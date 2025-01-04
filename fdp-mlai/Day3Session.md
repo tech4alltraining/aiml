@@ -75,5 +75,6 @@ ___
 
 - Natural Language Processing - NLP
   - https://towardsdatascience.com/a-practitioners-guide-to-natural-language-processing-part-i-processing-understanding-text-9f4abfd13e72
+  - https://medium.com/@shandeep92/countvectorizer-vs-tfidfvectorizer-cf62d0a54fa4
 - Computer Vision
   - https://towardsdatascience.com/everything-you-ever-wanted-to-know-about-computer-vision-heres-a-look-why-it-s-so-awesome-e8a58dfb641e
