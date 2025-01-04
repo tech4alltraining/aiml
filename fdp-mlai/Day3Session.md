@@ -29,17 +29,9 @@
 - Using CNNs in TensorFlow/Keras
 - Final Review and Q&A
 
-  - Image Processing: [Notebook 5.2](https://colab.research.google.com/drive/1XfsRBPlc4BTpd6Qr7FRel24C_Yu2tyIb?usp=sharing)
-    - https://www.simplilearn.com/tutorials/python-tutorial/opencv-python
-    - https://www.analyticsvidhya.com/blog/2021/09/a-beginners-guide-to-image-processing-with-opencv-and-python/
-- Introduction to Natural Language Processing [Dataset 5.2](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets_cv_nlp.zip)
-  - https://language.cognitive.azure.com/tryout/detectLanguage
-  - https://language.cognitive.azure.com/tryout/keyPhrases
-  - https://language.cognitive.azure.com/tryout/namedEntities
-  - https://language.cognitive.azure.com/tryout/sentiment
-  - https://language.cognitive.azure.com/tryout/answerQuestions
-  - Tokenization: [Notebook 5.3](https://colab.research.google.com/drive/1tF8-ckjCixBOwSXlrmZYuQWjp4T3HhrR?usp=sharing)
-
+- Image Processing: [Notebook 5.2]()
+  - https://www.simplilearn.com/tutorials/python-tutorial/opencv-python
+  - https://www.analyticsvidhya.com/blog/2021/09/a-beginners-guide-to-image-processing-with-opencv-and-python/
 ---
 
 ### **Assessments**
