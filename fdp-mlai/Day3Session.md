@@ -43,7 +43,7 @@
 ---
 
 ### **Assessments**
-**Day 3: Quiz #1:**
+**Quiz #3.1:**
 ___
 
 ### **References & Video Tutorials (Day 1 to Day 3)**
