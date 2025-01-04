@@ -28,7 +28,7 @@
   - https://www.simplilearn.com/tutorials/python-tutorial/opencv-python
   - https://www.analyticsvidhya.com/blog/2021/09/a-beginners-guide-to-image-processing-with-opencv-and-python/
 - Introduction to Convolutional Neural Networks (CNNs)
-- Hands-on Project: Image Classification Using CNNs in TensorFlow/Keras [[Notebook 3.5]()]
+- Hands-on Project: Image Classification Using CNNs in TensorFlow/Keras [[Notebook 3.5](https://colab.research.google.com/drive/1__mIJ7vivKvJ13kgtV-sx-nwotZFaqYR?usp=sharing)]
 - Final Review and Q&A
 ---
 
