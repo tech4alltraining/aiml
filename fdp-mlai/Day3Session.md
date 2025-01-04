@@ -11,10 +11,10 @@
   - https://language.cognitive.azure.com/tryout/sentiment
   - https://language.cognitive.azure.com/tryout/answerQuestions
 
-- Basics of Text Processing
-- Tokenization, Stemming, and Lemmatization [[Notebook 3.2]()]
+- Basics of Text Processing  [[Notebook 3.2]()]
+  - Tokenization, Stemming, and Lemmatization
 - Vectorization Techniques: Bag of Words, TF-IDF
-- Hands-on: Text Classification Using Scikit-learn
+- Hands-on: Text Classification Using Scikit-learn [[Notebook 3.3]()]
 
 #### **Basics of Computer Vision**
 
@@ -24,11 +24,11 @@
   - https://portal.vision.cognitive.azure.com/demo/image-captioning
   - https://portal.vision.cognitive.azure.com/demo/face-detection
   - https://portal.vision.cognitive.azure.com/demo/extract-text-from-images
-- Basics Image Processing: [[Notebook 3.3]()]
+- Basics Image Processing: [[Notebook 3.4]()]
   - https://www.simplilearn.com/tutorials/python-tutorial/opencv-python
   - https://www.analyticsvidhya.com/blog/2021/09/a-beginners-guide-to-image-processing-with-opencv-and-python/
 - Introduction to Convolutional Neural Networks (CNNs)
-- Hands-on Project: Image Classification Using CNNs in TensorFlow/Keras [[Notebook 3.4]()]
+- Hands-on Project: Image Classification Using CNNs in TensorFlow/Keras [[Notebook 3.5]()]
 - Final Review and Q&A
 ---
 
