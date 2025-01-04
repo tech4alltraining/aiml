@@ -14,7 +14,7 @@
 - Basics of Text Processing  [[Notebook 3.2](https://colab.research.google.com/drive/1gQXofW7Q86UFYL4h3Af6Chcr4ClNmd5U?usp=sharing)]
   - Tokenization, Stemming, and Lemmatization
 - Vectorization Techniques: Bag of Words, TF-IDF
-- Hands-on: Text Classification Using Scikit-learn [[Notebook 3.3]()]
+- Hands-on: Text Classification Using Scikit-learn [[Notebook 3.3](https://colab.research.google.com/drive/1nsgcf5I86me2yyKoWdyh9Cpas0A5ZBTV?usp=sharing)]
 
 #### **Basics of Computer Vision**
 
