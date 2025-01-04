@@ -24,7 +24,7 @@
   - https://portal.vision.cognitive.azure.com/demo/image-captioning
   - https://portal.vision.cognitive.azure.com/demo/face-detection
   - https://portal.vision.cognitive.azure.com/demo/extract-text-from-images
-- Basics Image Processing: [[Notebook 3.4]()]
+- Basics Image Processing: [[Notebook 3.4](https://colab.research.google.com/drive/1XfsRBPlc4BTpd6Qr7FRel24C_Yu2tyIb?usp=sharing)]
   - https://www.simplilearn.com/tutorials/python-tutorial/opencv-python
   - https://www.analyticsvidhya.com/blog/2021/09/a-beginners-guide-to-image-processing-with-opencv-and-python/
 - Introduction to Convolutional Neural Networks (CNNs)
