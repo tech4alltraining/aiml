@@ -3,7 +3,7 @@
 ## **ML/AI - FDP - ICTAK**
 ### **Session: Day 3**
 #### **Datasets:** [[Dataset 3.1](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets_cv_nlp.zip)] -  [[Demo 1](https://techcommunity.microsoft.com/blog/azure-ai-services-blog/explore-azure-ai-services-curated-list-of-prebuilt-models-and-demos/4230788)]
-##### **Introduction to NLP**
+#### **Introduction to NLP**
 - Introduction to NLP
   - https://language.cognitive.azure.com/tryout/detectLanguage
   - https://language.cognitive.azure.com/tryout/keyPhrases
@@ -16,7 +16,7 @@
 - Vectorization Techniques: Bag of Words, TF-IDF
 - Hands-on: Text Classification Using Scikit-learn
 
-##### **Basics of Computer Vision**
+#### **Basics of Computer Vision**
 
 - Introduction to Computer Vision [Dataset 3.1]
   - https://teachablemachine.withgoogle.com/train
@@ -24,21 +24,19 @@
   - https://portal.vision.cognitive.azure.com/demo/image-captioning
   - https://portal.vision.cognitive.azure.com/demo/face-detection
   - https://portal.vision.cognitive.azure.com/demo/extract-text-from-images
-- Introduction to Convolutional Neural Networks (CNNs)
-- Hands-on Project: Image Classification
-- Using CNNs in TensorFlow/Keras
-- Final Review and Q&A
-
-- Image Processing: [Notebook 5.2]()
+- Basics Image Processing: [[Notebook 3.3]()]
   - https://www.simplilearn.com/tutorials/python-tutorial/opencv-python
   - https://www.analyticsvidhya.com/blog/2021/09/a-beginners-guide-to-image-processing-with-opencv-and-python/
+- Introduction to Convolutional Neural Networks (CNNs)
+- Hands-on Project: Image Classification Using CNNs in TensorFlow/Keras [[Notebook 3.4]()]
+- Final Review and Q&A
 ---
 
 ### **Assessments**
 **Quiz #3.1:**
 ___
 
-### **References & Video Tutorials (Day 1 to Day 3)**
+### **References & Video Tutorials**
 - (Video) [Machine Learning Full Course - 12 Hours | Machine Learning Roadmap [2024]-Edureka](https://www.youtube.com/watch?v=N5fSpaaxoZc)
 - (Video) [Machine Learning Engineer Full Course - 10 Hours | Machine Learning Roadmap [2024] | Edureka](https://www.youtube.com/watch?v=kx7JCsRdMGQ)
 - (Video) [Machine Learning Full Course 2024 | Learn it LIVE | Machine Learning Tutorial | Simplilearn](https://www.youtube.com/watch?v=fTmR-br9Mjw)
