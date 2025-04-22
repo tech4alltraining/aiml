@@ -21,10 +21,11 @@
 - Introduction to Regression
 - Linear Regression
 - Case Study on Regression 
-  - **Practice:** [Dataset 3.1](https://raw.githubusercontent.com/tech4alltraining/aiml/main/salary_data.csv) **-** [Notebook 3.1](#) 
+  - **Practice:** [Dataset 3.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/salary_data.csv) **-** [Notebook 3.1](https://colab.research.google.com/drive/1aGHSyQX6Np3wbHSLJKASqX_u-St-ZEHP?usp=sharing) 
 - Introduction to Classification
-- Logistic Regression
-- Case Study on Classification [Notebook 3.2](#)
+- Logistic Regression 
+- Case Study on Classification
+  - **Practice:**[Notebook 3.2](https://colab.research.google.com/drive/1IFaA47Kiy_hpSOwmG7xZ33iy87MmTflp?usp=sharing)
 - kNN, SVM, Decision Trees, Random Forest, Naive Bayes 
   - **Practice:** [Notebook 4.1](#)
 ### Day 4
