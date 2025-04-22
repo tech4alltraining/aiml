@@ -25,32 +25,37 @@
 - Introduction to Classification
 - Logistic Regression 
 - Case Study on Classification
-  - **Practice:**[Notebook 3.2](https://colab.research.google.com/drive/1IFaA47Kiy_hpSOwmG7xZ33iy87MmTflp?usp=sharing)
+  - **Practice:** [Dataset 3.2](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/iris.csv) **-** [Notebook 3.2](https://colab.research.google.com/drive/1IFaA47Kiy_hpSOwmG7xZ33iy87MmTflp?usp=sharing)
 - kNN, SVM, Decision Trees, Random Forest, Naive Bayes 
-  - **Practice:** [Notebook 4.1](#)
+  - **Practice:** [Notebook 3.3](https://colab.research.google.com/drive/1IFaA47Kiy_hpSOwmG7xZ33iy87MmTflp?usp=sharing)
 ### Day 4
 - Introduction to Unsupervised Learning Techniques
-- Clustering Techniques: 
-  - kMeans [Practice Notebook 4.1](#)
-  - Agglomerative [Practice Notebook 4.2](#)
+- Clustering Techniques 
+- kMeans Clustering
+  - **Practice:** [Dataset 4.1](https://raw.githubusercontent.com/tirthajyoti/Machine-Learning-with-Python/master/Datasets/Mall_Customers.csv) **-** [Notebook 4.1](https://colab.research.google.com/drive/1A05FqC5ISMDPAp9uIIN5K990D1s2Yjlg?usp=sharing)
+- Agglomerative Clustering
+  - **Practice:** [Notebook 4.2](https://colab.research.google.com/drive/1yFH5gegU76B2I6h1nwnEAejHWin_H-iM?usp=sharing)
 - Introduction to Artificial Neural Network 
-  - MLP Classification [Practice Notebook 4.3](#)
+- MLP Classification
+  - **Practice:** [Notebook 4.3](https://colab.research.google.com/drive/1LanI5GhiOXM3RqjM5dEgvtM9M7K586vy?usp=sharing)
 ### Day 5
-- Introduction to Computer Vision [Practice Dataset 5.1](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets_cv_nlp.zip)
-- **Demos**
+- **Practice:** [Dataset 5.1](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets_cv_nlp.zip)
+- Introduction to Computer Vision 
+- **Demos-CV**
   - [Demo 5.1 - Teachable Machine - Image Classification](https://teachablemachine.withgoogle.com/)   
   - [Demo 5.2 - Object Detection](https://portal.vision.cognitive.azure.com/demo/generic-object-detection)
   - [Demo 5.3 - Image Captioning](https://portal.vision.cognitive.azure.com/demo/image-captioning)
   - [Demo 5.4 - Face Detection](https://portal.vision.cognitive.azure.com/demo/face-detection)
   - [Demo 5.5 - Optical Character Recognition](https://portal.vision.cognitive.azure.com/demo/extract-text-from-images)
-- Introduction to Natural Language Processing [Practice Dataset 5.1](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets_cv_nlp.zip)
-  - **Demos**
-    - [Demo 5.6 - Text Analytics - Language Detection](https://language.cognitive.azure.com/tryout/detectLanguage)
-    - [Demo 5.8 - Text Analytics - Key Phrase Extraction](https://language.cognitive.azure.com/tryout/keyPhrases)
-    - [Demo 5.9 - Text Analytics - Named Entity Recognition](https://language.cognitive.azure.com/tryout/namedEntities)
-    - [Demo 5.7 - Text Analytics - Sentiment Analysis](https://language.cognitive.azure.com/tryout/sentiment)
-    - [Demo 5.10 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
-  - Tokenization & Sentiment Analysis: [Notebook 5.2](https://colab.research.google.com/drive/1m-8Kv3maexHubD2sc7DwSSjfJepIFFrR?usp=sharing)
+- Introduction to Natural Language Processing
+- **Demos-NLP**
+  - [Demo 5.6 - Text Analytics - Language Detection](https://language.cognitive.azure.com/tryout/detectLanguage)
+  - [Demo 5.8 - Text Analytics - Key Phrase Extraction](https://language.cognitive.azure.com/tryout/keyPhrases)
+  - [Demo 5.9 - Text Analytics - Named Entity Recognition](https://language.cognitive.azure.com/tryout/namedEntities)
+  - [Demo 5.7 - Text Analytics - Sentiment Analysis](https://language.cognitive.azure.com/tryout/sentiment)
+  - [Demo 5.10 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
+- Tokenization & Sentiment Analysis: 
+  - **Practice:** [Notebook 5.2](https://colab.research.google.com/drive/1m-8Kv3maexHubD2sc7DwSSjfJepIFFrR?usp=sharing)
 <!-- - [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing)  -->
 ___
 
