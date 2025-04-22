@@ -12,22 +12,21 @@
   - [Matplotlib Tutorial](https://www.w3schools.com/python/matplotlib_intro.asp)
   - [Seaborn Tutorial-Geek](https://www.geeksforgeeks.org/python-seaborn-tutorial/) 
   - [Seaborn Tutorial-Datacamp](https://www.datacamp.com/tutorial/seaborn-python-tutorial)
-  - [Practice Notebook 2.1](https://colab.research.google.com/drive/1AidHPpqV6tTMe8vC0vi4deaiwKmA0vo7?usp=sharing)
-  - [Practice Notebook 2.2: Casestudy](https://colab.research.google.com/drive/1f6mXEaGaGYwnhty7zfvh2lKGffu2thha?usp=sharing)
+  - **Practice:** [Notebook 2.1](https://colab.research.google.com/drive/1AidHPpqV6tTMe8vC0vi4deaiwKmA0vo7?usp=sharing)
+  - **Practice:** [Notebook 2.2: Casestudy](https://colab.research.google.com/drive/1f6mXEaGaGYwnhty7zfvh2lKGffu2thha?usp=sharing)
 - Data Pre-processing Techniques
-  - [Practice Dataset 2.1](https://raw.githubusercontent.com/tech4alltraining/aiml/main/pre_data.csv)
-  - [Practice Notebook 2.3](#)
+  - **Practice:** [Dataset 2.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/prepreprocessing/pre_data.csv) **-** [Notebook 2.3](https://colab.research.google.com/drive/12GX_aO8RDfacky0S0MJZ-btuEg040_7N?usp=sharing)
 - Introduction to Supervised Learning Techniques
 ### Day 3
 - Introduction to Regression
 - Linear Regression
 - Case Study on Regression 
-  - [Practice Dataset 3.1](https://raw.githubusercontent.com/tech4alltraining/aiml/main/salary_data.csv)
-  - [Practice Notebook 3.1](#) 
+  - **Practice:** [Dataset 3.1](https://raw.githubusercontent.com/tech4alltraining/aiml/main/salary_data.csv) **-** [Notebook 3.1](#) 
 - Introduction to Classification
 - Logistic Regression
-- Case Study on Classification [Practice Notebook 3.2](#)
-- kNN, SVM, Decision Trees, Random Forest, Naive Bayes [Practice Notebook 4.1](#)
+- Case Study on Classification [Notebook 3.2](#)
+- kNN, SVM, Decision Trees, Random Forest, Naive Bayes 
+  - **Practice:** [Notebook 4.1](#)
 ### Day 4
 - Introduction to Unsupervised Learning Techniques
 - Clustering Techniques: 
