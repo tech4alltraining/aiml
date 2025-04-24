@@ -45,8 +45,8 @@
 - Introduction to Artificial Neural Network 
 - MLP Classification
   - **Practice:** [Notebook 4.3](https://colab.research.google.com/drive/1EyDdtgXd4UgeE45ZoLjPwZZS_XlyEXBD?usp=sharing)
-- **Exercise [Diabetics Dataset](https://drive.google.com/file/d/1RqazHBHX7_kzJpDNYyEa56vVn7OzE_BI/view
-):[https://drive.google.com/file/d/1o7vi1TVeTtpWeY25lMg5Bs7w4B2wfb8G/view?usp=sharing](https://drive.google.com/file/d/1o7vi1TVeTtpWeY25lMg5Bs7w4B2wfb8G/view?usp=sharing)**
+- **Exercise [[Diabetics Dataset](https://drive.google.com/file/d/1RqazHBHX7_kzJpDNYyEa56vVn7OzE_BI/view
+)] - Problem [https://drive.google.com/file/d/1o7vi1TVeTtpWeY25lMg5Bs7w4B2wfb8G/view?usp=sharing](https://drive.google.com/file/d/1o7vi1TVeTtpWeY25lMg5Bs7w4B2wfb8G/view?usp=sharing)**
 ### Day #5
 
 - **Practice:** [Dataset 5.1](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets_cv_nlp.zip)
