@@ -49,7 +49,7 @@
 )] - Problem [https://drive.google.com/file/d/1o7vi1TVeTtpWeY25lMg5Bs7w4B2wfb8G/view?usp=sharing](https://drive.google.com/file/d/1o7vi1TVeTtpWeY25lMg5Bs7w4B2wfb8G/view?usp=sharing)**
 ### Day #5
 
-- **Practice:** [Dataset 5.1](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets_cv_nlp.zip)
+- **Practice:** [Dataset 5.1](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets/datasets_cv_nlp.zip)
 - Introduction to Computer Vision
 - **Demos-CV**
   - [Demo 5.1 - Teachable Machine - Image Classification](https://teachablemachine.withgoogle.com/)   
