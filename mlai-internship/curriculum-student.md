@@ -59,6 +59,8 @@
   - [Demo 5.5 - Optical Character Recognition](https://portal.vision.cognitive.azure.com/demo/extract-text-from-images)
 - Image Processing Techniques
   - **Practice:** [Notebook 5.1](https://colab.research.google.com/drive/1nsyPbTSWa7PMMCKRsCxLx-DMHpoCz-Sg?usp=sharing)
+- Image Processing Techniques
+  - **Practice:** [Notebook 5.1](https://colab.research.google.com/drive/1nsyPbTSWa7PMMCKRsCxLx-DMHpoCz-Sg?usp=sharing)
 - Introduction to Natural Language Processing
 - **Demos-NLP**
   - [Demo 5.6 - Text Analytics - Language Detection](https://language.cognitive.azure.com/tryout/detectLanguage)
@@ -67,6 +69,7 @@
   - [Demo 5.7 - Text Analytics - Sentiment Analysis](https://language.cognitive.azure.com/tryout/sentiment)
   - [Demo 5.10 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
 - Tokenization & Sentiment Analysis: 
+  - **Practice:** [Notebook 5.2](https://colab.research.google.com/drive/1AkQBEXeFQUOPoem7mOCuXosk1DP66-t9?usp=sharing)
   - **Practice:** [Notebook 5.2](https://colab.research.google.com/drive/1AkQBEXeFQUOPoem7mOCuXosk1DP66-t9?usp=sharing)
 <!-- - [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing)  -->
 ___
@@ -96,6 +99,21 @@ ___
   - [https://www.analyticsvidhya.com/blog/2021/07/metrics-to-evaluate-your-classification-model-to-take-the-right-decisions/](https://www.analyticsvidhya.com/blog/2021/07/metrics-to-evaluate-your-classification-model-to-take-the-right-decisions/)
   - [https://medium.com/analytics-vidhya/evaluation-metrics-for-classification-models-e2f0d8009d69](https://medium.com/analytics-vidhya/evaluation-metrics-for-classification-models-e2f0d8009d69)
 
+- **Introduction Clustering**
+  - [https://www.geeksforgeeks.org/clustering-in-machine-learning/](https://www.geeksforgeeks.org/clustering-in-machine-learning/)
+- **kMeans Clsutering**
+  - [https://www.analyticsvidhya.com/blog/2019/08/comprehensive-guide-k-means-clustering/](https://www.analyticsvidhya.com/blog/2019/08/comprehensive-guide-k-means-clustering/)
+- **Agglomerative Clustering**
+  - [https://medium.com/@khalidassalafy/agglomerative-hierarchical-clustering-a-study-and-implementation-in-python-fddfdb6a7a64](https://medium.com/@khalidassalafy/agglomerative-hierarchical-clustering-a-study-and-implementation-in-python-fddfdb6a7a64)
+- **Artificial Neural Networks**
+  - [https://medium.com/data-science/an-introduction-to-artificial-neural-networks-5d2e108ff2c3](https://medium.com/data-science/an-introduction-to-artificial-neural-networks-5d2e108ff2c3)
+- **Computer Vision**
+  - [https://blog.roboflow.com/intro-to-computer-vision/](https://blog.roboflow.com/intro-to-computer-vision/)
+  - [https://www.datacamp.com/blog/what-is-computer-vision/](https://www.datacamp.com/blog/what-is-computer-vision/)
+  - [https://medium.com/@vinayak92/computer-vision-for-dummies-understand-cv-even-if-you-have-never-held-a-computer-before-db8ebd76a127](https://medium.com/@vinayak92/computer-vision-for-dummies-understand-cv-even-if-you-have-never-held-a-computer-before-db8ebd76a127)
+- **Natural Language Processing**
+  - [https://www.deeplearning.ai/resources/natural-language-processing/](https://www.deeplearning.ai/resources/natural-language-processing/)
+  - [https://builtin.com/data-science/introduction-nlp](https://builtin.com/data-science/introduction-nlp)
 - **Introduction Clustering**
   - [https://www.geeksforgeeks.org/clustering-in-machine-learning/](https://www.geeksforgeeks.org/clustering-in-machine-learning/)
 - **kMeans Clsutering**
