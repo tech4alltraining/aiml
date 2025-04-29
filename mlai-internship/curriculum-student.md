@@ -133,5 +133,11 @@ ___
   - (Video) [Machine Learning Full Course - 12 Hours - Machine Learning Roadmap [2024]-Edureka](https://www.youtube.com/watch?v=N5fSpaaxoZc)
   - (Video) [Machine Learning Engineer Full Course - 10 Hours - Machine Learning Roadmap [2024] - Edureka](https://www.youtube.com/watch?v=kx7JCsRdMGQ)
   - (Video) [Machine Learning Full Course 2024 - Learn it LIVE - Machine Learning Tutorial - Simplilearn](https://www.youtube.com/watch?v=fTmR-br9Mjw)
- 
+  - (Video) [Machine Learning Course curriculum - Machine Learning - Roadmap
+](https://www.youtube.com/watch?v=bY__YW-xknU&list=PLfFghEzKVmjsNtIRwErklMAN8nJmebB0I)
+
+- **Mathematics for Machine Learning**
+  - (Video) [Mathematics for Machine Learning [Full Course] - Essential Math for Machine Learning - Edureka](https://www.youtube.com/watch?v=1VSZtNYMntM)
+  - (Video) [Mathematics for Machine Learning - Introduction - Machine Learning Course
+](https://www.youtube.com/watch?v=VCF8kiLtBzU&list=PLfFghEzKVmjtZb9G6jvO9PLKvwUvK5avI)
 - **Join Discord - [https://discord.gg/3eb52cRGH3](https://discord.gg/3eb52cRGH3)**
