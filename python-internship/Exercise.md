@@ -10,8 +10,7 @@
 4. Write a Python program to create a variable named `is_student` and assign it the value `True`. Print the value of `is_student`. Print the type of `is_student`.
 5. In a Hospital, we check in a patient named "John Doe" who is 30 years old and is a new patient. Create different variables to store this information and print them. Print the type of each variable.
 6. In a school, we have a student named "Alice" who is 20 years old, has a GPA of 3.8, has height of 5.5 feet,and has weight of 45kg. Create different variables to store this information and print them. Print the type of each variable.
-7. In a library, we have a book named "Python Programming" which is written by "John Smith", published in 2020, and has 300 pages.
-8. Publisher: "Tech Books", ISBN: "123-456-789". Create different variables to store this information and print them. Print the type of each variable.
+7. In a library, we have a book named "Python Programming" which is written by "John Smith", published in 2020, and has 300 pages. Publisher: "Tech Books", ISBN: "123-456-789". Create different variables to store this information and print them. Print the type of each variable.
 ## Reading Input
 1. Write a Python program to read a name from the user and print it. 
 2. Write a Python program to read age from the user and print it.
