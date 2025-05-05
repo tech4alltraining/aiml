@@ -12,14 +12,11 @@
 6. In a school, we have a student named "Alice" who is 20 years old, has a GPA of 3.8, has height of 5.5 feet,and has weight of 45kg. Create different variables to store this information and print them. Print the type of each variable.
 7. In a library, we have a book named "Python Programming" which is written by "John Smith", published in 2020, and has 300 pages. Publisher: "Tech Books", ISBN: "123-456-789". Create different variables to store this information and print them. Print the type of each variable.
 ## Reading Input
-1. Write a Python program to read a name from the user and print it. 
-2. Write a Python program to read age from the user and print it.
-3. Write a Python program to read a marks from the user and print it.
-4. Write a Python program to read a patient name, age, and is_new_patient from the user and print them.
-5. Write a Python program to read a student name, age, GPA, height, and weight from the user and print them.
-6. Write a Python program to read a book name, author, published year, pages, publisher, and ISBN from the user and print them.
-7. Write a Python program to read a car name, model, year, color, and price from the user and print them.
-8. Write a Python program to read a movie name, director, release year, genre, and rating from the user and print them.
+1. Write a Python program to read a name, age, marks from the user and print it. 
+2. Write a Python program to read a patient name, age, and is_new_patient from the user and print them.
+3. Write a Python program to read a book name, author, published year, pages, publisher, and ISBN from the user and print them.
+4. Write a Python program to read a car name, model, year, color, and price from the user and print them.
+5. Write a Python program to read a movie name, director, release year, genre, and rating from the user and print them.
 
 ## Python Operators
 1. Write a Python program to add two numbers and print the result.
