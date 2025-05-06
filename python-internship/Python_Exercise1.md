@@ -29,3 +29,8 @@
 8. Write a Python program to find the average of three numbers and print the result.
 9. Write a Python program to find the maximum of three numbers and print the result.
 10. Write a Python program to find the minimum of three numbers and print the result.
+
+
+
+#Quiz
+[Quiz Link](https://www.menti.com/alwokt295jon)
