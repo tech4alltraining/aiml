@@ -37,7 +37,7 @@
 
 - Introduction to Unsupervised Learning Techniques
 - Clustering Techniques
-- **[Quiz 1](https://www.menti.com/albhiy1t16rz)**  
+- **[Quiz 1](#)**  
 - kMeans Clustering
   - **Practice:** [Dataset 4.1](https://raw.githubusercontent.com/tirthajyoti/Machine-Learning-with-Python/master/Datasets/Mall_Customers.csv) **-** [Notebook 4.1](https://colab.research.google.com/drive/1jXCcXXQbSmYnxjulhgtgJB9ueQ76u6Pj?usp=sharing)
 - Agglomerative Clustering
@@ -140,4 +140,4 @@ ___
   - (Video) [Mathematics for Machine Learning [Full Course] - Essential Math for Machine Learning - Edureka](https://www.youtube.com/watch?v=1VSZtNYMntM)
   - (Video) [Mathematics for Machine Learning - Introduction - Machine Learning Course
 ](https://www.youtube.com/watch?v=VCF8kiLtBzU&list=PLfFghEzKVmjtZb9G6jvO9PLKvwUvK5avI)
-- **Join Discord - [https://discord.gg/3eb52cRGH3](https://discord.gg/3eb52cRGH3)**
+- **Join Discord - [https://discord.gg/XKSHyk7Mda](https://discord.gg/XKSHyk7Mda)**
