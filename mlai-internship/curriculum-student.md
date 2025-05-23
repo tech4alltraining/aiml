@@ -37,7 +37,7 @@
 
 - Introduction to Unsupervised Learning Techniques
 - Clustering Techniques
-- **[Quiz 1](https://www.menti.com/albhiy1t16rz)**  
+- **[Quiz 1](#)**  
 - kMeans Clustering
   - **Practice:** [Dataset 4.1](https://raw.githubusercontent.com/tirthajyoti/Machine-Learning-with-Python/master/Datasets/Mall_Customers.csv) **-** [Notebook 4.1](https://colab.research.google.com/drive/1jXCcXXQbSmYnxjulhgtgJB9ueQ76u6Pj?usp=sharing)
 - Agglomerative Clustering
@@ -45,8 +45,6 @@
 - Introduction to Artificial Neural Network 
 - MLP Classification
   - **Practice:** [Notebook 4.3](https://colab.research.google.com/drive/1EyDdtgXd4UgeE45ZoLjPwZZS_XlyEXBD?usp=sharing)
-- **Exercise [[Diabetics Dataset](https://drive.google.com/file/d/1RqazHBHX7_kzJpDNYyEa56vVn7OzE_BI/view
-)] - Problem [https://drive.google.com/file/d/1o7vi1TVeTtpWeY25lMg5Bs7w4B2wfb8G/view?usp=sharing](https://drive.google.com/file/d/1o7vi1TVeTtpWeY25lMg5Bs7w4B2wfb8G/view?usp=sharing)**
 ### Day #5
 
 - **Practice:** [Dataset 5.1](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets/datasets_cv_nlp.zip)
@@ -59,17 +57,14 @@
   - [Demo 5.5 - Optical Character Recognition](https://portal.vision.cognitive.azure.com/demo/extract-text-from-images)
 - Image Processing Techniques
   - **Practice:** [Notebook 5.1](https://colab.research.google.com/drive/1nsyPbTSWa7PMMCKRsCxLx-DMHpoCz-Sg?usp=sharing)
-- Image Processing Techniques
-  - **Practice:** [Notebook 5.1](https://colab.research.google.com/drive/1nsyPbTSWa7PMMCKRsCxLx-DMHpoCz-Sg?usp=sharing)
 - Introduction to Natural Language Processing
 - **Demos-NLP**
   - [Demo 5.6 - Text Analytics - Language Detection](https://language.cognitive.azure.com/tryout/detectLanguage)
+  - [Demo 5.7 - Text Analytics - Sentiment Analysis](https://language.cognitive.azure.com/tryout/sentiment)
   - [Demo 5.8 - Text Analytics - Key Phrase Extraction](https://language.cognitive.azure.com/tryout/keyPhrases)
   - [Demo 5.9 - Text Analytics - Named Entity Recognition](https://language.cognitive.azure.com/tryout/namedEntities)
-  - [Demo 5.7 - Text Analytics - Sentiment Analysis](https://language.cognitive.azure.com/tryout/sentiment)
   - [Demo 5.10 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
 - Tokenization & Sentiment Analysis: 
-  - **Practice:** [Notebook 5.2](https://colab.research.google.com/drive/1AkQBEXeFQUOPoem7mOCuXosk1DP66-t9?usp=sharing)
   - **Practice:** [Notebook 5.2](https://colab.research.google.com/drive/1AkQBEXeFQUOPoem7mOCuXosk1DP66-t9?usp=sharing)
 <!-- - [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing)  -->
 ___
@@ -133,11 +128,10 @@ ___
   - (Video) [Machine Learning Full Course - 12 Hours - Machine Learning Roadmap [2024]-Edureka](https://www.youtube.com/watch?v=N5fSpaaxoZc)
   - (Video) [Machine Learning Engineer Full Course - 10 Hours - Machine Learning Roadmap [2024] - Edureka](https://www.youtube.com/watch?v=kx7JCsRdMGQ)
   - (Video) [Machine Learning Full Course 2024 - Learn it LIVE - Machine Learning Tutorial - Simplilearn](https://www.youtube.com/watch?v=fTmR-br9Mjw)
-  - (Video) [Machine Learning Course curriculum - Machine Learning - Roadmap
-](https://www.youtube.com/watch?v=bY__YW-xknU&list=PLfFghEzKVmjsNtIRwErklMAN8nJmebB0I)
+  - (Video) [Machine Learning Course curriculum - Machine Learning - Roadmap](https://www.youtube.com/watch?v=bY__YW-xknU&list=PLfFghEzKVmjsNtIRwErklMAN8nJmebB0I)
 
 - **Mathematics for Machine Learning**
   - (Video) [Mathematics for Machine Learning [Full Course] - Essential Math for Machine Learning - Edureka](https://www.youtube.com/watch?v=1VSZtNYMntM)
   - (Video) [Mathematics for Machine Learning - Introduction - Machine Learning Course
 ](https://www.youtube.com/watch?v=VCF8kiLtBzU&list=PLfFghEzKVmjtZb9G6jvO9PLKvwUvK5avI)
-- **Join Discord - [https://discord.gg/XKSHyk7Mda](https://discord.gg/XKSHyk7Mda)**
+- **Join Discord - [#](#)**
