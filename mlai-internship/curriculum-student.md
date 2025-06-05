@@ -37,7 +37,7 @@
 
 - Introduction to Unsupervised Learning Techniques
 - Clustering Techniques
-- **[Quiz 1](https://www.menti.com/alwokt295jon)**  
+- **[Quiz 1](https://www.menti.com/albhiy1t16rz)**  
 - kMeans Clustering
   - **Practice:** [Dataset 4.1](https://raw.githubusercontent.com/tirthajyoti/Machine-Learning-with-Python/master/Datasets/Mall_Customers.csv) **-** [Notebook 4.1](https://colab.research.google.com/drive/1jXCcXXQbSmYnxjulhgtgJB9ueQ76u6Pj?usp=sharing)
 - Agglomerative Clustering
