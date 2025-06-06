@@ -74,7 +74,7 @@
   - [Demo 5.11 - Text Analytics - Named Entity Recognition](https://language.cognitive.azure.com/tryout/namedEntities)
   - [Demo 5.12 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
 - Tokenization & Sentiment Analysis: 
-  - **Practice:** [Notebook 5.2](https://colab.research.google.com/drive/1AkQBEXeFQUOPoem7mOCuXosk1DP66-t9?usp=sharing)
+  - **Practice:** [Notebook 5.3](https://colab.research.google.com/drive/1AkQBEXeFQUOPoem7mOCuXosk1DP66-t9?usp=sharing)
 <!-- - [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing)  -->
 ___
 
