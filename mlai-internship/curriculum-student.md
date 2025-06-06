@@ -37,16 +37,20 @@
 
 - Introduction to Unsupervised Learning Techniques
 - Clustering Techniques
-- **[Quiz 1](https://www.menti.com/albhiy1t16rz)**  
+- **[Quiz 1](#)**  
 - kMeans Clustering
   - **Practice:** [Dataset 4.1](https://raw.githubusercontent.com/tirthajyoti/Machine-Learning-with-Python/master/Datasets/Mall_Customers.csv) **-** [Notebook 4.1](https://colab.research.google.com/drive/1jXCcXXQbSmYnxjulhgtgJB9ueQ76u6Pj?usp=sharing)
 - Agglomerative Clustering
   - **Practice:** [Notebook 4.2](https://colab.research.google.com/drive/1DySqOuLuP0vh4a2EOf7mRRO93_d1sgix?usp=sharing)
-- Introduction to Artificial Neural Network 
+- Introduction to Artificial Neural Network
+- Demo-ANN
+  - [Demo 4.1 Tesorflow Playground](https://playground.tensorflow.org/)
+
 - MLP Classification
   - **Practice:** [Notebook 4.3](https://colab.research.google.com/drive/1EyDdtgXd4UgeE45ZoLjPwZZS_XlyEXBD?usp=sharing)
+- DNN Classification
+  - **Practice:** [Notebook 4.4](https://colab.research.google.com/drive/1b2g0j3k6Y8c7a5d9Jx1Zy2fX3s8z5W9H?usp=sharing)
 ### Day #5
-
 - **Practice:** [Dataset 5.1](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets/datasets_cv_nlp.zip)
 - Introduction to Computer Vision
 - **Demos-CV**
@@ -55,15 +59,20 @@
   - [Demo 5.3 - Image Captioning](https://portal.vision.cognitive.azure.com/demo/image-captioning)
   - [Demo 5.4 - Face Detection](https://portal.vision.cognitive.azure.com/demo/face-detection)
   - [Demo 5.5 - Optical Character Recognition](https://portal.vision.cognitive.azure.com/demo/extract-text-from-images)
+
 - Image Processing Techniques
   - **Practice:** [Notebook 5.1](https://colab.research.google.com/drive/1nsyPbTSWa7PMMCKRsCxLx-DMHpoCz-Sg?usp=sharing)
+- CNN Classification
+  - [Demo 5.6 - CNN 3D Visualization](https://adamharley.com/nn_vis/cnn/3d.html)
+  - [Demo 5.7 - Convolution Demo](https://deeplizard.com/resource/pavq7noze2)
+  - **Practice:** [Notebook 5.2](https://colab.research.google.com/drive/1ikATxFnmve7qaecpqBZ14cYQE3vOkD63?usp=sharing)
 - Introduction to Natural Language Processing
 - **Demos-NLP**
-  - [Demo 5.6 - Text Analytics - Language Detection](https://language.cognitive.azure.com/tryout/detectLanguage)
-  - [Demo 5.7 - Text Analytics - Sentiment Analysis](https://language.cognitive.azure.com/tryout/sentiment)
-  - [Demo 5.8 - Text Analytics - Key Phrase Extraction](https://language.cognitive.azure.com/tryout/keyPhrases)
-  - [Demo 5.9 - Text Analytics - Named Entity Recognition](https://language.cognitive.azure.com/tryout/namedEntities)
-  - [Demo 5.10 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
+  - [Demo 5.8 - Text Analytics - Language Detection](https://language.cognitive.azure.com/tryout/detectLanguage)
+  - [Demo 5.9 - Text Analytics - Sentiment Analysis](https://language.cognitive.azure.com/tryout/sentiment)
+  - [Demo 5.10 - Text Analytics - Key Phrase Extraction](https://language.cognitive.azure.com/tryout/keyPhrases)
+  - [Demo 5.11 - Text Analytics - Named Entity Recognition](https://language.cognitive.azure.com/tryout/namedEntities)
+  - [Demo 5.12 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
 - Tokenization & Sentiment Analysis: 
   - **Practice:** [Notebook 5.2](https://colab.research.google.com/drive/1AkQBEXeFQUOPoem7mOCuXosk1DP66-t9?usp=sharing)
 <!-- - [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing)  -->
