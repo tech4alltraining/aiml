@@ -37,7 +37,6 @@
 
 - Introduction to Unsupervised Learning Techniques
 - Clustering Techniques
-- **[Quiz 1](#)**  
 - kMeans Clustering
   - **Practice:** [Dataset 4.1](https://raw.githubusercontent.com/tirthajyoti/Machine-Learning-with-Python/master/Datasets/Mall_Customers.csv) **-** [Notebook 4.1](https://colab.research.google.com/drive/1jXCcXXQbSmYnxjulhgtgJB9ueQ76u6Pj?usp=sharing)
 - Agglomerative Clustering
@@ -118,21 +117,7 @@ ___
 - **Natural Language Processing**
   - [https://www.deeplearning.ai/resources/natural-language-processing/](https://www.deeplearning.ai/resources/natural-language-processing/)
   - [https://builtin.com/data-science/introduction-nlp](https://builtin.com/data-science/introduction-nlp)
-- **Introduction Clustering**
-  - [https://www.geeksforgeeks.org/clustering-in-machine-learning/](https://www.geeksforgeeks.org/clustering-in-machine-learning/)
-- **kMeans Clsutering**
-  - [https://www.analyticsvidhya.com/blog/2019/08/comprehensive-guide-k-means-clustering/](https://www.analyticsvidhya.com/blog/2019/08/comprehensive-guide-k-means-clustering/)
-- **Agglomerative Clustering**
-  - [https://medium.com/@khalidassalafy/agglomerative-hierarchical-clustering-a-study-and-implementation-in-python-fddfdb6a7a64](https://medium.com/@khalidassalafy/agglomerative-hierarchical-clustering-a-study-and-implementation-in-python-fddfdb6a7a64)
-- **Artificial Neural Networks**
-  - [https://medium.com/data-science/an-introduction-to-artificial-neural-networks-5d2e108ff2c3](https://medium.com/data-science/an-introduction-to-artificial-neural-networks-5d2e108ff2c3)
-- **Computer Vision**
-  - [https://blog.roboflow.com/intro-to-computer-vision/](https://blog.roboflow.com/intro-to-computer-vision/)
-  - [https://www.datacamp.com/blog/what-is-computer-vision/](https://www.datacamp.com/blog/what-is-computer-vision/)
-  - [https://medium.com/@vinayak92/computer-vision-for-dummies-understand-cv-even-if-you-have-never-held-a-computer-before-db8ebd76a127](https://medium.com/@vinayak92/computer-vision-for-dummies-understand-cv-even-if-you-have-never-held-a-computer-before-db8ebd76a127)
-- **Natural Language Processing**
-  - [https://www.deeplearning.ai/resources/natural-language-processing/](https://www.deeplearning.ai/resources/natural-language-processing/)
-  - [https://builtin.com/data-science/introduction-nlp](https://builtin.com/data-science/introduction-nlp)
+
 - **Machine Learning Tutorials**
   - (Video) [Machine Learning Full Course - 12 Hours - Machine Learning Roadmap [2024]-Edureka](https://www.youtube.com/watch?v=N5fSpaaxoZc)
   - (Video) [Machine Learning Engineer Full Course - 10 Hours - Machine Learning Roadmap [2024] - Edureka](https://www.youtube.com/watch?v=kx7JCsRdMGQ)
@@ -143,4 +128,4 @@ ___
   - (Video) [Mathematics for Machine Learning [Full Course] - Essential Math for Machine Learning - Edureka](https://www.youtube.com/watch?v=1VSZtNYMntM)
   - (Video) [Mathematics for Machine Learning - Introduction - Machine Learning Course
 ](https://www.youtube.com/watch?v=VCF8kiLtBzU&list=PLfFghEzKVmjtZb9G6jvO9PLKvwUvK5avI)
-- **Join Discord - [#](#)**
+
