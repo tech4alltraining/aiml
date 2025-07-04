@@ -47,7 +47,7 @@
 - MLP Classification
   - **Practice:** [Notebook 4.3](https://colab.research.google.com/drive/1EyDdtgXd4UgeE45ZoLjPwZZS_XlyEXBD?usp=sharing)
 - DNN Classification
-  - **Practice:** [Notebook 4.4](https://colab.research.google.com/drive/1b2g0j3k6Y8c7a5d9Jx1Zy2fX3s8z5W9H?usp=sharing)
+  - **Practice:** [Notebook 4.4](https://colab.research.google.com/drive/1lvXCssEWZ-DvNoJHZmngPnARM2uD9h7E?usp=sharing)
 - Exercise 4.1: [Dataset 4.2](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/heart_failure_raw.csv) 
 ### Day #5
 - **Practice:** [Dataset 5.1](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets/datasets_cv_nlp.zip)
