@@ -1,4 +1,4 @@
-# Python Internship Exercises
+# Python Exercises
 ## Python Printing 
 1. Write a Python program to print "Hello, World!".
 2. Write a Python program to print the current date and time.
@@ -32,5 +32,3 @@
 
 
 
-#Quiz
-[Quiz Link](https://www.menti.com/alwokt295jon)
