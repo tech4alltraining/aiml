@@ -7,7 +7,10 @@
 - Introduction to Machine Learning Life Cycle
 - Practice: [Notebook 1.1](https://colab.research.google.com/drive/1MNn8569A7BfrgFKaUyXwrTJDSaios_B6?usp=sharing)
 - Tutorial: [Introduction to Python](https://www.w3schools.com/python/)
+
+**Feedback from Participants**  
 ![Feedback](feedback.jpeg)
+
 ### Day #2
 
 - Tools, Platforms and Frameworks for ML/AI 
