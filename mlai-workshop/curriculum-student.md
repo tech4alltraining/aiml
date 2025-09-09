@@ -6,6 +6,7 @@
 - Trends and Opportunities in Machine Learning & Artificial Intelligence
 - Introduction to Machine Learning Life Cycle
 - Practice: [Notebook 1.1](https://colab.research.google.com/drive/1MNn8569A7BfrgFKaUyXwrTJDSaios_B6?usp=sharing)
+- Tutorial: [Introduction to Python](https://www.w3schools.com/python/)
 
 ### Day #2
 
