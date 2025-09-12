@@ -35,7 +35,7 @@
 - Introduction to Classification
 - Logistic Regression 
 - Case Study on Classification
-  - **Practice:** [Dataset 3.2](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/iris.csv) **-** [Notebook 3.2](https://colab.research.google.com/drive/1mJQBMddfoi4P8EdgnPZVLo0tFPlAyBsH?usp=sharing)
+  - **Practice:** [Dataset 3.2](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/loan_data_10k.csv) **-** [Notebook 3.2](https://colab.research.google.com/drive/1mJQBMddfoi4P8EdgnPZVLo0tFPlAyBsH?usp=sharing)
 - kNN, SVM, Decision Trees, Random Forest, Naive Bayes 
   - **Practice:** [Notebook 3.3](https://colab.research.google.com/drive/1VuFHOR09-Si5rla6CGYHyuWupPL1r8aS?usp=sharing)
 
