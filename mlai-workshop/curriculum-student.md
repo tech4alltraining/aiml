@@ -82,7 +82,10 @@
   - **Practice:** [Notebook 5.3](https://colab.research.google.com/drive/1m-8Kv3maexHubD2sc7DwSSjfJepIFFrR?usp=sharing)
 <!-- - [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing)  -->
 
-### [Final Assessment](#)
+ 
+#### [Final Assessment](https://github.com/tech4alltraining/aiml/blob/main/assessments/ml_ai_final_assessment.md) 
+
+
 ___
 
 ### **References & Video Tutorials**
