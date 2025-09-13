@@ -84,7 +84,7 @@
 
  
 #### [Final Assessment](https://github.com/tech4alltraining/aiml/blob/main/assessments/ml_ai_final_assessment.md) 
-
+**Upload Link:** [Submit Notebook](https://forms.gle/NZETivZSyqyQSUqT9)
 
 ___
 
