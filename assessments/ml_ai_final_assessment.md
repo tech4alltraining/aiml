@@ -5,7 +5,7 @@ Diabetes is a chronic medical condition that can lead to serious health complica
 #### **Objective:**
 The objective of this analysis is to build and compare various classification models to predict whether a patient has diabetes (Diabetes_Status = Positive) or not (Diabetes_Status = Negative) based on their medical history and demographic details. The goal is to identify the best-performing model that can be used by healthcare professionals for early detection and personalized treatment planning.
 Problem Statement:
-Given the Diabetes Prediction Dataset, which contains medical and demographic data of patients, including features such as age, gender, BMI, hypertension, heart disease, smoking history, HbA1c level, and blood glucose level, the task is to apply different classification algorithms to predict the likelihood of diabetes in patients. The models to be applied include: Logistic Regression, k-Nearest Neighbors (kNN), Support Vector Machine (SVM), Naive Bayes, Decision Trees, Random Forests
+Given the Diabetes Prediction Dataset, which contains medical and demographic data of patients, including features such as age, gender, BMI, hypertension, heart disease, smoking history, HbA1c level, and blood glucose level, the task is to apply different classification algorithms to predict the likelihood of diabetes in patients. The models to be applied include: Logistic Regression, k-Nearest Neighbors (kNN), Support Vector Machine (SVM), Naive Bayes, Decision Trees, Random Forests, MLP Classifier, XGBoost Classifier.
 #### **Link to Dataset:**
 https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/project/diabetes_prediction.csv
 
