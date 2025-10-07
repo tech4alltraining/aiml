@@ -43,9 +43,9 @@
   - [Demo 4.5 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
 - **Tokenization & Sentiment Analysis**: 
   - **Practice:** [Notebook 4.1](https://colab.research.google.com/drive/1m-8Kv3maexHubD2sc7DwSSjfJepIFFrR?usp=sharing)
-  - **Practice:** [Notebook 4.2 - Cyberbullying Detection]()
+  - **Practice:** [Notebook 4.2 - Cyberbullying Detection](https://colab.research.google.com/drive/1TqOU7MeNjNB31ZlSibT2NwEJX72uWv5s?usp=sharing)
 
 
 
-# References:
-- https://deeplearningfromscratch.wordpress.com/2018/06/26/multi-layer-neural-nets/
+<!-- # References:
+- https://deeplearningfromscratch.wordpress.com/2018/06/26/multi-layer-neural-nets/ -->
