@@ -1,5 +1,8 @@
 ## AIML Workshop
 ### [1] Introduction to AIML
+- **Types of ML**: Supervised Unsupervised  and Reinforcement Learning
+- **Supervised Learning**: Regression & Classification
+- **Unsupervised Learning**: Clustering, Dimensionality Reduction, Association Rule Mining
 - [Demo 1.1 - Teachable Machine](https://teachablemachine.withgoogle.com/)
 - [Dataset 1.1: Fruits](https://github.com/tech4alltraining/aiml/blob/main/datasets/cv/image-classification.zip)
 
@@ -13,7 +16,7 @@
 - **Exercise 2.1:** [Dataset 2.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/heart_failure_raw.csv) 
 ### [3] Computer Vision
 - [Dataset 3.1: CV Demo](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets/datasets_cv_nlp.zip)
-- [Dataset 3.2: Helmet](https://github.com/tech4alltraining/aiml/blob/660b589f3dd29b188eff867928659face175d1aa/datasets/cv/helmet_dataset.zip)
+<!-- - [Dataset 3.2: Helmet](https://github.com/tech4alltraining/aiml/blob/660b589f3dd29b188eff867928659face175d1aa/datasets/cv/helmet_dataset.zip) -->
 - **Demos-CV**
   - [Demo 3.1 - Teachable Machine - Image Classification](https://teachablemachine.withgoogle.com/)
   - [Demo 3.2 - Object Detection](https://portal.vision.cognitive.azure.com/demo/generic-object-detection)
@@ -26,7 +29,11 @@
 - CNN Classification
   - [Demo 3.6 - CNN 3D Visualization](https://adamharley.com/nn_vis/cnn/3d.html)
   - [Demo 3.7 - Convolution Demo](https://deeplizard.com/resource/pavq7noze2)
-  - **Practice:** [Notebook 3.2](https://colab.research.google.com/drive/1ikATxFnmve7qaecpqBZ14cYQE3vOkD63?usp=sharing)
+  - **Practice:** [Notebook 3.2 - MNIST-Digit](https://colab.research.google.com/drive/1ikATxFnmve7qaecpqBZ14cYQE3vOkD63?usp=sharing)
+  - **Practice:** [Notebook 3.3 - Cifar10](https://colab.research.google.com/drive/1CmVV_ZITX5jdiT4mRJyEhHVtb2HLsDUy?usp=sharing)
+  - **Practice:** [Notebook 3.4 - Cats-and-Dogs](https://colab.research.google.com/drive/16f60liIu7lptoQAT1u2xutHtVsq33XhH?usp=sharing)
+- Transfer Learning
+  -  **Practice:** [Notebook 3.5 - Cats-and-Dogs - Transfer Learning](https://colab.research.google.com/drive/15x0opHHBwGa6mQXOXW952bT7edwYqj-M?usp=sharing)
 ### [4] Natural Language Processing
 - **Demos-NLP**
   - [Demo 4.1 - Text Analytics - Language Detection](https://language.cognitive.azure.com/tryout/detectLanguage)
@@ -36,3 +43,9 @@
   - [Demo 4.5 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
 - **Tokenization & Sentiment Analysis**: 
   - **Practice:** [Notebook 4.1](https://colab.research.google.com/drive/1m-8Kv3maexHubD2sc7DwSSjfJepIFFrR?usp=sharing)
+  - **Practice:** [Notebook 4.2 - Cyberbullying Detection]()
+
+
+
+# References:
+- https://deeplearningfromscratch.wordpress.com/2018/06/26/multi-layer-neural-nets/
