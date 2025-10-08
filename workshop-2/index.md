@@ -10,7 +10,7 @@
 - Demo-ANN
   - [Demo 2.1 Tesorflow Playground](https://playground.tensorflow.org/)
 - MLP Classification
-  - **Practice:** [Notebook 2.1]()
+  - **Practice:** [Notebook 2.1](https://colab.research.google.com/drive/1PG5GUVv4GR661Pu5S6hYz_j6DyA_Egz6?usp=sharing)
 - DNN Classification
   - **Practice:** [Notebook 2.2]()
 - **Exercise 2.1:** [Dataset 2.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/heart_failure_raw.csv) 
