@@ -10,9 +10,9 @@
 - Demo-ANN
   - [Demo 2.1 Tesorflow Playground](https://playground.tensorflow.org/)
 - MLP Classification
-  - **Practice:** [Notebook 2.1](https://colab.research.google.com/drive/1EyDdtgXd4UgeE45ZoLjPwZZS_XlyEXBD?usp=sharing)
+  - **Practice:** [Notebook 2.1]()
 - DNN Classification
-  - **Practice:** [Notebook 2.2](https://colab.research.google.com/drive/1lvXCssEWZ-DvNoJHZmngPnARM2uD9h7E?usp=sharing)
+  - **Practice:** [Notebook 2.2]()
 - **Exercise 2.1:** [Dataset 2.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/heart_failure_raw.csv) 
 ### [3] Computer Vision
 - [Dataset 3.1: CV Demo](https://github.com/tech4alltraining/aiml/raw/refs/heads/main/datasets/datasets_cv_nlp.zip)
@@ -25,15 +25,15 @@
   - [Demo 3.5 - Optical Character Recognition](https://portal.vision.cognitive.azure.com/demo/extract-text-from-images)
 
 - Image Processing Techniques
-  - **Practice:** [Notebook 3.1](https://colab.research.google.com/drive/1nsyPbTSWa7PMMCKRsCxLx-DMHpoCz-Sg?usp=sharing)
+  - **Practice:** [Notebook 3.1]()
 - CNN Classification
   - [Demo 3.6 - CNN 3D Visualization](https://adamharley.com/nn_vis/cnn/3d.html)
   - [Demo 3.7 - Convolution Demo](https://deeplizard.com/resource/pavq7noze2)
-  - **Practice:** [Notebook 3.2 - MNIST-Digit](https://colab.research.google.com/drive/1ikATxFnmve7qaecpqBZ14cYQE3vOkD63?usp=sharing)
-  - **Practice:** [Notebook 3.3 - Cifar10](https://colab.research.google.com/drive/1CmVV_ZITX5jdiT4mRJyEhHVtb2HLsDUy?usp=sharing)
-  - **Practice:** [Notebook 3.4 - Cats-and-Dogs](https://colab.research.google.com/drive/16f60liIu7lptoQAT1u2xutHtVsq33XhH?usp=sharing)
+  - **Practice:** [Notebook 3.2 - MNIST-Digit]()
+  - **Practice:** [Notebook 3.3 - Cifar10]()
+  - **Practice:** [Notebook 3.4 - Cats-and-Dogs]()
 - Transfer Learning
-  -  **Practice:** [Notebook 3.5 - Cats-and-Dogs - Transfer Learning](https://colab.research.google.com/drive/15x0opHHBwGa6mQXOXW952bT7edwYqj-M?usp=sharing)
+  -  **Practice:** [Notebook 3.5 - Cats-and-Dogs - Transfer Learning]()
 ### [4] Natural Language Processing
 - **Demos-NLP**
   - [Demo 4.1 - Text Analytics - Language Detection](https://language.cognitive.azure.com/tryout/detectLanguage)
@@ -42,8 +42,8 @@
   - [Demo 4.4 - Text Analytics - Named Entity Recognition](https://language.cognitive.azure.com/tryout/namedEntities)
   - [Demo 4.5 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
 - **Tokenization & Sentiment Analysis**: 
-  - **Practice:** [Notebook 4.1](https://colab.research.google.com/drive/1m-8Kv3maexHubD2sc7DwSSjfJepIFFrR?usp=sharing)
-  - **Practice:** [Notebook 4.2 - Cyberbullying Detection](https://colab.research.google.com/drive/1TqOU7MeNjNB31ZlSibT2NwEJX72uWv5s?usp=sharing)
+  - **Practice:** [Notebook 4.1]()
+  - **Practice:** [Notebook 4.2 - Cyberbullying Detection]()
 
 
 
