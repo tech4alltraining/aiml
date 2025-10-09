@@ -43,7 +43,8 @@
   - [Demo 4.5 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
 - **Tokenization & Sentiment Analysis**: 
   - **Practice:** [Notebook 4.1]()
-  - **Practice:** [Notebook 4.2 - Cyberbullying Detection]()
+  - **Practice:** [Notebook 4.2 - LSTM -Cyberbullying Detection]()
+  - **Practice:** [Notebook 4.2 - Distilbert -Cyberbullying Detection]()
 
 
 
