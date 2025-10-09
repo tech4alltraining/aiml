@@ -31,7 +31,7 @@
   - [Demo 3.7 - Convolution Demo](https://deeplizard.com/resource/pavq7noze2)
   - **Practice:** [Notebook 3.2 - MNIST-Digit]()
   - **Practice:** [Notebook 3.3 - Cifar10]()
-  - **Practice:** [Notebook 3.4 - Cats-and-Dogs]()
+  - **Practice:** [Notebook 3.4 - Cats-and-Dogs](https://colab.research.google.com/drive/1luw1FKcQRte-dP1oZdFeAcb2xuvvXv_Y?usp=sharing)
 - Transfer Learning
   -  **Practice:** [Notebook 3.5 - Cats-and-Dogs - Transfer Learning]()
 ### [4] Natural Language Processing
