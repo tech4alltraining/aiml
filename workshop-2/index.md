@@ -44,7 +44,7 @@
 - **Tokenization & Sentiment Analysis**: 
   - **Practice:** [Notebook 4.1]()
   - **Practice:** [Notebook 4.2 - LSTM -Cyberbullying Detection](https://colab.research.google.com/drive/1LkmOZQbMCxTJTw41-Lj8dgSrqGXVTAY2?usp=sharing)
-  - **Practice:** [Notebook 4.2 - Distilbert -Cyberbullying Detection]()
+  - **Practice:** [Notebook 4.2 - Distilbert -Cyberbullying Detection](https://colab.research.google.com/drive/1MbDlU2-MwXTYas6QOAEYIbRDi9VNCGc7?usp=sharing)
 
 
 
