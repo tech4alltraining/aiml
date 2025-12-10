@@ -31,7 +31,7 @@
 - Introduction to Regression
 - Linear Regression
 - Case Study on Regression 
-  - **Practice:** [Dataset 3.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/salary_data.csv) **-** [Notebook 3.1]() 
+  - **Practice:** [Dataset 3.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/salary_data.csv) **-** [Notebook 3.1](https://colab.research.google.com/drive/1YxFoPGIouT7-0cb-crlHVKHhxrqDQAZS?usp=sharing) 
 - Introduction to Classification
 - Logistic Regression 
 - Case Study on Classification
