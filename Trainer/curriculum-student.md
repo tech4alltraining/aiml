@@ -23,7 +23,7 @@
   - **Practice:** [Notebook 2.2: Casestudy](https://colab.research.google.com/drive/1f6mXEaGaGYwnhty7zfvh2lKGffu2thha?usp=sharing)
   - [Notebook Day 2](https://colab.research.google.com/drive/1s25kQfLyTUpO6J9wcAW_VdGM3RYHA70g?usp=sharing)
 - Data Pre-processing Techniques
-  - **Practice:** [Dataset 2.2](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/prepreprocessing/pre_data.csv) **-** [Notebook 2.3](https://colab.research.google.com/drive/1faozdCeHLG20-ZOGAJ7HdIJmSA0B1d8V?usp=sharing)
+  - **Practice:** [Dataset 2.2](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/prepreprocessing/pre_data.csv) **-** [Notebook 2.3](https://colab.research.google.com/drive/1MsdDPnB3WE3qZZUcZU7QRkJcl0kddz6e?usp=sharing)
 - Introduction to Supervised Learning Techniques
 
 ### Day #3
@@ -31,13 +31,13 @@
 - Introduction to Regression
 - Linear Regression
 - Case Study on Regression 
-  - **Practice:** [Dataset 3.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/salary_data.csv) **-** [Notebook 3.1]() 
+  - **Practice:** [Dataset 3.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/salary_data.csv) **-** [Notebook 3.1](https://colab.research.google.com/drive/14E7_EF2Eo4Bc-iz6mb0du-66TIwxj3ru?usp=sharing) 
 - Introduction to Classification
 - Logistic Regression 
 - Case Study on Classification
-  - **Practice:** [Dataset 3.2](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/loan_data_10k.csv) **-** [Notebook 3.2]()
+  - **Practice:** [Dataset 3.2](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/loan_data_10k.csv) **-** [Notebook 3.2](https://colab.research.google.com/drive/1mJQBMddfoi4P8EdgnPZVLo0tFPlAyBsH?usp=sharing)
 - kNN, SVM, Decision Trees, Random Forest, Naive Bayes 
-  - **Practice:** [Notebook 3.3]()
+  - **Practice:** [Notebook 3.3](https://colab.research.google.com/drive/1VuFHOR09-Si5rla6CGYHyuWupPL1r8aS?usp=sharing)
 
 ### Day #4
 
