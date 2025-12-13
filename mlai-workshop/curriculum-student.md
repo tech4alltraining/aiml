@@ -81,17 +81,11 @@
 - Tokenization & Sentiment Analysis: 
   - **Practice:** [Notebook 5.3](https://colab.research.google.com/drive/1m-8Kv3maexHubD2sc7DwSSjfJepIFFrR?usp=sharing)
 
-
-
-
-
-
 ___
 ### Exercise
 - **Exercise 1** Apply Regression [**Adv Dataset**](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/advertising.csv)
 
 ---
-
 ### Final Assessment
 - [**Dataset**: Diabetes Prediction](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/project/diabetes_prediction.csv)
 
