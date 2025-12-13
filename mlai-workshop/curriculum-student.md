@@ -88,7 +88,7 @@
 
 ___
 ### Practice
-- Apply Regression [**Adv Dataset**](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/advertising.csv)
+- **Exercise 1** Apply Regression [**Adv Dataset**](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/advertising.csv)
 
 
 
