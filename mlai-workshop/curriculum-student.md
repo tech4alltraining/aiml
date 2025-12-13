@@ -87,6 +87,10 @@
 <!-- **Upload Link:** [Submit Notebook](https://forms.gle/9CVLexqqQdNJxYEh8) -->
 
 ___
+### Practice
+- [**Apply Regression**](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/advertising.csv)
+
+
 
 ### **References & Video Tutorials**
 
