@@ -97,7 +97,7 @@ ___
 
 - [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing) 
 <!-- #### [Final Assessment](https://github.com/tech4alltraining/aiml/blob/main/assessments/ml_ai_final_assessment.md)  -->
-**Upload Link:** [Submit Notebook](https://forms.gle/9CVLexqqQdNJxYEh8)
+- **Upload Link:** [Submit Notebook](https://forms.gle/uZ5y7tb2ZGCm7mhr5)
 
 ---
 ### **References & Video Tutorials**

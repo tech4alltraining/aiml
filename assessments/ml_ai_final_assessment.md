@@ -7,7 +7,7 @@ The objective of this analysis is to build and compare various classification mo
 Problem Statement:
 Given the Diabetes Prediction Dataset, which contains medical and demographic data of patients, including features such as age, gender, BMI, hypertension, heart disease, smoking history, HbA1c level, and blood glucose level, the task is to apply different classification algorithms to predict the likelihood of diabetes in patients. The models to be applied include: Logistic Regression, k-Nearest Neighbors (kNN), Support Vector Machine (SVM), Naive Bayes, Decision Trees, Random Forests, MLP Classifier, XGBoost Classifier.
 #### **Link to Dataset:**
-https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/project/diabetes_prediction.csv
+[https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/project/diabetes_prediction.csv](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/project/diabetes_prediction.csv)
 
 #### **Tasks:**
 1. Understand the data and problem statement well, identify  independent variables and dependent variable
