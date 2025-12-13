@@ -90,9 +90,12 @@ ___
 ### Exercise
 - **Exercise 1** Apply Regression [**Adv Dataset**](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/advertising.csv)
 
+---
+
 ### Final Assessment
-[**Dataset**: Diabetes Prediction](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/project/diabetes_prediction.csv)
-[**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing) 
+- [**Dataset**: Diabetes Prediction](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/project/diabetes_prediction.csv)
+
+- [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing) 
 <!-- #### [Final Assessment](https://github.com/tech4alltraining/aiml/blob/main/assessments/ml_ai_final_assessment.md)  -->
 **Upload Link:** [Submit Notebook](https://forms.gle/9CVLexqqQdNJxYEh8)
 
