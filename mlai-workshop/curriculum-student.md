@@ -86,8 +86,8 @@
 <!-- #### [Final Assessment](https://github.com/tech4alltraining/aiml/blob/main/assessments/ml_ai_final_assessment.md)  -->
 <!-- **Upload Link:** [Submit Notebook](https://forms.gle/9CVLexqqQdNJxYEh8) -->
 
-___
-### Practice
+___as
+### Exercise
 - **Exercise 1** Apply Regression [**Adv Dataset**](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/advertising.csv)
 
 
