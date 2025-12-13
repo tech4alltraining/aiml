@@ -80,17 +80,21 @@
   - [Demo 5.12 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
 - Tokenization & Sentiment Analysis: 
   - **Practice:** [Notebook 5.3](https://colab.research.google.com/drive/1m-8Kv3maexHubD2sc7DwSSjfJepIFFrR?usp=sharing)
- [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing) 
 
- 
-<!-- #### [Final Assessment](https://github.com/tech4alltraining/aiml/blob/main/assessments/ml_ai_final_assessment.md)  -->
-**Upload Link:** [Submit Notebook](https://forms.gle/9CVLexqqQdNJxYEh8)
+
+
+
+
 
 ___
 ### Exercise
 - **Exercise 1** Apply Regression [**Adv Dataset**](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/advertising.csv)
 
-
+### Final Assessment
+[**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing) 
+<!-- #### [Final Assessment](https://github.com/tech4alltraining/aiml/blob/main/assessments/ml_ai_final_assessment.md)  -->
+**Upload Link:** [Submit Notebook](https://forms.gle/9CVLexqqQdNJxYEh8)
+sa
 ---
 ### **References & Video Tutorials**
 
