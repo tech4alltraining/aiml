@@ -9,6 +9,7 @@
 - [Dataset 1.1: Fruits](https://github.com/tech4alltraining/aiml/blob/main/datasets/cv/image-classification.zip)
 - [Notebook 1.1: Python Basics](https://colab.research.google.com/drive/173kStYtrqydUXa9cV2Okw3CuWGwvir-0?usp=sharing)
 - [Exercise 1.1: Python Problems](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/python-exercises.ipynb)
+- [Notebook 1.2: Python Problems](https://colab.research.google.com/drive/1g1ADTGkrvD1M9fkDmyLdVQlli0hzsQnv?usp=sharing)
 
 ### Day #2
 
