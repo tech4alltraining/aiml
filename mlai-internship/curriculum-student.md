@@ -82,7 +82,7 @@
 <!-- - [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing)  -->
 
 ### **Feedback QR Code**
-![Feedback QR Code]([feedback/QR Code - AIML MES Kuttipuran Batch 2.png](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/mlai-internship/feedback/QR%20Code%20-%20AIML%20MES%20Kuttipuran%20Batch%202.png))
+<img src="https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/mlai-internship/feedback/QR%20Code%20-%20AIML%20MES%20Kuttipuran%20Batch%202.png" width="400">
 ___
 
 ### **References & Video Tutorials**
