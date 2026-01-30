@@ -80,6 +80,9 @@
 - Tokenization & Sentiment Analysis: 
   - **Practice:** [Notebook 5.3](https://colab.research.google.com/drive/1m-8Kv3maexHubD2sc7DwSSjfJepIFFrR?usp=sharing)
 <!-- - [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing)  -->
+
+### **Feedback QR Code**
+![Feedback QR Code](feedback/QR Code - AIML MES Kuttipuran Batch 2.png)
 ___
 
 ### **References & Video Tutorials**
