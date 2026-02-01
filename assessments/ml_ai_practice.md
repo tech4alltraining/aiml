@@ -1,4 +1,4 @@
-## **ML-AI Add-on: Final Assessment**
+## **ML-AI Internship: Practive**
 ### **Predicting Diabetes Status Using Classification Models**
 #### **Context**:
 Diabetes is a chronic medical condition that can lead to serious health complications if not managed properly. Early prediction and diagnosis of diabetes are crucial for effective treatment and prevention of related complications. Healthcare professionals can benefit from predictive models that assess the risk of diabetes in patients based on their medical history and demographic information.
