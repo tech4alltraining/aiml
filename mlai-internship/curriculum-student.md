@@ -79,7 +79,9 @@
   - [Demo 5.12 - Text Analytics - QnA](https://language.cognitive.azure.com/tryout/answerQuestions)
 - Tokenization & Sentiment Analysis: 
   - **Practice:** [Notebook 5.3](https://colab.research.google.com/drive/1m-8Kv3maexHubD2sc7DwSSjfJepIFFrR?usp=sharing)
-<!-- - [**Live Assessment**](https://drive.google.com/file/d/1Frg9nBy7J6bhzBXbwSK43DXTuM37zE7h/view?usp=sharing)  -->
+
+### **Assessment Links**
+- [**Live Assessment**]() 
 
 ### **Feedback QR Code**
 <img src="https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/mlai-internship/feedback/QR%20Code%20-%20AIML%20MES%20Kuttipuran%20Batch%202.png" width="400">
