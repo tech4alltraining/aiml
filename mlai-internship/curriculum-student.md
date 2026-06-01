@@ -50,7 +50,8 @@
 - Demo-ANN
   - [Demo 4.1 Tesorflow Playground](https://playground.tensorflow.org/)
 - MLP Classification
-  - **Practice:** [Notebook 4.3](https://colab.research.google.com/drive/1EyDdtgXd4UgeE45ZoLjPwZZS_XlyEXBD?usp=sharing)
+  - **Practice:** [Notebook 4.3(A)](https://colab.research.google.com/drive/1EyDdtgXd4UgeE45ZoLjPwZZS_XlyEXBD?usp=sharing)
+  - **Practice:** [Notebook 4.3(B)](https://colab.research.google.com/drive/152yPkAbBFJNztoYDLUYJzQ71-jDz1a4F?usp=sharing)
 - DNN Classification
   - **Practice:** [Notebook 4.4](https://colab.research.google.com/drive/1lvXCssEWZ-DvNoJHZmngPnARM2uD9h7E?usp=sharing)
 - Exercise 4.1: [Dataset 4.2](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/heart_failure_raw.csv) 
