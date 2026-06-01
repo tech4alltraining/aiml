@@ -83,8 +83,8 @@
 ### **Exercise**
 - [**Final Exercise**](https://github.com/tech4alltraining/aiml/blob/main/assessments/ml_ai_practice.md) 
 
-### **Feedback QR Code**
-<img src="https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/mlai-internship/feedback/QR%20Code%20-%20AIML%20MES%20Kuttipuran%20Batch%202.png" width="400">
+<!-- ### **Feedback QR Code**
+<img src="https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/mlai-internship/feedback/QR%20Code%20-%20AIML%20MES%20Kuttipuran%20Batch%202.png" width="400"> -->
 ___
 
 ### **References & Video Tutorials**
