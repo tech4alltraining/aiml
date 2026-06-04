@@ -22,7 +22,7 @@
   - **Practice:** [Notebook 2.1](https://colab.research.google.com/drive/1AidHPpqV6tTMe8vC0vi4deaiwKmA0vo7?usp=sharing)
   - **Practice:** [Notebook 2.2: Casestudy](https://colab.research.google.com/drive/1f6mXEaGaGYwnhty7zfvh2lKGffu2thha?usp=sharing)
 - Data Pre-processing Techniques
-  - **Practice:** [Dataset 2.3](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/prepreprocessing/pre_data.csv) **-** [Notebook 2.3](https://colab.research.google.com/drive/1MsdDPnB3WE3qZZUcZU7QRkJcl0kddz6e?usp=sharing)
+  - **Practice:** [Dataset 2.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/prepreprocessing/pre_data.csv) **-** [Notebook 2.3](https://colab.research.google.com/drive/1MsdDPnB3WE3qZZUcZU7QRkJcl0kddz6e?usp=sharing)
 - Introduction to Supervised Learning Techniques
 
 ### Day #3
