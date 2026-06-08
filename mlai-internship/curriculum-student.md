@@ -70,6 +70,7 @@
 - CNN Classification
   - [Demo 5.6 - CNN 3D Visualization](https://adamharley.com/nn_vis/cnn/3d.html)
   - [Demo 5.7 - Convolution Demo](https://deeplizard.com/resource/pavq7noze2)
+  - [Tutorial 5.1 - CNN-Geek](https://www.geeksforgeeks.org/machine-learning/introduction-convolution-neural-network/)
   - **Practice:** [Notebook 5.2](https://colab.research.google.com/drive/1ikATxFnmve7qaecpqBZ14cYQE3vOkD63?usp=sharing)
 - Introduction to Natural Language Processing
 - **Demos-NLP**
