@@ -19,18 +19,28 @@
 
 #### **Session 1.2: *Python Libraries for Data Processing***
 ##### Introduction to Python Libraries
+- [Numpy Tutorial](https://www.w3schools.com/python/numpy/default.asp)
+- [Pandas Tutorial](https://www.w3schools.com/python/pandas/default.asp)
+- [Matplotlib Tutorial](https://www.w3schools.com/python/matplotlib_intro.asp)
+- [Seaborn Tutorial-Geek](https://www.geeksforgeeks.org/python-seaborn-tutorial/) 
+- [Seaborn Tutorial-Datacamp](https://www.datacamp.com/tutorial/seaborn-python-tutorial)
 ##### NumPy Fundamentals
+- [Exercise 1.2: NumPy Problems](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/numpy-exercises.ipynb)
 ##### Pandas for Data Handling
 ##### Data Loading & Exploration
 ##### Exploratory Data Analysis
 ##### NumPy & Pandas Practice
+- [Exercise 1.3: Pandas Problems](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/pandas-exercises.ipynb)
 
 ---
 ### Week 1 || Day 02
 ---
 #### **Session 2.1: *Data Visualization, Supervised Learning***
-##### Data Visualization & Preprocessing
-##### Matplotlib & Seaborn
+##### Data Visualization (Matplotlib & Seaborn)
+- [Exercise 2.1: Matplotlib & Seaborn Problems](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/matplotlib-seaborn-exercises.ipynb)
+##### Data Preprocessing
+- [Dataset 2.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/prepreprocessing/pre_data.csv)
+- [Notebook 2.1](https://colab.research.google.com/drive/1MsdDPnB3WE3qZZUcZU7QRkJcl0kddz6e?usp=sharing)
 ##### Supervised Machine Learning Concepts
 ##### Regression Techniques
 ##### Classification Techniques
