@@ -4,78 +4,43 @@
 ### Week 1 || Day 01
 ---
 
-#### **Session 1.1: *Machine Learning, Python Refresher***
-
-##### Introduction to Machine Learning & Artificial Intelligence
-##### Types of Machine Learning
-##### Real-world applications of ML & GenAI
-- [Demo 1.1 - Teachable Machine](https://teachablemachine.withgoogle.com/)
-- [Dataset 1.1: Fruits](https://github.com/tech4alltraining/aiml/blob/main/datasets/cv/image-classification.zip)
-##### Google Colab Tutorial
-##### Python Refresher: Variables, Data Types, Operators, Conditional Statements & Loops, Functions and Collections
-- [Tutorial 1.1: Python Basics - W3Schools](https://www.w3schools.com/python/)
-- [Notebook 1.1: Python Refresher](https://colab.research.google.com/drive/1g1ADTGkrvD1M9fkDmyLdVQlli0hzsQnv?usp=sharing)
-- [Exercise 1.1: Python Problems](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/python-exercises.ipynb)
-
-#### **Session 1.2: *Python Libraries for Data Processing***
-##### Introduction to Python Libraries
-##### NumPy Fundamentals
-##### Pandas for Data Handling
-##### Data Loading & Exploration
-##### Exploratory Data Analysis
-##### NumPy & Pandas Practice
+#### **Python & Data Foundations for Machine Learning**
+##### Overview of AI, Machine Learning & Generative AI
+##### Python essentials for ML - NumPy, Pandas
+#####  Data loading and exploration
+#####  Data cleaning techniques
+#####  Data visualization basics
+#####  Matplotlib, Seaborn
 
 ---
-### Week 1 || Day 02
----
-#### **Session 2.1: *Data Visualization, Supervised Learning***
-##### Data Visualization & Preprocessing
-##### Matplotlib & Seaborn
-##### Supervised Machine Learning Concepts
-##### Regression Techniques
-##### Classification Techniques
 
-#### **Session 2.2: *Machine Learning Workflow, Model Evaluation***
-##### Machine Learning Workflow
-##### Scikit-Learn API
-##### Model Evaluation Metrics
-##### Model Training & Validation
-##### Hands-on ML Activity
 
+#### **Supervised Machine Learning Techniques**
+##### Machine Learning workflow
+##### Supervised learning concepts
+##### Machine Learning Algorithms
+##### Model training and validation
+##### Evaluation metrics
 
 ---
 ### Week 1 || Day 03
 ---
-#### **Session 3.1: *Feature Engineering, Unsupervised Learning***
-##### Feature Reduction Techniques
-##### Feature Engineering
-##### Data Augmentation
-##### Introduction to Unsupervised Learning
-##### Clustering Algorithms
 
-#### **Session 3.2: *Model Optimization***
-##### Model Evaluation Techniques
-##### K-Fold Cross Validation
-##### Model Improvement Strategies
-##### Hands-on Optimization Activity
-##### Mini Project Discussion
+#### **Model Optimization & Unsupervised Learning**
+##### Feature engineering techniques
+##### Overfitting & underfitting
+##### Hyperparameter tuning
+##### Cross-validation
+##### Unsupervised learning
 
 ---
 ### Week 1 || Day 04
 ---
-#### **Session 4.1: *Hyperparameter Tuning, Deep Learning***
-##### Overfitting & Underfitting
-##### Hyperparameter Tuning
-##### Introduction to Deep Learning
-##### AI Ethics & Responsible AI
-
-
-#### **Session 4.2: *Generative AI & Large Language Models***
-
+#### **Generative AI & Large Language Models**
 ##### Introduction to Generative AI
   * [Activity 4.1] : Predict the next word
-##### Large Language Models (LLMs)
-##### Prompt Engineering Basics
+##### Large Language Models (LLMs) – concepts
+##### Prompt engineering principles
   * [Demo 4.1] - Prompting Demo (Paris trip example)
   * [Demo 4.2] - Without Prompt Engineering Demo (smartphone)
     > Generate a product description for a smartphone.
@@ -168,8 +133,7 @@
         > 
         > What is the earliest possible time they can all meet?
  
-##### Exploring Generative AI Tools
-##### Hands-on GenAI Activities
+#####  Using GenAI APIs (conceptual + demo)
   * [Practice 4.1] - GenAI API demo (simple prompt)
   * [Activity 4.3] - The Temperature Dial (temperature parameter)
   * [Activity 4.4] - The AI Fact-Checker (top-p, top-k parameters)
@@ -180,25 +144,18 @@
 
 #####  Ethical considerations and responsible AI
 * [Activity 4.5]: The Red Team Challenge (Jailbreak & Guardrails)
+#####  Integrating Machine Learning with Generative AI
+
 
 ---
 ### Week 1 || Day 05
 ---
-
-#### **Session 5.1: *Open Source GenAI Models & Hugging Face Ecosystem***
-##### Types of Prompts
-##### Integrating Machine Learning with Generative AI
-  * ML + GenAI integration patterns, Using GenAI to explain ML predictions, Automating insights from ML outputs, Best practices in ML & GenAI development
-##### Open Source Generative AI Models
-##### Hugging Face Ecosystem
-##### AI-powered Application Concepts
-
-
-#### **Session 5.2: *Capstone Project & GenAI Application Development***
-##### Streamlit App Development
-##### Project Grouping & Topic Selection
-##### Capstone Project Planning
-##### Internship Guidelines & Mentoring Plan
+#### **Integrating Machine Learning with Generative AI**
+#####  ML + GenAI integration patterns
+#####  Using GenAI to explain ML predictions
+#####  Automating insights from ML outputs
+#####  Intro to lightweight ML application interfaces (Streamlit overview)
+#####  Best practices in ML & GenAI development
 
 ---
 
