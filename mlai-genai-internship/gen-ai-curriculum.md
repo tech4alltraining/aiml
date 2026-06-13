@@ -1,4 +1,4 @@
-# **ML/AI & GenAI Internship Program**
+# **ML-AI & GenAI Internship Program**
 *Course Delivery Plan*
 
 ### Week 1 || Day 01
