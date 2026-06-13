@@ -9,7 +9,7 @@
 ##### Introduction to Machine Learning & Artificial Intelligence
 ##### Types of Machine Learning
 ##### Real-world applications of ML & GenAI
-- [Demo 1.1 - Teachable Machine](https://teachablemachine.withgoogle.com/)
+- [[Demo 1.1] - Teachable Machine](https://teachablemachine.withgoogle.com/)
 - [Dataset 1.1: Fruits](https://github.com/tech4alltraining/aiml/blob/main/datasets/cv/image-classification.zip)
 ##### Google Colab Tutorial
 ##### Python Refresher: Variables, Data Types, Operators, Conditional Statements & Loops, Functions and Collections
