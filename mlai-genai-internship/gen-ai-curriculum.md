@@ -14,7 +14,7 @@
 #### Google Colab Tutorial
 ##### Python Refresher: Variables, Data Types, Operators, Conditional Statements & Loops, Functions and Collections
 - [[Tutorial 1.1]: Python Basics](https://www.w3schools.com/python/)
-- [[Notebook 1.1]: Python Refresher](https://colab.research.google.com/drive/1g1ADTGkrvD1M9fkDmyLdVQlli0hzsQnv?usp=sharing)
+- [[Notebook 1.1]: Python Refresher](https://colab.research.google.com/drive/1MVi0l_AcxpJQvCoKSBgoLJMgR_thg7ax?usp=sharing)
 - [[Exercise 1.1]: Python Problems](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/python-exercises.ipynb)
 
 #### **Session 1.2: *Python Libraries for Data Processing***
