@@ -19,14 +19,11 @@
 
 #### **Session 1.2: *Python Libraries for Data Processing***
 ##### Introduction to Python Libraries
-- [[Numpy Tutorial]](https://www.w3schools.com/python/numpy/default.asp)
-- [[Pandas Tutorial]](https://www.w3schools.com/python/pandas/default.asp)
-- [[Matplotlib Tutorial]](https://www.w3schools.com/python/matplotlib_intro.asp)
-- [[Seaborn Tutorial-Geek]](https://www.geeksforgeeks.org/python-seaborn-tutorial/) 
-- [[Seaborn Tutorial-Datacamp]](https://www.datacamp.com/tutorial/seaborn-python-tutorial)
 ##### NumPy Fundamentals
+- [[Numpy Tutorial]](https://www.w3schools.com/python/numpy/default.asp)
 - [[Exercise 1.2]: NumPy Problems](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/numpy-exercises.ipynb)
 ##### Pandas for Data Handling
+- [[Pandas Tutorial]](https://www.w3schools.com/python/pandas/default.asp)
 ##### Data Loading & Exploration
 ##### Exploratory Data Analysis
 -  **Practice:** [Dataset 1.2](https://github.com/tech4alltraining/aiml/blob/main/datasets/regression/cardekho_dataset.csv) **-** [Notebook 1.2](https://colab.research.google.com/drive/1dPXOKWHW2GlQ35-uoi5AlHIMtqtlwftj?usp=sharing)

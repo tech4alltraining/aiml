@@ -38,6 +38,9 @@
 ---
 #### **Session 2.1: *Data Visualization, Supervised Learning***
 ##### Data Visualization (Matplotlib & Seaborn)
+- [[Matplotlib Tutorial]](https://www.w3schools.com/python/matplotlib_intro.asp)
+- [[Seaborn Tutorial-Geek]](https://www.geeksforgeeks.org/python-seaborn-tutorial/) 
+- [[Seaborn Tutorial-Datacamp]](https://www.datacamp.com/tutorial/seaborn-python-tutorial)
 - [Exercise 2.1: Matplotlib & Seaborn Problems](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/matplotlib-seaborn-exercises.ipynb)
 ##### Data Preprocessing
 - **Practice:** [Dataset 2.1](https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/prepreprocessing/pre_data.csv)**-**  [Notebook 2.1](https://colab.research.google.com/drive/1MsdDPnB3WE3qZZUcZU7QRkJcl0kddz6e?usp=sharing)
@@ -60,8 +63,11 @@
 ---
 #### **Session 3.1: *Feature Engineering, Unsupervised Learning***
 ##### Data Augmentation
+-  **Practice:** [Notebook 3.1](https://colab.research.google.com/drive/1bvfMkPtrSTILCFbxGvaUPr5iGwk65mTe?usp=sharing)
 ##### Feature Engineering
+-  **Practice:** [Notebook 3.2](https://colab.research.google.com/drive/1xKoiS5WaH9_kNHjg1dNP-xuAgaTmZ0Wr?usp=sharing)
 ##### Feature Reduction Techniques
+-  **Practice:** [Notebook 3.3](https://colab.research.google.com/drive/1wKr-AwnHXF3HgPvb-6K89SjVxUxxHsEK?usp=sharing)
 ##### Introduction to Unsupervised Learning
 ##### Clustering Algorithms
 - **Practice:** [Dataset 4.1](https://raw.githubusercontent.com/tirthajyoti/Machine-Learning-with-Python/master/Datasets/Mall_Customers.csv) **-** [Notebook 4.1](https://colab.research.google.com/drive/1jXCcXXQbSmYnxjulhgtgJB9ueQ76u6Pj?usp=sharing)
