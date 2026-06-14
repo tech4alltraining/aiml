@@ -75,7 +75,6 @@
 #### **Session 3.2: *Model Optimization***
 ##### Model Evaluation Techniques
 ##### K-Fold Cross Validation
-
 ##### Model Improvement Strategies
 ##### Hands-on Optimization Activity
 ##### Mini Project Discussion
