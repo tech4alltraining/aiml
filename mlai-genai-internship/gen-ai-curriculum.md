@@ -24,9 +24,10 @@
 - [[Exercise 1.2]: NumPy Problems - (github)](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/numpy-exercises.ipynb) [[Colab-Trainer]](https://colab.research.google.com/drive/1nKs3UcYWgZhIHDwFrFFv1rsY7WQvbYN4?usp=sharing)
 ##### Pandas for Data Handling
 - [[Pandas Tutorial]](https://www.w3schools.com/python/pandas/default.asp)
+- [[Pandas Practice Notebook 1.2]](https://colab.research.google.com/drive/1qZDpguw8vC8z7gsaagCGOhecHNC6EbZP?usp=sharing)
 ##### Data Loading & Exploration
 ##### Exploratory Data Analysis
--  **Practice:** [Dataset 1.2](https://github.com/tech4alltraining/aiml/blob/main/datasets/regression/cardekho_dataset.csv) **-** [Notebook 1.2](https://colab.research.google.com/drive/1dPXOKWHW2GlQ35-uoi5AlHIMtqtlwftj?usp=sharing)
+-  **Practice:** [Dataset 1.2](https://github.com/tech4alltraining/aiml/blob/main/datasets/regression/cardekho_dataset.csv) **-** [Notebook 1.3](https://colab.research.google.com/drive/1dPXOKWHW2GlQ35-uoi5AlHIMtqtlwftj?usp=sharing)
 ##### NumPy & Pandas Practice
 - [[Exercise 1.3]: Pandas Problems](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/pandas-exercises.ipynb)
 
