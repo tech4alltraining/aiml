@@ -21,7 +21,7 @@
 ##### Introduction to Python Libraries
 ##### NumPy Fundamentals
 - [[Numpy Tutorial]](https://www.w3schools.com/python/numpy/default.asp)
-- [[Exercise 1.2]: NumPy Problems](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/numpy-exercises.ipynb)
+- [[Exercise 1.2]: NumPy Problems - github](https://github.com/tech4alltraining/aiml/blob/main/mlai-internship/numpy-exercises.ipynb) [Colab-Trainer](https://colab.research.google.com/drive/1nKs3UcYWgZhIHDwFrFFv1rsY7WQvbYN4?usp=sharing)
 ##### Pandas for Data Handling
 - [[Pandas Tutorial]](https://www.w3schools.com/python/pandas/default.asp)
 ##### Data Loading & Exploration
