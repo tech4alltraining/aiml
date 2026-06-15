@@ -116,6 +116,7 @@
         > Corporate: "Let's synergize our bandwidth to touch base on the deliverables."
         >
         > Plain English: "Let's work together and meet to discuss the project."
+        >
         > Corporate: "We need to boil the ocean to shift a paradigm in this vertical."
         >
         > Plain English:
