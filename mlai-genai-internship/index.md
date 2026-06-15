@@ -61,32 +61,30 @@
 ---
 ### Week 1 || Day 03
 ---
-#### **Session 3.1: *Feature Engineering, Unsupervised Learning***
+#### **Session: *Feature Engineering, Model Optimization, Model Improvement, Unsupervised Learning***
 ##### Data Augmentation
 -  **Practice:** [Notebook 3.1](https://colab.research.google.com/drive/1bvfMkPtrSTILCFbxGvaUPr5iGwk65mTe?usp=sharing)
 ##### Feature Engineering
 -  **Practice:** [Notebook 3.2](https://colab.research.google.com/drive/1xKoiS5WaH9_kNHjg1dNP-xuAgaTmZ0Wr?usp=sharing)
 ##### Feature Reduction Techniques
 -  **Practice:** [Notebook 3.3](https://colab.research.google.com/drive/1wKr-AwnHXF3HgPvb-6K89SjVxUxxHsEK?usp=sharing)
-##### Introduction to Unsupervised Learning
-##### Clustering Algorithms
-- **Practice:** [Dataset 4.1](https://raw.githubusercontent.com/tirthajyoti/Machine-Learning-with-Python/master/Datasets/Mall_Customers.csv) **-** [Notebook 4.1](https://colab.research.google.com/drive/1jXCcXXQbSmYnxjulhgtgJB9ueQ76u6Pj?usp=sharing)
 
-#### **Session 3.2: *Model Optimization***
 ##### Model Evaluation Techniques
-##### K-Fold Cross Validation
+##### Overfitting & Underfitting
 ##### Model Improvement Strategies
-##### Hands-on Optimization Activity
-##### Mini Project Discussion
-
+##### K-Fold Cross Validation
+- **Practice:** [Notebook 3.4](https://colab.research.google.com/drive/1_MHdhg7Y1x5BnelDgPn9KB3d4NpwYwpf?usp=sharing)
+##### Hyperparameter Tuning
 ---
 ### Week 1 || Day 04
 ---
 #### **Session 4.1: *Hyperparameter Tuning, Deep Learning***
-##### Overfitting & Underfitting
-##### Hyperparameter Tuning
+
 ##### Introduction to Deep Learning
 ##### AI Ethics & Responsible AI
+##### Introduction to Unsupervised Learning
+##### Clustering Algorithms
+- **Practice:** [Dataset 4.1](https://raw.githubusercontent.com/tirthajyoti/Machine-Learning-with-Python/master/Datasets/Mall_Customers.csv) **-** [Notebook 4.1](https://colab.research.google.com/drive/1jXCcXXQbSmYnxjulhgtgJB9ueQ76u6Pj?usp=sharing)
 
 
 #### **Session 4.2: *Generative AI & Large Language Models***
