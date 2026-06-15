@@ -142,6 +142,7 @@
         > Ticket: "Do you offer enterprise discounts for teams of 50 or more?"
         >
         > Category: [SALES]
+        >
         > Ticket: "I was double-charged on my credit card this month."
         >
         > Category: [BILLING]
