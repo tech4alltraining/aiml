@@ -3,7 +3,7 @@
 # Demo 4.1 - Prompting Demo (Paris trip example)
 You're planning a trip to Paris and want the virtual assistant to provide recommendations for activities, restaurants and landmarks to visit during your stay. So let's say you're looking for a help with a traditional prompt and you ask for what should I do in Paris and the virtual assistant will assist you here like here are some recommendations for activities in Paris and here's how the enhanced prompt through prompt engineering respond to your queries. So if you input a query that goes like 
 ```
-Hey there I'm super excited about my upcoming trip to Paris so could you please recommend some must visit places and activities for me then the virtual assistant will generate the response as something like this.
+Hey there I'm super excited about my upcoming trip to Paris so could you please recommend some must visit places and activities for me
 ```
 You get the idea of how enhanced prompt provides users with an engaging and helpful experience by designing effective prompts that generate informative and relevant responses from the model. 
 

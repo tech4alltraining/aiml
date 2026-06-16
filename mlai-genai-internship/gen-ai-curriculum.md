@@ -196,7 +196,7 @@
  
 ##### Exploring Generative AI Tools
 ##### Hands-on GenAI Activities
-  * [Practice 4.1] - GenAI API demo (simple prompt)
+  * [Practice 4.1] - GenAI API demo (simple prompt) [Notebook-Gemini API] (https://colab.research.google.com/drive/1PLrhYse2JtZfKHN6i0mnlVswwl5oNOL0?usp=sharing)
   * [Activity 4.3] - The Temperature Dial (temperature parameter)
   * [Activity 4.4] - The AI Fact-Checker (top-p, top-k parameters)
   * [Demo 4.6] - The JSON Treasure Hunt
