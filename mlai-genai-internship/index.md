@@ -193,9 +193,7 @@
   * [Activity 4.3] - The Temperature Dial (temperature parameter)
   * [Activity 4.4] - The AI Fact-Checker (top-p, top-k parameters)
   * [Demo 4.6] - The JSON Treasure Hunt
-  
-  * [Practice 4.2] - Youtube video summarization using GenAI
-  * [Practice 4.3] - Diagnostic Helper (adding image input to GenAI) 
+
 
 #####  Ethical considerations and responsible AI
 * [Activity 4.5]: The Red Team Challenge (Jailbreak & Guardrails)

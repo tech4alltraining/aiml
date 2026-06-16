@@ -1,4 +1,5 @@
 # Demos & Activities
+
 # Demo 4.1 - Prompting Demo (Paris trip example)
 You're planning a trip to Paris and want the virtual assistant to provide recommendations for activities, restaurants and landmarks to visit during your stay. So let's say you're looking for a help with a traditional prompt and you ask for what should I do in Paris and the virtual assistant will assist you here like here are some recommendations for activities in Paris and here's how the enhanced prompt through prompt engineering respond to your queries. So if you input a query that goes like 
 ```
@@ -119,6 +120,9 @@ This shows how CoT helps the model juggle multiple variables without losing trac
 
 # Activity 4.2 - The Prompting Tournament
 The Prompting Tournament is a high-energy, competitive exercise designed to force students out of a "keyword search" mindset and into a "semantic steering" mindset. By banning the exact words they want the AI to generate, you force them to navigate the LLM's latent space—relying on associations, definitions, formatting tricks, and cultural context to get the desired output.
+
+> Get the AI to output exactly the phrase "***The eagle flies at midnight***" without using any of those words in the prompt itself.
+
 
 ## Rules of Engagement
 
