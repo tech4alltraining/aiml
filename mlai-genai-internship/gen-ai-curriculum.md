@@ -200,7 +200,7 @@
   * [Activity 4.3] - The Temperature Dial (temperature parameter)
   * [Activity 4.4] - The AI Fact-Checker (top-p, top-k parameters)
   * [Demo 4.6] - The JSON Treasure Hunt
-  
+  * [Simple Apps](https://github.com/tech4alltraining/aiml/blob/main/mlai-genai-internship/tutorials/streamlit-app-simple.md)* 
   * [Practice 4.2] - Youtube video summarization using GenAI
   * [Practice 4.3] - Diagnostic Helper (adding image input to GenAI) 
 
