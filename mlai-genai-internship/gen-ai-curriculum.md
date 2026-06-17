@@ -200,15 +200,34 @@
   * [Activity 4.3] - The Temperature Dial (temperature parameter)
   * [Activity 4.4] - The AI Fact-Checker (top-p, top-k parameters)
   * [Demo 4.6] - The JSON Treasure Hunt
-  * [Simple Apps](https://github.com/tech4alltraining/aiml/blob/main/mlai-genai-internship/tutorials/streamlit-app-simple.md)* 
-  * [Practice 4.2] - Youtube video summarization using GenAI
-  * [Practice 4.3] - Diagnostic Helper (adding image input to GenAI) 
+  * [[Apps: Text Gen, Chat Bot Apps](https://github.com/tech4alltraining/aiml/blob/main/mlai-genai-internship/tutorials/streamlit-app-simple.md)] 
+  * [[Apps: Youtube Video Summarization, Diagnostic Helper](https://github.com/tech4alltraining/aiml/blob/main/mlai-genai-internship/tutorials/streamlit-app-advanced.md)]
 
 #####  Ethical considerations and responsible AI
 * [Activity 4.5]: The Red Team Challenge (Jailbreak & Guardrails)
 
 
 
+---
+### Week 1 || Day 05
+---
+
+#### **Session 5.1: *Open Source GenAI Models & Hugging Face Ecosystem***
+##### Types of Prompts
+##### Integrating Machine Learning with Generative AI
+  - *[ML Model Deployment - Streamlit - [Loan Approval](https://colab.research.google.com/drive/1CDg6A7P7EL9eaLQiqKglFk1oOy6Su52c?usp=sharing)]*
+  - *[ML + GenAI Deployment - Streamlit [Loan Approval](https://colab.research.google.com/drive/1CDg6A7P7EL9eaLQiqKglFk1oOy6Su52c?usp=sharing)]*
+  - ML + GenAI integration patterns, Using GenAI to explain ML predictions, Automating insights from ML outputs, Best practices in ML & GenAI development
+##### Open Source Generative AI Models
+##### Hugging Face Ecosystem
+##### AI-powered Application Concepts
+
+
+#### **Session 5.2: *Capstone Project & GenAI Application Development***
+##### Streamlit App Development
+##### Project Grouping & Topic Selection
+##### Capstone Project Planning
+##### Internship Guidelines & Mentoring Plan
 
 
 ### **References & Video Tutorials**
