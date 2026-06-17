@@ -216,7 +216,7 @@
 ##### Types of Prompts
 ##### Integrating Machine Learning with Generative AI
   - *[ML Model Deployment - Streamlit - [Loan Approval](https://colab.research.google.com/drive/1CDg6A7P7EL9eaLQiqKglFk1oOy6Su52c?usp=sharing)]*
-  - *[ML + GenAI Deployment - Streamlit [Loan Approval](https://colab.research.google.com/drive/1CDg6A7P7EL9eaLQiqKglFk1oOy6Su52c?usp=sharing)]*
+  - *[ML + GenAI Deployment - Streamlit [Loan Approval](https://github.com/tech4alltraining/aiml/blob/main/mlai-genai-internship/tutorials/ml_gen_ai.md)]*
   - ML + GenAI integration patterns, Using GenAI to explain ML predictions, Automating insights from ML outputs, Best practices in ML & GenAI development
 ##### Open Source Generative AI Models
 ##### Hugging Face Ecosystem
