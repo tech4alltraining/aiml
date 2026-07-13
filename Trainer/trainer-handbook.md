@@ -336,6 +336,30 @@ Ask what the example demonstrates and what its limitation is.
 
 ---
 
+
+## How to use analogies effectively
+
+For a zero-knowledge audience, use analogies as bridges, not as final definitions.
+
+Recommended pattern:
+
+```text
+Analogy -> plain definition -> small example -> limitation
+```
+
+Example:
+
+```text
+Prompt is like a restaurant order.
+Plain definition: a prompt is the instruction given to the model.
+Example: "Explain AI in 4 bullet points for beginners."
+Limitation: even a good prompt cannot guarantee factual correctness.
+```
+
+Do not overextend analogies. After the student understands the idea, return to the technical term.
+
+---
+
 # Opening and diagnostic questions
 
 ## Opening demonstration
@@ -461,6 +485,40 @@ Use the trainer demonstration output and continue with non-API concepts. Do not 
 ---
 
 # Module 2: Basic concepts
+
+
+## Analogy bank for trainers
+
+Use these analogies when students look confused. Keep each analogy under 30 seconds.
+
+| Concept | Trainer analogy | How to explain it in class |
+|---|---|---|
+| AI | **Umbrella** | AI is the large umbrella; ML, GenAI, computer vision, speech systems, and agents are under it. |
+| Machine Learning | **Student learning from examples** | A student improves after seeing solved problems; ML improves by learning patterns from labelled examples. |
+| Predictive AI | **Doctor or mechanic giving a diagnosis** | It estimates the most likely condition, label, or risk from evidence. |
+| Generative AI | **Chef preparing a dish** | The prompt gives ingredients and instructions; the model prepares a new output. |
+| LLM | **Advanced autocomplete** | It predicts useful continuations, but it does not automatically verify truth. |
+| Prompt | **Restaurant order** | “Food” is vague; “one veg biryani, less spicy, no onion” is precise. Prompts work similarly. |
+| Token | **Lego block** | Text is broken into pieces; more pieces mean more processing. |
+| Context | **Open notebook** | The model can answer better when the required notes are available. |
+| Hallucination | **Confident student guessing** | Confidence and fluent language are not proof of correctness. |
+| Grounding | **Open-book answer** | The answer should be based on the given approved material. |
+| Tool | **Calculator in an exam** | The model may ask for calculation, but the calculator performs the exact operation. |
+| Memory/state | **Sticky notes on a desk** | Useful details are kept for the next step. |
+| Agent | **Office assistant with approved systems** | It checks allowed systems, observes results, and prepares a response. |
+| Guardrail | **Traffic signal or safety barrier** | It restricts unsafe or unauthorized actions. |
+
+### Quick analogy activity
+
+Ask students to complete these aloud:
+
+1. “A prompt is like a __________.” Expected: restaurant order or instruction sheet.  
+2. “Grounding is like answering with an approved __________.” Expected: textbook/document/reference.  
+3. “A tool is like a __________ that the system can safely use.” Expected: calculator/database/register.  
+4. “An agent is like an office assistant who uses approved __________.” Expected: tools/systems.  
+5. “A hallucination is like a confident guess without __________.” Expected: verification/evidence.
+
+---
 
 **Recommended time:** 20 minutes
 

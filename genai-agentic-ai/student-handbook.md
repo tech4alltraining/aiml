@@ -287,6 +287,44 @@ Create the following files as the training progresses. Use these filenames so th
 
 # Basic concepts
 
+
+## Quick analogy bank for beginners
+
+Use these analogies whenever a concept feels abstract.
+
+| Concept | Simple analogy | Meaning |
+|---|---|---|
+| AI | **Umbrella** | AI is the broad field; many techniques come under it. |
+| Machine Learning | **Student learning from solved examples** | The system learns patterns from examples instead of fixed rules. |
+| Predictive AI | **Weather forecast** | It estimates what is likely to happen or which label fits. |
+| Generative AI | **Creative assistant or chef** | It creates a new output from ingredients given in the prompt. |
+| LLM | **Powerful autocomplete** | It generates likely text based on the prompt and context. |
+| Prompt | **Order given to a restaurant waiter** | Clearer instructions produce a more suitable result. |
+| Token | **Lego block** | Text is split into small pieces the model can process. |
+| Context | **Open notebook during an exam** | The model can use only the information available to it. |
+| Hallucination | **Confident classmate guessing** | The answer may sound correct even when it is wrong. |
+| Grounding | **Open-book answer from an approved textbook** | The answer is based on trusted supplied information. |
+| Tool | **Calculator or office machine** | A controlled function performs a specific reliable action. |
+| Memory/state | **Sticky notes** | The system remembers useful details across steps. |
+| Agent | **Office assistant with approved tools** | It chooses safe tools and actions to complete a goal. |
+| Guardrail | **Road safety barrier** | It prevents unsafe or unauthorized actions. |
+
+### Mini activity: Match the analogy
+
+Match each item with the correct concept.
+
+| Analogy | Concept |
+|---|---|
+| A calculator used by the AI system | __________ |
+| A student learning from solved examples | __________ |
+| A confident friend who guesses an answer | __________ |
+| A waiter taking detailed food instructions | __________ |
+| An assistant checking order status and creating a ticket | __________ |
+
+Expected answers: tool, Machine Learning, hallucination, prompt, agent.
+
+---
+
 ## 1. Artificial Intelligence
 
 Artificial Intelligence is the broad field of making computer systems perform tasks associated with human intelligence.
@@ -352,6 +390,10 @@ Learned model + New input -> Prediction
 
 Predictive AI estimates a category, score, or numerical value.
 
+### Simple analogy
+
+Predictive AI is like a weather forecast. It does not create a new story; it estimates what is likely to happen based on patterns.
+
 Examples:
 
 - Fraud or not fraud
@@ -366,6 +408,10 @@ The main output is a prediction rather than newly written content.
 ## 4. Generative AI
 
 Generative AI creates new content based on patterns learned from data.
+
+### Simple analogy
+
+Generative AI is like a chef. The prompt provides ingredients and instructions, and the model prepares a new dish-like output. A better recipe usually gives a better dish.
 
 It can generate:
 
@@ -442,6 +488,8 @@ A prompt resembles instructions given to a new employee. Clear instructions usua
 
 ## 7. Token
 
+A token is like a Lego block. A sentence is broken into small pieces before the model processes it.
+
 A token is a small unit of text processed by a language model. It may be a word, part of a word, punctuation mark, or number.
 
 More input and output tokens generally mean more processing and potentially more cost. Beginners do not need to count tokens manually for these exercises.
@@ -449,6 +497,8 @@ More input and output tokens generally mean more processing and potentially more
 ---
 
 ## 8. Context
+
+Context is like the open notebook available during an exam. The model can use what is present in the current interaction, but it should not guess missing private facts.
 
 Context is the information available to the model while it generates a response.
 
@@ -486,6 +536,8 @@ Evaluate factual quality and instruction following separately.
 
 ## 10. Hallucination
 
+A hallucination is like a confident classmate who gives an answer without checking the textbook. The answer may sound correct, but it still needs verification.
+
 A hallucination occurs when a model produces incorrect or unsupported information while sounding confident.
 
 Example:
@@ -519,6 +571,8 @@ Analogy:
 
 ## 12. Tool
 
+A tool is like a calculator, attendance register, or office machine given to an assistant. The assistant can request it, but the system controls how it is used.
+
 A tool is a controlled function, calculator, database query, file reader, or API available to an AI system.
 
 Example request:
@@ -532,6 +586,8 @@ A calculator tool should perform the arithmetic because it is deterministic and 
 ---
 
 ## 13. Memory or state
+
+Memory or state is like sticky notes used while completing a task. It helps the system remember useful details without asking again.
 
 Memory or state stores information needed across turns or steps.
 
