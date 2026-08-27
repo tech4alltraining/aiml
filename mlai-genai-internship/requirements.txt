@@ -1,0 +1,38 @@
+# ML/AI & GenAI Internship Program
+#
+# Install into the `genai` conda environment:
+#
+#   conda create -n genai python=3.12 -y
+#   conda activate genai
+#   pip install -r requirements.txt
+#
+# Verify with:  python check_setup.py
+# Full setup instructions: student-handbook.md
+
+# --- Days 1-3: data handling, visualisation, machine learning ---
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+joblib
+
+# --- Notebooks ---
+jupyter
+ipykernel
+
+# --- Days 4-5: Generative AI and web apps ---
+google-genai
+streamlit
+pillow
+python-dotenv
+
+# --- Day 5 only: Hugging Face (about 2-3 GB - install the evening before) ---
+# Uncomment these, or install them separately with:
+#   pip install transformers torch datasets evaluate gradio
+#
+# transformers
+# torch
+# datasets
+# evaluate
+# gradio

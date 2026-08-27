@@ -1,5 +1,9 @@
 # AI-Powered Application Concepts
 
+**Day 5 · Session 5.1** — the concepts tutorial. There is no code here; this is the mental model you need before building the apps in [`loan-app.md`](../apps/loan-app.md) and [`ml_gen_ai.md`](../apps/ml_gen_ai.md).
+
+---
+
 An **AI-powered application** is a software application that uses Artificial Intelligence to perform tasks that normally require human intelligence.
 
 In simple words:

@@ -11,7 +11,10 @@ Gemini supports video understanding, including public YouTube URLs, and can proc
 
 ## Install libraries
 
+**Day 4 · Session 4.2.** Complete [`streamlit-app-simple.md`](streamlit-app-simple.md) first — these two apps build on it.
+
 ```bash
+conda activate genai
 pip install streamlit google-genai pillow
 ```
 

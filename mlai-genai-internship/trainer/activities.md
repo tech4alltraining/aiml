@@ -1,14 +1,75 @@
 # Demos & Activities
 
-# Demo 4.1 - Prompting Demo (Paris trip example)
-You're planning a trip to Paris and want the virtual assistant to provide recommendations for activities, restaurants and landmarks to visit during your stay. So let's say you're looking for a help with a traditional prompt and you ask for what should I do in Paris and the virtual assistant will assist you here like here are some recommendations for activities in Paris and here's how the enhanced prompt through prompt engineering respond to your queries. So if you input a query that goes like 
-```
-Hey there I'm super excited about my upcoming trip to Paris so could you please recommend some must visit places and activities for me
-```
-You get the idea of how enhanced prompt provides users with an engaging and helpful experience by designing effective prompts that generate informative and relevant responses from the model. 
+**Instructor facilitation notes for the Day 4 and Day 5 classroom activities.**
 
-# Demo 4.2 - Type of prompts (zero-shot, one-shot, few-shot, chain-of-thought)
-During your demo, paste the text exactly as it appears in the blockquotes into Gemini.
+The activity numbers here match the [Student Handbook](../student-handbook.md#activity-index) and the [Session Plan](session-plan.md) exactly. The prompts themselves, ready to copy, are in [prompts.md](../prompts.md).
+
+| Activity | Name | Format | Time |
+|---|---|---|---|
+| **Demo 4.1** | Weak vs strong prompting (Paris) | Instructor demo | 10 min |
+| **Demo 4.2** | The four prompt types | Instructor demo | 25 min |
+| **Activity 4.10** | The Prompting Tournament | Teams | 30 min |
+| **Activity 4.7** | The Temperature Dial | Whole class | 20 min |
+| **Activity 4.8** | Top-p and Top-k | Whole class | 15 min |
+| **Activity 4.11** | The AI Fact-Checker | Individual + debrief | 35 min |
+| **Activity 4.13** | The JSON Treasure Hunt | Individual | 15 min |
+| **Activity 4.12** | The Red Team Challenge | Pairs | 25 min |
+
+---
+
+# Demo 4.1 - Prompting Demo (Paris trip example)
+
+**Format:** instructor demo, projected · **Time:** 10 minutes · **Needs:** any LLM interface
+
+**The point:** the difference between a bad answer and a good one is usually the *prompt*, not the model.
+
+## Run these two, one after the other
+
+**Step 1 — the weak prompt.** Type this and let the class read the answer:
+
+> What should I do in Paris?
+
+You will get a generic list: Eiffel Tower, Louvre, Notre-Dame. Perfectly correct and completely useless — it is the same answer everyone on earth gets.
+
+**Step 2 — the strong prompt.** Same model, same topic:
+
+> I am visiting Paris for four days in October with a budget of €600 excluding accommodation. I am interested in history and food, and I do not enjoy long queues.
+>
+> Recommend one activity per day plus one restaurant near each.
+>
+> For each recommendation, give one sentence on why it suits me and the approximate cost.
+>
+> Return a table with columns: Day, Activity, Restaurant, Cost, Why.
+
+## Ask the class
+
+1. **Which answer could you actually act on?**
+2. **What did the second prompt contain that the first did not?** Lead them to name the parts: who I am, my constraints, what I want back, and the format.
+3. **Did the model get smarter between the two attempts?** No. **You got more specific.**
+
+## The line to leave them with
+
+> A prompt is a briefing, not a search query. Brief the model the way you would brief a capable new colleague who knows nothing about you.
+
+The five-part structure that formalises this is in [Handbook 4.4](../student-handbook.md#44-prompt-engineering).
+
+# Demo 4.2 - Types of prompts (zero-shot, one-shot, few-shot, chain-of-thought)
+
+During your demo, paste the text exactly as it appears in the blockquotes into Gemini or Google AI Studio.
+
+**Run them in this order.** Each one exists to fix a problem the previous one revealed:
+
+```text
+Zero-shot        -> works, but the FORMAT is unpredictable
+      ↓
+One-shot         -> one example fixes the format
+      ↓
+Few-shot         -> several examples teach a pattern words cannot describe
+      ↓
+Chain-of-thought -> reasoning first, which fixes logic and arithmetic errors
+```
+
+Students remember the sequence far better than they remember four definitions.
 
 ## 1. Zero-Shot Prompting
 
@@ -118,7 +179,10 @@ This shows how CoT helps the model juggle multiple variables without losing trac
 
 
 
-# Activity 4.2 - The Prompting Tournament
+# Activity 4.10 - The Prompting Tournament
+
+**Format:** teams of 3-4 · **Time:** 30 minutes · **Needs:** any LLM interface
+
 The Prompting Tournament is a high-energy, competitive exercise designed to force students out of a "keyword search" mindset and into a "semantic steering" mindset. By banning the exact words they want the AI to generate, you force them to navigate the LLM's latent space—relying on associations, definitions, formatting tricks, and cultural context to get the desired output.
 
 > Get the AI to output exactly the phrase "***The eagle flies at midnight***" without using any of those words in the prompt itself.
@@ -172,7 +236,9 @@ When the activity ends, bring the class back together and ask the winning groups
 2. **Zero-Shot formatting:** Getting the AI to drop its conversational filler ("Sure, here is your text:") requires explicit formatting constraints, a crucial skill for using APIs where you only want raw data returned.
 3. **Multiple Paths to the Same Output:** There is rarely one "perfect" prompt. Linguistic translation, cultural tropes, and strict formatting all trigger the same final token generation.
 
-# Activity: The Temperature Dial
+# Activity 4.7 - The Temperature Dial
+
+**Format:** whole class, instructor drives · **Time:** 20 minutes · **Needs:** a playground with adjustable parameters
 
 **The Concept:** LLMs don't actually "know" facts; they calculate probabilities. The **Temperature** parameter acts as a dial for the model’s creativity.
 
@@ -243,11 +309,75 @@ Once the testing is complete, bring the room together and ask these three questi
 * Translating a legal document from Spanish to English? *(Low/0.0 - accuracy is paramount).*
 
 
-Here is the ready-to-use lesson plan and problem formulation for the **Ethical Considerations and Responsible AI** block. This activity is titled **"The AI Fact-Checker"** and is split into two parts to address both **Hallucinations** and **Data Bias** interactively.
+---
+
+# Activity 4.8 - Top-p and Top-k
+
+**Format:** whole class, instructor drives · **Time:** 15 minutes · **Needs:** a playground with adjustable parameters, or the API
+
+**Run this straight after the Temperature Dial**, while the idea of "randomness" is fresh. Students almost always assume temperature is the only dial. It is not.
+
+## The concept, in one picture
+
+At every step, the model has a ranked list of possible next tokens. Two things happen, in this order:
+
+```text
+STEP 1 - Decide which candidates are even allowed on the shelf.
+         top_k = 40   ->  keep only the 40 most likely tokens
+         top_p = 0.9  ->  keep the most likely tokens until their
+                          probabilities add up to 90%, drop the rest
+
+STEP 2 - Decide how adventurously to pick from that shelf.
+         temperature  ->  0 = always the top one
+                          1 = sample freely across the shelf
+```
+
+**`top_k` and `top_p` decide who is invited. `temperature` decides who gets chosen.** That ordering is the entire lesson.
+
+## The demonstration
+
+Set **`temperature = 1.0`** and leave it there for the whole demo. Only change `top_k`.
+
+**Prompt:**
+
+> Suggest a name for a new coffee shop. Reply with the name only.
+
+| Setting | Run 3 times | What the class should observe |
+|---|---|---|
+| `top_k = 1` | | Identical every time |
+| `top_k = 5` | | Slight variation |
+| `top_k = 40` | | Clearly different each time |
+
+## The question that makes it land
+
+> **"Temperature is at 1.0 — maximum randomness. So why did `top_k = 1` give the same answer three times in a row?"**
+
+Let them think. The answer: **temperature can only choose among the candidates that survived `top_k`.** With one candidate, there is nothing to choose between. A high temperature cannot create variety that `top_k` has already removed.
+
+## Real-world settings
+
+Ask the class which combination they would use for each:
+
+| Task | temperature | top_p | top_k | Why |
+|---|---|---|---|---|
+| Extracting dates from invoices | 0.0 | 0.1 | 1 | The same input must give the same output, always |
+| A customer support reply | 0.3 | 0.9 | 40 | Mostly consistent, slightly natural |
+| Brainstorming campaign slogans | 1.0 | 1.0 | 100 | Variety is the whole point |
+| Summarising a medical report | 0.0 | 0.1 | 1 | Invention here is dangerous |
+
+## The practical advice to give them
+
+**Change `temperature` first and leave the other two at their defaults.** Adjust all three at once and you will never know which one caused the change you are looking at. This is the same discipline as changing one variable in an experiment — and students who have done Activity 3.3 will recognise it.
+
+The runnable code for this activity is in [Handbook Activity 4.8](../student-handbook.md#day-4--deep-learning-clustering-and-generative-ai).
 
 ---
 
-# Activity: The AI Fact-Checker
+# Activity 4.11 - The AI Fact-Checker
+
+**Format:** individual work, then whole-class debrief · **Time:** 35 minutes · **Needs:** any LLM interface
+
+This activity belongs to the **Ethical Considerations and Responsible AI** block. It is split into two parts, addressing **hallucination** and **data bias** separately.
 
 **The Concept:**
 LLMs do not have a database of facts or a connection to "truth"—they have a map of language probabilities. Because of this, they can suffer from two distinct flaws:
@@ -322,8 +452,22 @@ Bring the class back together and use these discussion points to solidify the le
 * *For Bias:* Use explicit **system prompts** (e.g., *"Ensure diverse representation of characters in your stories"*).
 
 
-# Demo: "The JSON Treasure Hunt"
-The Simple Problem: "The JSON Treasure Hunt"To help the class understand the data, give them a specific prompt to run through the code above (e.g., "Write a short haiku about a robot"). When the giant wall of JSON prints to their terminal, challenge them to find and extract three specific pieces of data hidden within the structure:
+# Activity 4.13 - The JSON Treasure Hunt
+
+**Format:** individual · **Time:** 15 minutes · **Needs:** a working Gemini API call ([Handbook 4.5](../student-handbook.md#45-your-first-gemini-api-call))
+
+Students run one simple prompt through the API and print the **entire** response object rather than just `response.text`:
+
+```python
+response = client.models.generate_content(
+    model="gemini-3.5-flash",
+    contents="Write a short haiku about a robot.",
+)
+
+print(response)          # the whole object, not just response.text
+```
+
+When the wall of JSON fills their terminal, challenge them to find three specific things inside it:
 
 * **The Payload**: Find the exact nesting path to the generated text string (usually buried under candidates $\rightarrow$ content $\rightarrow$ parts $\rightarrow$ text).
 * **The Bill**: Find the total_token_count under usage_metadata to see exactly how much data this request consumed (this is the metric companies use to bill for API usage).
@@ -331,11 +475,13 @@ The Simple Problem: "The JSON Treasure Hunt"To help the class understand the dat
   
 This exercise brilliantly demystifies AI. It proves to students that the LLM isn't a magical thinking machine, but a standard software system returning a predictable, nested dictionary of data.
 
-Here is a highly engaging, interactive activity for the Ethical & Responsible AI block. It focuses on the security and safety aspect of AI, specifically **Red Teaming** (testing an AI system to find its vulnerabilities).
-
 ---
 
-# Activity: The Red Team Challenge (Jailbreak & Guardrails)
+# Activity 4.12 - The Red Team Challenge (Jailbreak & Guardrails)
+
+**Format:** pairs or small groups · **Time:** 25 minutes · **Needs:** any LLM interface
+
+This activity covers the security and safety side of Responsible AI, specifically **Red Teaming** — deliberately testing an AI system to find its vulnerabilities.
 
 **The Concept:** When companies deploy GenAI (like a customer service bot), they give it hidden "System Prompts" to enforce responsible behavior—for example, "Don't give medical advice," or "Don't swear." However, LLMs are easily manipulated. **Red Teaming** is the ethical practice of intentionally trying to trick the AI into breaking its own rules so developers can fix the vulnerabilities before public release.
 

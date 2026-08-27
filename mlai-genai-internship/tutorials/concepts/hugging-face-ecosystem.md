@@ -23,6 +23,34 @@ The Hugging Face Hub hosts model repositories, datasets, and Spaces, and the off
 
 ---
 
+# 0. Before you start
+
+**Day 5 · Session 5.1.** All commands assume the `genai` conda environment from the [Student Handbook](../../setup-guide.md).
+
+```bash
+conda activate genai
+pip install transformers torch datasets evaluate gradio
+```
+
+> ⚠️ **This is a 2-3 GB download.** Install it the **evening before** the session, not during it. Twenty students downloading PyTorch simultaneously on classroom wifi will not end well.
+
+Create a free account at [huggingface.co/join](https://huggingface.co/join). You do not need a token for the models in this tutorial, but you will need the account to use Spaces.
+
+## Verify PyTorch works before the session
+
+Run this. It takes two seconds and saves an hour of confusion:
+
+```bash
+conda activate genai
+python -c "import torch, numpy; print('torch', torch.__version__, '| numpy', numpy.__version__)"
+```
+
+> ⚠️ **Apple Silicon Mac users:** if this prints `torch 2.2.2` (or older), your conda environment is an Intel/Rosetta build. PyTorch stopped publishing Intel macOS wheels after 2.2.2, and that version cannot work with NumPy 2 — every example below will fail with `RuntimeError: Numpy is not available`. The fix is in the [Student Handbook troubleshooting section](../../troubleshooting.md#environment-problems).
+
+**The first time you run each example**, the model is downloaded (a few hundred MB) and cached in `~/.cache/huggingface`. Later runs start immediately.
+
+---
+
 # 1. Major Components of the Hugging Face Ecosystem
 
 ## A. Hugging Face Hub
@@ -384,7 +412,13 @@ Example:
 ```python
 from transformers import pipeline
 
-sentiment_model = pipeline("sentiment-analysis")
+# Always name the model explicitly. If you write pipeline("sentiment-analysis")
+# with no model, you get whatever default the library currently ships - and
+# that default changes between versions, so your results stop being reproducible.
+sentiment_model = pipeline(
+    "sentiment-analysis",
+    model="distilbert-base-uncased-finetuned-sst-2-english",
+)
 
 sentences = [
     "I love machine learning.",
@@ -450,8 +484,10 @@ prompt = "Artificial Intelligence is useful because"
 
 output = generator(
     prompt,
-    max_length=50,
-    num_return_sequences=1
+    max_new_tokens=40,        # how many NEW tokens to add after the prompt
+    num_return_sequences=1,
+    do_sample=True,           # sample instead of always taking the top token
+    temperature=0.8,          # same parameter you met in Activity 4.7
 )
 
 print(output[0]["generated_text"])
@@ -492,7 +528,8 @@ Question answering models extract answers from a context passage.
 ```python
 from transformers import pipeline
 
-qa_model = pipeline("question-answering")
+qa_model = pipeline("question-answering",
+                    model="distilbert-base-cased-distilled-squad")
 
 context = """
 Artificial Intelligence is a branch of computer science that enables machines
@@ -627,6 +664,7 @@ Students will create a simple web interface for a model.
 ## Install
 
 ```bash
+conda activate genai
 pip install gradio transformers
 ```
 
@@ -636,7 +674,10 @@ pip install gradio transformers
 import gradio as gr
 from transformers import pipeline
 
-sentiment_model = pipeline("sentiment-analysis")
+sentiment_model = pipeline(
+    "sentiment-analysis",
+    model="distilbert-base-uncased-finetuned-sst-2-english",
+)
 
 def analyze_sentiment(text):
     result = sentiment_model(text)[0]
@@ -675,23 +716,52 @@ Students will understand that different models may produce different outputs.
 
 ## Task
 
-Use two sentiment models from the Hub and compare their predictions.
-
-Example models:
+Run the same sentences through two sentiment models trained on **different kinds of text**, and compare.
 
 ```text
-distilbert-base-uncased-finetuned-sst-2-english
-cardiffnlp/twitter-roberta-base-sentiment-latest
+distilbert-base-uncased-finetuned-sst-2-english   <- trained on movie reviews
+cardiffnlp/twitter-roberta-base-sentiment-latest  <- trained on tweets
+```
+
+## Code
+
+```python
+from transformers import pipeline
+
+model_a = pipeline("sentiment-analysis",
+                   model="distilbert-base-uncased-finetuned-sst-2-english")
+model_b = pipeline("sentiment-analysis",
+                   model="cardiffnlp/twitter-roberta-base-sentiment-latest")
+
+sentences = [
+    "The lab session was great.",
+    "The lab session was fine I guess.",
+    "Oh brilliant, another three-hour lab.",     # sarcasm
+    "not bad at all",                            # double negative
+    "The food was ok but the service was terrible.",
+]
+
+for sentence in sentences:
+    a = model_a(sentence)[0]
+    b = model_b(sentence)[0]
+    print(f"\n{sentence}")
+    print(f"  Model A (movie reviews): {a['label']:<10} {a['score']:.3f}")
+    print(f"  Model B (tweets)      : {b['label']:<10} {b['score']:.3f}")
 ```
 
 ## Student Questions
 
 ```text
-Do both models give the same result?
-Which model is more confident?
-Does the model work well on informal text?
-Does the model handle sarcasm?
+Do both models agree on every sentence? Where do they disagree?
+Sentence 3 is sarcasm. Did either model catch it?
+Sentence 4 is a double negative. Which handled it better?
+Sentence 5 is genuinely both positive and negative. What does the
+   confidence score tell you about the model struggling?
+Model B was trained on tweets, Model A on film reviews.
+   Which would you deploy for student feedback, and why?
 ```
+
+> **The lesson:** "which model is best?" is the wrong question. **"Best for what text?"** is the right one. Always check what a model was trained on before trusting it on your data.
 
 ## Learning Outcome
 
@@ -790,13 +860,13 @@ Deploy on Spaces
 
 This gives students a complete practical introduction to using modern Generative AI tools.
 
-[1]: https://huggingface.co/docs/hub/index?utm_source=chatgpt.com "Hugging Face Hub documentation"
-[2]: https://huggingface.co/docs/transformers/en/index?utm_source=chatgpt.com "Transformers"
-[3]: https://huggingface.co/docs/datasets/en/index?utm_source=chatgpt.com "Datasets"
-[4]: https://huggingface.co/docs/diffusers/v0.30.2/en/index?utm_source=chatgpt.com "Diffusers"
-[5]: https://huggingface.co/docs/peft/index?utm_source=chatgpt.com "PEFT"
-[6]: https://huggingface.co/docs/autotrain/index?utm_source=chatgpt.com "AutoTrain"
-[7]: https://huggingface.co/docs/hub/en/spaces?utm_source=chatgpt.com "Spaces"
-[8]: https://huggingface.co/docs/inference-providers/en/index?utm_source=chatgpt.com "Inference Providers"
-[9]: https://endpoints.huggingface.co/?utm_source=chatgpt.com "Inference Endpoints by Hugging Face"
-[10]: https://huggingface.co/docs/hub/spaces-overview?utm_source=chatgpt.com "Spaces Overview"
+[1]: https://huggingface.co/docs/hub/index "Hugging Face Hub documentation"
+[2]: https://huggingface.co/docs/transformers/en/index "Transformers"
+[3]: https://huggingface.co/docs/datasets/en/index "Datasets"
+[4]: https://huggingface.co/docs/diffusers/v0.30.2/en/index "Diffusers"
+[5]: https://huggingface.co/docs/peft/index "PEFT"
+[6]: https://huggingface.co/docs/autotrain/index "AutoTrain"
+[7]: https://huggingface.co/docs/hub/en/spaces "Spaces"
+[8]: https://huggingface.co/docs/inference-providers/en/index "Inference Providers"
+[9]: https://endpoints.huggingface.co/ "Inference Endpoints by Hugging Face"
+[10]: https://huggingface.co/docs/hub/spaces-overview "Spaces Overview"

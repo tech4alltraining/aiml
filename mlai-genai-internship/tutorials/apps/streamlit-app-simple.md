@@ -40,11 +40,16 @@ Gemini responds:
 
 # 2. Required Installation
 
-Install the required libraries:
+**Day 4 · Session 4.2.** All commands assume the `genai` conda environment from the [Student Handbook](../../setup-guide.md).
 
 ```bash
+conda activate genai
 pip install streamlit google-genai
 ```
+
+**Your terminal prompt must show `(genai)` before you install anything.** If it does not, the packages go somewhere else and `streamlit run` will fail with `command not found`.
+
+You also need a Gemini API key from [aistudio.google.com/apikey](https://aistudio.google.com/apikey).
 
 ---
 
@@ -124,6 +129,8 @@ st.write(
 
 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
+MODEL_NAME = "gemini-3.5-flash"
+
 # -----------------------------------------
 # User input
 # -----------------------------------------
@@ -162,7 +169,7 @@ if st.button("Generate Explanation"):
 
         with st.spinner("Generating response..."):
             response = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model=MODEL_NAME,
                 contents=prompt
             )
 
@@ -268,6 +275,8 @@ st.write(
 
 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
+MODEL_NAME = "gemini-3.5-flash"
+
 # -----------------------------------------
 # Initialize chat history
 # -----------------------------------------
@@ -320,7 +329,7 @@ if user_prompt:
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             response = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model=MODEL_NAME,
                 contents=prompt
             )
 
@@ -534,5 +543,5 @@ The two simple example apps are:
 
 These examples help students understand how modern AI applications combine a web interface with a powerful LLM through an API.
 
-[1]: https://ai.google.dev/gemini-api/docs/libraries?utm_source=chatgpt.com "Gemini API libraries - Google AI for Developers"
-[2]: https://docs.streamlit.io/develop/api-reference/connections/st.secrets?utm_source=chatgpt.com "st.secrets - Streamlit Docs"
+[1]: https://ai.google.dev/gemini-api/docs/libraries "Gemini API libraries - Google AI for Developers"
+[2]: https://docs.streamlit.io/develop/api-reference/connections/st.secrets "st.secrets - Streamlit Docs"

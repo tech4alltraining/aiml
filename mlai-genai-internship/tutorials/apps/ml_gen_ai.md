@@ -1,4 +1,24 @@
+# Integrating Machine Learning with Generative AI
+
+**Day 5 · Session 5.1** — the strongest single idea of the week, and the best thing you can put in a capstone project.
+
 **Machine Learning model predicts loan approval. Generative AI explains the prediction in simple language. Streamlit provides the user interface.**
+
+> 🧠 **The analogy to hold onto:** the **doctor** reads the test results and makes the diagnosis; the **receptionist** explains what happens next in words you understand. The ML model is the doctor. The LLM is the receptionist. A hospital where the receptionist diagnoses patients is a disaster — and so is an app where the LLM decides the loan.
+
+## Before you start
+
+Complete [`loan-app.md`](loan-app.md) first — this tutorial extends that app and reuses its `rf_model.joblib`.
+
+```bash
+conda activate genai
+pip install streamlit pandas scikit-learn joblib google-genai
+```
+
+You also need a Gemini API key from [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Setup instructions: [Student Handbook](../../setup-guide.md#storing-your-gemini-api-key-safely).
+
+---
+
 
 So the demo flow is:
 
@@ -115,6 +135,8 @@ model = load_model()
 # Load Gemini client
 # -----------------------------
 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+
+MODEL_NAME = "gemini-3.5-flash"
 
 # -----------------------------
 # IMPORTANT:
@@ -282,7 +304,7 @@ if submitted:
 
     with st.spinner("Generating explanation using Generative AI..."):
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model=MODEL_NAME,
             contents=prompt
         )
 
@@ -300,10 +322,13 @@ if submitted:
 From the terminal:
 
 ```bash
+conda activate genai
 cd loan_genai_demo
 pip install -r requirements.txt
 streamlit run app.py
 ```
+
+Stop the server with `Ctrl+C`.
 
 ---
 
@@ -364,7 +389,7 @@ Streamlit = user interface
 
 This is a strong example of how traditional ML and GenAI can be combined to build more interactive, understandable, and user-friendly AI applications.
 
-[1]: https://docs.streamlit.io/?utm_source=chatgpt.com "Streamlit documentation"
-[2]: https://ai.google.dev/gemini-api/docs/text-generation?utm_source=chatgpt.com "Text generation - generateContent API"
-[3]: https://scikit-learn.org/stable/model_persistence.html?utm_source=chatgpt.com "11. Model persistence"
-[4]: https://docs.streamlit.io/develop/api-reference/connections/st.secrets?utm_source=chatgpt.com "st.secrets - Streamlit Docs"
+[1]: https://docs.streamlit.io/ "Streamlit documentation"
+[2]: https://ai.google.dev/gemini-api/docs/text-generation "Text generation - generateContent API"
+[3]: https://scikit-learn.org/stable/model_persistence.html "11. Model persistence"
+[4]: https://docs.streamlit.io/develop/api-reference/connections/st.secrets "st.secrets - Streamlit Docs"

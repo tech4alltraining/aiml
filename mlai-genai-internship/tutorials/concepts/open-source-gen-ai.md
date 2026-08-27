@@ -1,5 +1,24 @@
 # Open-Source GenAI Models: A Comprehensive Guide for Students
 
+**Day 5 · Session 5.1** — a reference survey. Read it to know what exists; you are not expected to memorise it.
+
+## Open-source vs API models
+
+| | API model (Gemini, GPT, Claude) | Open-source model (Llama, Mistral, Qwen, Gemma) |
+|---|---|---|
+| Where it runs | The provider's servers | Your machine, your server, or a host you choose |
+| Cost | Per token | Free weights; you pay for the hardware |
+| Setup | An API key | Download the weights, have enough RAM or GPU |
+| Data privacy | Your data leaves your network | Your data can stay entirely local |
+| Customisation | Prompting only | Full fine-tuning possible |
+| Best for | Getting started, best quality, no infrastructure | Privacy, cost at scale, offline use, research |
+
+> 🧠 **Analogy:** an API model is a taxi — you pay per trip and someone else maintains the car. An open-source model is buying a car — free to drive once you own it, but you need somewhere to park it and you do the maintenance.
+
+Most models below can be run through the Hugging Face `pipeline()` covered in [`hugging-face-ecosystem.md`](hugging-face-ecosystem.md). **Check the parameter count before you try:** a 7B model needs roughly 16 GB of RAM to run at full precision, and a 70B model will not run on a laptop at all.
+
+---
+
 # 1. Text Generation / Chat Models
 
 These models generate text, answer questions, summarize documents, translate, reason, and support chatbot applications.
@@ -366,22 +385,22 @@ Bias and misuse risks
 
 For example, some models are released under permissive licenses such as MIT or Apache 2.0, while others are open-weight but have usage restrictions. Therefore, for real projects, students should not assume that “open” automatically means “free for every use.”
 
-[1]: https://opensource.org/ai/open-source-ai-definition?utm_source=chatgpt.com "The Open Source AI Definition – 1.0"
-[2]: https://ai.meta.com/blog/meta-llama-3-1/?utm_source=chatgpt.com "Introducing Llama 3.1: Our most capable models to date"
-[3]: https://mistral.ai/news/mistral-small-4/?utm_source=chatgpt.com "Introducing Mistral Small 4"
-[4]: https://huggingface.co/Qwen/Qwen3-8B?utm_source=chatgpt.com "Qwen/Qwen3-8B"
-[5]: https://qwen.ai/blog?id=qwen3&utm_source=chatgpt.com "Qwen3-235B"
-[6]: https://api-docs.deepseek.com/news/news250120?utm_source=chatgpt.com "DeepSeek-R1 Release"
-[7]: https://arxiv.org/abs/2501.12948?utm_source=chatgpt.com "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning"
-[8]: https://arxiv.org/abs/2403.08295?utm_source=chatgpt.com "Gemma: Open Models Based on Gemini Research and Technology"
-[9]: https://huggingface.co/google/gemma-4-E2B?utm_source=chatgpt.com "google/gemma-4-E2B"
-[10]: https://azure.microsoft.com/en-us/products/phi?utm_source=chatgpt.com "Phi Open Models - Small Language Models"
-[11]: https://arxiv.org/abs/2204.06745?utm_source=chatgpt.com "GPT-NeoX-20B: An Open-Source Autoregressive Language Model"
-[12]: https://huggingface.co/docs/transformers/en/model_doc/starcoder2?utm_source=chatgpt.com "Starcoder2"
-[13]: https://arxiv.org/abs/2406.11931?utm_source=chatgpt.com "DeepSeek-Coder-V2: Breaking the Barrier of Closed-Source Models in Code Intelligence"
-[14]: https://github.com/Stability-AI/generative-models?utm_source=chatgpt.com "Generative Models by Stability AI"
-[15]: https://github.com/black-forest-labs/flux?utm_source=chatgpt.com "black-forest-labs/flux: Official inference repo for FLUX.1 ..."
-[16]: https://github.com/openai/whisper?utm_source=chatgpt.com "openai/whisper: Robust Speech Recognition via Large- ..."
-[17]: https://huggingface.co/facebook/musicgen-large?utm_source=chatgpt.com "facebook/musicgen-large"
-[18]: https://stability.ai/news-updates/introducing-stable-audio-open?utm_source=chatgpt.com "Introducing Stable Audio Open"
-[19]: https://huggingface.co/coqui/XTTS-v2?utm_source=chatgpt.com "coqui/XTTS-v2"
+[1]: https://opensource.org/ai/open-source-ai-definition "The Open Source AI Definition – 1.0"
+[2]: https://ai.meta.com/blog/meta-llama-3-1/ "Introducing Llama 3.1: Our most capable models to date"
+[3]: https://mistral.ai/news/mistral-small-4/ "Introducing Mistral Small 4"
+[4]: https://huggingface.co/Qwen/Qwen3-8B "Qwen/Qwen3-8B"
+[5]: https://qwen.ai/blog?id=qwen3 "Qwen3-235B"
+[6]: https://api-docs.deepseek.com/news/news250120 "DeepSeek-R1 Release"
+[7]: https://arxiv.org/abs/2501.12948 "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning"
+[8]: https://arxiv.org/abs/2403.08295 "Gemma: Open Models Based on Gemini Research and Technology"
+[9]: https://huggingface.co/google/gemma-4-E2B "google/gemma-4-E2B"
+[10]: https://azure.microsoft.com/en-us/products/phi "Phi Open Models - Small Language Models"
+[11]: https://arxiv.org/abs/2204.06745 "GPT-NeoX-20B: An Open-Source Autoregressive Language Model"
+[12]: https://huggingface.co/docs/transformers/en/model_doc/starcoder2 "Starcoder2"
+[13]: https://arxiv.org/abs/2406.11931 "DeepSeek-Coder-V2: Breaking the Barrier of Closed-Source Models in Code Intelligence"
+[14]: https://github.com/Stability-AI/generative-models "Generative Models by Stability AI"
+[15]: https://github.com/black-forest-labs/flux "black-forest-labs/flux: Official inference repo for FLUX.1 ..."
+[16]: https://github.com/openai/whisper "openai/whisper: Robust Speech Recognition via Large- ..."
+[17]: https://huggingface.co/facebook/musicgen-large "facebook/musicgen-large"
+[18]: https://stability.ai/news-updates/introducing-stable-audio-open "Introducing Stable Audio Open"
+[19]: https://huggingface.co/coqui/XTTS-v2 "coqui/XTTS-v2"
