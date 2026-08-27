@@ -1,25 +1,24 @@
 # Demos & Activities
 
-**Instructor facilitation notes for the Day 4 and Day 5 classroom activities.**
+**Instructor facilitation notes for the Module 4 and Module 5 classroom activities.**
 
-The activity numbers here match the [Student Handbook](../student-handbook.md#activity-index) and the [Session Plan](session-plan.md) exactly. The prompts themselves, ready to copy, are in [prompts.md](../prompts.md).
+The activity numbers here match the [Student Handbook](../../mlai-genai-internship/student-handbook.md#activity-index) and the [Session Plan](session-plan.md) exactly. The prompts themselves, ready to copy, are in [prompts.md](../../mlai-genai-internship/prompts.md).
 
-| Activity | Name | Format | Time |
-|---|---|---|---|
-| **Demo 4.1** | Weak vs strong prompting (Paris) | Instructor demo | 10 min |
-| **Demo 4.2** | The four prompt types | Instructor demo | 25 min |
-| **Activity 4.10** | The Prompting Tournament | Teams | 30 min |
-| **Activity 4.7** | The Temperature Dial | Whole class | 20 min |
-| **Activity 4.8** | Top-p and Top-k | Whole class | 15 min |
-| **Activity 4.11** | The AI Fact-Checker | Individual + debrief | 35 min |
-| **Activity 4.13** | The JSON Treasure Hunt | Individual | 15 min |
-| **Activity 4.12** | The Red Team Challenge | Pairs | 25 min |
-
+| Activity | Name | Format |
+|---|---|---|
+| **Demo 4.1** | Weak vs strong prompting (Paris) | Instructor demo |
+| **Demo 4.2** | The four prompt types | Instructor demo |
+| **Activity 4.10** | The Prompting Tournament | Teams |
+| **Activity 4.7** | The Temperature Dial | Whole class |
+| **Activity 4.8** | Top-p and Top-k | Whole class |
+| **Activity 4.11** | The AI Fact-Checker | Individual + debrief |
+| **Activity 4.13** | The JSON Treasure Hunt | Individual |
+| **Activity 4.12** | The Red Team Challenge | Pairs |
 ---
 
 # Demo 4.1 - Prompting Demo (Paris trip example)
 
-**Format:** instructor demo, projected · **Time:** 10 minutes · **Needs:** any LLM interface
+**Format:** instructor demo, projected · · **Needs:** any LLM interface
 
 **The point:** the difference between a bad answer and a good one is usually the *prompt*, not the model.
 
@@ -51,7 +50,7 @@ You will get a generic list: Eiffel Tower, Louvre, Notre-Dame. Perfectly correct
 
 > A prompt is a briefing, not a search query. Brief the model the way you would brief a capable new colleague who knows nothing about you.
 
-The five-part structure that formalises this is in [Handbook 4.4](../student-handbook.md#44-prompt-engineering).
+The five-part structure that formalises this is in [Handbook 4.4](../../mlai-genai-internship/student-handbook.md#44-prompt-engineering).
 
 # Demo 4.2 - Types of prompts (zero-shot, one-shot, few-shot, chain-of-thought)
 
@@ -181,7 +180,7 @@ This shows how CoT helps the model juggle multiple variables without losing trac
 
 # Activity 4.10 - The Prompting Tournament
 
-**Format:** teams of 3-4 · **Time:** 30 minutes · **Needs:** any LLM interface
+**Format:** teams of 3-4 · · **Needs:** any LLM interface
 
 The Prompting Tournament is a high-energy, competitive exercise designed to force students out of a "keyword search" mindset and into a "semantic steering" mindset. By banning the exact words they want the AI to generate, you force them to navigate the LLM's latent space—relying on associations, definitions, formatting tricks, and cultural context to get the desired output.
 
@@ -201,13 +200,13 @@ Present these rules clearly to the class before starting:
 
 Run the tournament in escalating rounds to build their skills progressively.
 
-### Round 1: The Raw Attempt (5 Minutes)
+### Round 1: The Raw Attempt
 
 Let the groups try to brute-force the solution. They will likely try giving the AI dictionary definitions of the words.
 
 * *Common pitfall:* The AI will output the target phrase, but wrap it in chatty text (e.g., "The phrase you are looking for is 'The eagle flies at midnight'."). This fails the win condition and teaches them that they must explicitly constrain the AI's output format.
 
-### Round 2: Adding Constraints (5 Minutes)
+### Round 2: Adding Constraints
 
 Stop the room and teach them to use system-like instructions to kill the AI's "chattiness."
 
@@ -238,7 +237,7 @@ When the activity ends, bring the class back together and ask the winning groups
 
 # Activity 4.7 - The Temperature Dial
 
-**Format:** whole class, instructor drives · **Time:** 20 minutes · **Needs:** a playground with adjustable parameters
+**Format:** whole class, instructor drives · · **Needs:** a playground with adjustable parameters
 
 **The Concept:** LLMs don't actually "know" facts; they calculate probabilities. The **Temperature** parameter acts as a dial for the model’s creativity.
 
@@ -263,11 +262,11 @@ When the activity ends, bring the class back together and ask the winning groups
 
 | Run | Temperature 0.0 Output |
 | --- | --- |
-| 1 |  |
-| 2 |  |
-| 3 |  |
-| 4 |  |
-| 5 |  |
+| 1 | |
+| 2 | |
+| 3 | |
+| 4 | |
+| 5 | |
 
 **Observation:** What happened? (Students should notice that the output is identical, or nearly identical, every single time).
 
@@ -281,11 +280,11 @@ When the activity ends, bring the class back together and ask the winning groups
 
 | Run | Temperature 1.0 Output |
 | --- | --- |
-| 1 |  |
-| 2 |  |
-| 3 |  |
-| 4 |  |
-| 5 |  |
+| 1 | |
+| 2 | |
+| 3 | |
+| 4 | |
+| 5 | |
 
 **Observation:** What happened this time? (Students should see wild variations, different tones, and perhaps some weird or highly unconventional phrasing).
 
@@ -313,7 +312,7 @@ Once the testing is complete, bring the room together and ask these three questi
 
 # Activity 4.8 - Top-p and Top-k
 
-**Format:** whole class, instructor drives · **Time:** 15 minutes · **Needs:** a playground with adjustable parameters, or the API
+**Format:** whole class, instructor drives · · **Needs:** a playground with adjustable parameters, or the API
 
 **Run this straight after the Temperature Dial**, while the idea of "randomness" is fresh. Students almost always assume temperature is the only dial. It is not.
 
@@ -369,13 +368,13 @@ Ask the class which combination they would use for each:
 
 **Change `temperature` first and leave the other two at their defaults.** Adjust all three at once and you will never know which one caused the change you are looking at. This is the same discipline as changing one variable in an experiment — and students who have done Activity 3.3 will recognise it.
 
-The runnable code for this activity is in [Handbook Activity 4.8](../student-handbook.md#day-4--deep-learning-clustering-and-generative-ai).
+The runnable code for this activity is in [Handbook Activity 4.8](../../mlai-genai-internship/student-handbook.md#module-4--deep-learning-clustering-and-generative-ai).
 
 ---
 
 # Activity 4.11 - The AI Fact-Checker
 
-**Format:** individual work, then whole-class debrief · **Time:** 35 minutes · **Needs:** any LLM interface
+**Format:** individual work, then whole-class debrief · · **Needs:** any LLM interface
 
 This activity belongs to the **Ethical Considerations and Responsible AI** block. It is split into two parts, addressing **hallucination** and **data bias** separately.
 
@@ -391,7 +390,7 @@ LLMs do not have a database of facts or a connection to "truth"—they have a ma
 
 ### Part 1: The Trap (Hallucination Hunting)
 
-*Time: 15 Minutes*
+*
 
 **The Setup:** Instructors will give students a prompt designed to exploit the LLM's tendency to prioritize grammatical fluidity over actual truth.
 
@@ -415,7 +414,7 @@ LLMs do not have a database of facts or a connection to "truth"—they have a ma
 
 ### Part 2: The Mirror (Bias Auditing)
 
-*Time: 15 Minutes*
+*
 
 **The Setup:** Bias in LLMs is often subtle. It shows up in default assumptions. If you don't specify *who* someone is, the model fills in the blanks using statistical averages from its training data.
 
@@ -454,7 +453,7 @@ Bring the class back together and use these discussion points to solidify the le
 
 # Activity 4.13 - The JSON Treasure Hunt
 
-**Format:** individual · **Time:** 15 minutes · **Needs:** a working Gemini API call ([Handbook 4.5](../student-handbook.md#45-your-first-gemini-api-call))
+**Format:** individual · · **Needs:** a working Gemini API call ([Handbook 4.5](../../mlai-genai-internship/student-handbook.md#45-your-first-gemini-api-call))
 
 Students run one simple prompt through the API and print the **entire** response object rather than just `response.text`:
 
@@ -472,14 +471,14 @@ When the wall of JSON fills their terminal, challenge them to find three specifi
 * **The Payload**: Find the exact nesting path to the generated text string (usually buried under candidates $\rightarrow$ content $\rightarrow$ parts $\rightarrow$ text).
 * **The Bill**: Find the total_token_count under usage_metadata to see exactly how much data this request consumed (this is the metric companies use to bill for API usage).
 * **The Guardrails**: Look through the safety_ratings array. What probability rating did the model assign the haiku for the "HATE_SPEECH" category?
-  
+ 
 This exercise brilliantly demystifies AI. It proves to students that the LLM isn't a magical thinking machine, but a standard software system returning a predictable, nested dictionary of data.
 
 ---
 
 # Activity 4.12 - The Red Team Challenge (Jailbreak & Guardrails)
 
-**Format:** pairs or small groups · **Time:** 25 minutes · **Needs:** any LLM interface
+**Format:** pairs or small groups · · **Needs:** any LLM interface
 
 This activity covers the security and safety side of Responsible AI, specifically **Red Teaming** — deliberately testing an AI system to find its vulnerabilities.
 
@@ -499,7 +498,7 @@ Since you likely won't have a custom-built app for the class, you will simulate 
 
 ---
 
-### The Challenge (15 Minutes)
+### The Challenge
 
 Divide the class into pairs or small groups. Tell them they have 15 minutes to trick the bot into breaking its rules.
 

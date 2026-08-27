@@ -1,10 +1,10 @@
 # Prompt Library
 
-Every prompt used in the Day 4 and Day 5 sessions, ready to copy and paste.
+Every prompt used in the Module 4 and Module 5 sessions, ready to copy and paste.
 
 **How to use this file:** paste each blockquote into [Google AI Studio](https://aistudio.google.com/), Gemini, ChatGPT or Claude **exactly as written**, including the line breaks. The line breaks matter — few-shot prompts stop working when the examples run together.
 
-The teaching notes and the debrief questions for each are in [activities.md](trainer/activities.md). The concepts behind them are in the [Student Handbook, section 4.4](student-handbook.md#44-prompt-engineering).
+The concepts behind these are in the [Student Handbook, section 4.4](student-handbook.md#44-prompt-engineering).
 
 ---
 
@@ -419,7 +419,7 @@ That last pattern is the core idea behind **RAG** — retrieve the relevant text
 
 ## 11. ML + GenAI integration prompts
 
-The pattern for Day 5: the ML model decides, the LLM explains. Full code in [tutorials/ml_gen_ai.md](tutorials/apps/ml_gen_ai.md).
+The pattern for Module 5: the ML model decides, the LLM explains. Full code in [tutorials/ml_gen_ai.md](tutorials/apps/ml_gen_ai.md).
 
 ### 11.1 Explaining a prediction
 

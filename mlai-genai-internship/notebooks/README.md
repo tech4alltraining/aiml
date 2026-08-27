@@ -7,12 +7,12 @@
 | 00a | [00a_python_foundations.ipynb](00a_python_foundations.ipynb) | Python from scratch: printing, variables, types, operators, strings | No | ✅ Yes |
 | 00b | [00b_python_foundations_2.ipynb](00b_python_foundations_2.ipynb) | Collections, conditions, loops, functions | No | ✅ Yes |
 | 00c | [00c_python_scenarios.ipynb](00c_python_scenarios.ipynb) | Ten scenario worksheets, task by task | No | You write them |
-| 1 | [01_day1_python_data.ipynb](01_day1_python_data.ipynb) | Python, NumPy, Pandas, EDA | No | ✅ Yes |
-| 2 | [02_day2_ml_basics.ipynb](02_day2_ml_basics.ipynb) | Visualisation, preprocessing, regression, classification | No | ✅ Yes |
-| 3 | [03_day3_model_improvement.ipynb](03_day3_model_improvement.ipynb) | Features, overfitting, cross-validation, tuning | No | ✅ Yes |
-| 4 | [04_day4a_clustering.ipynb](04_day4a_clustering.ipynb) | K-Means, and how LLMs actually work | No | ✅ Yes |
-| 5 | [05_day4b_genai_api.ipynb](05_day4b_genai_api.ipynb) | Gemini API, prompting, temperature, JSON, memory | **Yes** | ❌ Run it yourself |
-| 6 | [06_day5_huggingface.ipynb](06_day5_huggingface.ipynb) | `pipeline()`, open-source models, model cards | No (downloads models) | ❌ Run it yourself |
+| 1 | [01_module1_python_data.ipynb](01_module1_python_data.ipynb) | Python, NumPy, Pandas, EDA | No | ✅ Yes |
+| 2 | [02_module2_ml_basics.ipynb](02_module2_ml_basics.ipynb) | Visualisation, preprocessing, regression, classification | No | ✅ Yes |
+| 3 | [03_module3_model_improvement.ipynb](03_module3_model_improvement.ipynb) | Features, overfitting, cross-validation, tuning | No | ✅ Yes |
+| 4 | [04_module4a_clustering.ipynb](04_module4a_clustering.ipynb) | K-Means, and how LLMs actually work | No | ✅ Yes |
+| 5 | [05_module4b_genai_api.ipynb](05_module4b_genai_api.ipynb) | Gemini API, prompting, temperature, JSON, memory | **Yes** | ❌ Run it yourself |
+| 6 | [06_module5_huggingface.ipynb](06_module5_huggingface.ipynb) | `pipeline()`, open-source models, model cards | No (downloads models) | ❌ Run it yourself |
 
 **Notebooks 00a–04 show their outputs directly on GitHub** — charts, tables and printed results are saved inside the file. You can read the whole lesson without running anything.
 
@@ -112,17 +112,17 @@ The fix is to keep `.qmd` as your **source** and commit the **rendered** `.md`:
 
 ```yaml
 ---
-title: "Day 1 — Pandas"
+title: "Module 1 — Pandas"
 format: gfm          # GitHub-Flavoured Markdown
 jupyter: python3
 ---
 ```
 
 ```bash
-quarto render day1.qmd --to gfm
+quarto render module1.qmd --to gfm
 ```
 
-That produces `day1.md` plus a `day1_files/` folder of PNGs, referenced by relative path. **GitHub renders the result perfectly**, with charts.
+That produces `module1.md` plus a `day1_files/` folder of PNGs, referenced by relative path. **GitHub renders the result perfectly**, with charts.
 
 - ✅ Clean, readable diffs on the `.qmd` source
 - ✅ Same source can also produce HTML, PDF and slides

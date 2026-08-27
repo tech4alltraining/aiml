@@ -13,14 +13,14 @@
 
 ## How this file is organised
 
-Each day has four tiers. **Do them in order.** Day 0 is optional — skip it if you already know Python. Tier 1 takes minutes; Tier 4 takes an evening.
+Each module has four tiers. **Do them in order.** Module 0 is optional — skip it if you already know Python. The tiers get longer as you go.
 
-| Tier | What it is | Time each |
-|---|---|---|
-| 🟢 **Warm-up** | One idea, one answer. Often no computer. | 2–5 min |
-| 🔵 **Practice** | Write code that works. | 10–20 min |
-| 🟠 **Challenge** | Combine several ideas. | 30–45 min |
-| 🔴 **Scenario** | A realistic situation with no single right answer. Judgement required. | 45–90 min |
+| Tier | What it is |
+|---|---|
+| 🟢 **Warm-up** | One idea, one answer. Often no computer |
+| 🔵 **Practice** | Write code that works |
+| 🟠 **Challenge** | Combine several ideas |
+| 🔴 **Scenario** | A realistic situation with no single right answer. Judgement required |
 
 **Scenario problems are the ones that matter.** They are how the work actually arrives: ambiguous, with a stakeholder who wants something, and a right answer that depends on what it costs to be wrong.
 
@@ -32,7 +32,7 @@ Each day has four tiers. **Do them in order.** Day 0 is optional — skip it if 
 
 ---
 
-# Day 0 — Python from scratch
+# Module 0 — Python from scratch
 
 **If you have never written Python, do this before anything else.**
 
@@ -57,7 +57,7 @@ The three foundation notebooks contain **35 short exercises, 7 quizzes and 20 ta
 | 7 | Temperature Station | functions, min/max |
 | 8 | Cricket Score Tracker | aggregation, sorting |
 | 9 | Expense Tracker | dict aggregation, percentages |
-| 10 | **Simple ML Data Prep** | **everything — the bridge to Day 1** |
+| 10 | **Simple ML Data Prep** | **everything — the bridge to Module 1** |
 
 > **Scenario 10 is the important one.** You clean a messy dataset by hand in plain Python — duplicates, missing values, inconsistent categories, encoding, train/test split. Tomorrow Pandas does all of it in six lines. **Students who understand the why find Pandas easy; students who only learn the six lines get stuck the first time their data is different.**
 
@@ -65,7 +65,7 @@ More drills: [`python-internship/`](../python-internship/) has topic-by-topic ex
 
 ---
 
-# Day 1 — Python, NumPy, Pandas, EDA
+# Module 1 — Python, NumPy, Pandas, EDA
 
 ## 🟢 Warm-up
 
@@ -189,7 +189,7 @@ Write a short memo (under 400 words) covering:
 
 ---
 
-# Day 2 — Visualisation, preprocessing, supervised learning
+# Module 2 — Visualisation, preprocessing, supervised learning
 
 ## 🟢 Warm-up
 
@@ -307,7 +307,7 @@ Answer in a memo:
 
 ---
 
-# Day 3 — Feature engineering and model improvement
+# Module 3 — Feature engineering and model improvement
 
 ## 🟢 Warm-up
 
@@ -366,12 +366,12 @@ a Parameter · b Hyperparameter · c Parameter · d Hyperparameter · e Hyperpar
 
 ## 🟠 Challenge
 
-**3.8 — The improvement log.** Take your Day 2 classifier and improve it in stages. Produce this table with real numbers:
+**3.8 — The improvement log.** Take your Module 2 classifier and improve it in stages. Produce this table with real numbers:
 
 | # | Change | CV mean | CV std | Test | Better? |
 |---|---|---|---|---|---|
 | 0 | Baseline (DummyClassifier) | | | | — |
-| 1 | Day 2 model, untouched | | | | |
+| 1 | Module 2 model, untouched | | | | |
 | 2 | + engineered features | | | | |
 | 3 | + feature selection | | | | |
 | 4 | + tuned hyperparameters | | | | |
@@ -414,7 +414,7 @@ List **five** possible causes, and for each say exactly what you would check to 
 
 ---
 
-# Day 4 — Clustering and Generative AI
+# Module 4 — Clustering and Generative AI
 
 ## 🟢 Warm-up
 
@@ -509,7 +509,7 @@ Test it with three questions that *are* answerable and three that are not. **Rep
 
 ---
 
-# Day 5 — Open-source models, Hugging Face, apps
+# Module 5 — Open-source models, Hugging Face, apps
 
 ## 🟢 Warm-up
 
@@ -591,7 +591,7 @@ Compare the explanations before and after. **Which is more honest?**
 Longer, graded work. Each one is a deliverable, not an exercise.
 
 ## Assignment 1 — The dataset investigation
-**Due: end of Day 2 · Weight: 15%**
+**After Module 2 · Weight: 15%**
 
 Choose a dataset from [`datasets/`](../datasets/) that was **not** used in class.
 
@@ -609,7 +609,7 @@ Choose a dataset from [`datasets/`](../datasets/) that was **not** used in class
 | Written clearly, with each number explained in a sentence | 10 |
 
 ## Assignment 2 — The honest model comparison
-**Due: end of Day 3 · Weight: 25%**
+**After Module 3 · Weight: 25%**
 
 Build the best classifier you can for a dataset of your choice.
 
@@ -627,7 +627,7 @@ Build the best classifier you can for a dataset of your choice.
 > **Marks are deducted for:** scaling before splitting, reporting only accuracy on imbalanced data, or a results table with no failures in it.
 
 ## Assignment 3 — The prompt portfolio
-**Due: end of Day 4 · Weight: 15%**
+**After Module 4 · Weight: 15%**
 
 Five prompts that solve real problems **you actually have**.
 
@@ -636,7 +636,7 @@ For each: the weak version, the strong five-part version, both outputs, the prom
 At least one must use structured JSON output and be parsed in Python.
 
 ## Assignment 4 — The application
-**Due: end of Day 5 · Weight: 20%**
+**After Module 5 · Weight: 20%**
 
 One working Streamlit app, from any category.
 
@@ -652,7 +652,7 @@ One working Streamlit app, from any category.
 | **A stated limitation section** | 10 |
 
 ## Assignment 5 — The capstone
-**Weeks 2–4 · Weight: 25%**
+**The capstone project · Weight: 25%**
 
 Full requirements, deliverables and marking are in the [Capstone project guide](student-handbook.md#capstone-project-guide).
 
@@ -662,39 +662,39 @@ Full requirements, deliverables and marking are in the [Capstone project guide](
 
 Tick honestly. Anything unticked is where to spend your next hour.
 
-## Day 1
-- [ ] I can load a CSV and describe it in five sentences without help
-- [ ] I know why `df.dropna()` alone changes nothing
-- [ ] I can filter a DataFrame on two conditions
-- [ ] I can explain why the median beats the mean for filling gaps
+## Module 1
+- I can load a CSV and describe it in five sentences without help
+- I know why `df.dropna()` alone changes nothing
+- I can filter a DataFrame on two conditions
+- I can explain why the median beats the mean for filling gaps
 
-## Day 2
-- [ ] I choose a chart from the question, not from habit
-- [ ] I can explain data leakage with an analogy
-- [ ] I always split before I scale
-- [ ] I compute a baseline before celebrating any score
-- [ ] I can say which of precision and recall matters for a given problem, and why
+## Module 2
+- I choose a chart from the question, not from habit
+- I can explain data leakage with an analogy
+- I always split before I scale
+- I compute a baseline before celebrating any score
+- I can say which of precision and recall matters for a given problem, and why
 
-## Day 3
-- [ ] I can spot overfitting from train and test scores
-- [ ] I report cross-validation std, not just the mean
-- [ ] I know the difference between a parameter and a hyperparameter
-- [ ] I have engineered a feature and measured whether it helped
+## Module 3
+- I can spot overfitting from train and test scores
+- I report cross-validation std, not just the mean
+- I know the difference between a parameter and a hyperparameter
+- I have engineered a feature and measured whether it helped
 
-## Day 4
-- [ ] I can explain hallucination mechanically
-- [ ] I write prompts with all five parts
-- [ ] I can pick the right prompt type for a task
-- [ ] I know what temperature, top-p and top-k each do
-- [ ] I know why a chatbot needs the history resent
+## Module 4
+- I can explain hallucination mechanically
+- I write prompts with all five parts
+- I can pick the right prompt type for a task
+- I know what temperature, top-p and top-k each do
+- I know why a chatbot needs the history resent
 
-## Day 5
-- [ ] I can run a Hugging Face model with `pipeline()`
-- [ ] I read the model card before trusting a model
-- [ ] I have a Streamlit app running on my own machine
-- [ ] I can say which component decides and which explains — and why
+## Module 5
+- I can run a Hugging Face model with `pipeline()`
+- I read the model card before trusting a model
+- I have a Streamlit app running on my own machine
+- I can say which component decides and which explains — and why
 
 ## Throughout
-- [ ] My API key has never been in a file I committed
-- [ ] I read the **last line** of an error first
-- [ ] I have said "I do not know" at least once, and then found out
+- My API key has never been in a file I committed
+- I read the **last line** of an error first
+- I have said "I do not know" at least once, and then found out

@@ -1,0 +1,73 @@
+Session 1 : Day 1 FN
+Google Colab Tutorial
+Python Refresher
+Variables
+Data Types
+Operators
+Conditional Statements & Loops
+Functions and Collections
+
+Session 2 : Day 1 AN
+Introduction to Python Libraries
+NumPy Fundamentals
+Pandas for Data Handling
+Data Loading & Exploration
+Exploratory Data Analysis
+NumPy & Pandas Practice
+
+Session 3 : Day 2 FN
+Data Visualization & Preprocessing
+Matplotlib & Seaborn
+Introduction to Machine Learning & Artificial Intelligence
+Types of Machine Learning
+Real-world applications of ML & GenAI
+Supervised Machine Learning Concepts
+Regression Techniques
+Classification Techniques
+
+Session 4 : Day 2 AN
+Machine Learning Workflow
+Scikit-Learn API
+Model Evaluation Metrics
+Model Training & Validation
+Hands-on ML Activity
+
+Session 5 : Day 3 FN
+Feature Reduction Techniques
+Feature Engineering
+Data Augmentation
+Introduction to Unsupervised Learning
+Clustering Algorithms
+
+Session 6 : Day 3 AN
+Model Evaluation Techniques
+K-Fold Cross Validation
+Model Improvement Strategies
+Hands-on Optimization Activity
+Mini Project Discussion
+
+Session 7 : Day 4 FN
+Overfitting & Underfitting
+Hyperparameter Tuning
+Introduction to Deep Learning
+AI Ethics & Responsible AI
+
+Session 8 : Day 4 AN
+Introduction to Generative AI
+Large Language Models (LLMs)
+Prompt Engineering Basics
+Exploring Generative AI Tools
+Hands-on GenAI Activities
+
+Session 9 : Day 5 FN
+Types of Prompts
+Integrating Machine Learning with Generative AI
+Open Source Generative AI Models
+Hugging Face Ecosystem
+AI-powered Application Concepts
+
+Session 10 : Day 5 AN
+Streamlit App Development
+Project Grouping & Topic Selection
+Capstone Project Planning
+Internship Guidelines & Mentoring Plan

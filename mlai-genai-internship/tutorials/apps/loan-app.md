@@ -1,6 +1,6 @@
 # Deploying an ML Model with Streamlit: Loan Approval Prediction
 
-**Day 5 · Session 5.2** — your first application that serves a *trained Machine Learning model* rather than calling an API.
+**Module 5 · Session 5.2** — your first application that serves a *trained Machine Learning model* rather than calling an API.
 
 Until now your models have lived in a notebook and printed to a terminal. Nobody but you could use them. This tutorial takes a trained Random Forest and puts it behind a web form that anyone can fill in.
 
@@ -507,10 +507,10 @@ The app prints both. Find an applicant where the model says "Approved" with only
 
 Before you would ever deploy something like this:
 
-- [ ] **The target encoding is an assumption.** The app assumes `1 = Approved`. Verify that against your training data — getting it backwards inverts every decision in the app.
-- [ ] **`person_gender` is a feature in this model.** Should a loan decision use gender at all? Check the accuracy separately for each gender group. If they differ, you have a fairness problem, not a technical one.
-- [ ] **A rejected applicant deserves a reason.** A red ❌ with no explanation is not acceptable for a decision affecting someone's money. [`ml_gen_ai.md`](ml_gen_ai.md) adds that explanation layer.
-- [ ] **A human must sign off.** This model is roughly 89% accurate — meaning it is wrong about one applicant in nine.
+- **The target encoding is an assumption.** The app assumes `1 = Approved`. Verify that against your training data — getting it backwards inverts every decision in the app.
+- **`person_gender` is a feature in this model.** Should a loan decision use gender at all? Check the accuracy separately for each gender group. If they differ, you have a fairness problem, not a technical one.
+- **A rejected applicant deserves a reason.** A red ❌ with no explanation is not acceptable for a decision affecting someone's money. [`ml_gen_ai.md`](ml_gen_ai.md) adds that explanation layer.
+- **A human must sign off.** This model is roughly 89% accurate — meaning it is wrong about one applicant in nine.
 
 ---
 

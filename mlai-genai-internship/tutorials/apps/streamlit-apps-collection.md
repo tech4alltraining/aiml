@@ -808,7 +808,7 @@ Test it by downloading the template, then re-uploading it.
 
 ## A6 — Model Comparison Lab
 
-⭐⭐⭐ **Advanced** · trains several models live, compares metrics, and draws a confusion matrix. Turns Day 2 and Day 3 into something you can *see*.
+⭐⭐⭐ **Advanced** · trains several models live, compares metrics, and draws a confusion matrix. Turns Module 2 and Module 3 into something you can *see*.
 
 **`a6_app.py`**
 
@@ -1354,12 +1354,11 @@ st.write(
 uploaded = st.file_uploader("Upload a .txt or .md file", type=["txt", "md"])
 
 sample = """
-The internship programme runs for four weeks. Week 1 is five days of
-classroom training covering Python, machine learning, and generative AI.
-Weeks 2 to 4 are the capstone project phase, with online reviews at the
-end of each week. Students must submit a repository and a report by the
-end of week 4, and give an 8 to 10 minute final presentation.
-Attendance in week 1 is compulsory. The pass mark is 50 percent.
+The internship programme has two phases. The taught phase covers Python,
+machine learning, and generative AI across five modules. The capstone
+phase follows, with three online review updates. Students must submit a
+repository and a report, and give a final presentation.
+Attendance in the taught phase is compulsory. The pass mark is 50 percent.
 """
 
 if uploaded is not None:
@@ -1435,7 +1434,7 @@ st.divider()
 st.subheader("Try these to test the grounding")
 st.markdown(
     """
-    - **In the document:** "How long is the programme?" → should answer
+    - **In the document:** "What are the two phases?" → should answer
     - **In the document:** "What is the pass mark?" → should answer
     - **NOT in the document:** "Who is the instructor?" → should **refuse**
     - **NOT in the document:** "What is the fee?" → should **refuse**

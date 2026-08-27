@@ -40,7 +40,7 @@ Gemini responds:
 
 # 2. Required Installation
 
-**Day 4 · Session 4.2.** All commands assume the `genai` conda environment from the [Student Handbook](../../setup-guide.md).
+**Module 4 · Session 4.2.** All commands assume the `genai` conda environment from the [Student Handbook](../../setup-guide.md).
 
 ```bash
 conda activate genai
@@ -189,15 +189,15 @@ streamlit run gemini_text_generator.py
 
 ## Explanation for Students
 
-| Part                 | Meaning                                  |
+| Part | Meaning |
 | -------------------- | ---------------------------------------- |
-| `st.title()`         | Displays the app title                   |
-| `st.text_input()`    | Takes topic from user                    |
-| `st.selectbox()`     | Lets user choose explanation style       |
-| `st.slider()`        | Lets user choose approximate word limit  |
-| `genai.Client()`     | Connects the app to Gemini API           |
+| `st.title()` | Displays the app title |
+| `st.text_input()` | Takes topic from user |
+| `st.selectbox()` | Lets user choose explanation style |
+| `st.slider()` | Lets user choose approximate word limit |
+| `genai.Client()` | Connects the app to Gemini API |
 | `generate_content()` | Sends prompt to Gemini and gets response |
-| `st.write()`         | Displays generated answer                |
+| `st.write()` | Displays generated answer |
 
 ---
 
@@ -362,22 +362,22 @@ streamlit run gemini_chatbot.py
 
 ## Explanation for Students
 
-| Component            | Purpose                              |
+| Component | Purpose |
 | -------------------- | ------------------------------------ |
-| `st.chat_input()`    | Takes chat message from user         |
-| `st.chat_message()`  | Displays user and assistant messages |
-| `st.session_state`   | Stores chat history                  |
-| `generate_content()` | Sends conversation to Gemini         |
-| `Clear Chat` button  | Resets the conversation              |
+| `st.chat_input()` | Takes chat message from user |
+| `st.chat_message()` | Displays user and assistant messages |
+| `st.session_state` | Stores chat history |
+| `generate_content()` | Sends conversation to Gemini |
+| `Clear Chat` button | Resets the conversation |
 
 ---
 
 # 4. Difference Between the Two Apps
 
-| App            | Type                  | Input                    | Output                   |
+| App | Type | Input | Output |
 | -------------- | --------------------- | ------------------------ | ------------------------ |
-| Text Generator | Single-turn GenAI app | Topic, style, word limit | Generated explanation    |
-| Chatbot        | Multi-turn GenAI app  | User questions           | Conversational responses |
+| Text Generator | Single-turn GenAI app | Topic, style, word limit | Generated explanation |
+| Chatbot | Multi-turn GenAI app | User questions | Conversational responses |
 
 The **Text Generator App** is useful for:
 

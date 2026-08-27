@@ -11,7 +11,7 @@ Gemini supports video understanding, including public YouTube URLs, and can proc
 
 ## Install libraries
 
-**Day 4 · Session 4.2.** Complete [`streamlit-app-simple.md`](streamlit-app-simple.md) first — these two apps build on it.
+**Module 4 · Session 4.2.** Complete [`streamlit-app-simple.md`](streamlit-app-simple.md) first — these two apps build on it.
 
 ```bash
 conda activate genai
@@ -491,10 +491,10 @@ Responsible AI warning
 
 # Difference Between the Two Advanced Apps
 
-| App                | Input                    | Gemini Capability Used | Output                           |
+| App | Input | Gemini Capability Used | Output |
 | ------------------ | ------------------------ | ---------------------- | -------------------------------- |
-| YouTube Summarizer | YouTube URL + prompt     | Video understanding    | Summary, notes, quiz             |
-| Diagnostic Helper  | Image + prompt + context | Image understanding    | Visual observations and guidance |
+| YouTube Summarizer | YouTube URL + prompt | Video understanding | Summary, notes, quiz |
+| Diagnostic Helper | Image + prompt + context | Image understanding | Visual observations and guidance |
 
 ---
 

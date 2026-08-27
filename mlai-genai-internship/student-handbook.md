@@ -2,10 +2,8 @@
 
 ## Student Hands-on Handbook
 
-**Beginner-friendly practical material for the 5-day classroom programme and the 4-week project phase**
+**Beginner-friendly practical material for the taught modules and the capstone project phase**
 **Python | NumPy & Pandas | Visualisation | Machine Learning | Deep Learning | Generative AI | Prompt Engineering | Gemini API | Hugging Face | Streamlit | Responsible AI**
-
-**Version: August 2026**
 
 ---
 
@@ -39,11 +37,11 @@ Step 4 is where the learning happens. Reading code teaches you nothing; breaking
 7. [Environment setup: the `genai` conda environment](setup-guide.md)
 8. [Option B: Google Colab setup](setup-guide.md#google-colab-no-installation-at-all)
 9. [Project folder and filenames](#project-folder-and-filenames)
-10. [Day 1 — Python refresher and data handling](#day-1--python-refresher-and-data-handling)
-11. [Day 2 — Visualisation, preprocessing and supervised learning](#day-2--visualisation-preprocessing-and-supervised-learning)
-12. [Day 3 — Feature engineering and model improvement](#day-3--feature-engineering-and-model-improvement)
-13. [Day 4 — Deep learning, clustering and Generative AI](#day-4--deep-learning-clustering-and-generative-ai)
-14. [Day 5 — Open-source models, Hugging Face and app development](#day-5--open-source-models-hugging-face-and-app-development)
+10. [Module 1 — Python refresher and data handling](#module-1--python-refresher-and-data-handling)
+11. [Module 2 — Visualisation, preprocessing and supervised learning](#module-2--visualisation-preprocessing-and-supervised-learning)
+12. [Module 3 — Feature engineering and model improvement](#module-3--feature-engineering-and-model-improvement)
+13. [Module 4 — Deep learning, clustering and Generative AI](#module-4--deep-learning-clustering-and-generative-ai)
+14. [Module 5 — Open-source models, Hugging Face and app development](#module-5--open-source-models-hugging-face-and-app-development)
 15. [Activity index](#activity-index)
 16. [Capstone project guide](#capstone-project-guide)
 17. [Responsible AI checklist](#responsible-ai-checklist)
@@ -71,7 +69,7 @@ Beginners see a red wall of text and panic. Experienced programmers read the **l
 
 ## What a "day" looks like
 
-Each day in this handbook follows the same rhythm, and it always starts with the easiest thing:
+Each module in this handbook follows the same rhythm, and it always starts with the easiest thing:
 
 ```text
 Idea in plain words   →  An analogy you already understand
@@ -94,7 +92,7 @@ Do not skip the paper activities because they look too easy. They are where the 
 | Symbol | Meaning |
 |---|---|
 | 🧠 **Analogy** | An everyday comparison for the idea being introduced |
-| ✏️ **Activity** | Something for you to do, usually 5–10 minutes |
+| ✏️ **Activity** | Something for you to do |
 | 🔁 **Change one thing** | A small edit to make, to see what breaks |
 | ⚠️ **Watch out** | A mistake beginners commonly make |
 | ✅ **Check yourself** | A question to answer before moving on |
@@ -158,7 +156,7 @@ Cover the right-hand column. For each of these, say the analogy out loud before 
 4. Data leakage
 5. Clustering
 
-If you can do five of these on Day 1, the rest of the course will feel much easier.
+If you can do five of these on Module 1, the rest of the course will feel much easier.
 
 ---
 
@@ -184,16 +182,16 @@ By the end of the programme you should be able to:
 
 # Programme map
 
-| Day | Focus | You finish the day with |
+| Module | Focus | You finish with |
 |---|---|---|
-| **Day 1** | Machine Learning concepts, Python refresher, NumPy, Pandas, EDA | A notebook that loads a CSV and answers five questions about it |
-| **Day 2** | Visualisation, preprocessing, regression, classification, ML workflow, metrics | A trained regression model and a trained classification model, both evaluated |
-| **Day 3** | Data augmentation, feature engineering, feature reduction, overfitting, cross-validation, hyperparameter tuning | A tuned model that scores better than your Day 2 model |
-| **Day 4** | Deep learning intro, clustering, Generative AI, LLMs, prompt engineering, Gemini API | Working prompts of all four types and your first Gemini API call |
-| **Day 5** | Open-source GenAI models, Hugging Face, ML + GenAI integration, Streamlit, capstone planning | A running Streamlit app and a chosen capstone topic |
+| **Module 1** | Machine Learning concepts, Python refresher, NumPy, Pandas, EDA | A notebook that loads a CSV and answers five questions about it |
+| **Module 2** | Visualisation, preprocessing, regression, classification, ML workflow, metrics | A trained regression model and a trained classification model, both evaluated |
+| **Module 3** | Data augmentation, feature engineering, feature reduction, overfitting, cross-validation, hyperparameter tuning | A tuned model that scores better than your Module 2 model |
+| **Module 4** | Deep learning intro, clustering, Generative AI, LLMs, prompt engineering, Gemini API | Working prompts of all four types and your first Gemini API call |
+| **Module 5** | Open-source GenAI models, Hugging Face, ML + GenAI integration, Streamlit, capstone planning | A running Streamlit app and a chosen capstone topic |
 | **Weeks 2–4** | Capstone project with online reviews | A submitted project and a final presentation |
 
-Each classroom day is two sessions. The tutorials referenced in each day are in the [`tutorials/`](tutorials) folder of this repository.
+The tutorials referenced in each module are in the [`tutorials/`](tutorials) folder of this repository.
 
 ---
 
@@ -239,7 +237,7 @@ The examples in this handbook use the URL form so that they run anywhere. If you
 
 ## ✏️ Activity 0.2 — Meet your data
 
-Before Day 1 begins, open **three** of the CSV files above in Excel, Google Sheets, or a text editor. Just look at them. For each one, write down:
+Before Module 1 begins, open **three** of the CSV files above in Excel, Google Sheets, or a text editor. Just look at them. For each one, write down:
 
 1. How many columns are there?
 2. Which column looks like the "answer" someone would want to predict?
@@ -251,13 +249,13 @@ Do this with your eyes, not with code. A person who has *looked* at their data m
 
 # Accounts and software you need
 
-Create these **before Day 1**. Do not leave them for the morning of the session.
+Create these **before Module 1**. Do not leave them for the morning of the session.
 
 | What | Why | Where |
 |---|---|---|
 | Google account | Colab and Google AI Studio | [accounts.google.com](https://accounts.google.com) |
-| Gemini API key | Day 4 and Day 5 GenAI code | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
-| Hugging Face account | Day 5 open-source models and Spaces | [huggingface.co/join](https://huggingface.co/join) |
+| Gemini API key | Module 4 and Module 5 GenAI code | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
+| Hugging Face account | Module 5 open-source models and Spaces | [huggingface.co/join](https://huggingface.co/join) |
 | GitHub account | Submitting the capstone project | [github.com/signup](https://github.com/signup) |
 | Miniconda or Anaconda | Running code on your own machine | [docs.conda.io](https://docs.conda.io/projects/miniconda/en/latest/) |
 | Visual Studio Code | Editing `.py` files | [code.visualstudio.com](https://code.visualstudio.com) |
@@ -271,7 +269,7 @@ Create these **before Day 1**. Do not leave them for the morning of the session.
 
 **Full installation instructions for Windows, Ubuntu and macOS — using either `venv` or `conda` — are in the [Environment Setup Guide](setup-guide.md).**
 
-Do it before Day 1. It takes about 45 minutes.
+Do it before you start Module 1.
 
 ## The short version
 
@@ -372,7 +370,7 @@ code .
 mlai-genai-internship-work/
 ├── .gitignore
 ├── .env                          # your API key (never committed)
-├── check_setup.py                # Day 0
+├── check_setup.py                # Module 0
 ├── day1_pandas_practice.py
 ├── day2_regression.py
 ├── day2_classification.py
@@ -391,7 +389,7 @@ mlai-genai-internship-work/
 
 ---
 
-# Day 1 — Python refresher and data handling
+# Module 1 — Python refresher and data handling
 
 **Session 1.1:** Machine Learning concepts and a Python refresher.
 **Session 1.2:** NumPy, Pandas, data loading and Exploratory Data Analysis.
@@ -1024,7 +1022,7 @@ _____________________________________
 
 Hearing eight different datasets described in eight minutes teaches you something no single dataset can: **every dataset is broken in its own particular way.**
 
-### ✅ Day 1 exit task
+### ✅ Module 1 exit task
 
 Using the cardekho dataset, answer in a notebook:
 
@@ -1038,7 +1036,7 @@ Write each answer as **one sentence in plain English**, not as a code output. "T
 
 ---
 
-# Day 2 — Visualisation, preprocessing and supervised learning
+# Module 2 — Visualisation, preprocessing and supervised learning
 
 **Session 2.1:** Data visualisation, preprocessing, regression and classification.
 **Session 2.2:** The ML workflow, the scikit-learn API and evaluation metrics.
@@ -1515,7 +1513,7 @@ for name, model in models.items():
 
 The confusion matrix looks intimidating and is genuinely simple. Imagine the end-of-year report from a building's fire alarm:
 
-|  | The alarm stayed quiet | The alarm went off |
+| | The alarm stayed quiet | The alarm went off |
 |---|---|---|
 | **There was no fire** | ✅ Correct silence (TN) | 🔔 False alarm (FP) |
 | **There was a fire** | 💀 Missed fire (FN) | ✅ Correctly caught (TP) |
@@ -1535,8 +1533,8 @@ Actual 1            FN              TP
 ```
 
 - **TN** — correctly said no
-- **FP** — said yes, but it was no  → a **false alarm**
-- **FN** — said no, but it was yes  → a **miss**
+- **FP** — said yes, but it was no → a **false alarm**
+- **FN** — said no, but it was yes → a **miss**
 - **TP** — correctly said yes
 
 ### 🧠 Analogy: precision and recall are a fishing net
@@ -1630,13 +1628,13 @@ model.score(X_test, y_test)   # 4. quick default score
 
 Classifiers add `model.predict_proba(X)`, which returns the probability of each class instead of just the label. Use it when you need confidence, not just a decision.
 
-### Day 2 exit task
+### Module 2 exit task
 
 Complete the [ML practice exercise](https://github.com/tech4alltraining/aiml/blob/main/assessments/ml_ai_practice.md). For each model you train, report accuracy **and** precision **and** recall, and write one sentence on which of the three matters most for that problem.
 
 ---
 
-# Day 3 — Feature engineering and model improvement
+# Module 3 — Feature engineering and model improvement
 
 **Session:** Data augmentation, feature engineering, feature reduction, overfitting, cross-validation and hyperparameter tuning.
 
@@ -1800,7 +1798,7 @@ _____________________________________________
 
 </details>
 
-**Now test one.** Add your best feature to the classification script from Day 2, re-train, and compare. Write down the before and after scores — including if it made things *worse*. A feature that does not help is a real result, and knowing that took you five minutes to discover.
+**Now test one.** Add your best feature to the classification script from Module 2, re-train, and compare. Write down the before and after scores — including if it made things *worse*. A feature that does not help is a real result, and knowing that took you five minutes to discover.
 
 - Practice: [Notebook 3.2 — Feature engineering](https://colab.research.google.com/drive/1xKoiS5WaH9_kNHjg1dNP-xuAgaTmZ0Wr?usp=sharing)
 
@@ -1871,7 +1869,7 @@ print("Variance explained by each:", pca.explained_variance_ratio_.round(3))
 
 ## 3.4 Overfitting and underfitting
 
-This is the central problem of Machine Learning. If you understand only one idea from Day 3, make it this one.
+This is the central problem of Machine Learning. If you understand only one idea from Module 3, make it this one.
 
 ### 🧠 Analogy: three students and an exam
 
@@ -2082,7 +2080,7 @@ A cake recipe has two kinds of number.
 
 **Things the cake works out for itself:** how brown the crust gets, how far it rises. You do not set those — they emerge from baking. Those are **parameters**, and the model learns them during `fit()`.
 
-**Things you set before it goes in:** oven temperature 180°C, time 40 minutes, shelf position middle. Those are **hyperparameters**, and no amount of baking will choose them for you.
+**Things you set before it goes in:** oven temperature 180°C, , shelf position middle. Those are **hyperparameters**, and no amount of baking will choose them for you.
 
 If the cake comes out burnt on top and raw inside, you do not blame the flour. You change the dials and bake another one. **Hyperparameter tuning is systematically trying dial settings and keeping the best cake.**
 
@@ -2178,13 +2176,13 @@ print("Test score     :", round(random_search.score(X_test, y_test), 4))
 
 - Practice: [Notebook 3.6 — Hyperparameter tuning](https://colab.research.google.com/drive/1-eyZakV1mK4C-_9nvLzV66lqsJBLS0JO?usp=sharing)
 
-### Day 3 exit task
+### Module 3 exit task
 
-Take your Day 2 classification model and improve it. Report a small table:
+Take your Module 2 classification model and improve it. Report a small table:
 
 | Version | What changed | CV mean | CV std | Test score |
 |---|---|---|---|---|
-| Baseline | Day 2 model | | | |
+| Baseline | Module 2 model | | | |
 | + features | Added `loan_to_income` | | | |
 | + tuning | GridSearchCV best params | | | |
 
@@ -2192,7 +2190,7 @@ If a change made the score worse, keep it in the table and say so. Negative resu
 
 ---
 
-# Day 4 — Deep learning, clustering and Generative AI
+# Module 4 — Deep learning, clustering and Generative AI
 
 **Session 4.1:** Deep learning intro, AI ethics, unsupervised learning, clustering.
 **Session 4.2:** Generative AI, LLMs, prompt engineering, the Gemini API.
@@ -2542,7 +2540,7 @@ Return a numbered list. After each question, add one line starting with
 
 </details>
 
-**✅ Check yourself:** put the two outputs side by side. Which one could you use *without editing*? That difference took you two extra minutes of writing. This is the highest-return skill in the whole of Day 4.
+**✅ Check yourself:** put the two outputs side by side. Which one could you use *without editing*? That difference took you two extra minutes of writing. This is the highest-return skill in the whole of Module 4.
 
 ### The four prompt types
 
@@ -2650,7 +2648,7 @@ maybe split it into two."
 
 **The lesson:** more examples is not automatically better. Chain-of-thought is not automatically better. **Match the prompt type to what the task actually needs.**
 
-The full set of demos and prompts is in [`activities.md`](trainer/activities.md) and [`prompts.md`](prompts.md).
+The full set of demo prompts is in [`prompts.md`](prompts.md).
 
 ## 4.5 Your first Gemini API call
 
@@ -3009,7 +3007,7 @@ print("A2:", chat.send_message("Who created it?").text.strip()[:200])
 
 ## 4.6 Group activities
 
-The activities above are ones you do alone at your keyboard. These four are run by the instructor with the whole class, and the full facilitation notes are in [`activities.md`](trainer/activities.md).
+The activities above are ones you do alone at your keyboard. These four are run by your instructor with the whole class.
 
 | ID | Activity | What it teaches |
 |---|---|---|
@@ -3031,7 +3029,7 @@ Run both. Paste both outputs into your notes side by side, and write one sentenc
 
 **Then do the part that matters:** actually use the strong prompt this week. A prompt you saved and reuse is worth more than fifty you tried once.
 
-### ✅ Day 4 exit task
+### ✅ Module 4 exit task
 
 You should be able to show:
 
@@ -3042,7 +3040,7 @@ You should be able to show:
 
 ---
 
-# Day 5 — Open-source models, Hugging Face and app development
+# Module 5 — Open-source models, Hugging Face and app development
 
 **Session 5.1:** Open-source GenAI models, the Hugging Face ecosystem, integrating ML with GenAI.
 **Session 5.2:** Streamlit app development and capstone planning.
@@ -3326,7 +3324,7 @@ The **receptionist** explains what happens next in language you actually underst
 
 A hospital where the receptionist diagnoses patients is a disaster. So is an application where the LLM decides the loan.
 
-This is the most important idea of Day 5, and the strongest thing you can put in a capstone project.
+This is the most important idea of Module 5, and the strongest thing you can put in a capstone project.
 
 ```text
 Structured input  →  ML model      →  prediction  ┐
@@ -3396,9 +3394,9 @@ Then deliberately test the boundary between the two components:
 
 **✅ Check yourself:** in one sentence, what would go wrong if you deleted the ML model and asked Gemini to approve the loan directly? (You would have replaced a measurable, testable, auditable decision with an unmeasurable one — and you could not tell a rejected applicant why.)
 
-### ✅ Day 5 exit task
+### ✅ Module 5 exit task
 
-Have a Streamlit app running on your own machine, in the `genai` environment, that either serves a trained ML model or calls the Gemini API. Screenshot it. That screenshot is your Day 5 evidence.
+Have a Streamlit app running on your own machine, in the `genai` environment, that either serves a trained ML model or calls the Gemini API. Screenshot it. That screenshot is your Module 5 evidence.
 
 ---
 
@@ -3406,47 +3404,47 @@ Have a Streamlit app running on your own machine, in the `genai` environment, th
 
 Every activity in this handbook, in order. Tick them off as you go — the ✏️ ones are the course.
 
-| # | Activity | Computer needed? | Time | Teaches |
-|---|---|---|---|---|
-| **0.1** | [Match the analogy](#the-analogy-bank) | No | 5 min | The vocabulary of the whole course |
-| **0.2** | [Meet your data](#the-datasets-you-will-use) | Spreadsheet only | 15 min | Looking at data before coding |
-| **1.1** | [Sort the mail](#day-1--python-refresher-and-data-handling) | No | 10 min | What "learning from examples" means |
-| **1.2** | Number or category? | No | 10 min | Regression vs classification |
-| **1.3** | Teachable Machine | Browser | 20 min | Training a real model with no code |
-| **1.4** | Fix the broken program | Yes | 15 min | Reading error messages |
-| **1.5** | The marks calculator | Yes | 15 min | NumPy without loops |
-| **1.6** | Twelve rows you can see | Yes | 20 min | Spotting data problems |
-| **1.7** | Data detective | Yes | 20 min | EDA on an unfamiliar dataset |
-| **2.1** | The chart chooser | No | 10 min | Choosing a chart from a question |
-| **2.2** | Draw it before you code it | Yes | 15 min | Reading your own charts |
-| **2.3** | Preprocess twelve rows by hand | Yes | 25 min | The full preprocessing pipeline |
-| **2.4** | Beat the model | Paper first | 15 min | What regression actually computes |
-| **2.5** | What does a mistake cost? | No | 15 min | Choosing precision vs recall |
-| **2.6** | Build the useless 99% model | Yes | 10 min | Why accuracy misleads |
-| **3.1** | Legal or illegal augmentation? | No | 10 min | Label-preserving transformations |
-| **3.2** | Invent three features | Paper first | 15 min | Feature engineering |
-| **3.3** | Watch a model overfit, live | Yes | 20 min | The train/test gap |
-| **3.4** | Prove one split is unreliable | Yes | 15 min | Why cross-validate |
-| **4.1** | Cluster the classroom | No — stand up | 10 min | What clustering does, and choosing k |
-| **4.2** | Choose k, then defend it | Yes | 20 min | Elbow and silhouette |
-| **4.3** | Be the language model | No | 15 min | Next-token prediction, hallucination |
-| **4.4** | Count the tokens | Browser | 10 min | Tokens, cost, context |
-| **4.5** | The prompt makeover | Yes | 20 min | The five parts of a prompt |
-| **4.6** | All four prompt types on one task | Yes | 25 min | Choosing a prompt type |
-| **4.7** | The temperature dial | Yes | 15 min | What `temperature` does |
-| **4.8** | Top-k in the extreme | Yes | 10 min | How `top_k` and temperature interact |
-| **4.9** | Prove the model has no memory | Yes | 15 min | Statelessness and chat history |
-| **4.10** | The Prompting Tournament | Browser | 30 min | Semantic steering |
-| **4.11** | The AI Fact-Checker | Browser | 30 min | Hallucination and bias |
-| **4.12** | The Red Team Challenge | Browser | 25 min | Guardrails and jailbreaks |
-| **4.13** | The JSON Treasure Hunt | Yes | 15 min | A response is just a dictionary |
-| **4.14** | Your own useful prompt | Yes | 15 min | Applying it to real work |
-| **5.1** | Two models, one sentence | Yes | 20 min | Model choice matters |
-| **5.2** | Read a model card | Browser | 15 min | Responsible model selection |
-| **5.3** | Build the loan app end to end | Yes | 45 min | Serving an ML model |
-| **5.4** | Add the explanation layer | Yes | 45 min | ML + GenAI integration |
+| # | Activity | Computer needed? | Teaches |
+|---|---|---|---|
+| **0.1** | [Match the analogy](#the-analogy-bank) | No | The vocabulary of the whole course |
+| **0.2** | [Meet your data](#the-datasets-you-will-use) | Spreadsheet only | Looking at data before coding |
+| **1.1** | [Sort the mail](#module-1--python-refresher-and-data-handling) | No | What “learning from examples” means |
+| **1.2** | Number or category? | No | Regression vs classification |
+| **1.3** | Teachable Machine | Browser | Training a real model with no code |
+| **1.4** | Fix the broken program | Yes | Reading error messages |
+| **1.5** | The marks calculator | Yes | NumPy without loops |
+| **1.6** | Twelve rows you can see | Yes | Spotting data problems |
+| **1.7** | Data detective | Yes | EDA on an unfamiliar dataset |
+| **2.1** | The chart chooser | No | Choosing a chart from a question |
+| **2.2** | Draw it before you code it | Yes | Reading your own charts |
+| **2.3** | Preprocess twelve rows by hand | Yes | The full preprocessing pipeline |
+| **2.4** | Beat the model | Paper first | What regression actually computes |
+| **2.5** | What does a mistake cost? | No | Choosing precision vs recall |
+| **2.6** | Build the useless 99% model | Yes | Why accuracy misleads |
+| **3.1** | Legal or illegal augmentation? | No | Label-preserving transformations |
+| **3.2** | Invent three features | Paper first | Feature engineering |
+| **3.3** | Watch a model overfit, live | Yes | The train/test gap |
+| **3.4** | Prove one split is unreliable | Yes | Why cross-validate |
+| **4.1** | Cluster the classroom | No — stand up | What clustering does, and choosing k |
+| **4.2** | Choose k, then defend it | Yes | Elbow and silhouette |
+| **4.3** | Be the language model | No | Next-token prediction, hallucination |
+| **4.4** | Count the tokens | Browser | Tokens, cost, context |
+| **4.5** | The prompt makeover | Yes | The five parts of a prompt |
+| **4.6** | All four prompt types on one task | Yes | Choosing a prompt type |
+| **4.7** | The temperature dial | Yes | What `temperature` does |
+| **4.8** | Top-k in the extreme | Yes | How `top_k` and temperature interact |
+| **4.9** | Prove the model has no memory | Yes | Statelessness and chat history |
+| **4.10** | The Prompting Tournament | Browser | Semantic steering |
+| **4.11** | The AI Fact-Checker | Browser | Hallucination and bias |
+| **4.12** | The Red Team Challenge | Browser | Guardrails and jailbreaks |
+| **4.13** | The JSON Treasure Hunt | Yes | A response is just a dictionary |
+| **4.14** | Your own useful prompt | Yes | Applying it to real work |
+| **5.1** | Two models, one sentence | Yes | Model choice matters |
+| **5.2** | Read a model card | Browser | Responsible model selection |
+| **5.3** | Build the loan app end to end | Yes | Serving an ML model |
+| **5.4** | Add the explanation layer | Yes | ML + GenAI integration |
 
-Activities **4.10** to **4.13** are instructor-led; the facilitation notes are in [`activities.md`](trainer/activities.md).
+Activities **4.10** to **4.13** are instructor-led.
 
 ## If you are short of time
 
@@ -3508,13 +3506,13 @@ Section 6 is not optional. A project that claims no limitations has not been exa
 
 ## Review milestones
 
-| Milestone | When | You present |
+| Milestone | Format | You present |
 |---|---|---|
-| **Review 1** | Week 2 | Problem statement, dataset, EDA findings |
-| **Review 2** | Week 3 | Baseline model and evaluation metrics |
-| **Review 3** | Week 4 | Improved model, app demo |
-| **Submission** | End of Week 4 | Repository and report |
-| **Final presentation** | End of Week 4 | 8–10 minutes plus questions |
+| **Review 1** | Online | Problem statement, dataset, EDA findings |
+| **Review 2** | Online | Baseline model and evaluation metrics |
+| **Review 3** | Online | Improved model, app demo |
+| **Submission** | After Review 3 | Repository and report |
+| **Final presentation** | After submission | Presentation and questions |
 
 ## Marking guide
 
@@ -3545,31 +3543,31 @@ Run through this before every submission and every demo.
 
 ## Data
 
-- [ ] Am I allowed to use this dataset? Check the licence.
-- [ ] Have I removed personal identifiers I do not need?
-- [ ] Does the data represent all the groups the model will be used on?
-- [ ] Do I know when it was collected and whether it is still current?
+- Am I allowed to use this dataset? Check the licence.
+- Have I removed personal identifiers I do not need?
+- Does the data represent all the groups the model will be used on?
+- Do I know when it was collected and whether it is still current?
 
 ## Model
 
-- [ ] Have I checked accuracy **separately for each group** (gender, age band, region)?
-- [ ] Do I know which features drive the prediction?
-- [ ] Have I stated the model's failure modes in the README?
-- [ ] Is a human making the final decision on anything consequential?
+- Have I checked accuracy **separately for each group** (gender, age band, region)?
+- Do I know which features drive the prediction?
+- Have I stated the model's failure modes in the README?
+- Is a human making the final decision on anything consequential?
 
 ## Generative AI
 
-- [ ] Have I verified the facts in anything I present as true?
-- [ ] Have I told users that the content is AI-generated?
-- [ ] Am I keeping personal or confidential data out of prompts?
-- [ ] Are my guardrails in the prompt (what the model must not do)?
-- [ ] Have I tested what happens when a user tries to misuse it?
+- Have I verified the facts in anything I present as true?
+- Have I told users that the content is AI-generated?
+- Am I keeping personal or confidential data out of prompts?
+- Are my guardrails in the prompt (what the model must not do)?
+- Have I tested what happens when a user tries to misuse it?
 
 ## Security
 
-- [ ] Is my API key out of the code and in `.env` or `secrets.toml`?
-- [ ] Is `.gitignore` in place **before** my first commit?
-- [ ] Have I checked my repository for keys already committed?
+- Is my API key out of the code and in `.env` or `secrets.toml`?
+- Is `.gitignore` in place **before** my first commit?
+- Have I checked my repository for keys already committed?
 
 > **If you ever push a key by accident**, revoke it immediately at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and generate a new one. Deleting the commit is **not** enough — the key is already in the Git history and in anyone's clone.
 
@@ -3609,35 +3607,35 @@ Before you look anything up, check these four. Nine times in ten, one of them is
 
 Answer these without looking anything up. If you cannot, go back to that section.
 
-## Day 1
+## Module 1
 
 1. In one sentence, how does Machine Learning differ from traditional programming?
 2. When would you choose regression over classification?
 3. Which five commands do you run first on any new dataset?
 4. Why fill missing numbers with the median rather than the mean?
 
-## Day 2
+## Module 2
 
 5. A model has 99% accuracy on fraud detection. Why might it still be worthless?
 6. What exactly is the difference between precision and recall?
 7. Why must you fit the scaler on the training set only?
 8. What does R² = 0 mean? What would a negative R² mean?
 
-## Day 3
+## Module 3
 
 9. Training accuracy 0.99, test accuracy 0.71. What is happening and what are two fixes?
 10. Why is 5-fold cross-validation more trustworthy than a single split?
 11. What is the difference between a parameter and a hyperparameter?
 12. When would you use `RandomizedSearchCV` instead of `GridSearchCV`?
 
-## Day 4
+## Module 4
 
 13. Why does an LLM hallucinate? Answer in terms of how it works, not "it makes mistakes".
 14. You need output in a fixed format. Which prompt type, and why?
 15. What does `temperature=0` do, and when would you want it?
 16. Your chatbot forgets the previous question. Why, and what fixes it?
 
-## Day 5
+## Module 5
 
 17. Give one situation where an open-source model beats an API model, and one where the reverse is true.
 18. Why must a model load be wrapped in `@st.cache_resource`?
@@ -3709,7 +3707,6 @@ Answer these without looking anything up. If you cannot, go back to that section
 | [`notebooks/`](notebooks) | Six Colab/Jupyter notebooks, outputs included |
 | [`exercises-assignments.md`](exercises-assignments.md) | Exercises per concept and five graded assignments |
 | [`tutorials/streamlit-apps-collection.md`](tutorials/apps/streamlit-apps-collection.md) | 15 runnable apps: ML, GenAI, and both combined |
-| [`trainer/`](trainer/) | Session plan, curriculum and activity notes |
 | [`prompts.md`](prompts.md) | Copy-paste prompt library |
 | [`tutorials/`](tutorials) | Eight in-depth tutorials |
 

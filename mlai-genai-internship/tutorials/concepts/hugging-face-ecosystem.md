@@ -25,7 +25,7 @@ The Hugging Face Hub hosts model repositories, datasets, and Spaces, and the off
 
 # 0. Before you start
 
-**Day 5 · Session 5.1.** All commands assume the `genai` conda environment from the [Student Handbook](../../setup-guide.md).
+**Module 5 · Session 5.1.** All commands assume the `genai` conda environment from the [Student Handbook](../../setup-guide.md).
 
 ```bash
 conda activate genai
@@ -316,19 +316,19 @@ Simple explanation:
 
 # 2. Hugging Face Ecosystem Summary Table
 
-| Component           | Purpose                                  | Student-Friendly Meaning  |
+| Component | Purpose | Student-Friendly Meaning |
 | ------------------- | ---------------------------------------- | ------------------------- |
-| Hub                 | Store and share models/datasets/apps     | GitHub for AI             |
-| Transformers        | Use pretrained NLP and multimodal models | Run models easily         |
-| Datasets            | Load datasets                            | Get data for ML tasks     |
-| Tokenizers          | Convert text into tokens                 | Prepare text for AI       |
-| Pipelines           | Simple model usage                       | AI in a few lines         |
-| Diffusers           | Generate images/audio                    | Text-to-image AI          |
-| Evaluate            | Calculate metrics                        | Check model performance   |
-| PEFT                | Efficient fine-tuning                    | Train small adapters      |
-| AutoTrain           | No-code training                         | Train without deep coding |
-| Spaces              | Host demo apps                           | Create AI web apps        |
-| Inference Endpoints | Deploy models                            | Use models through APIs   |
+| Hub | Store and share models/datasets/apps | GitHub for AI |
+| Transformers | Use pretrained NLP and multimodal models | Run models easily |
+| Datasets | Load datasets | Get data for ML tasks |
+| Tokenizers | Convert text into tokens | Prepare text for AI |
+| Pipelines | Simple model usage | AI in a few lines |
+| Diffusers | Generate images/audio | Text-to-image AI |
+| Evaluate | Calculate metrics | Check model performance |
+| PEFT | Efficient fine-tuning | Train small adapters |
+| AutoTrain | No-code training | Train without deep coding |
+| Spaces | Host demo apps | Create AI web apps |
+| Inference Endpoints | Deploy models | Use models through APIs |
 
 ---
 
@@ -809,19 +809,21 @@ Students understand that model selection is not only technical; it also involves
 
 ---
 
-# 12. Suggested 3-Hour Hands-on Session Plan
+# 12. Suggested Hands-on Sequence
 
-|   Time | Topic                        | Activity                        |
-| -----: | ---------------------------- | ------------------------------- |
-| 20 min | Introduction to Hugging Face | Explain Hub and ecosystem       |
-| 25 min | Explore Hub                  | Students search models/datasets |
-| 30 min | Transformers pipeline        | Sentiment analysis              |
-| 25 min | Text generation              | Prompt-based generation         |
-| 25 min | Question answering           | Answer from context             |
-| 25 min | Datasets library             | Load IMDb dataset               |
-| 25 min | Evaluation                   | Accuracy calculation            |
-| 30 min | Gradio app                   | Build simple AI app             |
-| 15 min | Responsible AI               | Read model cards                |
+Work through the activities in this order. Each one builds on the last.
+
+| Step | Topic | Activity |
+| ---: | ----- | -------- |
+| 1 | Introduction to Hugging Face | Explain the Hub and the ecosystem |
+| 2 | Explore the Hub | Students search models and datasets |
+| 3 | Transformers `pipeline()` | Sentiment analysis |
+| 4 | Text generation | Prompt-based generation |
+| 5 | Question answering | Answer from context |
+| 6 | Datasets library | Load the IMDb dataset |
+| 7 | Evaluation | Accuracy calculation |
+| 8 | Gradio app | Build a simple AI app |
+| 9 | Responsible AI | Read model cards |
 
 ---
 

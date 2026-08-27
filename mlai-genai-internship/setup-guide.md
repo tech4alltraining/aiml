@@ -4,7 +4,7 @@
 
 Complete installation instructions for **Windows, Ubuntu/Linux and macOS**, using either **`venv`** or **`conda`**.
 
-> **Do this before Day 1.** Set aside 45 minutes. Nothing in the course works until this is done, and a room of twenty students installing PyTorch simultaneously does not work.
+> **Do this before Module 1.** Nothing in the course works until it is done, and a room of twenty students installing PyTorch simultaneously does not work.
 
 | Related | For |
 |---|---|
@@ -338,7 +338,7 @@ Download the installer from [docs.conda.io/projects/miniconda](https://docs.cond
 
 ### Mac users on Apple Silicon: check this before you go further
 
-> ⚠️ **Choose the right build.** On an M1/M2/M3/M4 Mac take the **Apple Silicon (arm64)** installer, not the Intel one. Check your hardware with `uname -m` — `arm64` means Apple Silicon. A Rosetta (x86_64) conda installs fine and runs almost everything, but caps PyTorch at 2.2.2, which breaks the Day 5 Hugging Face examples. Details in the [Troubleshooting Guide](troubleshooting.md#environment-problems).
+> ⚠️ **Choose the right build.** On an M1/M2/M3/M4 Mac take the **Apple Silicon (arm64)** installer, not the Intel one. Check your hardware with `uname -m` — `arm64` means Apple Silicon. A Rosetta (x86_64) conda installs fine and runs almost everything, but caps PyTorch at 2.2.2, which breaks the Module 5 Hugging Face examples. Details in the [Troubleshooting Guide](troubleshooting.md#environment-problems).
 
 Or via Homebrew:
 
@@ -386,7 +386,7 @@ conda activate genai
 python -m pip install --upgrade pip
 ```
 
-## 3.2 Install the Day 1–3 packages (data and machine learning)
+## 3.2 Install the Module 1–3 packages (data and machine learning)
 
 ```bash
 pip install numpy pandas matplotlib seaborn scikit-learn joblib
@@ -394,12 +394,12 @@ pip install numpy pandas matplotlib seaborn scikit-learn joblib
 
 | Package | What it does | First used |
 |---|---|---|
-| `numpy` | Fast numerical arrays | Day 1 |
-| `pandas` | Tables of data (DataFrames) | Day 1 |
-| `matplotlib` | Plotting | Day 2 |
-| `seaborn` | Prettier statistical plots | Day 2 |
-| `scikit-learn` | Machine learning models and metrics | Day 2 |
-| `joblib` | Saving and loading trained models | Day 5 |
+| `numpy` | Fast numerical arrays | Module 1 |
+| `pandas` | Tables of data (DataFrames) | Module 1 |
+| `matplotlib` | Plotting | Module 2 |
+| `seaborn` | Prettier statistical plots | Module 2 |
+| `scikit-learn` | Machine learning models and metrics | Module 2 |
+| `joblib` | Saving and loading trained models | Module 5 |
 
 ## 3.3 Install the notebook tools
 
@@ -407,7 +407,7 @@ pip install numpy pandas matplotlib seaborn scikit-learn joblib
 pip install jupyter ipykernel notebook
 ```
 
-## 3.4 Install the Day 4–5 packages (GenAI and web apps)
+## 3.4 Install the Module 4–5 packages (GenAI and web apps)
 
 ```bash
 pip install google-genai streamlit pillow python-dotenv
@@ -415,14 +415,14 @@ pip install google-genai streamlit pillow python-dotenv
 
 | Package | What it does | First used |
 |---|---|---|
-| `google-genai` | Calls the Gemini API | Day 4 |
-| `streamlit` | Turns a Python script into a web app | Day 4 |
-| `pillow` | Image handling, for image-input apps | Day 4 |
-| `python-dotenv` | Reads your API key from a `.env` file | Day 4 |
+| `google-genai` | Calls the Gemini API | Module 4 |
+| `streamlit` | Turns a Python script into a web app | Module 4 |
+| `pillow` | Image handling, for image-input apps | Module 4 |
+| `python-dotenv` | Reads your API key from a `.env` file | Module 4 |
 
-## 3.5 Install the Day 5 Hugging Face packages
+## 3.5 Install the Module 5 Hugging Face packages
 
-> ⚠️ **This is a 2–3 GB download. Do it the evening before Day 5, not during the session.** Twenty students downloading PyTorch at once on classroom wifi does not work.
+> ⚠️ **This is a 2–3 GB download. Do it the evening before Module 5, not during the session.** Twenty students downloading PyTorch at once on classroom wifi does not work.
 
 ```bash
 pip install transformers torch datasets evaluate gradio
@@ -482,7 +482,7 @@ pip freeze > requirements-lock.txt
 
 # Step 4: Verify the installation
 
-Do not skip this. Two minutes here saves an hour on Day 1.
+Do not skip this. Two minutes here saves an hour on Module 1.
 
 Create **`check_setup.py`** in your project folder:
 
@@ -498,15 +498,15 @@ print("Running :", sys.executable)
 print("-" * 55)
 
 packages = [
-    ("numpy", "Day 1 - arrays"),
-    ("pandas", "Day 1 - dataframes"),
-    ("matplotlib", "Day 2 - plotting"),
-    ("seaborn", "Day 2 - statistical plots"),
-    ("sklearn", "Day 2 - machine learning"),
-    ("joblib", "Day 5 - saving models"),
-    ("streamlit", "Day 4 - web apps"),
-    ("PIL", "Day 4 - images"),
-    ("dotenv", "Day 4 - API keys"),
+    ("numpy", "Module 1 - arrays"),
+    ("pandas", "Module 1 - dataframes"),
+    ("matplotlib", "Module 2 - plotting"),
+    ("seaborn", "Module 2 - statistical plots"),
+    ("sklearn", "Module 2 - machine learning"),
+    ("joblib", "Module 5 - saving models"),
+    ("streamlit", "Module 4 - web apps"),
+    ("PIL", "Module 4 - images"),
+    ("dotenv", "Module 4 - API keys"),
 ]
 
 missing = []
@@ -521,9 +521,9 @@ for name, purpose in packages:
 
 try:
     from google import genai
-    print(f"OK    {'google-genai':<12} {'installed':<10} Day 4 - Gemini API")
+    print(f"OK    {'google-genai':<12} {'installed':<10} Module 4 - Gemini API")
 except ImportError:
-    print(f"FAIL  {'google-genai':<12} {'-':<10} Day 4 - Gemini API")
+    print(f"FAIL  {'google-genai':<12} {'-':<10} Module 4 - Gemini API")
     missing.append("google-genai")
 
 print("-" * 55)
@@ -531,7 +531,7 @@ if missing:
     print("MISSING:", ", ".join(missing))
     print("Fix: activate the environment, then re-run the pip install commands.")
 else:
-    print("All set. You are ready for Day 1.")
+    print("All set. You are ready for Module 1.")
 ```
 
 Run it:
@@ -547,18 +547,18 @@ Python  : 3.12.11
 Platform: Linux x86_64
 Running : /home/you/mlai-genai/genai/bin/python
 -------------------------------------------------------
-OK    numpy        2.4.0      Day 1 - arrays
-OK    pandas       2.3.3      Day 1 - dataframes
-OK    matplotlib   3.10.8     Day 2 - plotting
-OK    seaborn      0.13.2     Day 2 - statistical plots
-OK    sklearn      1.9.0      Day 2 - machine learning
-OK    joblib       1.5.3      Day 5 - saving models
-OK    streamlit    1.59.2     Day 4 - web apps
-OK    PIL          12.0.0     Day 4 - images
-OK    dotenv       installed  Day 4 - API keys
-OK    google-genai installed  Day 4 - Gemini API
+OK    numpy        2.4.0      Module 1 - arrays
+OK    pandas       2.3.3      Module 1 - dataframes
+OK    matplotlib   3.10.8     Module 2 - plotting
+OK    seaborn      0.13.2     Module 2 - statistical plots
+OK    sklearn      1.9.0      Module 2 - machine learning
+OK    joblib       1.5.3      Module 5 - saving models
+OK    streamlit    1.59.2     Module 4 - web apps
+OK    PIL          12.0.0     Module 4 - images
+OK    dotenv       installed  Module 4 - API keys
+OK    google-genai installed  Module 4 - Gemini API
 -------------------------------------------------------
-All set. You are ready for Day 1.
+All set. You are ready for Module 1.
 ```
 
 **Look at the `Running :` line.** The path must contain `genai`. If it does not, you are running the wrong Python — your environment is not active.
@@ -855,22 +855,22 @@ git status
 
 # Setup checklist
 
-Tick every box before Day 1:
+Tick every box before Module 1:
 
-- [ ] Python 3.10+ or Miniconda installed
-- [ ] Project folder created
-- [ ] `genai` environment created
-- [ ] Environment activates, and the prompt shows `(genai)`
-- [ ] Day 1–3 packages installed
-- [ ] Notebook tools installed
-- [ ] Day 4–5 packages installed
-- [ ] `python check_setup.py` prints **All set**
-- [ ] Jupyter kernel registered
-- [ ] VS Code installed with the Python extension
-- [ ] VS Code interpreter set to `genai`
-- [ ] Gemini API key created
-- [ ] `.env` file created with the key
-- [ ] `.gitignore` created, and `git status` does not show `.env`
-- [ ] (Before Day 5) Hugging Face packages installed
+- Python 3.10+ or Miniconda installed
+- Project folder created
+- `genai` environment created
+- Environment activates, and the prompt shows `(genai)`
+- Module 1–3 packages installed
+- Notebook tools installed
+- Module 4–5 packages installed
+- `python check_setup.py` prints **All set**
+- Jupyter kernel registered
+- VS Code installed with the Python extension
+- VS Code interpreter set to `genai`
+- Gemini API key created
+- `.env` file created with the key
+- `.gitignore` created, and `git status` does not show `.env`
+- (Before Module 5) Hugging Face packages installed
 
 ---

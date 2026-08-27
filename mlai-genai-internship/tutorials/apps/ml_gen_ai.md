@@ -1,6 +1,6 @@
 # Integrating Machine Learning with Generative AI
 
-**Day 5 · Session 5.1** — the strongest single idea of the week, and the best thing you can put in a capstone project.
+**Module 5 · Session 5.1** — the strongest single idea of the week, and the best thing you can put in a capstone project.
 
 **Machine Learning model predicts loan approval. Generative AI explains the prediction in simple language. Streamlit provides the user interface.**
 
@@ -44,11 +44,11 @@ Streamlit is suitable for this because it is designed for quickly building inter
 
 This is a good classroom demo because it clearly shows the difference between:
 
-| Component        | Role                                               |
+| Component | Role |
 | ---------------- | -------------------------------------------------- |
-| Machine Learning | Makes the actual prediction                        |
-| Generative AI    | Explains the prediction in human-readable language |
-| Streamlit        | Provides the web interface                         |
+| Machine Learning | Makes the actual prediction |
+| Generative AI | Explains the prediction in human-readable language |
+| Streamlit | Provides the web interface |
 
 ---
 

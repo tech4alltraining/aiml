@@ -1,6 +1,6 @@
 # Open-Source GenAI Models: A Comprehensive Guide for Students
 
-**Day 5 · Session 5.1** — a reference survey. Read it to know what exists; you are not expected to memorise it.
+**Module 5 · Session 5.1** — a reference survey. Read it to know what exists; you are not expected to memorise it.
 
 ## Open-source vs API models
 
@@ -23,15 +23,15 @@ Most models below can be run through the Hugging Face `pipeline()` covered in [`
 
 These models generate text, answer questions, summarize documents, translate, reason, and support chatbot applications.
 
-| Model Family      | Developer       | Main Use                                      |
+| Model Family | Developer | Main Use |
 | ----------------- | --------------- | --------------------------------------------- |
-| Llama             | Meta            | Chatbots, reasoning, summarization, coding    |
-| Mistral / Mixtral | Mistral AI      | Chat, reasoning, enterprise assistants        |
-| Qwen              | Alibaba Cloud   | Multilingual chat, coding, reasoning          |
-| DeepSeek          | DeepSeek AI     | Reasoning, coding, mathematics                |
-| Gemma             | Google DeepMind | Lightweight chat and multimodal applications  |
-| Phi               | Microsoft       | Small language models for local/on-device use |
-| GPT-NeoX          | EleutherAI      | Research and open LLM experimentation         |
+| Llama | Meta | Chatbots, reasoning, summarization, coding |
+| Mistral / Mixtral | Mistral AI | Chat, reasoning, enterprise assistants |
+| Qwen | Alibaba Cloud | Multilingual chat, coding, reasoning |
+| DeepSeek | DeepSeek AI | Reasoning, coding, mathematics |
+| Gemma | Google DeepMind | Lightweight chat and multimodal applications |
+| Phi | Microsoft | Small language models for local/on-device use |
+| GPT-NeoX | EleutherAI | Research and open LLM experimentation |
 
 ## A. Llama
 
@@ -156,13 +156,13 @@ It is older than Llama, Qwen, and DeepSeek, but still useful for explaining the 
 
 These models are trained or fine-tuned for programming tasks.
 
-| Model                  | Developer                           | Main Use                          |
+| Model | Developer | Main Use |
 | ---------------------- | ----------------------------------- | --------------------------------- |
-| StarCoder / StarCoder2 | BigCode / Hugging Face / ServiceNow | Code generation and completion    |
-| Code Llama             | Meta                                | Code generation and explanation   |
-| DeepSeek-Coder         | DeepSeek AI                         | Coding and mathematical reasoning |
-| Qwen-Coder             | Alibaba Cloud                       | Coding assistants and agents      |
-| CodeGemma              | Google                              | Code completion and generation    |
+| StarCoder / StarCoder2 | BigCode / Hugging Face / ServiceNow | Code generation and completion |
+| Code Llama | Meta | Code generation and explanation |
+| DeepSeek-Coder | DeepSeek AI | Coding and mathematical reasoning |
+| Qwen-Coder | Alibaba Cloud | Coding assistants and agents |
+| CodeGemma | Google | Code completion and generation |
 
 ## A. StarCoder2
 
@@ -197,11 +197,11 @@ Solving programming problems
 
 These models generate images from text prompts and can also support editing, inpainting, and image-to-image generation.
 
-| Model                    | Developer                | Main Use                              |
+| Model | Developer | Main Use |
 | ------------------------ | ------------------------ | ------------------------------------- |
-| Stable Diffusion / SDXL  | Stability AI / community | Text-to-image generation              |
-| Stable Diffusion 3 / 3.5 | Stability AI             | High-quality image generation         |
-| FLUX.1                   | Black Forest Labs        | High-quality text-to-image generation |
+| Stable Diffusion / SDXL | Stability AI / community | Text-to-image generation |
+| Stable Diffusion 3 / 3.5 | Stability AI | High-quality image generation |
+| FLUX.1 | Black Forest Labs | High-quality text-to-image generation |
 
 ## A. Stable Diffusion
 
@@ -242,13 +242,13 @@ Digital artwork
 
 These models generate or understand speech, music, and sound.
 
-| Model             | Developer       | Main Use                                 |
+| Model | Developer | Main Use |
 | ----------------- | --------------- | ---------------------------------------- |
-| Whisper           | OpenAI          | Speech-to-text and translation           |
-| MusicGen          | Meta            | Text-to-music generation                 |
-| AudioGen          | Meta            | Text-to-sound generation                 |
-| Stable Audio Open | Stability AI    | Sound effects and short audio generation |
-| Coqui TTS / XTTS  | Coqui community | Text-to-speech and voice generation      |
+| Whisper | OpenAI | Speech-to-text and translation |
+| MusicGen | Meta | Text-to-music generation |
+| AudioGen | Meta | Text-to-sound generation |
+| Stable Audio Open | Stability AI | Sound effects and short audio generation |
+| Coqui TTS / XTTS | Coqui community | Text-to-speech and voice generation |
 
 ## A. Whisper
 
@@ -305,10 +305,10 @@ Create multilingual speech demos
 
 Open video generation is less mature than text and image generation, but several open-weight or community models exist.
 
-| Model / Toolkit          | Main Use                                   |
+| Model / Toolkit | Main Use |
 | ------------------------ | ------------------------------------------ |
-| Stable Video Diffusion   | Image-to-video generation                  |
-| AnimateDiff              | Animate image generation workflows         |
+| Stable Video Diffusion | Image-to-video generation |
+| AnimateDiff | Animate image generation workflows |
 | Open-Sora-style projects | Research-oriented text-to-video generation |
 
 Example uses:
@@ -328,12 +328,12 @@ Important teaching point: open video models generally require more GPU memory an
 
 Multimodal GenAI models can process more than one type of input, such as text + image, or text + audio.
 
-| Model Family              | Input / Output                                   |
+| Model Family | Input / Output |
 | ------------------------- | ------------------------------------------------ |
-| LLaVA                     | Image + text input, text output                  |
-| Qwen-VL                   | Vision-language tasks                            |
-| Gemma multimodal variants | Text and image input, text output                |
-| Phi multimodal variants   | Text, image, and sometimes speech-oriented tasks |
+| LLaVA | Image + text input, text output |
+| Qwen-VL | Vision-language tasks |
+| Gemma multimodal variants | Text and image input, text output |
+| Phi multimodal variants | Text, image, and sometimes speech-oriented tasks |
 
 Example uses:
 
@@ -348,16 +348,16 @@ Visual question answering
 
 # 7. Summary Table for Students
 
-| Category               | Example Models                                    | What They Generate                       |
+| Category | Example Models | What They Generate |
 | ---------------------- | ------------------------------------------------- | ---------------------------------------- |
-| Text generation        | Llama, Mistral, Qwen, DeepSeek, Gemma, Phi        | Answers, summaries, essays, explanations |
-| Code generation        | StarCoder2, DeepSeek-Coder, Code Llama, CodeGemma | Programs, functions, debugging help      |
-| Image generation       | Stable Diffusion, SDXL, FLUX.1                    | Images, posters, art, diagrams           |
-| Speech recognition     | Whisper                                           | Text from speech                         |
-| Text-to-speech         | Coqui TTS, XTTS                                   | Voice from text                          |
-| Music/audio generation | MusicGen, Stable Audio Open                       | Music, sound effects, audio clips        |
-| Video generation       | Stable Video Diffusion, AnimateDiff               | Short videos or animations               |
-| Multimodal AI          | LLaVA, Qwen-VL, Gemma multimodal, Phi multimodal  | Image understanding and text responses   |
+| Text generation | Llama, Mistral, Qwen, DeepSeek, Gemma, Phi | Answers, summaries, essays, explanations |
+| Code generation | StarCoder2, DeepSeek-Coder, Code Llama, CodeGemma | Programs, functions, debugging help |
+| Image generation | Stable Diffusion, SDXL, FLUX.1 | Images, posters, art, diagrams |
+| Speech recognition | Whisper | Text from speech |
+| Text-to-speech | Coqui TTS, XTTS | Voice from text |
+| Music/audio generation | MusicGen, Stable Audio Open | Music, sound effects, audio clips |
+| Video generation | Stable Video Diffusion, AnimateDiff | Short videos or animations |
+| Multimodal AI | LLaVA, Qwen-VL, Gemma multimodal, Phi multimodal | Image understanding and text responses |
 
 ---
 

@@ -1,6 +1,6 @@
 # AI-Powered Application Concepts
 
-**Day 5 · Session 5.1** — the concepts tutorial. There is no code here; this is the mental model you need before building the apps in [`loan-app.md`](../apps/loan-app.md) and [`ml_gen_ai.md`](../apps/ml_gen_ai.md).
+**Module 5 · Session 5.1** — the concepts tutorial. There is no code here; this is the mental model you need before building the apps in [`loan-app.md`](../apps/loan-app.md) and [`ml_gen_ai.md`](../apps/ml_gen_ai.md).
 
 ---
 
@@ -12,15 +12,15 @@ In simple words:
 
 Examples:
 
-| Application | AI Task                                     |
+| Application | AI Task |
 | ----------- | ------------------------------------------- |
-| Google Maps | Finds shortest route and predicts traffic   |
-| YouTube     | Recommends videos                           |
-| Face Unlock | Recognizes face                             |
-| ChatGPT     | Understands and generates text              |
-| Spam filter | Detects unwanted emails                     |
-| AI camera   | Detects faces and improves images           |
-| Medical AI  | Helps detect disease from reports or images |
+| Google Maps | Finds shortest route and predicts traffic |
+| YouTube | Recommends videos |
+| Face Unlock | Recognizes face |
+| ChatGPT | Understands and generates text |
+| Spam filter | Detects unwanted emails |
+| AI camera | Detects faces and improves images |
+| Medical AI | Helps detect disease from reports or images |
 
 ---
 
@@ -78,11 +78,11 @@ Spammers can change the words.
 
 The AI model learns from many examples:
 
-| Email Text                     | Label    |
+| Email Text | Label |
 | ------------------------------ | -------- |
-| You won a lottery              | Spam     |
-| Meeting at 10 AM               | Not Spam |
-| Claim your free prize          | Spam     |
+| You won a lottery | Spam |
+| Meeting at 10 AM | Not Spam |
+| Claim your free prize | Spam |
 | Assignment submission reminder | Not Spam |
 
 After learning, the AI can classify a new email:
@@ -150,14 +150,14 @@ The application takes input from the user or system.
 
 Examples:
 
-| Application        | Input                         |
+| Application | Input |
 | ------------------ | ----------------------------- |
-| Chatbot            | User question                 |
-| Face unlock        | Face image                    |
-| Spam filter        | Email text                    |
-| Medical AI         | X-ray image or patient report |
-| Recommendation app | User history                  |
-| Voice assistant    | Speech                        |
+| Chatbot | User question |
+| Face unlock | Face image |
+| Spam filter | Email text |
+| Medical AI | X-ray image or patient report |
+| Recommendation app | User history |
+| Voice assistant | Speech |
 
 ---
 
@@ -167,11 +167,11 @@ Raw input data must often be cleaned or converted before the AI model can use it
 
 Examples:
 
-| Input Type   | Preprocessing                            |
+| Input Type | Preprocessing |
 | ------------ | ---------------------------------------- |
-| Text         | Tokenization, lowercasing, cleaning      |
-| Image        | Resize image, normalize pixels           |
-| Audio        | Convert speech waveform into features    |
+| Text | Tokenization, lowercasing, cleaning |
+| Image | Resize image, normalize pixels |
+| Audio | Convert speech waveform into features |
 | Tabular data | Handle missing values, scaling, encoding |
 
 Example:
@@ -193,13 +193,13 @@ It is trained to perform a task.
 
 Examples:
 
-| Task           | AI Model Output                |
+| Task | AI Model Output |
 | -------------- | ------------------------------ |
-| Classification | Spam or Not Spam               |
-| Regression     | Predicted car price            |
-| Recommendation | Suggested videos               |
-| Detection      | Face detected or not           |
-| Generation     | Generated text, image, or code |
+| Classification | Spam or Not Spam |
+| Regression | Predicted car price |
+| Recommendation | Suggested videos |
+| Detection | Face detected or not |
+| Generation | Generated text, image, or code |
 
 ---
 
@@ -465,14 +465,14 @@ Machine learning is a method where computers learn from data.
 
 ## Components
 
-| Component        | Example                  |
+| Component | Example |
 | ---------------- | ------------------------ |
-| User interface   | Chat window              |
-| Input            | Student question         |
-| Model            | Language model           |
+| User interface | Chat window |
+| Input | Student question |
+| Model | Language model |
 | Knowledge source | College FAQ or documents |
-| Output           | Answer                   |
-| Feedback         | Was this answer helpful? |
+| Output | Answer |
+| Feedback | Was this answer helpful? |
 
 ---
 
@@ -704,16 +704,16 @@ A student chatbot should not provide harmful instructions, private data, or unsu
 
 # 11. Challenges in AI-Powered Applications
 
-| Challenge           | Example                                       |
+| Challenge | Example |
 | ------------------- | --------------------------------------------- |
-| Wrong prediction    | Medical AI misses a high-risk patient         |
-| Bias                | Loan model rejects applicants unfairly        |
-| Privacy risk        | Chatbot stores personal data insecurely       |
-| Lack of explanation | User does not know why loan was rejected      |
-| Overdependence      | Users blindly trust AI output                 |
-| Model drift         | Model becomes outdated over time              |
-| Security attack     | User manipulates chatbot with harmful prompts |
-| Cost                | Large AI models require powerful hardware     |
+| Wrong prediction | Medical AI misses a high-risk patient |
+| Bias | Loan model rejects applicants unfairly |
+| Privacy risk | Chatbot stores personal data insecurely |
+| Lack of explanation | User does not know why loan was rejected |
+| Overdependence | Users blindly trust AI output |
+| Model drift | Model becomes outdated over time |
+| Security attack | User manipulates chatbot with harmful prompts |
+| Cost | Large AI models require powerful hardware |
 
 ---
 
@@ -721,14 +721,14 @@ A student chatbot should not provide harmful instructions, private data, or unsu
 
 AI-powered applications should follow responsible AI principles.
 
-| Principle      | Example                               |
+| Principle | Example |
 | -------------- | ------------------------------------- |
-| Fairness       | Avoid discrimination in loan approval |
-| Reliability    | Self-driving system must work safely  |
-| Privacy        | Protect medical and financial data    |
-| Inclusiveness  | Support users with disabilities       |
-| Transparency   | Explain AI decisions clearly          |
-| Accountability | Humans should remain responsible      |
+| Fairness | Avoid discrimination in loan approval |
+| Reliability | Self-driving system must work safely |
+| Privacy | Protect medical and financial data |
+| Inclusiveness | Support users with disabilities |
+| Transparency | Explain AI decisions clearly |
+| Accountability | Humans should remain responsible |
 
 ---
 
@@ -744,14 +744,14 @@ AI-based attendance system using face recognition
 
 Ask students to identify:
 
-| Question                                    | Expected Answer                  |
+| Question | Expected Answer |
 | ------------------------------------------- | -------------------------------- |
-| What is the input?                          | Student face image               |
-| What is the AI task?                        | Face recognition                 |
-| What is the output?                         | Present or absent                |
-| What data is needed?                        | Student face images              |
-| What is the risk?                           | Wrong recognition, privacy issue |
-| What responsible AI principle is important? | Privacy, security, fairness      |
+| What is the input? | Student face image |
+| What is the AI task? | Face recognition |
+| What is the output? | Present or absent |
+| What data is needed? | Student face images |
+| What is the risk? | Wrong recognition, privacy issue |
+| What responsible AI principle is important? | Privacy, security, fairness |
 
 ---
 
@@ -759,15 +759,15 @@ Ask students to identify:
 
 Ask students to complete this table:
 
-| AI Application           | Input                | Output                   | AI Task         |
+| AI Application | Input | Output | AI Task |
 | ------------------------ | -------------------- | ------------------------ | --------------- |
-| YouTube recommendation   | Watch history        | Suggested videos         | Recommendation  |
-| Face unlock              | Face image           | Unlock / not unlock      | Recognition     |
-| Chatbot                  | User question        | Text answer              | Text generation |
-| Google Translate         | Text in one language | Text in another language | Translation     |
-| Car price prediction     | Car details          | Selling price            | Regression      |
-| Heart failure prediction | Patient data         | Risk prediction          | Classification  |
-| Spam filter              | Email text           | Spam / not spam          | Classification  |
+| YouTube recommendation | Watch history | Suggested videos | Recommendation |
+| Face unlock | Face image | Unlock / not unlock | Recognition |
+| Chatbot | User question | Text answer | Text generation |
+| Google Translate | Text in one language | Text in another language | Translation |
+| Car price prediction | Car details | Selling price | Regression |
+| Heart failure prediction | Patient data | Risk prediction | Classification |
+| Spam filter | Email text | Spam / not spam | Classification |
 
 ---
 

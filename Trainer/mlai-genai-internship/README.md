@@ -4,44 +4,44 @@ Everything for delivering the ML/AI & GenAI Internship Program.
 
 | File | What it is | When you use it |
 |---|---|---|
-| [session-plan.md](session-plan.md) | Time-blocked plan for all ten sessions, minute by minute | Planning and running each day |
-| [curriculum.md](curriculum.md) | Day-by-day topic list with every notebook, dataset and exercise link | Checking coverage |
+| [session-plan.md](session-plan.md) | The teaching sequence, step by step | Planning and running each module |
+| [curriculum.md](curriculum.md) | Module-by-module topic list with every notebook, dataset and exercise link | Checking coverage |
 | [activities.md](activities.md) | Full facilitation notes for instructor-led demos and activities | Running a class activity |
 
-Students should use the [Student Handbook](../student-handbook.md) instead — activity numbers match exactly across all four documents.
+Students should use the [Student Handbook](../../mlai-genai-internship/student-handbook.md) instead — activity numbers match exactly across all four documents.
 
 ---
 
-## The week at a glance
+## The modules at a glance
 
-| Day | Sessions | Students finish with |
+| Module | Parts | Students finish with |
 |---|---|---|
 | **1** | ML concepts, Python refresher, NumPy, Pandas, EDA | A notebook that loads a CSV and answers five questions about it |
 | **2** | Visualisation, preprocessing, regression, classification, metrics | A trained regression model and a trained classifier, both evaluated |
-| **3** | Features, reduction, overfitting, cross-validation, tuning | A tuned model that beats their Day 2 baseline, with evidence |
+| **3** | Features, reduction, overfitting, cross-validation, tuning | A tuned model that beats their Module 2 baseline, with evidence |
 | **4** | Deep learning, clustering, GenAI, prompting, Gemini API | Working prompts of all four types and their first API call |
 | **5** | Open-source models, Hugging Face, ML+GenAI, Streamlit, capstone | A running Streamlit app and a chosen capstone topic |
 
 ## Before you teach
 
-**A week before:**
+**Before the programme starts:**
 
-- [ ] Send students the [Setup Guide](../setup-guide.md) and ask them to build the `genai` environment
-- [ ] Ask them to create a Gemini API key and a Hugging Face account
-- [ ] Warn them the Day 5 Hugging Face install is 2–3 GB — do it the evening before
-- [ ] Point absolute beginners at the [Python foundation notebooks](../notebooks/) (`00a`, `00b`, `00c`)
+- Send students the [Setup Guide](../../mlai-genai-internship/setup-guide.md) and ask them to build the `genai` environment
+- Ask them to create a Gemini API key and a Hugging Face account
+- Warn them the Module 5 Hugging Face install is 2–3 GB — do it well in advance
+- Point absolute beginners at the [Python foundation notebooks](../../mlai-genai-internship/notebooks/) (`00a`, `00b`, `00c`)
 
-**The day before each session:**
+**Before each session:**
 
-- [ ] Run every code example yourself in the `genai` environment
-- [ ] Check the Colab notebook links still open
-- [ ] Verify the dataset URLs load — they are fetched live during the session
+- Run every code example yourself in the `genai` environment
+- Check the Colab notebook links still open
+- Verify the dataset URLs load — they are fetched live during the session
 
-**On the day:**
+**During the session:**
 
-- [ ] Have the datasets downloaded locally as a fallback for poor classroom wifi
-- [ ] Start long-running cells (GridSearchCV, model downloads) *before* explaining them
-- [ ] Keep [Troubleshooting](../troubleshooting.md) open in a tab
+- Have the datasets downloaded locally as a fallback for poor classroom wifi
+- Start long-running cells (GridSearchCV, model downloads) *before* explaining them
+- Keep [Troubleshooting](../../mlai-genai-internship/troubleshooting.md) open in a tab
 
 ## Questions to ask at every project review
 
