@@ -12,14 +12,14 @@ Everything for the taught modules and the capstone project phase.
 
 ## Start here
 
-| If you are a… | Go to |
+| If you are… | Go to |
 |---|---|
 | **Starting out, nothing installed** | [**Setup Guide**](setup-guide.md) — venv or conda, all three platforms |
-| **Student who has never written Python** | [**Python Foundations**](notebooks/00a_python_foundations.ipynb) — from `print()` upwards |
-| **Student** | [**Student Handbook**](student-handbook.md) — concepts, analogies, 38 activities |
-| **Student who wants to run code now** | [**Notebooks**](notebooks/) — one click to Colab, outputs included |
-| **Student building an app** | [**Streamlit Apps**](tutorials/apps/streamlit-apps-collection.md) — 15 runnable apps |
-| **Student practising** | [**Exercises & Assignments**](exercises-assignments.md) — warm-up to scenario-based |
+| **Never written Python** | [**Python Foundations**](notebooks/00a_python_foundations.ipynb) — from `print()` upwards |
+| **Ready to learn** | [**Student Handbook**](student-handbook.md) — concepts, analogies, 38 activities |
+| **Want to run code now** | [**Notebooks**](notebooks/) — one click to Colab, outputs included |
+| **Building an app** | [**Streamlit Apps**](tutorials/apps/streamlit-apps-collection.md) — 15 runnable apps |
+| **Practising** | [**Exercises & Assignments**](exercises-assignments.md) — warm-up to scenario-based |
 | **Anyone with an error** | [**Troubleshooting**](troubleshooting.md) |
 | **Anyone needing a demo prompt** | [**Prompt Library**](prompts.md) |
 
@@ -28,11 +28,11 @@ Everything for the taught modules and the capstone project phase.
 ## How this folder is organised
 
 ```text
-mlai-genai-internship/
+student/
 │
 ├── README.md                    ← you are here
 ├── setup-guide.md               install for Windows / Ubuntu / macOS
-├── student-handbook.md          the main student book
+├── student-handbook.md          the main book
 ├── exercises-assignments.md     practice + five graded assignments
 ├── troubleshooting.md           every error and its fix
 ├── prompts.md                   copy-paste prompt library
@@ -42,11 +42,9 @@ mlai-genai-internship/
 │   ├── 00a 00b 00c              Python from scratch
 │   └── 01 → 06                  Module 1 to Module 5
 │
-├── tutorials/
-│   ├── apps/                    build something (15 Streamlit apps + 4 guides)
-│   └── concepts/                read about something
-│
-└── archive/                     superseded versions
+└── tutorials/
+    ├── apps/                    build something (15 Streamlit apps + 4 guides)
+    └── concepts/                read about something
 ```
 
 ---
@@ -93,7 +91,7 @@ Every demo is a runnable notebook. **Notebooks 00a–04a show their charts and r
 
 Charts come with a **📊 How to read this chart** guide — because drawing a chart is easy and reading one is the skill.
 
-More on running them, and on the `.ipynb` vs Quarto question: [notebooks/README.md](notebooks/README.md)
+More on running them: [notebooks/README.md](notebooks/README.md)
 
 ---
 
@@ -152,10 +150,10 @@ Requirements and marking guide: [Capstone project guide](student-handbook.md#cap
 
 | Location | Contents |
 |---|---|
-| [`datasets/`](../datasets/) | All course datasets — see [the dataset table](student-handbook.md#the-datasets-you-will-use) |
-| [`python-internship/`](../python-internship/) | Extra Python drill exercises and topic notebooks |
-| [`mlai-internship/`](../mlai-internship/) | NumPy, Pandas and plotting exercise notebooks |
-| [`assessments/`](../assessments/) | Practice exercise and final assessment |
+| [`datasets/`](../../datasets/) | All course datasets — see [the dataset table](student-handbook.md#the-datasets-you-will-use) |
+| [`python-internship/`](../../python-internship/) | Extra Python drill exercises and topic notebooks |
+| [`mlai-internship/`](../../mlai-internship/) | NumPy, Pandas and plotting exercise notebooks |
+| [`assessments/`](../../assessments/) | Practice exercise and final assessment |
 
 ---
 

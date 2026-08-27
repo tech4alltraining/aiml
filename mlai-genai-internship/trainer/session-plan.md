@@ -4,7 +4,7 @@
 
 The order to teach in, and what to do at each step. **No timings are given deliberately** — run each module at whatever pace your group needs, over whatever schedule suits you.
 
-Students should use the [Student Handbook](../../mlai-genai-internship/student-handbook.md) instead; the activity numbers below match it exactly.
+Students should use the [Student Handbook](../student/student-handbook.md) instead; the activity numbers below match it exactly.
 
 | Column | Meaning |
 |---|---|
@@ -19,9 +19,9 @@ Students should use the [Student Handbook](../../mlai-genai-internship/student-h
 
 | Notebook | Covers |
 |---|---|
-| [00a — Basics](../../mlai-genai-internship/notebooks/00a_python_foundations.ipynb) | printing, variables, types, operators, strings |
-| [00b — Structures](../../mlai-genai-internship/notebooks/00b_python_foundations_2.ipynb) | collections, conditions, loops, functions |
-| [00c — Scenarios](../../mlai-genai-internship/notebooks/00c_python_scenarios.ipynb) | ten real-world problems, task by task |
+| [00a — Basics](../student/notebooks/00a_python_foundations.ipynb) | printing, variables, types, operators, strings |
+| [00b — Structures](../student/notebooks/00b_python_foundations_2.ipynb) | collections, conditions, loops, functions |
+| [00c — Scenarios](../student/notebooks/00c_python_scenarios.ipynb) | ten real-world problems, task by task |
 
 **Ask students to complete Scenario 10 in particular.** It walks them through cleaning a messy dataset by hand — duplicates, missing values, inconsistent categories, encoding, train/test split — which is exactly what Modules 1 and 2 then do with Pandas. Students who have done it by hand understand *why*; students who have not just copy six lines.
 
@@ -35,8 +35,8 @@ If a student arrives without having done this, point them at 00a and 00b during 
 
 | Topic | Mode | Ref |
 |---|---|---|
-| Welcome, programme map, what students will build | 🗣️ | [Handbook: Programme map](../../mlai-genai-internship/student-handbook.md#programme-map) |
-| Environment check — everyone runs `check_setup.py` | ✏️ | [Setup Guide](../../mlai-genai-internship/setup-guide.md) |
+| Welcome, programme map, what students will build | 🗣️ | [Handbook: Programme map](../student/student-handbook.md#programme-map) |
+| Environment check — everyone runs `check_setup.py` | ✏️ | [Setup Guide](../student/setup-guide.md) |
 | AI vs ML vs Deep Learning vs GenAI. The recipe-and-chef analogy | 🗣️ | Handbook 1.1 |
 | **Activity 1.1** — Sort the mail (no computer) | ✏️ | Handbook 1.1 |
 | Types of ML: supervised, unsupervised, generative | 🗣️ | Handbook 1.1 |
@@ -143,7 +143,7 @@ If a student arrives without having done this, point them at 00a and 00b during 
 | Module 3 recap; review improvement tables | 🗣️ | |
 | Neural networks: the relay-race analogy; the training loop | 🗣️ | Handbook 4.1 |
 | When to use deep learning — and when not to | 🗣️ | Handbook 4.1 |
-| AI ethics and Responsible AI: bias, privacy, accountability | 🗣️👥 | [Handbook: Responsible AI](../../mlai-genai-internship/student-handbook.md#responsible-ai-checklist) |
+| AI ethics and Responsible AI: bias, privacy, accountability | 🗣️👥 | [Handbook: Responsible AI](../student/student-handbook.md#responsible-ai-checklist) |
 | Clustering: the box-of-old-photographs analogy | 🗣️ | Handbook 4.2 |
 | **Activity 4.1** — Cluster the classroom (everyone stands up) | 👥 | Handbook 4.2 |
 | K-Means on Mall Customers; elbow and silhouette | 💻 | Handbook 4.2 |
@@ -177,13 +177,13 @@ If a student arrives without having done this, point them at 00a and 00b during 
 | Topic | Mode | Ref |
 |---|---|---|
 | Module 4 recap; a few students read out their prompt makeovers | 🗣️ | |
-| Open-source vs API models; when each wins | 🗣️ | [open-source-gen-ai](../../mlai-genai-internship/tutorials/concepts/open-source-gen-ai.md) |
-| Hugging Face: the app-store-for-AI-models analogy; tour of the Hub | 🗣️💻 | [hugging-face-ecosystem](../../mlai-genai-internship/tutorials/concepts/hugging-face-ecosystem.md) |
+| Open-source vs API models; when each wins | 🗣️ | [open-source-gen-ai](../student/tutorials/concepts/open-source-gen-ai.md) |
+| Hugging Face: the app-store-for-AI-models analogy; tour of the Hub | 🗣️💻 | [hugging-face-ecosystem](../student/tutorials/concepts/hugging-face-ecosystem.md) |
 | `pipeline()`: sentiment, text generation, question answering | 💻 | Handbook 5.2 |
 | **Activity 5.1** — Two models, one sentence | ✏️ | Handbook 5.2 |
 | **Activity 5.2** — Read a model card | ✏️ | Handbook 5.2 |
-| ML + GenAI: the doctor-and-receptionist analogy | 🗣️💻 | Handbook 5.4 · [ml_gen_ai](../../mlai-genai-internship/tutorials/apps/ml_gen_ai.md) |
-| AI-powered application concepts and architecture | 🗣️ | [ai-powered-apps](../../mlai-genai-internship/tutorials/concepts/ai-powered-apps.md) |
+| ML + GenAI: the doctor-and-receptionist analogy | 🗣️💻 | Handbook 5.4 · [ml_gen_ai](../student/tutorials/apps/ml_gen_ai.md) |
+| AI-powered application concepts and architecture | 🗣️ | [ai-powered-apps](../student/tutorials/concepts/ai-powered-apps.md) |
 
 ### Part 2 — Streamlit and capstone planning
 
@@ -191,10 +191,10 @@ If a student arrives without having done this, point them at 00a and 00b during 
 |---|---|---|
 | Streamlit: the script-that-became-a-website and rewiped-whiteboard analogies | 🗣️💻 | Handbook 5.3 |
 | Build `hello_streamlit.py` together; widgets, session state, caching | 💻 | Handbook 5.3 |
-| **Activity 5.3** — Build the loan app end to end | ✏️ | [loan-app](../../mlai-genai-internship/tutorials/apps/loan-app.md) |
-| **Activity 5.4** — Add the GenAI explanation layer | ✏️ | [ml_gen_ai](../../mlai-genai-internship/tutorials/apps/ml_gen_ai.md) |
-| Capstone: topic selection, group formation | 👥 | [Capstone guide](../../mlai-genai-internship/student-handbook.md#capstone-project-guide) |
-| Deliverables, marking guide, review milestones | 🗣️ | [Capstone guide](../../mlai-genai-internship/student-handbook.md#capstone-project-guide) |
+| **Activity 5.3** — Build the loan app end to end | ✏️ | [loan-app](../student/tutorials/apps/loan-app.md) |
+| **Activity 5.4** — Add the GenAI explanation layer | ✏️ | [ml_gen_ai](../student/tutorials/apps/ml_gen_ai.md) |
+| Capstone: topic selection, group formation | 👥 | [Capstone guide](../student/student-handbook.md#capstone-project-guide) |
+| Deliverables, marking guide, review milestones | 🗣️ | [Capstone guide](../student/student-handbook.md#capstone-project-guide) |
 | Internship guidelines, mentoring plan, close | 🗣️ | |
 
 **Outcome:** every student has a Streamlit app running locally and a chosen capstone topic.
@@ -228,10 +228,10 @@ Question 6 is the one students prepare for least and learn from most.
 
 **Before the programme starts:**
 
-- [ ] Send students the [Setup Guide](../../mlai-genai-internship/setup-guide.md) and ask them to create the `genai` environment
+- [ ] Send students the [Setup Guide](../student/setup-guide.md) and ask them to create the `genai` environment
 - [ ] Ask them to create their Gemini API key and Hugging Face account
 - [ ] Warn them the Module 5 Hugging Face install is 2–3 GB — do it well in advance
-- [ ] Point absolute beginners at the [Python foundation notebooks](../../mlai-genai-internship/notebooks/)
+- [ ] Point absolute beginners at the [Python foundation notebooks](../student/notebooks/)
 
 **Before each session:**
 
@@ -243,7 +243,7 @@ Question 6 is the one students prepare for least and learn from most.
 
 - [ ] Have the datasets downloaded locally as a fallback for poor classroom wifi
 - [ ] Start long-running cells (GridSearchCV, Hugging Face downloads) *before* explaining them
-- [ ] Keep [Troubleshooting](../../mlai-genai-internship/troubleshooting.md) open in a tab
+- [ ] Keep [Troubleshooting](../student/troubleshooting.md) open in a tab
 
 ---
 
@@ -253,5 +253,5 @@ Question 6 is the one students prepare for least and learn from most.
 |---|---|
 | [curriculum.md](curriculum.md) | Topic-by-topic coverage with notebook links |
 | [activities.md](activities.md) | Full facilitation notes for instructor-led activities |
-| [Student Handbook](../../mlai-genai-internship/student-handbook.md) | The student's book — concepts, code, all activities |
-| [Slide decks](../../mlai-genai-internship/latex/) | Six projector-ready decks (build with `make`) |
+| [Student Handbook](../student/student-handbook.md) | The student's book — concepts, code, all activities |
+| [Slide decks](latex/) | Six projector-ready decks (build with `make`) |

@@ -4,27 +4,27 @@
 
 | Also see | For |
 |---|---|
-| [**Student Handbook**](../../mlai-genai-internship/student-handbook.md) | Students — concepts, analogies, runnable code, all 38 activities |
+| [**Student Handbook**](../student/student-handbook.md) | Students — concepts, analogies, runnable code, all 38 activities |
 | [**Session Plan**](session-plan.md) | Trainers — the same content, time-blocked minute by minute |
 | [**Activities**](activities.md) | Facilitation notes for instructor-led activities |
-| [**Prompt Library**](../../mlai-genai-internship/prompts.md) | Every demo prompt, ready to copy |
-| [**Notebooks**](../../mlai-genai-internship/notebooks) | Six Colab/Jupyter notebooks, outputs included |
-| [**Streamlit Apps**](../../mlai-genai-internship/tutorials/apps/streamlit-apps-collection.md) | 15 runnable apps, simple to advanced |
-| [**Exercises**](../../mlai-genai-internship/exercises-assignments.md) | Practice per concept, plus graded assignments |
-| [**Setup Guide**](../../mlai-genai-internship/setup-guide.md) | Windows, Ubuntu, macOS · venv or conda |
-| [**Index**](../../mlai-genai-internship/README.md) | Everything in this folder |
+| [**Prompt Library**](../student/prompts.md) | Every demo prompt, ready to copy |
+| [**Notebooks**](../student/notebooks) | Six Colab/Jupyter notebooks, outputs included |
+| [**Streamlit Apps**](../student/tutorials/apps/streamlit-apps-collection.md) | 15 runnable apps, simple to advanced |
+| [**Exercises**](../student/exercises-assignments.md) | Practice per concept, plus graded assignments |
+| [**Setup Guide**](../student/setup-guide.md) | Windows, Ubuntu, macOS · venv or conda |
+| [**Index**](../student/README.md) | Everything in this folder |
 
-> **All code in this programme runs in an environment named `genai`.** Setup for Windows, Ubuntu and macOS: [Setup Guide](../../mlai-genai-internship/setup-guide.md).
+> **All code in this programme runs in an environment named `genai`.** Setup for Windows, Ubuntu and macOS: [Setup Guide](../student/setup-guide.md).
 
 ### Week 0 || Python Pre-work *(optional, self-paced)*
 ---
 #### **For students with no Python background**
 ##### Python Foundations Part A: printing, variables, data types, operators, strings
-- [Notebook 00a](../../mlai-genai-internship/notebooks/00a_python_foundations.ipynb)
+- [Notebook 00a](../student/notebooks/00a_python_foundations.ipynb)
 ##### Python Foundations Part B: collections, conditions, loops, functions
-- [Notebook 00b](../../mlai-genai-internship/notebooks/00b_python_foundations_2.ipynb)
+- [Notebook 00b](../student/notebooks/00b_python_foundations_2.ipynb)
 ##### Scenario Worksheets: ten real-world problems
-- [Notebook 00c](../../mlai-genai-internship/notebooks/00c_python_scenarios.ipynb)
+- [Notebook 00c](../student/notebooks/00c_python_scenarios.ipynb)
 - Scenario 10 (ML Data Prep) is the direct bridge into Module 1
 ##### Additional drills
 - [Python exercises](../../python-internship/Python_Exercise1.md) · [Scenario worksheet](../../python-internship/Python_Exercise2.ipynb)
@@ -139,7 +139,7 @@
 ##### Large Language Models (LLMs)
 ##### Prompt Engineering Basics
  * [Demo 4.1] - Prompting Demo (Paris trip example)
- * [Demo 4.1b] - Without Prompt Engineering (smartphone) — see [prompts.md §2](../../mlai-genai-internship/prompts.md#2-weak-vs-strong-prompts)
+ * [Demo 4.1b] - Without Prompt Engineering (smartphone) — see [prompts.md §2](../student/prompts.md#2-weak-vs-strong-prompts)
  > *Prompt:* Generate a product description for a smartphone.
  >
  > *Sample Output:*
@@ -242,8 +242,8 @@
  * [Activity 4.8] - Top-p and Top-k (`top_p`, `top_k`) — [notes](activities.md#activity-48---top-p-and-top-k)
  * [Activity 4.13] - The JSON Treasure Hunt — [notes](activities.md#activity-413---the-json-treasure-hunt)
  * [Activity 4.9] - Prove the model has no memory — *Handbook 4.5*
- * [Apps: Text Generator, Chatbot](../../mlai-genai-internship/tutorials/apps/streamlit-app-simple.md)
- * [Apps: YouTube Summarizer, Diagnostic Helper](../../mlai-genai-internship/tutorials/apps/streamlit-app-advanced.md)
+ * [Apps: Text Generator, Chatbot](../student/tutorials/apps/streamlit-app-simple.md)
+ * [Apps: YouTube Summarizer, Diagnostic Helper](../student/tutorials/apps/streamlit-app-advanced.md)
 
 ##### Ethical considerations and responsible AI
 * [Activity 4.11]: The AI Fact-Checker — hallucination & bias — [notes](activities.md#activity-411---the-ai-fact-checker)
@@ -262,21 +262,21 @@
  - *[ML + GenAI Deployment - Streamlit [GenAU](https://github.com/tech4alltraining/aiml/blob/main/mlai-genai-internship/tutorials/ml_gen_ai.md)]*
  - ML + GenAI integration patterns, Using GenAI to explain ML predictions, Automating insights from ML outputs, Best practices in ML & GenAI development
 ##### Open Source Generative AI Models
-- [Tutorial: Open-Source GenAI Models](../../mlai-genai-internship/tutorials/concepts/open-source-gen-ai.md)
+- [Tutorial: Open-Source GenAI Models](../student/tutorials/concepts/open-source-gen-ai.md)
 ##### Hugging Face Ecosystem
-- [Tutorial: Hugging Face Ecosystem](../../mlai-genai-internship/tutorials/concepts/hugging-face-ecosystem.md)
+- [Tutorial: Hugging Face Ecosystem](../student/tutorials/concepts/hugging-face-ecosystem.md)
 - *Handbook Activity 5.1 — Two models, one sentence · Activity 5.2 — Read a model card*
 ##### AI-powered Application Concepts
-- [Tutorial: AI-Powered Application Concepts](../../mlai-genai-internship/tutorials/concepts/ai-powered-apps.md)
+- [Tutorial: AI-Powered Application Concepts](../student/tutorials/concepts/ai-powered-apps.md)
 
 
 #### **Session 5.2: *Capstone Project & GenAI Application Development***
 ##### Streamlit App Development
-- [Tutorial: Loan Approval App (ML model + Streamlit)](../../mlai-genai-internship/tutorials/apps/loan-app.md) — *Handbook Activity 5.3*
-- [Tutorial: ML + GenAI (prediction + explanation)](../../mlai-genai-internship/tutorials/apps/ml_gen_ai.md) — *Handbook Activity 5.4*
+- [Tutorial: Loan Approval App (ML model + Streamlit)](../student/tutorials/apps/loan-app.md) — *Handbook Activity 5.3*
+- [Tutorial: ML + GenAI (prediction + explanation)](../student/tutorials/apps/ml_gen_ai.md) — *Handbook Activity 5.4*
 ##### Project Grouping & Topic Selection
 ##### Capstone Project Planning
-- [Capstone guide, deliverables and marking](../../mlai-genai-internship/student-handbook.md#capstone-project-guide)
+- [Capstone guide, deliverables and marking](../student/student-handbook.md#capstone-project-guide)
 ##### Internship Guidelines & Mentoring Plan
 
 ---

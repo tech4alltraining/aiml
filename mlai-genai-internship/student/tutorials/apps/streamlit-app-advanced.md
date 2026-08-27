@@ -211,7 +211,7 @@ Gemini analyzes video content
 Summary is displayed in Streamlit
 ```
 
-## Classroom Discussion
+## Discussion
 
 Ask students:
 
@@ -520,7 +520,7 @@ The app should avoid storing sensitive patient data.
 
 ---
 
-# Suggested Classroom Activity
+# Practice tasks
 
 ## Activity 1: Improve YouTube Summarizer
 

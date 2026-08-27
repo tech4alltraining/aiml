@@ -361,7 +361,7 @@ Visual question answering
 
 ---
 
-# 8. Simple Classroom Explanation
+# 8. In simple terms
 
 You can explain it like this:
 

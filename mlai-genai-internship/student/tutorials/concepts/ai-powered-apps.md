@@ -732,7 +732,7 @@ AI-powered applications should follow responsible AI principles.
 
 ---
 
-# 13. Classroom Activity: Identify AI Application Components
+# 13. Activity: Identify the components
 
 Give students this example:
 
@@ -755,7 +755,7 @@ Ask students to identify:
 
 ---
 
-# 14. Another Classroom Activity
+# 14. Activity: Complete the table
 
 Ask students to complete this table:
 

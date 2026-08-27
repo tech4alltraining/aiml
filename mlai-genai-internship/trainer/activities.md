@@ -2,7 +2,7 @@
 
 **Instructor facilitation notes for the Module 4 and Module 5 classroom activities.**
 
-The activity numbers here match the [Student Handbook](../../mlai-genai-internship/student-handbook.md#activity-index) and the [Session Plan](session-plan.md) exactly. The prompts themselves, ready to copy, are in [prompts.md](../../mlai-genai-internship/prompts.md).
+The activity numbers here match the [Student Handbook](../student/student-handbook.md#activity-index) and the [Session Plan](session-plan.md) exactly. The prompts themselves, ready to copy, are in [prompts.md](../student/prompts.md).
 
 | Activity | Name | Format |
 |---|---|---|
@@ -50,7 +50,7 @@ You will get a generic list: Eiffel Tower, Louvre, Notre-Dame. Perfectly correct
 
 > A prompt is a briefing, not a search query. Brief the model the way you would brief a capable new colleague who knows nothing about you.
 
-The five-part structure that formalises this is in [Handbook 4.4](../../mlai-genai-internship/student-handbook.md#44-prompt-engineering).
+The five-part structure that formalises this is in [Handbook 4.4](../student/student-handbook.md#44-prompt-engineering).
 
 # Demo 4.2 - Types of prompts (zero-shot, one-shot, few-shot, chain-of-thought)
 
@@ -368,7 +368,7 @@ Ask the class which combination they would use for each:
 
 **Change `temperature` first and leave the other two at their defaults.** Adjust all three at once and you will never know which one caused the change you are looking at. This is the same discipline as changing one variable in an experiment — and students who have done Activity 3.3 will recognise it.
 
-The runnable code for this activity is in [Handbook Activity 4.8](../../mlai-genai-internship/student-handbook.md#module-4--deep-learning-clustering-and-generative-ai).
+The runnable code for this activity is in [Handbook Activity 4.8](../student/student-handbook.md#module-4--deep-learning-clustering-and-generative-ai).
 
 ---
 
@@ -453,7 +453,7 @@ Bring the class back together and use these discussion points to solidify the le
 
 # Activity 4.13 - The JSON Treasure Hunt
 
-**Format:** individual · · **Needs:** a working Gemini API call ([Handbook 4.5](../../mlai-genai-internship/student-handbook.md#45-your-first-gemini-api-call))
+**Format:** individual · · **Needs:** a working Gemini API call ([Handbook 4.5](../student/student-handbook.md#45-your-first-gemini-api-call))
 
 Students run one simple prompt through the API and print the **entire** response object rather than just `response.text`:
 

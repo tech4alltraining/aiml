@@ -61,7 +61,7 @@ The three foundation notebooks contain **35 short exercises, 7 quizzes and 20 ta
 
 > **Scenario 10 is the important one.** You clean a messy dataset by hand in plain Python — duplicates, missing values, inconsistent categories, encoding, train/test split. Tomorrow Pandas does all of it in six lines. **Students who understand the why find Pandas easy; students who only learn the six lines get stuck the first time their data is different.**
 
-More drills: [`python-internship/`](../python-internship/) has topic-by-topic exercise notebooks.
+More drills: [`python-internship/`](../../python-internship/) has topic-by-topic exercise notebooks.
 
 ---
 
@@ -153,7 +153,7 @@ print("e:", (marks / marks.max() * 100).round(1))
 
 ## 🟠 Challenge
 
-**1.7 — The data quality report.** Pick any dataset from [`datasets/`](../datasets/) that was not used in class. Produce a one-page report containing:
+**1.7 — The data quality report.** Pick any dataset from [`datasets/`](../../datasets/) that was not used in class. Produce a one-page report containing:
 
 ```text
 1. Shape, and what one row represents
@@ -593,7 +593,7 @@ Longer, graded work. Each one is a deliverable, not an exercise.
 ## Assignment 1 — The dataset investigation
 **After Module 2 · Weight: 15%**
 
-Choose a dataset from [`datasets/`](../datasets/) that was **not** used in class.
+Choose a dataset from [`datasets/`](../../datasets/) that was **not** used in class.
 
 **Deliverable:** a notebook plus a one-page summary.
 

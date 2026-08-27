@@ -38,20 +38,6 @@ Streamlit is suitable for this because it is designed for quickly building inter
 
 ---
 
-## Demo title
-
-**“Integrating Machine Learning with Generative AI for Loan Approval Explanation”**
-
-This is a good classroom demo because it clearly shows the difference between:
-
-| Component | Role |
-| ---------------- | -------------------------------------------------- |
-| Machine Learning | Makes the actual prediction |
-| Generative AI | Explains the prediction in human-readable language |
-| Streamlit | Provides the web interface |
-
----
-
 ## Folder structure
 
 Create a folder like this:
@@ -299,7 +285,7 @@ if submitted:
        loan-to-income ratio, interest rate, employment experience, and previous default.
     4. Do not use gender as a reason for approval or rejection.
     5. Give 3 practical suggestions to improve approval chances if the prediction is rejected.
-    6. Keep the explanation concise and classroom-friendly.
+    6. Keep the explanation concise and easy to read.
     """
 
     with st.spinner("Generating explanation using Generative AI..."):
@@ -317,7 +303,7 @@ if submitted:
 
 ---
 
-## How to run the demo
+## Run it
 
 From the terminal:
 
@@ -332,62 +318,40 @@ Stop the server with `Ctrl+C`.
 
 ---
 
-## How to explain this demo to students
+## How the two halves fit together
 
-You can explain it like this:
+**Step 1 — the ML model predicts.** The trained Random Forest receives structured input: age, income, credit score, loan amount, interest rate, loan intent, previous defaults. It outputs a class label — approved or rejected.
 
-**Step 1: Traditional ML prediction**
+**Step 2 — the GenAI model explains.** It does **not** make the decision. It receives the prediction *and* the applicant details, and turns them into a readable explanation.
 
-The trained Random Forest model receives structured input such as age, income, credit score, loan amount, interest rate, loan intent, and previous default status. It outputs a class label such as approved or rejected.
+**Step 3 — Streamlit joins them.** The user enters values, clicks a button, sees the prediction, then sees the explanation.
 
-**Step 2: GenAI explanation**
-
-The Generative AI model does not make the loan decision. It receives the ML prediction and the applicant details, then generates a human-readable explanation.
-
-**Step 3: Streamlit integration**
-
-Streamlit connects both parts into a single web app. The user enters values, clicks a button, sees the ML prediction, and then sees a GenAI-generated explanation.
+> **Machine Learning is used for prediction. Generative AI is used for explanation and interaction.** That distinction is the whole point of this tutorial.
 
 ---
 
-## Important point for your demo
+## Try it
 
-Say this clearly during the session:
+1. Look at the trained model file `rf_model.joblib` — it was trained on historical loan data before you ever ran the app
+2. Run the app and enter one applicant's details
+3. Click **Predict and Explain**
+4. Read the ML result, then read the GenAI explanation
+5. Change one field — credit score, income, loan amount, previous defaults
+6. Run again and compare the two explanations
 
-> “Machine Learning is used for prediction. Generative AI is used for explanation and interaction.”
-
-That distinction is the main learning outcome.
-
----
-
-## Recommended demo script for classroom
-
-You can present it in this order:
-
-1. Show the trained model file: `rf_model.joblib`.
-2. Explain that the model was already trained using historical loan data.
-3. Run the Streamlit app.
-4. Enter one applicant’s details.
-5. Click **Predict and Explain**.
-6. Show the ML result: Approved/Rejected.
-7. Show the GenAI explanation.
-8. Change values such as credit score, income, loan amount, or previous default.
-9. Run again and compare the explanation.
-10. Discuss why GenAI should explain the result, not replace the ML model.
+**Then answer:** why should the GenAI layer *explain* the result rather than *replace* the ML model?
 
 ---
 
-## Best teaching conclusion
-
-This demo shows a practical AI-powered application:
+## What you have built
 
 ```text
 Machine Learning = prediction engine
-Generative AI = explanation engine
-Streamlit = user interface
+Generative AI    = explanation engine
+Streamlit        = user interface
 ```
 
-This is a strong example of how traditional ML and GenAI can be combined to build more interactive, understandable, and user-friendly AI applications.
+Traditional ML and GenAI combined into an application that is more interactive and more understandable than either alone.
 
 [1]: https://docs.streamlit.io/ "Streamlit documentation"
 [2]: https://ai.google.dev/gemini-api/docs/text-generation "Text generation - generateContent API"

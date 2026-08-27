@@ -827,7 +827,7 @@ Work through the activities in this order. Each one builds on the last.
 
 ---
 
-# 13. Simple Closing Explanation for Students
+# 13. In summary
 
 Hugging Face is an important ecosystem for modern AI because it brings together models, datasets, tools, and deployment options in one place.
 

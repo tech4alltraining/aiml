@@ -2,13 +2,15 @@
 
 Everything for delivering the ML/AI & GenAI Internship Program.
 
-| File | What it is | When you use it |
+| What | For | When you use it |
 |---|---|---|
 | [session-plan.md](session-plan.md) | The teaching sequence, step by step | Planning and running each module |
 | [curriculum.md](curriculum.md) | Module-by-module topic list with every notebook, dataset and exercise link | Checking coverage |
 | [activities.md](activities.md) | Full facilitation notes for instructor-led demos and activities | Running a class activity |
+| [latex/](latex/) | Six projector-ready slide decks — build with `make` | Presenting |
+| [archive/](archive/) | Superseded versions of the curriculum | Reference only |
 
-Students should use the [Student Handbook](../../mlai-genai-internship/student-handbook.md) instead — activity numbers match exactly across all four documents.
+**Students never see this folder.** Everything they need is in [`../student/`](../student/), and the activity numbers match exactly — call out "Activity 2.5" and everyone is on the same page.
 
 ---
 
@@ -26,10 +28,10 @@ Students should use the [Student Handbook](../../mlai-genai-internship/student-h
 
 **Before the programme starts:**
 
-- Send students the [Setup Guide](../../mlai-genai-internship/setup-guide.md) and ask them to build the `genai` environment
+- Send students the [Setup Guide](../student/setup-guide.md) and ask them to build the `genai` environment
 - Ask them to create a Gemini API key and a Hugging Face account
 - Warn them the Module 5 Hugging Face install is 2–3 GB — do it well in advance
-- Point absolute beginners at the [Python foundation notebooks](../../mlai-genai-internship/notebooks/) (`00a`, `00b`, `00c`)
+- Point absolute beginners at the [Python foundation notebooks](../student/notebooks/) (`00a`, `00b`, `00c`)
 
 **Before each session:**
 
@@ -41,7 +43,7 @@ Students should use the [Student Handbook](../../mlai-genai-internship/student-h
 
 - Have the datasets downloaded locally as a fallback for poor classroom wifi
 - Start long-running cells (GridSearchCV, model downloads) *before* explaining them
-- Keep [Troubleshooting](../../mlai-genai-internship/troubleshooting.md) open in a tab
+- Keep [Troubleshooting](../student/troubleshooting.md) open in a tab
 
 ## Questions to ask at every project review
 
@@ -53,3 +55,30 @@ Students should use the [Student Handbook](../../mlai-genai-internship/student-h
 6. Where does your model **fail**, and who could it treat unfairly?
 
 Question 6 is the one students prepare for least and learn from most.
+
+
+---
+
+## How the material is produced
+
+Notes for whoever maintains this course.
+
+### Notebooks
+
+The nine student notebooks live in [`../student/notebooks/`](../student/notebooks/). Notebooks `00a`–`04` are committed **with their outputs saved**, so GitHub renders the charts and results and a student can read the whole lesson without running anything. Notebooks `05` and `06` ship deliberately empty — one calls a live API with the student's own key, the other downloads models.
+
+Before committing an executed notebook, check it carries no API key:
+
+```bash
+grep -l "AIza" ../student/notebooks/*.ipynb
+```
+
+### Slide decks
+
+[`latex/`](latex/) holds six Beamer decks and three build checks. `make` builds them all; `make check` also reports any slide whose content runs into the footer. See [latex/README.md](latex/README.md).
+
+### Why `.ipynb` and not Quarto
+
+`.qmd` does **not** render on GitHub — it is shown as plain text, because Quarto has to execute the code first. Committed `.ipynb` files render natively *with outputs*, and carry a one-click **Open in Colab** badge, so the file a student reads is the file they run.
+
+If you later want a course website or PDF handouts, Quarto renders `.ipynb` directly — keep the notebooks exactly as they are and add Quarto on top, rather than maintaining a second source.

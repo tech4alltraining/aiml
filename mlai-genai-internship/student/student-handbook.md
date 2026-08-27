@@ -197,21 +197,21 @@ The tutorials referenced in each module are in the [`tutorials/`](tutorials) fol
 
 # The datasets you will use
 
-All of these live in the [`datasets/`](../datasets/) folder of this repository. You will meet them in this order — smallest and simplest first.
+All of these live in the [`datasets/`](../../datasets/) folder of this repository. You will meet them in this order — smallest and simplest first.
 
 | Dataset | Rows | What it holds | Used for | Path |
 |---|---:|---|---|---|
-| **pre_data** | 12 | Country, age, salary, purchased | Learning preprocessing — small enough to read with your eyes | [`datasets/prepreprocessing/pre_data.csv`](../datasets/prepreprocessing/pre_data.csv) |
-| **iris** | 150 | Flower petal and sepal measurements | Your first classification model | [`datasets/classification/iris.csv`](../datasets/classification/iris.csv) |
-| **salary_data** | 375 | Years of experience, salary | Your first regression model | [`datasets/regression/salary_data.csv`](../datasets/regression/salary_data.csv) |
-| **advertising** | 200 | TV, radio, newspaper spend, sales | Regression with several inputs | [`datasets/regression/advertising.csv`](../datasets/regression/advertising.csv) |
-| **Mall_Customers** | 200 | Age, income, spending score | Clustering | [`datasets/clustering/Mall_Customers.csv`](../datasets/clustering/Mall_Customers.csv) |
-| **titanic** | 891 | Passenger details, survived | Classification with messy real data | [`datasets/classification/archive/titanic.csv`](../datasets/classification/archive/titanic.csv) |
-| **cardekho** | 15,411 | Used car details, selling price | EDA and visualisation | [`datasets/regression/cardekho_dataset.csv`](../datasets/regression/cardekho_dataset.csv) |
-| **loan_data_10k** | 10,000 | Applicant and loan details, approved | The main project dataset — used all week | [`datasets/loan_data_10k.csv`](../datasets/loan_data_10k.csv) |
-| **heart_failure** | 299 | Patient measurements, death event | Classification where recall matters | [`datasets/classification/heart_failure_raw.csv`](../datasets/classification/heart_failure_raw.csv) |
-| **diabetes_prediction** | 100,000 | Health indicators, diabetes | Larger classification, imbalanced classes | [`datasets/classification/diabetes_prediction_dataset.csv`](../datasets/classification/diabetes_prediction_dataset.csv) |
-| **bbc-text** | 2,225 | News articles, category | Text classification, GenAI summarising | [`datasets/nlp/bbc-text.csv`](../datasets/nlp/bbc-text.csv) |
+| **pre_data** | 12 | Country, age, salary, purchased | Learning preprocessing — small enough to read with your eyes | [`datasets/prepreprocessing/pre_data.csv`](../../datasets/prepreprocessing/pre_data.csv) |
+| **iris** | 150 | Flower petal and sepal measurements | Your first classification model | [`datasets/classification/iris.csv`](../../datasets/classification/iris.csv) |
+| **salary_data** | 375 | Years of experience, salary | Your first regression model | [`datasets/regression/salary_data.csv`](../../datasets/regression/salary_data.csv) |
+| **advertising** | 200 | TV, radio, newspaper spend, sales | Regression with several inputs | [`datasets/regression/advertising.csv`](../../datasets/regression/advertising.csv) |
+| **Mall_Customers** | 200 | Age, income, spending score | Clustering | [`datasets/clustering/Mall_Customers.csv`](../../datasets/clustering/Mall_Customers.csv) |
+| **titanic** | 891 | Passenger details, survived | Classification with messy real data | [`datasets/classification/archive/titanic.csv`](../../datasets/classification/archive/titanic.csv) |
+| **cardekho** | 15,411 | Used car details, selling price | EDA and visualisation | [`datasets/regression/cardekho_dataset.csv`](../../datasets/regression/cardekho_dataset.csv) |
+| **loan_data_10k** | 10,000 | Applicant and loan details, approved | The main project dataset — used all week | [`datasets/loan_data_10k.csv`](../../datasets/loan_data_10k.csv) |
+| **heart_failure** | 299 | Patient measurements, death event | Classification where recall matters | [`datasets/classification/heart_failure_raw.csv`](../../datasets/classification/heart_failure_raw.csv) |
+| **diabetes_prediction** | 100,000 | Health indicators, diabetes | Larger classification, imbalanced classes | [`datasets/classification/diabetes_prediction_dataset.csv`](../../datasets/classification/diabetes_prediction_dataset.csv) |
+| **bbc-text** | 2,225 | News articles, category | Text classification, GenAI summarising | [`datasets/nlp/bbc-text.csv`](../../datasets/nlp/bbc-text.csv) |
 
 ## Two ways to load a dataset
 
@@ -3475,7 +3475,7 @@ Topic ideas by track:
 | **ML + GenAI** | Loan approval with explanations · Health risk score with lifestyle advice · Resume screener with feedback |
 | **Computer vision** | Helmet detection · Fruit classification · Attendance by face recognition |
 
-Datasets are available in the [`datasets/`](../datasets/) folder of this repository.
+Datasets are available in the [`datasets/`](../../datasets/) folder of this repository.
 
 ## Required deliverables
 
@@ -3701,14 +3701,14 @@ Answer these without looking anything up. If you cannot, go back to that section
 
 | File | What it is |
 |---|---|
-| [`README.md`](README.md) | Index of everything in this folder |
+| [`README.md`](README.md) | Index of everything here |
 | [`setup-guide.md`](setup-guide.md) | Install for Windows, Ubuntu, macOS — venv and conda |
 | [`troubleshooting.md`](troubleshooting.md) | Every error and its fix |
-| [`notebooks/`](notebooks) | Six Colab/Jupyter notebooks, outputs included |
+| [`notebooks/`](notebooks) | Nine Colab/Jupyter notebooks, outputs included |
 | [`exercises-assignments.md`](exercises-assignments.md) | Exercises per concept and five graded assignments |
-| [`tutorials/streamlit-apps-collection.md`](tutorials/apps/streamlit-apps-collection.md) | 15 runnable apps: ML, GenAI, and both combined |
+| [`tutorials/apps/`](tutorials/apps) | Build something — 15 Streamlit apps plus four guides |
+| [`tutorials/concepts/`](tutorials/concepts) | Read about something — three in-depth tutorials |
 | [`prompts.md`](prompts.md) | Copy-paste prompt library |
-| [`tutorials/`](tutorials) | Eight in-depth tutorials |
 
 ## Practice
 

@@ -201,7 +201,7 @@ streamlit run gemini_text_generator.py
 
 ---
 
-## Classroom Practice
+## Practice
 
 Ask students to test the app with topics such as:
 
@@ -450,7 +450,7 @@ In the chatbot app, it stores previous messages so the conversation does not dis
 
 ---
 
-# 6. Suggested Classroom Activity
+# 6. Practice tasks
 
 ## Activity 1: Modify the Text Generator
 
