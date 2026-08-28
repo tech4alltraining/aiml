@@ -15,9 +15,9 @@ The course runs as **twelve sessions**. Each one is self-contained: read it, run
 | 9 | [Deep Learning](session-09-deep-learning.md) | [open](../notebooks/session-09-deep-learning.ipynb) |
 | 10 | [Generative AI & LLMs](session-10-genai-llms.md) | [open](../notebooks/session-10-genai-llms.ipynb) |
 | 11 | [AI-Powered Applications](session-11-ai-apps.md) | [open](../notebooks/session-11-ai-apps.ipynb) |
-| 12 | Open Source, Hugging Face & Responsible AI *(in preparation)* | — |
+| 12 | [Open Source, Hugging Face & Responsible AI](session-12-opensource-ethics.md) | [open](../notebooks/session-12-opensource-ethics.ipynb) |
 
-*11 of 12 sessions published.*
+*12 of 12 sessions published.*
 
 ---
 
