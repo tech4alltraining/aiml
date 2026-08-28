@@ -14,6 +14,7 @@ Everything for the taught modules and the capstone project phase.
 
 | If you are… | Go to |
 |---|---|
+| **Following the course** | [**Sessions**](sessions/) — twelve sessions, each with examples, exercises, MCQs and tasks |
 | **Starting out, nothing installed** | [**Setup Guide**](setup-guide.md) — venv or conda, all three platforms |
 | **Never written Python** | [**Python Foundations**](notebooks/00a_python_foundations.ipynb) — from `print()` upwards |
 | **Ready to learn** | [**Student Handbook**](student-handbook.md) — concepts, analogies, 38 activities |

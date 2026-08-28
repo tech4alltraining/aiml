@@ -1,73 +1,62 @@
-Session 1 : Day 1 FN
-Google Colab Tutorial
-Python Refresher
-Variables
-Data Types
-Operators
-Conditional Statements & Loops
-Functions and Collections
+Session 1
+Python Refresher: Variables, Data Types, Operators, Conditional Statements & Loops, Functions and Collections, Strings, Classes and Objects
 
-Session 2 : Day 1 AN
-Introduction to Python Libraries
-NumPy Fundamentals
-Pandas for Data Handling
-Data Loading & Exploration
-Exploratory Data Analysis
-NumPy & Pandas Practice
+Session 2
+Introduction to Python Libraries: NumPy Fundamentals, Pandas for Data Handling, Data Loading & Exploration, Exploratory Data Analysis, NumPy & Pandas Practice
 
-Session 3 : Day 2 FN
-Data Visualization & Preprocessing
-Matplotlib & Seaborn
+Session 3
+Python Libraries for Data Visualization: Matplotlib & Seaborn
+Data Preprocessing Techniques: Handling Missing Values, Remove Duplicates, Outlier Detection & Removal, Data Transformation & Scaling, Data Encoding Techniques, Train-Test Split, Data Preprocessing Practice
+
+Session 4
 Introduction to Machine Learning & Artificial Intelligence
-Types of Machine Learning
 Real-world applications of ML & GenAI
-Supervised Machine Learning Concepts
-Regression Techniques
-Classification Techniques
-
-Session 4 : Day 2 AN
+Types of Machine Learning
 Machine Learning Workflow
-Scikit-Learn API
-Model Evaluation Metrics
-Model Training & Validation
-Hands-on ML Activity
+ML&AI APIs: Scikit-learn, TensorFlow, PyTorch, Keras
 
-Session 5 : Day 3 FN
+Session 5
+Supervised Machine Learning Concepts: Regression & Classification
+Regression Techniques: Linear Regression & Evaluation Metrics
+Classification Techniques: Logistic Regression, kNN, SVM, Gaussian Naive Bayes, Decision Trees, Random Forest  & Evaluation Metrics
+ML Model Deployment: Model Saving, Loading, and Inference
+Streamlit App Development: Building Interactive Web Apps with Streamlit
+
+Session 6
+Data Augmentation Techniques
+Feature Engineering Techniques
 Feature Reduction Techniques
-Feature Engineering
-Data Augmentation
-Introduction to Unsupervised Learning
-Clustering Algorithms
 
-Session 6 : Day 3 AN
-Model Evaluation Techniques
-K-Fold Cross Validation
-Model Improvement Strategies
-Hands-on Optimization Activity
-Mini Project Discussion
+Session 7
+Introduction to Unsupervised Learning: Clustering, Association Rule Mining, Dimensionality Reduction
+Clustering Algorithms: k-Means, Hierarchical Clustering, DBSCAN
 
-Session 7 : Day 4 FN
+Session 8
+Model Evaluation Techniques: Holdout Validation, Cross-Validation, Bootstrapping 
+K-Fold Cross-Validation, Leave-One-Out Cross-Validation
 Overfitting & Underfitting
-Hyperparameter Tuning
-Introduction to Deep Learning
-AI Ethics & Responsible AI
+Model Improvement Strategies:  Hyperparameter Tuning (Grid Search, Random Search, Bayesian Optimization) 
 
-Session 8 : Day 4 AN
+Session 9
+Introduction to Deep Learning: Artificial Neural Networks (ANNs), Activation Functions, Loss Functions, Backpropagation, Optimizers
+From Deep Learning to Generative AI
+
+Session 10
 Introduction to Generative AI
-Large Language Models (LLMs)
+Large Language Models (LLMs): Language Models, LLM parameters, Leading LLMs (GPT, BERT, T5, LLaMA, Falcon, Mistral, etc.), LLM Applications
 Prompt Engineering Basics
-Exploring Generative AI Tools
-Hands-on GenAI Activities
+Types of Prompts: Zero-shot, One-shot, Few-shot, Chain-of-Thought (CoT)
 
-Session 9 : Day 5 FN
-Types of Prompts
+Session 11
+AI-powered Application Concepts
+Building GenAI Applications using Streamlit
 Integrating Machine Learning with Generative AI
+
+Session 12 : 
 Open Source Generative AI Models
 Hugging Face Ecosystem
-AI-powered Application Concepts
+AI Ethics & Responsible AI
 
-Session 10 : Day 5 AN
-Streamlit App Development
 Project Grouping & Topic Selection
 Capstone Project Planning
 Internship Guidelines & Mentoring Plan
