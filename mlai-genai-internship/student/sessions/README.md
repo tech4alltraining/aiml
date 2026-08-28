@@ -11,13 +11,13 @@ The course runs as **twelve sessions**. Each one is self-contained: read it, run
 | 5 | [Supervised Learning & Deployment](session-05-supervised-learning.md) | [open](../notebooks/session-05-supervised-learning.ipynb) |
 | 6 | [Data Augmentation & Feature Engineering](session-06-augmentation-features.md) | [open](../notebooks/session-06-augmentation-features.ipynb) |
 | 7 | [Unsupervised Learning](session-07-unsupervised.md) | [open](../notebooks/session-07-unsupervised.ipynb) |
-| 8 | Model Evaluation & Improvement *(in preparation)* | — |
+| 8 | [Model Evaluation & Improvement](session-08-evaluation-tuning.md) | [open](../notebooks/session-08-evaluation-tuning.ipynb) |
 | 9 | Deep Learning *(in preparation)* | — |
 | 10 | Generative AI & LLMs *(in preparation)* | — |
 | 11 | AI-Powered Applications *(in preparation)* | — |
 | 12 | Open Source, Hugging Face & Responsible AI *(in preparation)* | — |
 
-*7 of 12 sessions published.*
+*8 of 12 sessions published.*
 
 ---
 
