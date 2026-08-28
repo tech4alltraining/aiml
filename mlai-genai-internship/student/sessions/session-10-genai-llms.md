@@ -707,7 +707,7 @@ for rev in ["The headphones arrived two days late but the sound is excellent.",
             response_mime_type="application/json", temperature=0.0))
     print(json.loads(out.text))
 
-# 5 - You often get valid JSON wrapped in ```json fences, or preceded by
+# 5 - You often get valid JSON wrapped in a markdown code fence, or preceded by
 #     "Here is the JSON you asked for:". json.loads() then CRASHES.
 #     Setting response_mime_type makes the output parseable every time --
 #     which is what turns a chat model into a software component.
