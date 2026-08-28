@@ -13,11 +13,11 @@ The course runs as **twelve sessions**. Each one is self-contained: read it, run
 | 7 | [Unsupervised Learning](session-07-unsupervised.md) | [open](../notebooks/session-07-unsupervised.ipynb) |
 | 8 | [Model Evaluation & Improvement](session-08-evaluation-tuning.md) | [open](../notebooks/session-08-evaluation-tuning.ipynb) |
 | 9 | [Deep Learning](session-09-deep-learning.md) | [open](../notebooks/session-09-deep-learning.ipynb) |
-| 10 | Generative AI & LLMs *(in preparation)* | — |
+| 10 | [Generative AI & LLMs](session-10-genai-llms.md) | [open](../notebooks/session-10-genai-llms.ipynb) |
 | 11 | AI-Powered Applications *(in preparation)* | — |
 | 12 | Open Source, Hugging Face & Responsible AI *(in preparation)* | — |
 
-*9 of 12 sessions published.*
+*10 of 12 sessions published.*
 
 ---
 
