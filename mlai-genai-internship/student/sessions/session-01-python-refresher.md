@@ -1,14 +1,14 @@
 # Session 1 — Python Refresher
 
-**Variables · Data Types · Operators · Conditionals & Loops · Functions · Collections · Strings · Classes and Objects**
-
-> **This session assumes you have never written a line of Python.** Nothing here needs maths beyond arithmetic.
+**Syntax · Comments · Variables · Data types · Numbers · Input & Output · Strings · Operators · Lists · Tuples & Sets · Dictionaries · Conditionals · Loops · Functions · Classes & Objects**
 
 | | |
 |---|---|
 | **Notebook** | [session-01-python-refresher.ipynb](../notebooks/session-01-python-refresher.ipynb) |
-| **Next** | [Session 2 — NumPy & Pandas](README.md) |
+| **Next** | [Session 2 — NumPy & Pandas](session-02-numpy-pandas.md) |
 | **Stuck?** | [Troubleshooting](../troubleshooting.md) |
+
+> **This session assumes you have never written a line of Python.** Every topic uses only what came before it. If something looks unfamiliar, it has not been taught yet — keep going in order and it will be.
 
 ---
 
@@ -16,989 +16,3952 @@
 
 By the end of this session you can:
 
-1. Create variables and print them readably with f-strings
-2. Name the four basic data types and convert between them
-3. Use arithmetic, comparison, logical and membership operators
-4. Write `if` / `elif` / `else` that behaves correctly
-5. Loop over a list, a dictionary and a range
-6. Choose the right collection — list, tuple, set or dict — and justify it
-7. Slice and clean strings
-8. Write a function that **returns** a value
-9. Define a **class**, create objects from it, and explain why that is useful
-10. Read an error message and find the actual problem
+1. Read and write correctly indented Python
+2. Store values in variables and know what type each one is
+3. Read input from a person and print formatted output
+4. Slice, modify and format strings
+5. Use every Python operator confidently
+6. Store many values in lists, tuples, sets and dictionaries
+7. Make decisions with `if`, `elif`, `else` and `match`
+8. Repeat work with `for` and `while`
+9. Package code into functions
+10. Build your own types with classes and objects
 
 ---
 
-## The eight topics
+## How this session is built
 
-| # | Topic | The one thing to take away |
-|---|---|---|
-| 1 | [Variables and printing](#1-variables-and-printing) | `=` means *put this in this box* |
-| 2 | [Data types](#2-data-types) | `"21"` and `21` are different things |
-| 3 | [Operators](#3-operators) | `=` assigns, `==` compares |
-| 4 | [Conditionals and loops](#4-conditionals-and-loops) | `elif`, never a second `if` |
-| 5 | [Collections](#5-collections) | List or dict, nine times out of ten |
-| 6 | [Strings](#6-strings) | Strings are immutable — methods return a **new** one |
-| 7 | [Functions](#7-functions) | `print` shows, `return` hands back |
-| 8 | [Classes and objects](#8-classes-and-objects) | A class is a *blueprint*; an object is a *thing built from it* |
+**Fifteen topics, in strict teaching order.** Each one introduces exactly one new idea and uses only what you already know.
+
+| # | Topic | | # | Topic |
+|---|---|---|---|---|
+| 1 | [Python syntax](#1-python-syntax) | | 9 | [Lists](#9-lists) |
+| 2 | [Comments](#2-comments) | | 10 | [Tuples & Sets](#10-tuples-and-sets) |
+| 3 | [Variables](#3-variables) | | 11 | [Dictionaries](#11-dictionaries) |
+| 4 | [Data types](#4-data-types) | | 12 | [Conditionals](#12-conditionals-if-elif-else-and-match) |
+| 5 | [Numbers](#5-numbers) | | 13 | [Loops](#13-loops-for-and-while) |
+| 6 | [Input & Output](#6-input-and-output) | | 14 | [Functions](#14-functions) |
+| 7 | [Strings](#7-strings) | | 15 | [Classes & Objects](#15-classes-and-objects) |
+| 8 | [Operators](#8-operators) | | | |
+
+**Five checkpoint problems** sit between the topics. Each uses only what you have learned up to that point:
+
+| After topic | Problem |
+|---|---|
+| 6 | [⭐ Rectangle area calculator](#-checkpoint-problem-1--rectangle-area) |
+| 7 | [⭐ Initials maker](#-checkpoint-problem-2--initials-maker) |
+| 12 | [⭐ Even or odd](#-checkpoint-problem-3--even-or-odd) |
+| 13 | [⭐ Multiplication table](#-checkpoint-problem-4--multiplication-table) |
+| 14 | [⭐ Prime number checker](#-checkpoint-problem-5--prime-number-checker) |
+
+**Every topic has the same shape:**
+
+```text
+📘 Examples          3-4 short examples of the new idea
+🌍 Scenarios         3 examples from real situations
+✏️ Tasks             5 scenario-based tasks, with solutions
+❓ MCQs              5 questions, with answers and why
+```
 
 ---
 
-# 1. Variables and printing
+# 1. Python syntax
 
-🧠 **Analogy: labelled boxes.** A variable is a labelled box you put a value in. Write `age = 21` and you have a box labelled `age` containing 21.
+**Syntax means the rules for how code must be written.** Python has fewer of them than most languages, and one that is unusual.
 
-**The `=` sign is not "equals".** It means *put this value in this box* — an instruction, not a statement of fact. And the box keeps only the **last** thing you put in it.
+🧠 **Analogy: a recipe card.** The steps run top to bottom, one per line. Sub-steps are written indented underneath the step they belong to. **Python works exactly like this — and unlike most languages, the indentation is not decoration. It is the grammar.**
+
+## The three rules
+
+**1. One statement per line.**
+
+```python
+print("Hello")
+print("World")
+```
+
+**2. Indentation shows what belongs inside what.** Use **four spaces**.
+
+```python
+if 5 > 3:
+    print("This line is INSIDE the if")
+    print("So is this one")
+print("This line is OUTSIDE - back to the left margin")
+```
+
+> ⚠️ **The most common beginner error.** Get the indentation wrong and Python stops with `IndentationError`. It is not being fussy — the indentation is how it knows what belongs where.
+
+**3. A colon `:` opens a block.** Whenever a line ends in `:`, the next line must be indented.
+
+```python
+if True:          # <- colon opens the block
+    print("in")   # <- so this must be indented
+```
+
+## Printing
+
+`print()` puts something on the screen. It is how you see what your program is doing.
+
+```python
+print("Hello, world!")
+print(42)
+print("Two", "things", "at", "once")
+```
 
 ## 📘 Examples
 
-**Example 1 — creating and reading variables**
+**Example 1 — your first program**
 
 ```python
-name = "Asha"
-age = 21
-height = 5.4
-is_student = True
+print("Hello, world!")
+```
 
+Output:
+```text
+Hello, world!
+```
+
+**Example 2 — several lines run in order, top to bottom**
+
+```python
+print("Line one")
+print("Line two")
+print("Line three")
+```
+
+Output:
+```text
+Line one
+Line two
+Line three
+```
+
+**Example 3 — quotes: single or double, both fine**
+
+```python
+print("Double quotes work")
+print('Single quotes work too')
+print("Use single 'inside' double when you need a quote mark")
+```
+
+**Example 4 — indentation shows grouping**
+
+```python
+print("Always runs")
+if True:
+    print("Runs because the condition is True")
+    print("Also inside the block")
+print("Always runs - we are back at the left margin")
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — a shop's opening banner**
+
+```python
+print("=" * 30)
+print("   WELCOME TO CAMPUS CAFE")
+print("=" * 30)
+print("Fresh coffee served all day")
+```
+
+**Scenario 2 — a receipt header, with blank lines for spacing**
+
+```python
+print("CAMPUS BOOKSTORE")
+print()                        # an empty print() gives you a blank line
+print("Receipt")
+print("-" * 20)
+```
+
+**Scenario 3 — an error message a program might show**
+
+```python
+print("ERROR: could not open the file")
+print("Check that the filename is spelled correctly.")
+```
+
+## ✏️ Tasks
+
+1. Print your name, your course, and your college on three separate lines.
+2. Print a box: a line of 20 `*`, then `* HELLO *`, then another line of 20 `*`.
+3. Print a shop banner with a blank line between the shop name and the tagline.
+4. Write four `print` lines that display a short poem.
+5. Write a program that prints a menu: a title, a dashed line, and three items.
+
+<details><summary>Solutions</summary>
+
+```python
+# 1
+print("Priya Sharma")
+print("B.Tech Computer Science")
+print("Government Engineering College")
+
+# 2
+print("*" * 20)
+print("* HELLO *")
+print("*" * 20)
+
+# 3
+print("CAMPUS CAFE")
+print()
+print("Fresh coffee served all day")
+
+# 4
+print("The code runs top to bottom,")
+print("one line at a time,")
+print("indented where it belongs -")
+print("and that is the whole rhyme.")
+
+# 5
+print("TODAY'S MENU")
+print("-" * 20)
+print("1. Tea")
+print("2. Coffee")
+print("3. Samosa")
+```
+</details>
+
+## ❓ MCQs
+
+**Q1.** What does Python use to show that code belongs inside a block?
+- (a) Curly braces `{}`  (b) Indentation  (c) Semicolons  (d) Brackets `[]`
+
+**Q2.** How many spaces are conventionally used for one level of indentation?
+- (a) 1  (b) 2  (c) 4  (d) 8
+
+**Q3.** What must follow a line that ends in a colon `:`?
+- (a) A blank line  (b) An indented line  (c) A closing brace  (d) A semicolon
+
+**Q4.** What does `print()` with nothing inside it do?
+- (a) An error  (b) Prints a blank line  (c) Prints "None"  (d) Prints nothing at all
+
+**Q5.** Which is valid Python?
+- (a) `print("Hi");`  (b) `print "Hi"`  (c) `print("Hi")`  (d) `Print("Hi")`
+
+<details><summary>Answers</summary>
+
+**A1 — (b) Indentation.** This is Python's most distinctive rule. Most other languages use `{}`.
+
+**A2 — (c) 4 spaces.** Any consistent amount works, but four is the universal convention.
+
+**A3 — (b) An indented line.** The colon opens a block, and the block must be indented.
+
+**A4 — (b) Prints a blank line.** Useful for spacing your output.
+
+**A5 — (c).** `Print` with a capital P is a different name and gives `NameError`. The semicolon in (a) is legal but never used in Python.
+</details>
+
+---
+
+# 2. Comments
+
+**A comment is a note to a human. Python ignores it completely.**
+
+🧠 **Analogy: notes in the margin of a textbook.** They help the reader; they are not part of the text itself.
+
+```python
+# This is a comment. Python skips this entire line.
+print("This runs")          # A comment can also sit after code
+```
+
+## Why comments matter
+
+**You are writing them for yourself in three months**, when you have forgotten why you did something.
+
+```python
+x = 0
+
+# Bad comment - says WHAT the code already says
+x = x + 1     # add 1 to x
+
+# Good comment - says WHY
+x = x + 1     # rows are numbered from 1, but Python counts from 0
+```
+
+> **Comment the *why*, not the *what*.** The code already says what it does.
+
+## Multi-line notes
+
+```python
+"""
+This is a triple-quoted string.
+Python does not ignore it, but if nothing uses it,
+it behaves like a multi-line comment.
+Commonly used to describe what a file does.
+"""
+```
+
+## 📘 Examples
+
+**Example 1 — a comment on its own line**
+
+```python
+# Print a greeting for the user
+print("Welcome!")
+```
+
+**Example 2 — a comment after code**
+
+```python
+print("Total: 250")      # 250 is in rupees
+```
+
+**Example 3 — commenting out a line while testing**
+
+```python
+print("This runs")
+# print("This does not run - it is commented out")
+print("This runs too")
+```
+
+**Example 4 — a header block describing a file**
+
+```python
+"""
+fee_calculator.py
+Works out the total fee including late charges.
+Written for the college accounts office.
+"""
+print("Fee calculator starting...")
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — explaining a value nobody would guess**
+
+```python
+# 18 is the minimum voting age in India
+print("Minimum age: 18")
+```
+
+**Scenario 2 — leaving a note for a teammate**
+
+```python
+# TODO: this needs to handle the case where the shop is closed
+print("Shop is open")
+```
+
+**Scenario 3 — temporarily disabling a line during debugging**
+
+```python
+print("Step 1 complete")
+# print("Step 2 complete")     # switched off while we test step 3
+print("Step 3 complete")
+```
+
+## ✏️ Tasks
+
+1. Write a program that prints a shop name, with a comment above explaining what it does.
+2. Add a comment explaining why a discount is 15%.
+3. Write a three-line file header describing a program that calculates marks.
+4. Write two `print` lines and comment out the second one.
+5. Take this line and add a *why* comment: `print("Rounding to 2 decimal places")`.
+
+<details><summary>Solutions</summary>
+
+```python
+# 1 - Display the shop's name banner at startup
+print("CAMPUS CAFE")
+
+# 2
+# 15% is the standard student discount agreed with the college
+print("Discount: 15%")
+
+# 3
+"""
+marks_calculator.py
+Adds up marks from five subjects and prints the percentage.
+Used by the class teacher at the end of each term.
+"""
+
+# 4
+print("This runs")
+# print("This is switched off")
+
+# 5
+# Money is always shown to 2 decimal places on receipts
+print("Rounding to 2 decimal places")
+```
+</details>
+
+## ❓ MCQs
+
+**Q1.** What symbol starts a single-line comment in Python?
+- (a) `//`  (b) `#`  (c) `--`  (d) `/*`
+
+**Q2.** What does Python do with a comment?
+- (a) Prints it  (b) Ignores it completely  (c) Saves it to a file  (d) Runs it slowly
+
+**Q3.** Which is the better comment?
+- (a) `x = x + 1  # add one to x`
+- (b) `x = x + 1  # rows are numbered from 1, Python counts from 0`
+- (c) Both are equally good
+- (d) Neither
+
+**Q4.** Can a comment appear on the same line as code?
+- (a) No  (b) Yes, after the code  (c) Yes, before the code  (d) Only in functions
+
+**Q5.** What is the main reason to write comments?
+- (a) To make the file longer  (b) To explain *why*, for whoever reads it next — often you  (c) Python requires them  (d) To slow the program down
+
+<details><summary>Answers</summary>
+
+**A1 — (b) `#`.**
+
+**A2 — (b) Ignores it completely.** It has no effect on how the program runs.
+
+**A3 — (b).** **Comment the *why*, not the *what*.** The code already says it adds one.
+
+**A4 — (b) Yes, after the code.** Leave two spaces before the `#`.
+
+**A5 — (b).** The next reader is usually you, three months later.
+</details>
+
+---
+
+# 3. Variables
+
+**A variable is a name for a value.** You give a value a name so you can use it later.
+
+🧠 **Analogy: a labelled jar in a kitchen.** You write "sugar" on a jar and put sugar in it. Later you ask for "the sugar" rather than "the white granular thing in the third jar". **The label is the variable name; the contents are the value.**
+
+```python
+name = "Priya"
+age = 20
+```
+
+**The `=` sign means "put this value into this name".** It is not the equals sign from mathematics.
+
+```python
+count = 5        # count now holds 5
+count = 8        # count now holds 8 - the old value is gone
+```
+
+## Naming rules
+
+| Rule | ✅ Good | ❌ Bad |
+|---|---|---|
+| Letters, digits, underscores only | `total_marks` | `total-marks` |
+| Cannot start with a digit | `student1` | `1student` |
+| Case matters | `age` and `Age` are **different** | — |
+| No Python keywords | `class_name` | `class` |
+| Describe the contents | `student_count` | `x` |
+
+> **Use `snake_case`:** lowercase words joined by underscores. This is the Python convention and everyone follows it.
+
+## Assigning several at once
+
+```python
+x, y, z = 1, 2, 3            # three names, three values
+a = b = c = 0                # all three get 0
+```
+
+## 📘 Examples
+
+**Example 1 — store and use**
+
+```python
+city = "Kochi"
+print(city)
+```
+
+**Example 2 — a variable can be reassigned**
+
+```python
+score = 10
+print(score)          # 10
+score = 25
+print(score)          # 25 - the old value is replaced
+```
+
+**Example 3 — use one variable to build another**
+
+```python
+price = 150
+quantity = 3
+total = price * quantity
+print(total)          # 450
+```
+
+**Example 4 — several assignments in one line**
+
+```python
+length, width = 10, 4
+print(length)         # 10
+print(width)          # 4
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — a student's details**
+
+```python
+student_name = "Arun"
+roll_number = 42
+course = "B.Tech"
+print(student_name)
+print(roll_number)
+print(course)
+```
+
+**Scenario 2 — a shop calculating a bill**
+
+```python
+item_price = 250
+item_count = 4
+bill_total = item_price * item_count
+print(bill_total)         # 1000
+```
+
+**Scenario 3 — swapping two values**
+
+```python
+first = "A"
+second = "B"
+first, second = second, first      # Python swaps them in one line
+print(first)              # B
+print(second)             # A
+```
+
+## ✏️ Tasks
+
+1. Store your name, age and city in three variables and print each one.
+2. A book costs 320 and you buy 3. Store both, compute the total, print it.
+3. Store a temperature of 25, then change it to 30, printing before and after.
+4. Store the length and width of a room and print both using one assignment line.
+5. Store two students' marks and swap them, printing before and after.
+
+<details><summary>Solutions</summary>
+
+```python
+# 1
+name = "Priya"
+age = 20
+city = "Kochi"
 print(name)
 print(age)
+print(city)
 
-score = 50
-score = 87          # the box now holds 87; the 50 is gone
-print(score)
-```
+# 2
+book_price = 320
+book_count = 3
+total = book_price * book_count
+print(total)              # 960
 
-**Example 2 — f-strings, the readable way to print**
+# 3
+temperature = 25
+print(temperature)        # 25
+temperature = 30
+print(temperature)        # 30
 
-```python
-name, marks = "Asha", 87.456
+# 4
+length, width = 12, 9
+print(length)
+print(width)
 
-print("Student", name, "scored", marks)      # clumsy
-print(f"Student {name} scored {marks}")      # f-string
-print(f"Student {name} scored {marks:.1f}")  # :.1f = one decimal place
-print(f"{name} needs {100 - marks:.1f} more") # maths inside the braces
-```
-
-**Example 3 — aligning output**
-
-```python
-students = {"Asha": 87.4, "Ravi": 74.15, "Meera": 95.5}
-
-for name, mark in students.items():
-    print(f"{name:<10}{mark:>7.1f}")   # <10 left-align, >7 right-align
-```
-
-## ✏️ Practice
-
-1. Print the text `Learning Python` on one line.
-2. Create `college` holding your college name and print it.
-3. With `subject = "Machine Learning"` and `hours = 40`, print `I am studying Machine Learning for 40 hours` using an f-string.
-4. Create `price = 249.789` and print it to **2 decimal places**.
-5. Set `a = 10`, then change `a` to `25`, then print `a`. What appears, and why?
-
-<details><summary>Solutions</summary>
-
-```python
-print("Learning Python")                                    # 1
-
-college = "NIT Calicut"; print(college)                     # 2
-
-subject, hours = "Machine Learning", 40                     # 3
-print(f"I am studying {subject} for {hours} hours")
-
-price = 249.789; print(f"{price:.2f}")                      # 4
-
-a = 10; a = 25; print(a)    # 5 -> 25. A variable holds only the LAST value.
+# 5
+arun_marks, priya_marks = 78, 91
+print(arun_marks)         # 78
+print(priya_marks)        # 91
+arun_marks, priya_marks = priya_marks, arun_marks
+print(arun_marks)         # 91
+print(priya_marks)        # 78
 ```
 </details>
 
 ## ❓ MCQs
 
-**Q1.** What does `=` do in Python?
-- (a) Tests whether two things are equal
-- (b) Puts a value into a variable
-- (c) Prints a value
-- (d) Creates a constant
+**Q1.** What does `=` mean in Python?
+- (a) "Is equal to"  (b) "Put this value into this name"  (c) "Compare these"  (d) "Print this"
 
-**Q2.** After `x = 5` then `x = 9`, what does `print(x)` show?
-- (a) `5`  (b) `9`  (c) `59`  (d) An error
+**Q2.** Which variable name is invalid?
+- (a) `student_1`  (b) `_total`  (c) `1student`  (d) `totalMarks`
 
-**Q3.** What is the difference between `print(age)` and `print("age")`?
-- (a) Nothing
-- (b) The first shows the value; the second shows the literal text
-- (c) The first shows the text; the second shows the value
-- (d) The second is invalid
+**Q3.** After `x = 5` then `x = 9`, what does `x` hold?
+- (a) 5  (b) 9  (c) 14  (d) Both
 
-**Q4.** What does the `f` do in `print(f"Hello {name}")`?
-- (a) Formats the output as a float
-- (b) Makes it a function
-- (c) Lets `{ }` be replaced by a variable's value
-- (d) Forces the text to lowercase
+**Q4.** Are `age` and `Age` the same variable?
+- (a) Yes  (b) No — case matters  (c) Only inside functions  (d) Only for numbers
 
-**Q5.** `price = 3.14159`. What does `print(f"{price:.2f}")` show?
-- (a) `3.14159`  (b) `3.14`  (c) `3.1`  (d) `3`
+**Q5.** What is the Python naming convention for variables?
+- (a) `snake_case`  (b) `camelCase`  (c) `PascalCase`  (d) `SCREAMING_CASE`
 
 <details><summary>Answers</summary>
 
-**A1 — (b).** It is an instruction: *put this value in this box*. `==` is the one that tests equality.
+**A1 — (b).** It is an instruction, not a statement of fact. The comparison operator is `==`, which you meet in Topic 8.
 
-**A2 — (b) `9`.** A variable holds only the last value assigned to it.
+**A2 — (c) `1student`.** A name cannot start with a digit.
 
-**A3 — (b).** Anything inside quotes is treated as literal text.
+**A3 — (b) 9.** Reassigning replaces the old value entirely.
 
-**A4 — (c).** Without the `f`, Python prints the braces literally: `Hello {name}`.
+**A4 — (b) No.** Python is case-sensitive, and this catches beginners often.
 
-**A5 — (b) `3.14`.** `:.2f` formats to two decimal places.
+**A5 — (a) `snake_case`.** Lowercase words joined by underscores.
 </details>
-
-## 🎯 Tasks
-
-**Task 1 — Your ID card.** Create variables for your name, age, course, semester and CGPA, then print a tidy card using f-string alignment (`:<10`, `:>7`).
-
-**Task 2 — Hospital patient record.** A hospital checks in a patient: name `John Doe`, age 30, blood group `O+`, weight 72.5 kg, new patient `True`. Create a variable for each, print each with its `type()`, then print a one-line summary. Re-measure the weight as 71.8 and print the summary again.
 
 ---
 
-# 2. Data types
+# 4. Data types
 
-🧠 **Analogy: what kind of thing is in the box?** A box can hold text, a whole number, a decimal, or a yes/no. Python cares which, because you can add two numbers but not two yes/nos.
+**Every value in Python has a type.** The type decides what you can do with the value.
 
-| Type | Called | Example | What it is |
+🧠 **Analogy: the difference between a number and a phone number.** Both are made of digits. You can add two numbers meaningfully; adding two phone numbers is nonsense. **The type is what tells Python which operations make sense.**
+
+## The four types you need first
+
+| Type | Name | Example | For |
 |---|---|---|---|
-| `str` | string | `"Asha"` | Text. **Always in quotes** |
-| `int` | integer | `21` | A whole number |
-| `float` | float | `5.4` | A decimal number |
-| `bool` | boolean | `True` | Yes or no. **Capital** T and F |
+| **int** | Integer | `42`, `-7`, `0` | Whole numbers |
+| **float** | Floating point | `3.14`, `-0.5`, `2.0` | Numbers with decimals |
+| **str** | String | `"hello"`, `'A'` | Text |
+| **bool** | Boolean | `True`, `False` | Yes/no, on/off |
 
-> ⚠️ **`"21"` and `21` are different things.** The first is text that happens to look like a number.
+> ⚠️ **`True` and `False` are capitalised.** `true` gives a `NameError`.
+
+## Checking a type
+
+```python
+print(type(42))          # <class 'int'>
+print(type(3.14))        # <class 'float'>
+print(type("hello"))     # <class 'str'>
+print(type(True))        # <class 'bool'>
+```
+
+## Converting between types
+
+```python
+int("42")        # 42     - text to whole number
+float("3.14")    # 3.14   - text to decimal
+str(42)          # "42"   - number to text
+int(3.9)         # 3      - CHOPS the decimal, does not round
+bool(0)          # False  - 0 is False, every other number is True
+```
+
+> ⚠️ **`int(3.9)` gives `3`, not `4`.** It removes the decimal part rather than rounding. Use `round(3.9)` if you want 4.
+
+## Other types you will meet later
+
+```python
+print(type([1, 2, 3]))        # <class 'list'>   -> Topic 9
+print(type((1, 2)))           # <class 'tuple'>  -> Topic 10
+print(type({"a": 1}))         # <class 'dict'>   -> Topic 11
+```
+
+**You do not need these yet.** They are here so the word `list` is not a surprise when it appears.
 
 ## 📘 Examples
 
-**Example 1 — checking the type**
+**Example 1 — the four basic types**
 
 ```python
-for value in ["Asha", 21, 5.4, True]:
-    print(f"{str(value):<8} {type(value).__name__}")
+count = 10               # int
+price = 99.50            # float
+name = "Kochi"           # str
+is_open = True           # bool
+
+print(type(count))
+print(type(price))
+print(type(name))
+print(type(is_open))
 ```
 
-**Example 2 — the text-vs-number trap**
+**Example 2 — text and number are genuinely different**
 
 ```python
-print("21" + "5")     # "215"  - text is GLUED
-print(21 + 5)         # 26     - numbers are ADDED
-
-try:
-    print("21" + 5)   # TypeError - Python will not guess
-except TypeError as error:
-    print("ERROR:", error)
+print("5" + "3")         # 53   - joins two pieces of TEXT
+print(5 + 3)             # 8    - adds two NUMBERS
 ```
 
-**Example 3 — converting**
+**Example 3 — converting text to a number**
 
 ```python
-print(int("21") + 5)        # 26
-print(float("3.14") * 2)    # 6.28
-print("Age: " + str(21))    # "Age: 21"
-
-print(int(7.9))             # 7  <- CHOPS the decimal, does NOT round
-print(round(7.9))           # 8
-
-print(int(float("12.5")))   # 12 - two steps; int("12.5") alone fails
-
-age = int(input("Your age: "))   # input() ALWAYS returns a string
+text_value = "25"
+number_value = int(text_value)
+print(number_value + 5)      # 30
 ```
 
-## ✏️ Practice
+**Example 4 — `int()` chops, `round()` rounds**
 
-1. Create one variable of each type and print each with its `type()`.
-2. What is `"7" + "3"`? What is `7 + 3`? Explain the difference in a comment.
-3. Convert the text `"45"` to a number and add 5.
-4. Convert `9.99` to an integer. What happened to the `.99`?
-5. Try `int("12.5")`. Read the error, then fix it so it works.
+```python
+print(int(3.9))          # 3
+print(round(3.9))        # 4
+print(int(-2.7))         # -2
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — a form field arrives as text and must become a number**
+
+```python
+age_from_form = "20"                # forms always give you TEXT
+age = int(age_from_form)
+print(age + 1)                      # 21 - next birthday
+```
+
+**Scenario 2 — building a message by converting a number to text**
+
+```python
+score = 87
+message = "Your score is " + str(score)
+print(message)                      # Your score is 87
+```
+
+**Scenario 3 — a yes/no flag**
+
+```python
+library_card_valid = True
+print(library_card_valid)
+print(type(library_card_valid))     # <class 'bool'>
+```
+
+## ✏️ Tasks
+
+1. Create one variable of each of the four basic types and print each type.
+2. Add the strings `"10"` and `"20"`. Then convert both to `int` and add again. Explain the difference.
+3. Convert `4.99` to an integer. What do you get, and why is it not 5?
+4. A form gives you the text `"150"`. Convert it and add 50.
+5. Build the sentence `"I have 3 books"` from the number `3` using `str()`.
 
 <details><summary>Solutions</summary>
 
 ```python
-for v in ["Asha", 21, 5.4, True]:                       # 1
-    print(f"{str(v):<8} {type(v).__name__}")
+# 1
+count, price, name, flag = 10, 99.5, "Kochi", True
+print(type(count))       # int
+print(type(price))       # float
+print(type(name))        # str
+print(type(flag))        # bool
 
-print("7" + "3")   # "73" - text is GLUED together      # 2
-print(7 + 3)       # 10   - numbers are ADDED
+# 2
+print("10" + "20")       # 1020 - STRING joining, placed side by side
+print(int("10") + int("20"))   # 30 - real addition
+# "+" means JOIN for text and ADD for numbers. The type decides.
 
-print(int("45") + 5)         # 3 -> 50
+# 3
+print(int(4.99))         # 4 - int() CHOPS the decimal part, it does not round
+print(round(4.99))       # 5
 
-print(int(9.99))             # 4 -> 9. int() CHOPS, it does not round
-print(round(9.99))           #      -> 10
+# 4
+value = int("150")
+print(value + 50)        # 200
 
-print(int(float("12.5")))    # 5 -> 12. Convert to float FIRST
+# 5
+books = 3
+print("I have " + str(books) + " books")
 ```
 </details>
 
 ## ❓ MCQs
 
-**Q1.** What is `type(True)`?
-- (a) `str`  (b) `int`  (c) `bool`  (d) `float`
+**Q1.** What is the type of `3.0`?
+- (a) int  (b) float  (c) str  (d) bool
 
-**Q2.** `int(7.9)` returns 7, not 8. Why?
-- (a) It rounds to the nearest even number
-- (b) It chops off the decimal part
-- (c) It is a bug
-- (d) It rounds down only for odd numbers
+**Q2.** What does `"5" + "3"` produce?
+- (a) `8`  (b) `"53"`  (c) An error  (d) `"8"`
 
-**Q3.** Why does `int("12.5")` fail when `int("12")` works?
-- (a) `"12.5"` is too long
-- (b) `int()` on a string expects a whole number in text form
-- (c) Quotes are not allowed with decimals
-- (d) It does not fail
+**Q3.** What does `int(3.9)` return?
+- (a) 4  (b) 3  (c) 3.9  (d) An error
 
-**Q4.** You read a number with `input()` and adding 5 gives a `TypeError`. Why?
-- (a) `input()` always returns a **string**
-- (b) `input()` returns a float
-- (c) You cannot add to user input
-- (d) `+` does not work on numbers
+**Q4.** Which is written correctly?
+- (a) `true`  (b) `TRUE`  (c) `True`  (d) `"true"` for a boolean
 
-**Q5.** Which of these is **not** valid Python?
-- (a) `x = True`  (b) `x = "True"`  (c) `x = true`  (d) `x = 1`
+**Q5.** Why must a value read from a form be converted before doing arithmetic?
+- (a) It is always wrong  (b) It arrives as a string, and `+` joins strings instead of adding  (c) Forms are slow  (d) It does not need converting
 
 <details><summary>Answers</summary>
 
-**A1 — (c) `bool`.**
+**A1 — (b) float.** The decimal point makes it a float even though the value is a whole number.
 
-**A2 — (b).** `int()` truncates towards zero. Use `round(7.9)` if you want 8.
+**A2 — (b) `"53"`.** For strings, `+` joins.
 
-**A3 — (b).** `"12.5"` has a decimal point, so it is not a valid integer string. Use `int(float("12.5"))`.
+**A3 — (b) 3.** It chops the decimal. Use `round()` to round.
 
-**A4 — (a).** The commonest beginner error in Python. Convert first: `int(input(...))`.
+**A4 — (c) `True`.** Capital T. Lowercase `true` is a `NameError`.
 
-**A5 — (c).** Python needs a **capital** `True`. Lowercase `true` raises a `NameError`.
+**A5 — (b).** **This is the single most common beginner bug** and you will meet it again in Topic 6.
 </details>
-
-## 🎯 Tasks
-
-**Task 1 — The type detective.** For `values = [42, "42", 42.0, True, "hello", 0, "", None, [1, 2]]`, print each value, its type, and whether `bool(value)` is True or False. **Which four are 'falsy', and why do you think those four were chosen?**
-
-**Task 2 — Safe converter.** For `inputs = ["45", "3.14", "hello", "-7", "12.5", "", "1e3"]`, print either the converted number and its type, or a friendly message saying why it failed. Use `try` / `except ValueError`. **Do not let the program crash.**
 
 ---
 
-# 3. Operators
+# 5. Numbers
 
-Operators are the symbols that *do* things.
+**Now that you know `int` and `float`, here is what you can do with them.**
 
-| Group | Operators | They give back |
-|---|---|---|
-| **Arithmetic** | `+  -  *  /  //  %  **` | A number |
-| **Comparison** | `==  !=  >  <  >=  <=` | `True` or `False` |
-| **Logical** | `and  or  not` | `True` or `False` |
-| **Membership** | `in`, `not in` | `True` or `False` |
+## Arithmetic
 
-> ⚠️ **`=` and `==` are completely different.** `=` puts a value in a box. `==` asks "are these the same?" Mixing them up is the most common typo in programming.
+| Operator | Meaning | Example | Result |
+|---|---|---|---|
+| `+` | Add | `7 + 3` | `10` |
+| `-` | Subtract | `7 - 3` | `4` |
+| `*` | Multiply | `7 * 3` | `21` |
+| `/` | Divide | `7 / 3` | `2.333...` |
+| `//` | Floor divide | `7 // 3` | `2` |
+| `%` | Remainder | `7 % 3` | `1` |
+| `**` | Power | `7 ** 3` | `343` |
+
+> ⚠️ **`/` always gives a float**, even when it divides evenly: `10 / 2` is `5.0`, not `5`. Use `//` when you want a whole number.
+
+## The two that beginners underuse
+
+**`//` gives you how many whole times something fits.**
+
+```python
+print(17 // 5)      # 3   - five fits into seventeen 3 whole times
+```
+
+**`%` gives you what is left over.** This one is genuinely useful:
+
+```python
+print(17 % 5)       # 2   - 2 left over
+print(10 % 2)       # 0   - EVEN numbers leave 0 when divided by 2
+print(7 % 2)        # 1   - ODD numbers leave 1
+```
+
+> **`% 2` is how you test whether a number is even.** You will use this in Checkpoint Problem 3.
+
+## Useful built-in functions
+
+```python
+print(round(3.567, 2))   # 3.57   - round to 2 decimal places
+print(abs(-15))          # 15     - distance from zero
+print(min(4, 9, 2))      # 2
+print(max(4, 9, 2))      # 9
+print(pow(2, 10))        # 1024   - same as 2 ** 10
+```
 
 ## 📘 Examples
 
-**Example 1 — arithmetic, including the three people forget**
+**Example 1 — the seven operators**
 
 ```python
 a, b = 17, 5
-
-print(a / b)    # 3.4   normal division ALWAYS gives a float
-print(a // b)   # 3     floor division: the whole part only
-print(a % b)    # 2     modulus: the REMAINDER
-print(a ** 2)   # 289   power
-
-print(10 % 2)   # 0 -> 10 is EVEN
-print(11 % 2)   # 1 -> 11 is ODD
+print(a + b)      # 22
+print(a - b)      # 12
+print(a * b)      # 85
+print(a / b)      # 3.4
+print(a // b)     # 3
+print(a % b)      # 2
+print(a ** 2)     # 289
 ```
 
-**Example 2 — comparison and logic**
+**Example 2 — the order of operations, and how to control it**
 
 ```python
-marks, attendance = 78, 65
-
-print(marks == 78)                          # True
-print(marks >= 75 and attendance >= 75)     # False - BOTH must hold
-print(marks >= 75 or attendance >= 75)      # True  - at least one
-print(not (marks >= 40))                    # False
+print(2 + 3 * 4)        # 14 - multiplication happens first
+print((2 + 3) * 4)      # 20 - brackets force the addition first
 ```
 
-**Example 3 — membership works on lists and text**
+**Example 3 — rounding money**
 
 ```python
-subjects = ["Maths", "Physics", "Python"]
-
-print("Python" in subjects)      # True
-print("History" in subjects)     # False
-print("y" in "Python")           # True  - works on strings too
+price = 19.999
+print(round(price, 2))       # 20.0
+print(round(2.34567, 3))     # 2.346
 ```
 
-## ✏️ Practice
+**Example 4 — testing even and odd with `%`**
 
-1. Print `23 // 4` and `23 % 4`. Explain each in a comment.
-2. Write an expression that is `True` when a number `n` is even.
-3. With `age = 20` and `has_id = True`, write **one** expression true only when both hold.
-4. With `fruits = ["apple", "banana"]`, check whether `"mango"` is in it.
-5. Predict `print(5 == 5.0)` before running it. Were you right?
+```python
+print(8 % 2)      # 0  -> even
+print(9 % 2)      # 1  -> odd
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — splitting a bill**
+
+```python
+total_bill = 1750
+people = 4
+each_pays = total_bill / people
+print(round(each_pays, 2))       # 437.5
+```
+
+**Scenario 2 — converting minutes into hours and minutes**
+
+```python
+total_minutes = 200
+hours = total_minutes // 60       # how many whole hours
+minutes = total_minutes % 60      # what is left over
+print(hours)                      # 3
+print(minutes)                    # 20
+```
+
+**Scenario 3 — a percentage**
+
+```python
+marks_scored = 437
+total_marks = 500
+percentage = (marks_scored / total_marks) * 100
+print(round(percentage, 2))       # 87.4
+```
+
+## ✏️ Tasks
+
+1. A shop sells pens at 12 each. Compute and print the cost of 7 pens.
+2. Convert 350 minutes into hours and remaining minutes using `//` and `%`.
+3. A student scored 412 out of 550. Print the percentage rounded to 2 decimals.
+4. Compute the area of a circle with radius 7 (use `3.14159`), rounded to 2 decimals.
+5. A shopkeeper has 100 sweets and 7 children. How many does each get, and how many are left over?
 
 <details><summary>Solutions</summary>
 
 ```python
-print(23 // 4)   # 5 - how many whole 4s fit into 23          # 1
-print(23 % 4)    # 3 - what is left over
+# 1
+pen_price, pen_count = 12, 7
+print(pen_price * pen_count)              # 84
 
-n = 10; print(n % 2 == 0)                                     # 2
+# 2
+total_minutes = 350
+print(total_minutes // 60)                # 5  hours
+print(total_minutes % 60)                 # 50 minutes
 
-age, has_id = 20, True; print(age >= 18 and has_id)           # 3
+# 3
+percentage = (412 / 550) * 100
+print(round(percentage, 2))               # 74.91
 
-print("mango" in ["apple", "banana"])   # False               # 4
+# 4
+radius = 7
+area = 3.14159 * radius ** 2
+print(round(area, 2))                     # 153.94
+# ** happens before *, so this is 3.14159 * (7**2). Brackets would make
+# that clearer to a reader.
 
-print(5 == 5.0)   # True - Python compares the VALUE, not the type   # 5
+# 5
+sweets, children = 100, 7
+print(sweets // children)                 # 14 each
+print(sweets % children)                  # 2  left over
 ```
 </details>
 
 ## ❓ MCQs
 
-**Q1.** What is the value of `17 // 5`?
-- (a) `3.4`  (b) `3`  (c) `2`  (d) `4`
+**Q1.** What does `10 / 2` return?
+- (a) `5`  (b) `5.0`  (c) `"5"`  (d) An error
 
-**Q2.** What does `%` most commonly get used for?
-- (a) Percentages
-- (b) Testing divisibility, e.g. `n % 2 == 0` for even
-- (c) String formatting only
-- (d) Rounding
+**Q2.** What does `17 % 5` return?
+- (a) 3  (b) 2  (c) 3.4  (d) 12
 
-**Q3.** Which expression is `True` only when **both** conditions hold?
-- (a) `a or b`  (b) `a and b`  (c) `not a`  (d) `a in b`
+**Q3.** How do you test whether `n` is even?
+- (a) `n / 2 == 0`  (b) `n % 2 == 0`  (c) `n // 2 == 0`  (d) `n ** 2 == 0`
 
-**Q4.** What is the difference between `=` and `==`?
-- (a) None; they are interchangeable
-- (b) `=` compares, `==` assigns
-- (c) `=` assigns, `==` compares
-- (d) `==` is only for numbers
+**Q4.** What is `2 + 3 * 4`?
+- (a) 20  (b) 14  (c) 24  (d) 9
 
-**Q5.** What does `"y" in "Python"` return?
-- (a) `True`  (b) `False`  (c) `1`  (d) An error — `in` needs a list
+**Q5.** What does `round(3.567, 2)` return?
+- (a) 3.56  (b) 3.57  (c) 3.6  (d) 4
 
 <details><summary>Answers</summary>
 
-**A1 — (b) `3`.** Floor division keeps only the whole part. `17 / 5` would give `3.4`.
+**A1 — (b) `5.0`.** `/` always produces a float. Use `//` for a whole number.
 
-**A2 — (b).** `n % 2 == 0` is the standard even test.
+**A2 — (b) 2.** 5 goes into 17 three times with 2 left over.
 
-**A3 — (b) `and`.** `or` needs only one side to hold.
+**A3 — (b) `n % 2 == 0`.** An even number leaves no remainder.
 
-**A4 — (c).** Confusing them is the most common typo in programming.
+**A4 — (b) 14.** Multiplication before addition. Use brackets when in doubt.
 
-**A5 — (a) `True`.** `in` works on strings as well as lists — it checks whether one string appears inside another.
+**A5 — (b) 3.57.** The second argument is the number of decimal places.
 </details>
-
-## 🎯 Tasks
-
-**Task 1 — Simple calculator.** Store two numbers, print all seven arithmetic results labelled, say which is larger, say whether both are even using `and`, and handle division by zero without crashing. Test with `(17, 5)`, `(10, 0)` and `(-8, 3)`. **Does negative floor division do what you expected?** Look up why.
-
-**Task 2 — Eligibility checker.** A scholarship needs CGPA ≥ 8.0, attendance ≥ 75%, no backlogs, and family income < 500000. Write **one** expression combining all four, print a clear message — then print **which specific conditions failed**. That last part is the difference between a program and a useful program.
 
 ---
 
-# 4. Conditionals and loops
+# 6. Input and Output
 
-🧠 **Analogy: a recipe with decisions and repetition.** Conditionals are "if the sauce is too thick, add water". Loops are "stir for 20 minutes".
+**A program that always prints the same thing is not very useful.** `input()` lets a person type something in.
 
-> ⚠️ **Indentation is not decoration in Python — it is the syntax.** The indented lines are the ones that belong to the `if` or the `for`. Get it wrong and the program does something different, **often with no error at all**.
+🧠 **Analogy: a form at a counter.** You hand it over, the person writes on it, and hands it back. **Everything they write comes back as text — even if they wrote a number.**
+
+```python
+name = input("What is your name? ")
+print("Hello, " + name)
+```
+
+## ⚠️ The rule that catches everyone
+
+> **`input()` ALWAYS returns a string.** Even when the person typed `25`, you get the text `"25"`.
+
+```python
+age = input("Your age: ")        # person types 25
+# print(age + 5)                 # TypeError! You cannot add a number to text.
+                                 # Uncomment it and run to see the real error.
+print(age + "5")                 # "255" - it JOINED them, as text
+```
+
+**The fix is `int()` or `float()`, from Topic 4:**
+
+```python
+age = int(input("Your age: "))       # now it is a real number
+print(age + 5)                       # 30
+```
+
+| Reading | Use |
+|---|---|
+| Text | `input("prompt")` |
+| Whole number | `int(input("prompt"))` |
+| Decimal number | `float(input("prompt"))` |
+
+## Printing nicely: f-strings
+
+Joining with `+` needs `str()` everywhere and gets ugly. **An f-string is far cleaner:**
+
+```python
+name = "Priya"
+age = 20
+
+print("Name: " + name + ", Age: " + str(age))    # works, but clumsy
+print(f"Name: {name}, Age: {age}")               # f-string - much better
+```
+
+**Put `f` before the quote, then write `{variable}` anywhere inside.**
+
+```python
+price = 19.5
+count = 3
+print(f"{count} items at {price} each = {count * price}")
+```
+
+**You can format numbers inside the braces:**
+
+```python
+value = 3.14159
+print(f"{value:.2f}")            # 3.14   - 2 decimal places
+print(f"{1234567:,}")            # 1,234,567 - thousands separators
+```
+
+## Controlling `print`
+
+```python
+print("A", "B", "C")                 # A B C      - space between by default
+print("A", "B", "C", sep="-")        # A-B-C      - change the separator
+print("no newline", end=" ")         # stays on the same line
+print("continued here")
+```
 
 ## 📘 Examples
 
-**Example 1 — why `elif` and not a second `if`**
+**Example 1 — reading text**
 
 ```python
-m = 95
-
-g = ""
-if m >= 90:
-    g = "A"
-if m >= 75:        # this ALSO runs, and overwrites the A
-    g = "B"
-print(g)           # "B"  <- WRONG
-
-if m >= 90:
-    g = "A"
-elif m >= 75:      # only runs if the first was False
-    g = "B"
-print(g)           # "A"  <- correct
+city = input("Which city do you live in? ")
+print(f"{city} is a great city!")
 ```
 
-**Example 2 — the three loop patterns**
+**Example 2 — reading a number correctly**
 
 ```python
-marks = [78, 92, 65, 88]
-subjects = ["Maths", "Physics", "Python", "Stats"]
-
-for mark in marks:                        # values
-    print(mark)
-
-for i, mark in enumerate(marks):          # position AND value
-    print(f"Subject {i + 1}: {mark}")
-
-for sub, mark in zip(subjects, marks):    # two lists together
-    print(f"{sub:<10} {mark}")
-
-for i in range(1, 6):                     # a sequence of numbers
-    print(i)
+age = int(input("Enter your age: "))
+print(f"Next year you will be {age + 1}")
 ```
 
-**Example 3 — building a result, and `while`**
+**Example 3 — reading a decimal**
 
 ```python
-passed = []
-for mark in marks:
-    if mark >= 60:
-        passed.append(mark)
-print(passed)
-
-passed_short = [m for m in marks if m >= 60]   # the same, in one line
-print(passed_short)
-
-countdown = 3
-while countdown > 0:
-    print(countdown)
-    countdown -= 1        # MUST change, or it loops forever
-print("go!")
+price = float(input("Enter the price: "))
+print(f"With 18% GST: {price * 1.18:.2f}")
 ```
 
-## ✏️ Practice
+**Example 4 — reading two values**
 
-1. Loop over `[12, 7, 30, 45, 8]` printing `even` or `odd` next to each.
-2. Find the largest number in `[23, 45, 12, 67, 34]` **without** using `max()`.
-3. Print 1 to 10, but print `Fizz` instead of any multiple of 3.
-4. Given `scores = [85, 42, 91, 58, 77]`, count how many are 60 or above.
-5. Use a list comprehension to build the squares of `[1, 2, 3, 4, 5]`.
+```python
+length = float(input("Length in metres: "))
+width = float(input("Width in metres: "))
+print(f"Area: {length * width:.2f} square metres")
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — a canteen order**
+
+```python
+item = input("What would you like? ")
+quantity = int(input("How many? "))
+price = float(input("Price per item: "))
+print(f"{quantity} x {item} = {quantity * price:.2f}")
+```
+
+**Scenario 2 — a temperature converter**
+
+```python
+celsius = float(input("Temperature in Celsius: "))
+fahrenheit = (celsius * 9 / 5) + 32
+print(f"{celsius}C is {fahrenheit:.1f}F")
+```
+
+**Scenario 3 — a simple interest calculator**
+
+```python
+principal = float(input("Principal amount: "))
+rate = float(input("Interest rate (%): "))
+years = int(input("Number of years: "))
+
+interest = (principal * rate * years) / 100
+print(f"Interest: {interest:,.2f}")
+print(f"Total to repay: {principal + interest:,.2f}")
+```
+
+## ✏️ Tasks
+
+1. Ask for a name and a favourite colour, then print a sentence using both in an f-string.
+2. Ask for two numbers and print their sum, difference and product.
+3. Ask for a price and print it with 5% discount applied, to 2 decimals.
+4. Ask for a distance in kilometres and print it in metres, with thousands separators.
+5. Ask for marks in three subjects and print the total and the average to 2 decimals.
 
 <details><summary>Solutions</summary>
 
 ```python
-for n in [12, 7, 30, 45, 8]:                                  # 1
-    print(n, "even" if n % 2 == 0 else "odd")
+# 1
+name = input("Your name: ")
+colour = input("Favourite colour: ")
+print(f"{name}'s favourite colour is {colour}.")
 
-nums = [23, 45, 12, 67, 34]                                   # 2
-largest = nums[0]
-for n in nums:
-    if n > largest:
-        largest = n
-print(largest)
+# 2
+a = float(input("First number: "))
+b = float(input("Second number: "))
+print(f"Sum:        {a + b}")
+print(f"Difference: {a - b}")
+print(f"Product:    {a * b}")
 
-for i in range(1, 11):                                        # 3
-    print("Fizz" if i % 3 == 0 else i)
+# 3
+price = float(input("Price: "))
+print(f"After 5% discount: {price * 0.95:.2f}")
 
-scores = [85, 42, 91, 58, 77]                                 # 4
-print(sum(1 for s in scores if s >= 60))
+# 4
+km = float(input("Distance in km: "))
+print(f"{km} km = {km * 1000:,.0f} metres")
 
-print([n ** 2 for n in [1, 2, 3, 4, 5]])                      # 5
+# 5
+m1 = float(input("Marks in subject 1: "))
+m2 = float(input("Marks in subject 2: "))
+m3 = float(input("Marks in subject 3: "))
+total = m1 + m2 + m3
+print(f"Total:   {total:.2f}")
+print(f"Average: {total / 3:.2f}")
 ```
 </details>
 
 ## ❓ MCQs
 
-**Q1.** Why use `elif` instead of a second `if`?
-- (a) It is shorter to type
-- (b) `elif` only runs when the earlier conditions were False
-- (c) `if` cannot be used twice
-- (d) There is no difference
+**Q1.** What type does `input()` always return?
+- (a) int  (b) float  (c) str  (d) It depends what was typed
 
-**Q2.** What does `enumerate(marks)` give you?
-- (a) The values only
-- (b) The positions only
-- (c) The position and the value as a pair
-- (d) A sorted copy
+**Q2.** A person types `25`. What does `age = input()` then `age + 5` do?
+- (a) Gives 30  (b) Raises a `TypeError`  (c) Gives `"255"`  (d) Gives 25
 
-**Q3.** What is wrong with this?
-```python
-n = 5
-while n > 0:
-    print(n)
-```
-- (a) `while` needs an `else`
-- (b) `n` never changes, so it loops forever
-- (c) `print` is not allowed in a loop
-- (d) Nothing
+**Q3.** How do you read a whole number from the user?
+- (a) `input()`  (b) `int(input())`  (c) `number(input())`  (d) `input(int)`
 
-**Q4.** In Python, what defines which lines belong to an `if`?
-- (a) Curly braces  (b) Semicolons  (c) Indentation  (d) The `end` keyword
+**Q4.** What does `f"{3.14159:.2f}"` produce?
+- (a) `"3.14159"`  (b) `"3.14"`  (c) `"3.142"`  (d) An error
 
-**Q5.** What does `range(1, 6)` produce?
-- (a) 1, 2, 3, 4, 5, 6  (b) 1, 2, 3, 4, 5  (c) 0, 1, 2, 3, 4, 5  (d) 1 to 6 inclusive of 0
+**Q5.** What does `print("A", "B", sep="-")` print?
+- (a) `A B`  (b) `A-B`  (c) `AB`  (d) `A - B`
 
 <details><summary>Answers</summary>
 
-**A1 — (b).** Two separate `if`s both run, so a mark of 95 gets set to "A" then overwritten with "B". This is one of the commonest logic bugs beginners write.
+**A1 — (c) str.** **Always**, no matter what was typed.
 
-**A2 — (c).** It saves you creating and updating a counter by hand.
+**A2 — (b) `TypeError`.** You cannot add an integer to a string. This is the most common beginner error in the whole session.
 
-**A3 — (b).** A `while` loop must contain something that eventually makes its condition False — here, `n -= 1`.
+**A3 — (b) `int(input())`.** Read the text, then convert it.
 
-**A4 — (c) Indentation.** In most other languages braces do this job. Wrong indentation in Python often produces no error, just silently different behaviour.
+**A4 — (b) `"3.14"`.** `:.2f` means two decimal places.
 
-**A5 — (b) 1, 2, 3, 4, 5.** `range` includes the start and **excludes** the stop.
+**A5 — (b) `A-B`.** `sep` sets what goes between the items.
 </details>
-
-## 🎯 Tasks
-
-**Task 1 — Hospital triage.** Given five patients with `name`, `age`, `temp` and `pain`, assign each a priority: `CRITICAL` if temp ≥ 39 **or** pain ≥ 8; `URGENT` if temp ≥ 38 **or** pain ≥ 5; otherwise `ROUTINE`. Then: anyone under 12 or over 70 moves **up one level**. Print them grouped, count each category, and answer *"who needs to be seen first?"*
-
-**Task 2 — Number games.** FizzBuzz to 50 · print all primes below 50 · print the 1–10 times table as an aligned grid · repeatedly sum a number's digits until one remains (`9875` → `29` → `11` → `2`) · reverse a number **without** converting it to a string.
 
 ---
 
-# 5. Collections
+## ⭐ Checkpoint Problem 1 — Rectangle area
 
-🧠 **Analogy: four kinds of container.**
+> **Uses only:** variables, numbers, input, f-strings. Nothing you have not seen.
 
-| Type | Analogy | Ordered? | Changeable? | Duplicates? | Written as |
-|---|---|---|---|---|---|
-| **list** | A shelf of books | Yes | Yes | Yes | `[1, 2, 3]` |
-| **tuple** | A sealed box of coordinates | Yes | **No** | Yes | `(1, 2)` |
-| **set** | A bag of raffle tickets | No | Yes | **No** | `{1, 2, 3}` |
-| **dict** | A labelled drawer | Yes | Yes | Keys unique | `{"a": 1}` |
+**The problem.** Ask the user for the length and width of a room in metres. Print the area and the perimeter, each to two decimal places.
 
-**Nine times out of ten the answer is a list or a dict.**
+**Try it yourself before opening the solution.**
+
+<details><summary>Solution</summary>
+
+```python
+# Read the two measurements. float() because rooms are rarely whole metres.
+length = float(input("Length in metres: "))
+width = float(input("Width in metres: "))
+
+area = length * width
+perimeter = 2 * (length + width)
+
+print(f"Area:      {area:.2f} square metres")
+print(f"Perimeter: {perimeter:.2f} metres")
+```
+
+**Sample run:**
+```text
+Length in metres: 5.5
+Width in metres: 4
+Area:      22.00 square metres
+Perimeter: 19.00 metres
+```
+</details>
+
+**Make it harder:**
+
+1. Also print the cost of flooring at 850 per square metre, with thousands separators.
+2. Print the area in square feet as well (1 square metre = 10.7639 square feet).
+3. Ask for the room's height too, and print the volume.
+
+---
+
+# 7. Strings
+
+**A string is text.** You have used strings since Topic 1 — now here is everything they can do.
+
+🧠 **Analogy: a row of numbered boxes, one letter per box.** You can look inside any box, take a run of boxes, or make a new row from an old one. **What you cannot do is change a box — Python strings never change. Every "modification" builds a new string.**
+
+## Creating strings
+
+```python
+single = 'Hello'
+double = "Hello"
+multi = """This string
+spans several lines."""
+```
+
+## Indexing: getting one character
+
+**Positions start at 0**, not 1.
+
+```python
+text = "PYTHON"
+#       012345      <- positions from the left
+#      -654321      <- positions from the right
+
+print(text[0])      # P   - the first character
+print(text[3])      # H
+print(text[-1])     # N   - the LAST character
+print(text[-2])     # O   - second from the end
+```
+
+> **`text[-1]` for the last character** is a Python idiom you will use constantly.
+
+## Slicing: getting a run of characters
+
+**`text[start:stop]` — `start` is included, `stop` is not.**
+
+```python
+text = "PYTHON"
+print(text[0:3])    # PYT   - positions 0, 1, 2  (NOT 3)
+print(text[2:5])    # THO
+print(text[:3])     # PYT   - from the beginning
+print(text[3:])     # HON   - to the end
+print(text[:])      # PYTHON - the whole thing
+print(text[-3:])    # HON   - the last three
+```
+
+> ⚠️ **The stop position is excluded.** `text[0:3]` gives you three characters: 0, 1 and 2. This trips up everyone at first, and it is why `[0:3]` and `[3:]` fit together perfectly with no overlap.
+
+## Modifying: a new string comes back
+
+```python
+name = "priya sharma"
+
+print(name.upper())        # PRIYA SHARMA
+print(name.lower())        # priya sharma
+print(name.title())        # Priya Sharma
+print(name.capitalize())   # Priya sharma
+
+print(name)                # priya sharma  <- the ORIGINAL is unchanged
+```
+
+> **Strings are immutable.** Every method returns a *new* string. If you want to keep the result, assign it: `name = name.upper()`.
+
+## The string methods you will actually use
+
+| Method | Does | Example → result |
+|---|---|---|
+| `.upper()` `.lower()` | Change case | `"aB".upper()` → `"AB"` |
+| `.title()` | Capitalise Each Word | `"john doe".title()` → `"John Doe"` |
+| `.strip()` | Remove surrounding spaces | `"  hi  ".strip()` → `"hi"` |
+| `.replace(a, b)` | Swap text | `"a-b".replace("-", " ")` → `"a b"` |
+| `.split(sep)` | Break into a list | `"a,b".split(",")` → `["a", "b"]` |
+| `.find(x)` | Position, or −1 | `"hello".find("l")` → `2` |
+| `.count(x)` | How many times | `"hello".count("l")` → `2` |
+| `.startswith(x)` | True/False | `"hello".startswith("he")` → `True` |
+| `.endswith(x)` | True/False | `"a.csv".endswith(".csv")` → `True` |
+| `len(s)` | Length (not a method) | `len("hello")` → `5` |
+
+## Escape characters
+
+**Some characters need a backslash to type.**
+
+| Escape | Gives |
+|---|---|
+| `\n` | A new line |
+| `\t` | A tab |
+| `\"` | A double quote |
+| `\'` | A single quote |
+| `\\` | A backslash |
+
+```python
+print("Line one\nLine two")
+print("Name:\tPriya")
+print("She said \"hello\" to me")
+print("Path: C:\\Users\\priya")
+```
+
+## Formatting
+
+You met f-strings in Topic 6. Here is the fuller picture:
+
+```python
+name, score = "Priya", 87.456
+
+print(f"{name} scored {score:.1f}")      # f-string   - use this
+print("{} scored {:.1f}".format(name, score))   # .format() - older style
+```
+
+**Alignment, useful for tables:**
+
+```python
+print(f"{'Item':<10}{'Price':>8}")       # < left, > right, ^ centre
+print(f"{'Tea':<10}{15:>8}")
+print(f"{'Samosa':<10}{25:>8}")
+```
 
 ## 📘 Examples
 
-**Example 1 — lists, the workhorse**
+**Example 1 — indexing and length**
 
 ```python
-marks = [78, 92, 65, 88, 45]
-
-print(marks[0], marks[-1], marks[1:3])   # 78 45 [92, 65]
-
-marks.append(97)      # add to the end
-marks[0] = 80         # change one item
-marks.remove(45)      # remove by VALUE
-marks.sort()          # sort in place
-
-print(sum(marks), max(marks), min(marks))
-print(f"{sum(marks) / len(marks):.1f}")
+word = "PYTHON"
+print(word[0])         # P
+print(word[-1])        # N
+print(len(word))       # 6
 ```
 
-**Example 2 — dicts, looked up by name**
+**Example 2 — slicing**
 
 ```python
-student = {"name": "Asha", "age": 21, "cgpa": 8.45}
+date = "2026-08-28"
+print(date[:4])        # 2026   - the year
+print(date[5:7])       # 08     - the month
+print(date[-2:])       # 28     - the day
+```
 
-print(student["name"])
-print(student.get("phone"))                # None, no crash
-print(student.get("phone", "not given"))   # a default
+**Example 3 — cleaning up messy input**
 
-student["semester"] = 6                    # add
-student["cgpa"] = 8.60                     # change
+```python
+messy = "   Priya Sharma   "
+clean = messy.strip().title()
+print(f"[{clean}]")    # [Priya Sharma]
+```
+
+**Example 4 — escape characters in action**
+
+```python
+print("Name:\tPriya\nCity:\tKochi")
+```
+
+Output:
+```text
+Name:	Priya
+City:	Kochi
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — validating an email address, roughly**
+
+```python
+email = "priya@college.edu"
+print(email.count("@"))              # 1   - should be exactly one
+print(email.endswith(".edu"))        # True
+print(email.find("@"))               # 5   - where the @ sits
+```
+
+**Scenario 2 — formatting a name badge from messy data**
+
+```python
+raw = "  aRUN kUMAR  "
+badge = raw.strip().title()
+print(f"| {badge:^20} |")            # centred in 20 characters
+```
+
+**Scenario 3 — pulling apart a filename**
+
+```python
+filename = "sales_report_2026.csv"
+print(filename.endswith(".csv"))     # True
+print(filename[:-4])                 # sales_report_2026 - drop the extension
+print(filename.replace("_", " "))    # sales report 2026.csv
+```
+
+## ✏️ Tasks
+
+1. Take the string `"MACHINE LEARNING"` and print the first word, the last word, and the total length.
+2. A date arrives as `"28/08/2026"`. Print the day, month and year on separate lines using slicing.
+3. Clean the messy name `"   rAJESH kUMAR  "` into `"Rajesh Kumar"`.
+4. From `"student_marks_final.csv"`, print the filename without its extension and with underscores replaced by spaces.
+5. Print a two-row table with a left-aligned item name in 12 characters and a right-aligned price in 8.
+
+<details><summary>Solutions</summary>
+
+```python
+# 1
+text = "MACHINE LEARNING"
+print(text[:7])            # MACHINE
+print(text[8:])            # LEARNING
+print(len(text))           # 16
+
+# 2
+date = "28/08/2026"
+print(date[:2])            # 28
+print(date[3:5])           # 08
+print(date[6:])            # 2026
+
+# 3
+messy = "   rAJESH kUMAR  "
+print(messy.strip().title())     # Rajesh Kumar
+
+# 4
+f = "student_marks_final.csv"
+print(f[:-4])                          # student_marks_final
+print(f[:-4].replace("_", " "))        # student marks final
+
+# 5
+print(f"{'Item':<12}{'Price':>8}")
+print(f"{'Tea':<12}{15:>8}")
+print(f"{'Samosa':<12}{25:>8}")
+```
+</details>
+
+## ❓ MCQs
+
+**Q1.** What does `"PYTHON"[1]` return?
+- (a) `P`  (b) `Y`  (c) `PY`  (d) An error
+
+**Q2.** What does `"PYTHON"[0:3]` return?
+- (a) `PYTH`  (b) `PYT`  (c) `YTH`  (d) `PYTHO`
+
+**Q3.** What does `"PYTHON"[-1]` return?
+- (a) `P`  (b) `N`  (c) An error  (d) `O`
+
+**Q4.** After `name = "abc"` and `name.upper()`, what does `name` hold?
+- (a) `"ABC"`  (b) `"abc"` — strings are immutable, so the method returned a new string  (c) An error  (d) `None`
+
+**Q5.** What does `\n` do inside a string?
+- (a) Prints a backslash and an n  (b) Starts a new line  (c) Inserts a tab  (d) Nothing
+
+<details><summary>Answers</summary>
+
+**A1 — (b) `Y`.** Positions start at 0, so position 1 is the second character.
+
+**A2 — (b) `PYT`.** **The stop position is excluded** — you get 0, 1 and 2.
+
+**A3 — (b) `N`.** Negative indexing counts from the end.
+
+**A4 — (b) `"abc"`.** **Strings never change.** You must assign the result: `name = name.upper()`.
+
+**A5 — (b) Starts a new line.**
+</details>
+
+---
+
+## ⭐ Checkpoint Problem 2 — Initials maker
+
+> **Uses only:** input, strings, slicing, methods, f-strings.
+
+**The problem.** Ask for a full name like `"priya raj sharma"` and print the initials in the form `P.R.S.` — even if the user types extra spaces or the wrong case.
+
+**Hint:** `.split()` with no argument breaks text on any whitespace and handles repeated spaces for you.
+
+<details><summary>Solution</summary>
+
+```python
+full_name = input("Enter your full name: ")
+
+# .strip() removes surrounding spaces; .split() breaks on whitespace and
+# copes with double spaces on its own.
+parts = full_name.strip().split()
+
+# We do not know loops yet, so handle the common case of three names.
+first_initial = parts[0][0].upper()
+middle_initial = parts[1][0].upper()
+last_initial = parts[2][0].upper()
+
+print(f"{first_initial}.{middle_initial}.{last_initial}.")
+```
+
+**Sample run:**
+```text
+Enter your full name:    priya   raj sharma
+P.R.S.
+```
+
+**Note `parts[0][0]`:** `parts[0]` is the first name, and `[0]` on that is its first letter. Two indexes, one after the other.
+</details>
+
+**Make it harder:**
+
+1. Print the full surname after the initials: `P.R. Sharma`.
+2. Print the name reversed: `Sharma, Priya Raj`.
+3. Print how many characters the name has, ignoring spaces. *(Hint: `.replace(" ", "")` then `len()`.)*
+
+> **This solution only works for exactly three names.** After Topic 13 you will be able to handle any number — come back and improve it.
+
+---
+
+# 8. Operators
+
+You already use `+`, `-`, `*`, `/` from Topic 5. **Here is the complete set.**
+
+## Arithmetic operators
+
+Covered in Topic 5: `+` `-` `*` `/` `//` `%` `**`
+
+## Comparison operators — these produce `True` or `False`
+
+| Operator | Means | Example | Result |
+|---|---|---|---|
+| `==` | Equal to | `5 == 5` | `True` |
+| `!=` | Not equal to | `5 != 3` | `True` |
+| `>` | Greater than | `5 > 3` | `True` |
+| `<` | Less than | `5 < 3` | `False` |
+| `>=` | Greater or equal | `5 >= 5` | `True` |
+| `<=` | Less or equal | `5 <= 3` | `False` |
+
+> ⚠️ **`=` assigns. `==` compares.** One equals sign puts a value into a name; two ask a question. Mixing them up is the classic beginner bug.
+
+```python
+age = 20            # ASSIGN 20 to age
+print(age == 20)    # ASK: is age 20?  ->  True
+```
+
+## Logical operators — combining conditions
+
+| Operator | True when | Example |
+|---|---|---|
+| `and` | **Both** are true | `age > 18 and has_id` |
+| `or` | **At least one** is true | `is_student or is_senior` |
+| `not` | Flips it | `not is_closed` |
+
+```python
+age = 20
+has_id = True
+
+print(age >= 18 and has_id)     # True  - both conditions hold
+print(age >= 60 or has_id)      # True  - the second one holds
+print(not has_id)               # False - flipped
+```
+
+🧠 **Analogy for `and` versus `or`:** to enter an exam hall you need a hall ticket **and** an ID card — miss either and you are out. To get a discount you might need to be a student **or** a senior citizen — either one is enough.
+
+## Assignment operators — shorthand
+
+```python
+total = 10
+total += 5      # same as: total = total + 5   -> 15
+total -= 3      # 12
+total *= 2      # 24
+total /= 4      # 6.0
+total //= 2     # 3.0
+total **= 2     # 9.0
+```
+
+## Membership operators — `in` and `not in`
+
+```python
+text = "machine learning"
+print("learn" in text)          # True
+print("java" in text)           # False
+print("java" not in text)       # True
+```
+
+**`in` also works on lists, tuples, sets and dictionaries** — Topics 9 to 11.
+
+## Identity operators — `is` and `is not`
+
+```python
+x = None
+print(x is None)         # True   - the correct way to test for None
+print(x is not None)     # False
+```
+
+> **Use `is` only for `None`, `True` and `False`.** For comparing values, use `==`.
+
+## Operator precedence
+
+**What happens first, when there are no brackets:**
+
+```text
+1.  **                    power
+2.  * / // %              multiply, divide
+3.  + -                   add, subtract
+4.  == != > < >= <=       comparisons
+5.  not
+6.  and
+7.  or                    lowest
+```
+
+> **When it is not obvious, use brackets.** They cost nothing and make your intent clear to the next reader.
+
+## 📘 Examples
+
+**Example 1 — comparisons return booleans**
+
+```python
+marks = 78
+print(marks > 40)         # True
+print(marks == 100)       # False
+print(marks != 78)        # False
+print(type(marks > 40))   # <class 'bool'>
+```
+
+**Example 2 — combining conditions**
+
+```python
+age = 22
+is_member = True
+
+print(age >= 18 and is_member)      # True
+print(age < 18 or is_member)        # True
+print(not is_member)                # False
+```
+
+**Example 3 — the `+=` shorthand**
+
+```python
+score = 0
+score += 10
+score += 25
+print(score)              # 35
+```
+
+**Example 4 — membership**
+
+```python
+password = "Summer2026!"
+print("!" in password)             # True
+print("2026" in password)          # True
+print(" " not in password)         # True  - no spaces, good
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — checking eligibility to vote**
+
+```python
+age = 19
+is_citizen = True
+can_vote = age >= 18 and is_citizen
+print(can_vote)              # True
+```
+
+**Scenario 2 — a discount rule**
+
+```python
+is_student = True
+is_senior = False
+total_spend = 1200
+
+gets_discount = (is_student or is_senior) and total_spend > 1000
+print(gets_discount)         # True
+# The brackets matter: without them, "and" binds tighter than "or"
+# and the meaning changes completely.
+```
+
+**Scenario 3 — a running total across a day**
+
+```python
+day_total = 0
+day_total += 250        # morning sale
+day_total += 175        # afternoon sale
+day_total += 400        # evening sale
+print(day_total)        # 825
+```
+
+## ✏️ Tasks
+
+1. A student passes with 40 or more. Store marks of 38 and print whether they passed.
+2. A cinema ticket is free for under-5s or over-65s. Store an age and print whether it is free.
+3. A password must be longer than 8 characters **and** contain `"!"`. Test `"Summer2026!"`.
+4. Start a bank balance at 5000, add 1200, subtract 800 using `+=` and `-=`, and print it.
+5. Check whether the word `"error"` appears in the message `"System error: disk full"`.
+
+<details><summary>Solutions</summary>
+
+```python
+# 1
+marks = 38
+print(marks >= 40)                          # False
+
+# 2
+age = 70
+print(age < 5 or age > 65)                  # True
+
+# 3
+password = "Summer2026!"
+print(len(password) > 8 and "!" in password)   # True
+
+# 4
+balance = 5000
+balance += 1200
+balance -= 800
+print(balance)                              # 5400
+
+# 5
+message = "System error: disk full"
+print("error" in message)                   # True
+```
+</details>
+
+## ❓ MCQs
+
+**Q1.** What is the difference between `=` and `==`?
+- (a) None  (b) `=` assigns a value, `==` compares two values  (c) `=` compares, `==` assigns  (d) `==` is invalid
+
+**Q2.** What does `5 >= 5` return?
+- (a) `True`  (b) `False`  (c) `5`  (d) An error
+
+**Q3.** When is `A and B` true?
+- (a) When either is true  (b) When both are true  (c) Never  (d) When neither is true
+
+**Q4.** What does `total += 5` mean?
+- (a) `total = 5`  (b) `total = total + 5`  (c) `total == 5`  (d) `total = total * 5`
+
+**Q5.** Which operator tests whether something appears inside a string?
+- (a) `has`  (b) `in`  (c) `contains`  (d) `==`
+
+<details><summary>Answers</summary>
+
+**A1 — (b).** **The classic beginner bug.** One assigns, two ask a question.
+
+**A2 — (a) `True`.** `>=` is "greater than *or equal to*", and 5 equals 5.
+
+**A3 — (b) When both are true.** Hall ticket **and** ID card.
+
+**A4 — (b).** Shorthand for adding to what is already there.
+
+**A5 — (b) `in`.** It works on lists, tuples, sets and dictionaries too.
+</details>
+
+---
+
+# 9. Lists
+
+**A list holds many values in one variable, in order.**
+
+🧠 **Analogy: a shopping list on paper.** Items sit in a definite order, you can read the third one, cross one out, add one at the bottom, or change one. **A Python list does all of that.**
+
+```python
+fruits = ["apple", "banana", "cherry"]
+numbers = [10, 20, 30, 40]
+mixed = ["Priya", 20, 87.5, True]        # a list can hold any types
+empty = []
+```
+
+## Accessing items
+
+**Exactly like string indexing from Topic 7 — positions start at 0.**
+
+```python
+fruits = ["apple", "banana", "cherry", "date"]
+#           0         1         2        3
+#          -4        -3        -2       -1
+
+print(fruits[0])       # apple
+print(fruits[2])       # cherry
+print(fruits[-1])      # date      - the last item
+print(len(fruits))     # 4
+```
+
+**Slicing works too, and the stop is still excluded:**
+
+```python
+fruits = ["apple", "banana", "cherry", "date"]
+
+print(fruits[1:3])     # ['banana', 'cherry']
+print(fruits[:2])      # ['apple', 'banana']
+print(fruits[-2:])     # ['cherry', 'date']
+```
+
+## Changing items
+
+> **Unlike strings, lists CAN be changed in place.** This is the single most important difference between them.
+
+```python
+fruits = ["apple", "banana", "cherry"]
+fruits[1] = "blueberry"
+print(fruits)          # ['apple', 'blueberry', 'cherry']
+```
+
+## Adding items
+
+```python
+fruits = ["apple", "banana"]
+
+fruits.append("cherry")            # add to the END
+print(fruits)                      # ['apple', 'banana', 'cherry']
+
+fruits.insert(1, "apricot")        # insert AT position 1
+print(fruits)                      # ['apple', 'apricot', 'banana', 'cherry']
+
+fruits.extend(["date", "elderberry"])   # add several at once
+print(fruits)
+```
+
+## Removing items
+
+```python
+fruits = ["apple", "banana", "cherry", "banana"]
+
+fruits.remove("banana")     # removes the FIRST "banana" only
+print(fruits)               # ['apple', 'cherry', 'banana']
+
+last = fruits.pop()         # removes and RETURNS the last item
+print(last)                 # banana
+print(fruits)               # ['apple', 'cherry']
+
+del fruits[0]               # delete by position
+print(fruits)               # ['cherry']
+
+fruits.clear()              # empty it completely
+print(fruits)               # []
+```
+
+## Useful list operations
+
+```python
+marks = [78, 92, 45, 88, 61]
+
+print(len(marks))          # 5
+print(max(marks))          # 92
+print(min(marks))          # 45
+print(sum(marks))          # 364
+print(sum(marks) / len(marks))   # 72.8   - the average
+print(sorted(marks))       # [45, 61, 78, 88, 92] - a NEW sorted list
+print(marks)               # unchanged
+marks.sort()               # sorts the list ITSELF
+print(marks)               # [45, 61, 78, 88, 92]
+marks.reverse()
+print(marks)               # [92, 88, 78, 61, 45]
+print(78 in marks)         # True
+print(marks.index(78))     # 2   - where it sits
+print(marks.count(78))     # 1   - how many times
+```
+
+## 🔓 New syntax: looping through a list
+
+**To do something with *every* item, you need a loop.** Here is your first one — Topic 13 covers loops fully.
+
+```python
+fruits = ["apple", "banana", "cherry"]
+
+for fruit in fruits:
+    print(fruit)
+```
+
+Output:
+```text
+apple
+banana
+cherry
+```
+
+**Read it as an English sentence:** *"for each fruit in fruits, print that fruit."*
+
+- `fruit` is a name **you choose**. It holds one item at a time.
+- The `:` opens a block, and the indented lines run once per item — exactly the indentation rule from Topic 1.
+
+```python
+marks = [78, 92, 45]
+
+for m in marks:
+    print(f"Mark: {m}, doubled: {m * 2}")
+```
+
+## 📘 Examples
+
+**Example 1 — create and access**
+
+```python
+cities = ["Kochi", "Delhi", "Mumbai", "Chennai"]
+print(cities[0])       # Kochi
+print(cities[-1])      # Chennai
+print(len(cities))     # 4
+```
+
+**Example 2 — change, add, remove**
+
+```python
+todo = ["wash", "cook"]
+todo.append("study")           # ['wash', 'cook', 'study']
+todo[0] = "clean"              # ['clean', 'cook', 'study']
+todo.remove("cook")            # ['clean', 'study']
+print(todo)
+```
+
+**Example 3 — statistics without writing any maths**
+
+```python
+marks = [78, 92, 45, 88, 61]
+print(f"Highest: {max(marks)}")
+print(f"Lowest:  {min(marks)}")
+print(f"Total:   {sum(marks)}")
+print(f"Average: {sum(marks) / len(marks):.2f}")
+```
+
+**Example 4 — looping**
+
+```python
+prices = [120, 85, 260]
+
+for price in prices:
+    print(f"Price with tax: {price * 1.18:.2f}")
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — a canteen's daily sales**
+
+```python
+sales = [450, 380, 620, 510, 295]
+print(f"Best day:  {max(sales)}")
+print(f"Worst day: {min(sales)}")
+print(f"Week total: {sum(sales)}")
+print(f"Daily average: {sum(sales) / len(sales):.2f}")
+```
+
+**Scenario 2 — a waiting list where people join and leave**
+
+```python
+waiting = ["Arun", "Priya", "Ravi"]
+
+waiting.append("Meera")            # Meera joins the back
+served = waiting.pop(0)            # the front person is served
+print(f"Now serving: {served}")    # Arun
+print(f"Still waiting: {waiting}") # ['Priya', 'Ravi', 'Meera']
+```
+
+**Scenario 3 — a class result summary**
+
+```python
+students = ["Arun", "Priya", "Ravi"]
+marks = [78, 92, 45]
+
+print(f"Class average: {sum(marks) / len(marks):.2f}")
+
+for name in students:
+    print(f"Student: {name}")
+```
+
+## ✏️ Tasks
+
+1. Make a list of five subjects. Print the first, the last, and how many there are.
+2. Make a list of six marks. Print the highest, lowest, total and average to 2 decimals.
+3. Start with `["milk", "eggs"]`. Add `"bread"` at the end, `"tea"` at the front, then remove `"eggs"`. Print the result.
+4. From `[45, 92, 78, 61, 88]`, print a sorted copy **and** show the original is unchanged. Then sort the original itself.
+5. Loop through a list of three prices and print each with 18% tax added.
+
+<details><summary>Solutions</summary>
+
+```python
+# 1
+subjects = ["Maths", "Physics", "Chemistry", "English", "Computer"]
+print(subjects[0])            # Maths
+print(subjects[-1])           # Computer
+print(len(subjects))          # 5
+
+# 2
+marks = [78, 92, 45, 88, 61, 73]
+print(f"Highest: {max(marks)}")
+print(f"Lowest:  {min(marks)}")
+print(f"Total:   {sum(marks)}")
+print(f"Average: {sum(marks) / len(marks):.2f}")
+
+# 3
+shopping = ["milk", "eggs"]
+shopping.append("bread")
+shopping.insert(0, "tea")
+shopping.remove("eggs")
+print(shopping)               # ['tea', 'milk', 'bread']
+
+# 4
+nums = [45, 92, 78, 61, 88]
+print(sorted(nums))           # [45, 61, 78, 88, 92]  - a NEW list
+print(nums)                   # [45, 92, 78, 61, 88]  - unchanged
+nums.sort()
+print(nums)                   # [45, 61, 78, 88, 92]  - now changed
+
+# 5
+prices = [120, 85, 260]
+for price in prices:
+    print(f"{price} + tax = {price * 1.18:.2f}")
+```
+</details>
+
+## ❓ MCQs
+
+**Q1.** What does `["a", "b", "c"][1]` return?
+- (a) `"a"`  (b) `"b"`  (c) `"c"`  (d) An error
+
+**Q2.** What is the key difference between a list and a string?
+- (a) Lists are faster  (b) A list can be changed in place; a string cannot  (c) Lists hold only numbers  (d) There is none
+
+**Q3.** Which method adds an item to the **end** of a list?
+- (a) `.insert()`  (b) `.append()`  (c) `.add()`  (d) `.extend()`
+
+**Q4.** What is the difference between `sorted(marks)` and `marks.sort()`?
+- (a) None  (b) `sorted()` returns a new list; `.sort()` changes the original  (c) `.sort()` returns a new list  (d) `sorted()` is invalid
+
+**Q5.** In `for fruit in fruits:`, what is `fruit`?
+- (a) The whole list  (b) A name you choose, holding one item at a time  (c) A built-in keyword  (d) The number of items
+
+<details><summary>Answers</summary>
+
+**A1 — (b) `"b"`.** Positions start at 0.
+
+**A2 — (b).** **Lists are mutable; strings are immutable.** The most important difference between them.
+
+**A3 — (b) `.append()`.** `.insert()` needs a position; `.extend()` adds several.
+
+**A4 — (b).** `sorted()` leaves the original alone. Use it when you still need the original order.
+
+**A5 — (b).** You pick the name — `fruit`, `item`, `x`. Choose something readable.
+</details>
+
+---
+
+# 10. Tuples and Sets
+
+**Two more ways to hold several values, each with one distinctive property.**
+
+## Tuples — a list that cannot change
+
+🧠 **Analogy: a printed certificate versus a whiteboard.** You can rewrite a whiteboard (a list). A printed certificate is fixed (a tuple). **You use a tuple to say "this must not change".**
+
+```python
+point = (3, 7)
+colours = ("red", "green", "blue")
+single = (5,)                # NOTE the comma - without it this is just 5
+```
+
+**Reading works exactly like a list:**
+
+```python
+colours = ("red", "green", "blue")
+print(colours[0])        # red
+print(colours[-1])       # blue
+print(len(colours))      # 3
+print("red" in colours)  # True
+
+for c in colours:
+    print(c)
+```
+
+**Changing does not:**
+
+```python
+colours = ("red", "green", "blue")
+
+# colours[0] = "yellow"
+# -> TypeError: 'tuple' object does not support item assignment
+#    Uncomment it to see the error. That refusal is the POINT of a tuple.
+print(colours)
+```
+
+**Unpacking is where tuples shine:**
+
+```python
+point = (3, 7)
+x, y = point             # unpack into two names
+print(x)                 # 3
+print(y)                 # 7
+```
+
+> **You have already used this.** `first, second = second, first` in Topic 3 works because the right-hand side builds a tuple.
+
+| Use a **tuple** when | Use a **list** when |
+|---|---|
+| The values must not change | You need to add, remove or edit |
+| Coordinates, RGB colours, database rows | A shopping list, a queue, results |
+
+## Sets — no duplicates, no order
+
+🧠 **Analogy: a guest list where each name appears once.** Adding a name that is already there changes nothing. **And nobody is "third on the list" — a set has no order at all.**
+
+```python
+numbers = {1, 2, 3, 2, 1}
+print(numbers)            # {1, 2, 3}  - duplicates gone automatically
+
+empty_set = set()         # NOTE: {} makes an empty DICTIONARY, not a set
+```
+
+**No indexing** — there is no "first" item:
+
+```python
+numbers = {1, 2, 3}
+
+# numbers[0]
+# -> TypeError: 'set' object is not subscriptable
+#    There is no "first" item in a set, so there is nothing to ask for.
+print(numbers)
+```
+
+**Adding and removing:**
+
+```python
+s = {1, 2, 3}
+s.add(4)                  # {1, 2, 3, 4}
+s.add(2)                  # unchanged - 2 is already there
+s.discard(1)              # {2, 3, 4}   - no error if missing
+s.discard(99)             # still fine  - discard never complains
+print(s)                  # {2, 3, 4}
+
+# s.remove(99)            # KeyError - remove() DOES complain if it is missing.
+                          # Use discard() when you do not care either way.
+```
+
+**Set maths, which is what makes them worth learning:**
+
+```python
+maths = {"Arun", "Priya", "Ravi"}
+physics = {"Priya", "Ravi", "Meera"}
+
+print(maths | physics)    # union        - in EITHER class
+print(maths & physics)    # intersection - in BOTH classes
+print(maths - physics)    # difference   - maths only
+print(maths ^ physics)    # symmetric    - in one but not both
+```
+
+**The most common real use: removing duplicates.**
+
+```python
+marks = [78, 92, 78, 45, 92, 61]
+print(list(set(marks)))       # duplicates removed
+```
+
+## 📘 Examples
+
+**Example 1 — a tuple protects a value**
+
+```python
+screen_size = (1920, 1080)
+width, height = screen_size
+print(f"{width} x {height}")       # 1920 x 1080
+```
+
+**Example 2 — a set removes duplicates instantly**
+
+```python
+visitors = ["Arun", "Priya", "Arun", "Ravi", "Priya"]
+unique = set(visitors)
+print(len(visitors))       # 5 visits
+print(len(unique))         # 3 people
+```
+
+**Example 3 — set operations answer real questions**
+
+```python
+monday = {"Arun", "Priya", "Ravi"}
+tuesday = {"Priya", "Meera"}
+
+print(monday & tuesday)    # {'Priya'}          - came both days
+print(monday | tuesday)    # everyone who came at all
+print(monday - tuesday)    # {'Arun', 'Ravi'}   - Monday only
+```
+
+**Example 4 — a tuple cannot be modified**
+
+```python
+config = ("localhost", 8080)
+print(config[0])           # localhost
+# config[0] = "example.com"    # TypeError - and that is the point
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — a database row, which should not be edited by accident**
+
+```python
+student_record = (42, "Priya Sharma", "B.Tech", 8.7)
+roll, name, course, cgpa = student_record
+print(f"{name} ({roll}) is studying {course} with CGPA {cgpa}")
+```
+
+**Scenario 2 — counting unique visitors to a library**
+
+```python
+entries = ["A101", "B202", "A101", "C303", "B202", "A101"]
+print(f"Total entries: {len(entries)}")           # 6
+print(f"Unique people: {len(set(entries))}")      # 3
+```
+
+**Scenario 3 — which students are in both clubs**
+
+```python
+coding_club = {"Arun", "Priya", "Ravi", "Sneha"}
+music_club = {"Priya", "Sneha", "Vikram"}
+
+print(f"In both:      {coding_club & music_club}")
+print(f"In either:    {coding_club | music_club}")
+print(f"Coding only:  {coding_club - music_club}")
+```
+
+## ✏️ Tasks
+
+1. Store a screen resolution as a tuple and unpack it into `width` and `height`.
+2. Try to change an item in a tuple. What error do you get? Why is that useful?
+3. From `[5, 3, 5, 8, 3, 1, 8]`, produce a list with duplicates removed.
+4. Two shops sell overlapping items. Find items sold by both, by either, and by only the first.
+5. Store a student record as a tuple of four fields and unpack it into four names.
+
+<details><summary>Solutions</summary>
+
+```python
+# 1
+resolution = (1366, 768)
+width, height = resolution
+print(f"{width} x {height}")
+
+# 2
+point = (3, 7)
+# point[0] = 5
+# -> TypeError: 'tuple' object does not support item assignment
+# Useful because it makes accidental modification IMPOSSIBLE, not just
+# discouraged. Use a tuple to say "this must not change".
+
+# 3
+nums = [5, 3, 5, 8, 3, 1, 8]
+print(sorted(set(nums)))              # [1, 3, 5, 8]
+
+# 4
+shop_a = {"pen", "book", "bag", "ruler"}
+shop_b = {"book", "bag", "bottle"}
+print(shop_a & shop_b)                # {'book', 'bag'}
+print(shop_a | shop_b)                # everything
+print(shop_a - shop_b)                # {'pen', 'ruler'}
+
+# 5
+record = (42, "Priya Sharma", "B.Tech", 8.7)
+roll, name, course, cgpa = record
+print(f"{name} ({roll}), {course}, CGPA {cgpa}")
+```
+</details>
+
+## ❓ MCQs
+
+**Q1.** What is the defining property of a tuple?
+- (a) It is faster  (b) It cannot be changed after creation  (c) It holds only numbers  (d) It has no order
+
+**Q2.** What does `{1, 2, 3, 2, 1}` produce?
+- (a) `{1, 2, 3, 2, 1}`  (b) `{1, 2, 3}`  (c) An error  (d) `[1, 2, 3]`
+
+**Q3.** Why does `numbers[0]` fail on a set?
+- (a) Sets are empty  (b) Sets have no order, so there is no "first" item  (c) Sets hold only strings  (d) It does not fail
+
+**Q4.** What does `{"a", "b"} & {"b", "c"}` return?
+- (a) `{"a", "b", "c"}`  (b) `{"b"}`  (c) `{"a", "c"}`  (d) `set()`
+
+**Q5.** What does `(5)` create?
+- (a) A one-item tuple  (b) Just the integer 5 — you need `(5,)` for a tuple  (c) A set  (d) A list
+
+<details><summary>Answers</summary>
+
+**A1 — (b) It cannot be changed.** That immutability is the whole point.
+
+**A2 — (b) `{1, 2, 3}`.** Sets discard duplicates automatically.
+
+**A3 — (b).** No order means no positions.
+
+**A4 — (b) `{"b"}`.** `&` is intersection: what is in both.
+
+**A5 — (b) Just the integer 5.** **The trailing comma is what makes a tuple:** `(5,)`.
+</details>
+
+---
+
+# 11. Dictionaries
+
+**A dictionary stores pairs: a key, and the value it points to.**
+
+🧠 **Analogy: an actual dictionary.** You look up a *word* and get its *meaning*. You do not ask for "the 47th word" — you ask for a word by name. **A Python dictionary works the same way: you look things up by key, not by position.**
+
+```python
+student = {
+    "name": "Priya",
+    "age": 20,
+    "course": "B.Tech",
+    "cgpa": 8.7,
+}
+```
+
+## Getting values
+
+```python
+student = {"name": "Priya", "age": 20, "course": "B.Tech", "cgpa": 8.7}
+
+print(student["name"])          # Priya
+print(student["cgpa"])          # 8.7
+
+# print(student["email"])       # KeyError! There is no "email" key.
+                                # Uncomment it to see the crash for yourself.
+print(student.get("email"))     # None - safe, no crash
+print(student.get("email", "not provided"))    # your own default
+```
+
+> **Use `.get()` when the key might be missing.** Square brackets crash; `.get()` hands you a default.
+
+## Adding and changing
+
+```python
+student = {"name": "Priya", "age": 20, "course": "B.Tech"}
+
+student["age"] = 21                     # change an existing key
+student["email"] = "priya@college.edu"  # a NEW key is simply created
+print(student)
+```
+
+## Removing
+
+```python
+student = {"name": "Priya", "email": "priya@college.edu", "cgpa": 8.7}
+
+del student["email"]              # delete by key
+removed = student.pop("cgpa")     # remove and RETURN the value
+print(removed)                    # 8.7
+student.clear()                   # empty it
+print(student)                    # {}
+```
+
+## Looking through a dictionary
+
+```python
+student = {"name": "Priya", "age": 20, "course": "B.Tech"}
+
+print(student.keys())      # dict_keys(['name', 'age', 'course'])
+print(student.values())    # dict_values(['Priya', 20, 'B.Tech'])
+print(student.items())     # pairs
+
+print("name" in student)   # True  - `in` checks the KEYS
+print(len(student))        # 3
+```
+
+**Looping — using the `for` you met in Topic 9:**
+
+```python
+student = {"name": "Priya", "age": 20, "course": "B.Tech"}
+
+for key in student:
+    print(key)                       # just the keys
 
 for key, value in student.items():
-    print(f"{key:<10}: {value}")
+    print(f"{key}: {value}")         # both at once
 ```
 
-**Example 3 — sets and tuples earn their place**
+## Nesting
+
+**Values can themselves be lists or dictionaries.** This is how real data looks.
 
 ```python
-cities = ["Delhi", "Mumbai", "Delhi", "Chennai", "Mumbai"]
-print(set(cities), len(set(cities)))       # distinct values, fast
+classroom = {
+    "teacher": "Mrs Nair",
+    "subject": "Physics",
+    "students": ["Arun", "Priya", "Ravi"],
+    "marks": {"Arun": 78, "Priya": 92, "Ravi": 45},
+}
 
-python_students = {"Asha", "Ravi", "Meera"}
-ml_students = {"Ravi", "Meera", "John"}
-print(python_students & ml_students)       # in BOTH
-print(python_students | ml_students)       # in EITHER
-print(python_students - ml_students)       # Python only
-
-location = (10.85, 76.27)                  # fixed: cannot be changed
-try:
-    location[0] = 99
-except TypeError as error:
-    print("Cannot change a tuple:", error)
+print(classroom["students"][0])       # Arun
+print(classroom["marks"]["Priya"])    # 92
 ```
 
-## ✏️ Practice
+**Read it left to right:** `classroom["marks"]` gives you the inner dictionary, and `["Priya"]` looks up inside that.
 
-1. `temps = [31, 28, 35, 29, 33]`. Print the average to 1 decimal place.
-2. Add `30` to the end, then print the highest and lowest.
-3. Create a dict for a book (title, author, year, pages) and print each key and value on its own line.
-4. `colours = ["red","blue","red","green","blue"]`. How many **distinct** colours?
-5. `a = {1,2,3,4}`, `b = {3,4,5}`. Print what is in both, in either, and in `a` only.
+## 📘 Examples
+
+**Example 1 — create and read**
+
+```python
+prices = {"tea": 15, "coffee": 25, "samosa": 20}
+print(prices["coffee"])          # 25
+print(len(prices))               # 3
+```
+
+**Example 2 — add, change, remove**
+
+```python
+prices = {"tea": 15, "coffee": 25}
+prices["juice"] = 40             # add
+prices["tea"] = 18               # change
+del prices["coffee"]             # remove
+print(prices)                    # {'tea': 18, 'juice': 40}
+```
+
+**Example 3 — safe lookup**
+
+```python
+prices = {"tea": 15}
+print(prices.get("coffee"))                  # None
+print(prices.get("coffee", "not on menu"))   # not on menu
+```
+
+**Example 4 — looping over pairs**
+
+```python
+prices = {"tea": 15, "coffee": 25, "samosa": 20}
+
+for item, price in prices.items():
+    print(f"{item:<10} {price:>5}")
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — a canteen price list**
+
+```python
+menu = {"tea": 15, "coffee": 25, "samosa": 20, "sandwich": 45}
+
+print(f"Items on menu: {len(menu)}")
+print(f"Cheapest: {min(menu.values())}")
+print(f"Total if you buy one of each: {sum(menu.values())}")
+
+for item, price in menu.items():
+    print(f"{item:<12}{price:>5}")
+```
+
+**Scenario 2 — a student record with nested data**
+
+```python
+student = {
+    "name": "Priya Sharma",
+    "roll": 42,
+    "marks": {"maths": 92, "physics": 78, "chemistry": 85},
+}
+
+print(student["name"])
+print(student["marks"]["maths"])                    # 92
+print(sum(student["marks"].values()) / 3)           # average
+```
+
+**Scenario 3 — counting things**
+
+```python
+# A dictionary is the natural way to count occurrences
+attendance = {"Arun": 18, "Priya": 20, "Ravi": 12}
+
+for name, days in attendance.items():
+    percentage = (days / 20) * 100
+    print(f"{name:<8} {days:>3} days  ({percentage:.0f}%)")
+```
+
+## ✏️ Tasks
+
+1. Build a dictionary of three cities and their populations. Print one, and print how many entries there are.
+2. Build a menu dictionary. Add an item, change a price, and delete an item.
+3. Look up a key that does not exist, once with `[]` and once with `.get()`. Describe the difference.
+4. Loop through a price dictionary and print each item and price in a neat aligned table.
+5. Build a nested dictionary holding a student's name and their marks in three subjects, then print the average.
 
 <details><summary>Solutions</summary>
 
 ```python
-temps = [31, 28, 35, 29, 33]                                  # 1
-print(f"{sum(temps) / len(temps):.1f}")
+# 1
+cities = {"Kochi": 677381, "Delhi": 16787941, "Mumbai": 12442373}
+print(cities["Kochi"])
+print(len(cities))                     # 3
 
-temps.append(30); print(max(temps), min(temps))               # 2
+# 2
+menu = {"tea": 15, "coffee": 25}
+menu["juice"] = 40
+menu["tea"] = 18
+del menu["coffee"]
+print(menu)                            # {'tea': 18, 'juice': 40}
 
-book = {"title": "Python Programming", "author": "John Smith",  # 3
-        "year": 2020, "pages": 300}
-for k, v in book.items():
-    print(f"{k:<8}: {v}")
+# 3
+menu = {"tea": 15}
+print(menu.get("pizza"))               # None - safe
+# print(menu["pizza"])                 # KeyError - the program STOPS
+# Square brackets crash on a missing key; .get() returns None (or a
+# default you supply). Use .get() whenever the key might be absent.
 
-print(len(set(["red","blue","red","green","blue"])))          # 4 -> 3
+# 4
+prices = {"tea": 15, "coffee": 25, "samosa": 20}
+for item, price in prices.items():
+    print(f"{item:<12}{price:>5}")
 
-a, b = {1,2,3,4}, {3,4,5}                                     # 5
-print(a & b, a | b, a - b)
+# 5
+student = {"name": "Priya", "marks": {"maths": 92, "physics": 78, "chemistry": 85}}
+marks = student["marks"]
+print(f"{student['name']} average: {sum(marks.values()) / len(marks):.2f}")
 ```
 </details>
 
 ## ❓ MCQs
 
-**Q1.** You need to store a student's name, age and CGPA together. Which collection?
-- (a) list  (b) tuple  (c) dict  (d) set
+**Q1.** How do you get a value out of a dictionary?
+- (a) By position, like `d[0]`  (b) By key, like `d["name"]`  (c) With `.find()`  (d) You cannot
 
-**Q2.** Why does `{1, 2, 2, 3}` print as `{1, 2, 3}`?
-- (a) Python sorted it  (b) Sets refuse duplicates  (c) An error was suppressed  (d) `2` is reserved
+**Q2.** What happens with `d["missing"]` when the key is not there?
+- (a) Returns `None`  (b) Raises `KeyError`  (c) Returns `0`  (d) Creates the key
 
-**Q3.** `student["phone"]` when the key is missing does what?
-- (a) Returns `None`  (b) Returns `""`  (c) Raises a `KeyError`  (d) Adds the key
+**Q3.** What does `d.get("missing", "default")` return?
+- (a) `KeyError`  (b) `None`  (c) `"default"`  (d) `"missing"`
 
-**Q4.** When would you deliberately choose a tuple over a list?
-- (a) When you need it sorted
-- (b) When the values must never change
-- (c) When you need duplicates
-- (d) Tuples are always faster, so always
+**Q4.** What does `"name" in student` check?
+- (a) The values  (b) The keys  (c) Both  (d) The length
 
-**Q5.** What is the quickest way to count distinct values in a list?
-- (a) `len(my_list)`  (b) `count(my_list)`  (c) `len(set(my_list))`  (d) `my_list.distinct()`
+**Q5.** In `classroom["marks"]["Priya"]`, what is happening?
+- (a) An error  (b) Look up `"marks"` to get an inner dictionary, then look up `"Priya"` in that  (c) Two keys at once  (d) A slice
 
 <details><summary>Answers</summary>
 
-**A1 — (c) dict.** Each value has a meaning, so look it up by name (`student["cgpa"]`) rather than by position. Position-based access breaks the moment someone reorders the data.
+**A1 — (b) By key.** Dictionaries have no positions — you look things up by name.
 
-**A2 — (b).** Sets silently refuse duplicates — no error, the second `2` is simply dropped.
+**A2 — (b) `KeyError`**, and the program stops.
 
-**A3 — (c) `KeyError`**, and it crashes. Use `.get()` when a key might be absent.
+**A3 — (c) `"default"`.** The second argument is your fallback.
 
-**A4 — (b).** Coordinates, an RGB colour, a database row. Trying to modify a tuple raises an error, which turns a silent bug into an obvious one.
+**A4 — (b) The keys.** To search the values, use `in student.values()`.
 
-**A5 — (c) `len(set(my_list))`.**
+**A5 — (b).** Read it left to right: each `[...]` looks up one level deeper.
 </details>
-
-## 🎯 Tasks
-
-**Task 1 — Student score analyser.** Store `{"Alice": 85, "Bob": 78, "Charlie": 92, "Daisy": 61, "Evan": 78}`. Print each name and score; compute the average; print who scored **above** average; count distinct scores with a set and explain why it is fewer than five; put the top two names in a tuple; assign each a grade.
-
-**Task 2 — Grocery billing.** Prices `{"milk": 45, "bread": 30, "eggs": 60, "butter": 80}`, cart `["milk","eggs","bread","milk","jam"]`. Use `in` to check each item, total only the ones you have prices for, **warn for each you skip**, find unique products with a set, print a receipt, and apply 5% off above 200.
 
 ---
 
-# 6. Strings
+# 12. Conditionals: if, elif, else and match
 
-A **string** is text. In ML you meet strings constantly: column names, categories, reviews, prompts.
+**A program that always does the same thing is a list of instructions. A program that decides is software.**
 
-🧠 **Analogy: a row of numbered letter tiles.** Each character has a position, starting at **0**.
+🧠 **Analogy: a signboard at a road junction.** *If the road is clear, go straight. Otherwise if there is a diversion, turn left. Otherwise, wait.* **Exactly one of those happens.**
 
-> ⚠️ **Strings are immutable.** Every string method returns a **new** string — it never changes the original. Forgetting to capture the result is a very common bug.
+## `if`
+
+```python
+age = 20
+
+if age >= 18:
+    print("You may vote")
+```
+
+**The condition is one of the comparisons from Topic 8**, producing `True` or `False`. If it is `True`, the indented block runs. If not, it is skipped entirely.
+
+## `if` / `else`
+
+```python
+age = 15
+
+if age >= 18:
+    print("You may vote")
+else:
+    print("You are too young to vote")
+```
+
+## `if` / `elif` / `else`
+
+**`elif` is short for "else if". Python checks each in order and runs the FIRST one that is true, then stops.**
+
+```python
+marks = 78
+
+if marks >= 90:
+    print("Grade A")
+elif marks >= 75:
+    print("Grade B")
+elif marks >= 60:
+    print("Grade C")
+elif marks >= 40:
+    print("Grade D")
+else:
+    print("Fail")
+```
+
+> ⚠️ **Order matters enormously.** If you put `marks >= 40` first, then *every* passing mark gets Grade D and the later branches never run. **Always write the strictest condition first.**
+
+## Combining conditions
+
+**Use `and`, `or`, `not` from Topic 8:**
+
+```python
+age = 20
+has_id = True
+
+if age >= 18 and has_id:
+    print("Entry allowed")
+else:
+    print("Entry refused")
+```
+
+## Nesting
+
+```python
+age = 20
+has_ticket = False
+
+if age >= 18:
+    if has_ticket:
+        print("Enjoy the film")
+    else:
+        print("Please buy a ticket")
+else:
+    print("This film is 18+")
+```
+
+> **A nested `if` can often be flattened with `and`.** Prefer the flat version when it reads well — it is easier to follow.
+
+## The one-line form
+
+```python
+age = 20
+status = "adult" if age >= 18 else "minor"
+print(status)                # adult
+```
+
+## `match` — Python's newest branching tool
+
+**When you are comparing one value against several fixed options, `match` reads better than a chain of `elif`s.** *(Python 3.10 and later.)*
+
+```python
+day = "SAT"
+
+match day:
+    case "SAT" | "SUN":
+        print("Weekend")
+    case "MON":
+        print("Start of the week")
+    case _:                       # _ means "anything else"
+        print("A working day")
+```
+
+| Use | When |
+|---|---|
+| `if` / `elif` | Ranges and complex conditions: `marks >= 75` |
+| `match` | One value against fixed options: a menu choice, a status code |
 
 ## 📘 Examples
 
-**Example 1 — indexing and slicing**
+**Example 1 — a simple `if`**
 
 ```python
-text = "Machine Learning"
-#       0123456789...
+temperature = 38
 
-print(len(text))       # 16
-print(text[0])         # M      first character
-print(text[-1])        # g      last character
-print(text[0:7])       # Machine   includes 0, EXCLUDES 7
-print(text[8:])        # Learning  from 8 to the end
-print(text[:7])        # Machine   from the start
+if temperature > 37.5:
+    print("You have a fever")
 ```
 
-**Example 2 — the methods you will actually use**
+**Example 2 — `if` / `else`**
 
 ```python
-messy = "  Machine Learning IS Fun!  "
+password = "abc"
 
-print(repr(messy.strip()))              # removes surrounding spaces
-print(messy.strip().lower())
-print(messy.strip().upper())
-print(messy.strip().replace("Fun", "Useful"))
-print(messy.split())                    # -> a list of words
-print(messy.strip().startswith("Machine"))
-print(messy.lower().count("n"))
-
-# THE IMMUTABILITY TRAP
-t = "hello"
-t.upper()          # returns "HELLO" - and throws it away
-print(t)           # still "hello"
-t = t.upper()      # capture it
-print(t)           # "HELLO"
+if len(password) >= 8:
+    print("Password accepted")
+else:
+    print("Password too short")
 ```
 
-**Example 3 — splitting, joining, and cleaning categories**
+**Example 3 — a grade ladder**
 
 ```python
-row = "Asha,21,Computer Science,8.45"
-name, age, course, cgpa = row.split(",")
-print(f"{name} is {age} and studies {course}")
+marks = 84
 
-words = "Python is a great language".split()
-print("-".join(words))
+if marks >= 90:
+    grade = "A"
+elif marks >= 75:
+    grade = "B"
+elif marks >= 60:
+    grade = "C"
+else:
+    grade = "F"
 
-# The real ML use: making inconsistent categories match
-raw = ["  Delhi", "delhi ", "DELHI", "Delhi"]
-cleaned = [c.strip().lower() for c in raw]
-print(raw)
-print(cleaned)          # now they all match
-print(len(set(raw)), "->", len(set(cleaned)), "distinct cities")
+print(f"Marks {marks} -> Grade {grade}")     # Grade B
 ```
 
-## ✏️ Practice
+**Example 4 — `match` on a menu choice**
 
-1. `s = "Data Science"`. Print its length, first character and last character.
-2. Print `"Data"` from that string using a slice.
-3. Convert `"  HELLO world  "` to lowercase with no surrounding spaces.
-4. Count the words in `"machine learning is fun and useful"`.
-5. `row = "Ravi,19,Physics"`. Split it and print `Ravi is 19 and studies Physics`.
+```python
+choice = "2"
+
+match choice:
+    case "1":
+        print("You chose Tea")
+    case "2":
+        print("You chose Coffee")
+    case "3":
+        print("You chose Samosa")
+    case _:
+        print("Not on the menu")
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — ticket pricing by age**
+
+```python
+age = int(input("Your age: "))
+
+if age < 5:
+    price = 0
+elif age < 18:
+    price = 80
+elif age < 60:
+    price = 150
+else:
+    price = 100
+
+print(f"Ticket price: {price}")
+```
+
+**Scenario 2 — checking exam eligibility**
+
+```python
+attendance = 72
+fees_paid = True
+
+if attendance >= 75 and fees_paid:
+    print("You may sit the exam")
+elif not fees_paid:
+    print("Please clear your fees first")
+else:
+    print(f"Attendance is {attendance}% - you need 75%")
+```
+
+**Scenario 3 — an ATM menu**
+
+```python
+option = input("1=Balance 2=Withdraw 3=Deposit: ")
+
+match option:
+    case "1":
+        print("Your balance is 5,240")
+    case "2":
+        print("How much would you like to withdraw?")
+    case "3":
+        print("Please insert your cash")
+    case _:
+        print("Invalid option - please try again")
+```
+
+## ✏️ Tasks
+
+1. Ask for a number and print whether it is positive, negative or zero.
+2. Ask for marks and print the grade using the ladder A/B/C/D/Fail.
+3. A shop gives 10% off above 1000 and 20% off above 5000. Ask for a bill and print the final amount.
+4. Ask for a day name and use `match` to print whether it is a weekend or a working day.
+5. Ask for age and whether the person has a licence, then print whether they may drive (18+ **and** licensed).
 
 <details><summary>Solutions</summary>
 
 ```python
-s = "Data Science"                                            # 1
-print(len(s), s[0], s[-1])
+# 1
+n = float(input("Enter a number: "))
+if n > 0:
+    print("Positive")
+elif n < 0:
+    print("Negative")
+else:
+    print("Zero")
 
-print(s[0:4])                                                 # 2
+# 2
+marks = float(input("Enter marks: "))
+if marks >= 90:
+    print("Grade A")
+elif marks >= 75:
+    print("Grade B")
+elif marks >= 60:
+    print("Grade C")
+elif marks >= 40:
+    print("Grade D")
+else:
+    print("Fail")
+# The strictest condition MUST come first, or every mark falls into
+# the first branch that happens to match.
 
-print("  HELLO world  ".strip().lower())                      # 3
+# 3
+bill = float(input("Bill amount: "))
+if bill > 5000:
+    discount = 0.20
+elif bill > 1000:
+    discount = 0.10
+else:
+    discount = 0.0
+print(f"You pay: {bill * (1 - discount):.2f}")
 
-print(len("machine learning is fun and useful".split()))      # 4
+# 4
+day = input("Day (MON-SUN): ").upper()
+match day:
+    case "SAT" | "SUN":
+        print("Weekend")
+    case "MON" | "TUE" | "WED" | "THU" | "FRI":
+        print("Working day")
+    case _:
+        print("Not a valid day")
 
-name, age, subject = "Ravi,19,Physics".split(",")             # 5
-print(f"{name} is {age} and studies {subject}")
+# 5
+age = int(input("Your age: "))
+has_licence = input("Do you have a licence (yes/no)? ").lower() == "yes"
+if age >= 18 and has_licence:
+    print("You may drive")
+else:
+    print("You may not drive")
 ```
 </details>
 
 ## ❓ MCQs
 
-**Q1.** In `text[0:7]`, is character 7 included?
-- (a) Yes  (b) No  (c) Only if the string is long enough  (d) Only for lists
+**Q1.** What does `elif` mean?
+- (a) "End if"  (b) "Else if" — checked only when the earlier conditions were false  (c) "Every if"  (d) "Exit if"
 
-**Q2.** `"Hello".replace("l", "L")` — does the original string change?
-- (a) Yes  (b) No, strings are immutable; it returns a new one  (c) Only if reassigned in place  (d) It raises an error
+**Q2.** In a chain of `if`/`elif`, how many branches run?
+- (a) All that are true  (b) Exactly one — the first that is true  (c) None  (d) The last one
 
-**Q3.** Why call `.strip().lower()` on category data before modelling?
-- (a) To save memory
-- (b) So `"  Delhi"`, `"delhi "` and `"DELHI"` are treated as one city
-- (c) It is required by Pandas
-- (d) To sort the values
+**Q3.** Why must `marks >= 90` come before `marks >= 40`?
+- (a) Style  (b) Python runs the FIRST true branch, so a loose condition first would catch everything  (c) It does not matter  (d) 90 is bigger
 
-**Q4.** What does `"a,b,c".split(",")` return?
-- (a) `"abc"`  (b) `["a", "b", "c"]`  (c) `("a","b","c")`  (d) `{"a","b","c"}`
+**Q4.** What does `case _:` mean in a `match`?
+- (a) An error  (b) "Anything else" — the catch-all  (c) An empty case  (d) The first case
 
-**Q5.** What does `text[-1]` give you?
-- (a) An error  (b) The first character  (c) The last character  (d) The whole string reversed
+**Q5.** When is `match` a better fit than `if`/`elif`?
+- (a) Always  (b) When comparing one value against several fixed options  (c) For ranges like `x > 10`  (d) Never
 
 <details><summary>Answers</summary>
 
-**A1 — (b) No.** A slice includes the start and **excludes** the stop, so `text[0:7]` gives seven characters, 0 to 6.
+**A1 — (b) "Else if".** It is only checked if everything above it was false.
 
-**A2 — (b).** You must capture it: `text = text.replace(...)`.
+**A2 — (b) Exactly one.** Once a branch runs, Python skips the rest of the chain.
 
-**A3 — (b).** A model treating `Delhi`, `delhi` and `DELHI` as three cities learns three weaker patterns instead of one strong one.
+**A3 — (b).** **Order matters enormously.** Write the strictest condition first.
 
-**A4 — (b) a list.** `split` cuts a string up; `join` glues a list back together.
+**A4 — (b).** The underscore is the catch-all, like `else`.
 
-**A5 — (c) the last character.** Negative indexes count backwards from the end.
+**A5 — (b).** For ranges and compound conditions, `if`/`elif` is still the right tool.
 </details>
-
-## 🎯 Tasks
-
-**Task 1 — Text analyser.** For a paragraph, print: total characters (with and without spaces), total words, **unique** words case-insensitively, the five longest words, vowel counts, and the most common word. **Then test it on text with punctuation** — does your word count still work? Fix it if not.
-
-**Task 2 — Clean the messy column.** `cities = ["  Delhi", "delhi ", "DELHI", "Mumbai", " mumbai", "Chennai", "chennai  ", "MUMBAI", "New  Delhi", "new delhi"]`. How many distinct values does Python see now? Clean them so identical cities match. How many now? Handle the **double space** in `"New  Delhi"` too. Print a count of each cleaned city.
 
 ---
 
-# 7. Functions
+## ⭐ Checkpoint Problem 3 — Even or odd
 
-🧠 **Analogy: a recipe card.** A function is instructions you write **once**, give a name, and reuse. You hand it ingredients (arguments) and it hands back a dish (the return value).
+> **Uses only:** input, numbers, `%`, conditionals.
 
-**Why it matters:** if you write the same six lines in four places and later find a bug, you must fix it four times. In a function you fix it once.
+**The problem.** Ask the user for a whole number and print whether it is even or odd. Then extend it: also say whether the number is positive, negative or zero.
+
+<details><summary>Solution</summary>
+
+```python
+number = int(input("Enter a whole number: "))
+
+# % gives the remainder. An even number divided by 2 leaves nothing over.
+if number % 2 == 0:
+    print(f"{number} is EVEN")
+else:
+    print(f"{number} is ODD")
+
+if number > 0:
+    print("It is positive")
+elif number < 0:
+    print("It is negative")
+else:
+    print("It is zero")
+```
+
+**Sample run:**
+```text
+Enter a whole number: -7
+-7 is ODD
+It is negative
+```
+
+**Why `% 2 == 0` and not `/ 2`?** `/` gives `3.5` for odd numbers and `4.0` for even ones — both are truthy, so it tells you nothing directly. `%` gives exactly `0` or `1`, which is precisely the question you are asking.
+</details>
+
+**Make it harder:**
+
+1. Also print whether the number is divisible by 3, by 5, or by both.
+2. Print the largest of three numbers the user enters.
+3. Ask for a year and print whether it is a leap year. *(A leap year is divisible by 4, except centuries, unless divisible by 400.)*
+
+<details><summary>Solution to the leap year extension</summary>
+
+```python
+year = int(input("Enter a year: "))
+
+if year % 400 == 0:
+    print(f"{year} IS a leap year")       # 2000 -> yes
+elif year % 100 == 0:
+    print(f"{year} is NOT a leap year")   # 1900 -> no
+elif year % 4 == 0:
+    print(f"{year} IS a leap year")       # 2024 -> yes
+else:
+    print(f"{year} is NOT a leap year")   # 2023 -> no
+```
+
+**Note the order.** Checking `% 400` first, then `% 100`, then `% 4` is what makes the rule work. Reverse them and 2000 gets the wrong answer.
+</details>
+
+---
+
+# 13. Loops: for and while
+
+**You met `for` briefly in Topic 9. Here is the full picture, plus `while`.**
+
+🧠 **Analogy: two kinds of repeated instruction.**
+- *"Greet every guest on this list"* — you know exactly how many. **That is a `for` loop.**
+- *"Keep stirring until it thickens"* — you do not know how many stirs. **That is a `while` loop.**
+
+## `for` — repeat once per item
+
+```python
+for fruit in ["apple", "banana", "cherry"]:
+    print(fruit)
+```
+
+**Loop over a string, and you get its characters:**
+
+```python
+for letter in "PYTHON":
+    print(letter)
+```
+
+## `range()` — counting
+
+```python
+for i in range(5):
+    print(i)                # 0 1 2 3 4  - starts at 0, STOPS BEFORE 5
+
+for i in range(1, 6):
+    print(i)                # 1 2 3 4 5
+
+for i in range(0, 10, 2):
+    print(i)                # 0 2 4 6 8  - step of 2
+
+for i in range(5, 0, -1):
+    print(i)                # 5 4 3 2 1  - counting down
+```
+
+> ⚠️ **`range(5)` gives 0, 1, 2, 3, 4 — five numbers, not reaching 5.** The same "stop is excluded" rule as slicing in Topic 7.
+
+## `enumerate()` — when you need the position too
+
+```python
+students = ["Arun", "Priya", "Ravi"]
+
+for position, name in enumerate(students):
+    print(f"{position}: {name}")           # 0: Arun, 1: Priya, ...
+
+for position, name in enumerate(students, start=1):
+    print(f"{position}. {name}")           # 1. Arun, 2. Priya, ...
+```
+
+## `while` — repeat while a condition holds
+
+```python
+count = 1
+
+while count <= 5:
+    print(count)
+    count += 1              # WITHOUT this line, the loop never ends
+```
+
+> ⚠️ **Every `while` loop must contain something that eventually makes the condition false.** Forget it and your program hangs forever. If that happens, press **Ctrl+C** to stop it.
+
+## `break` and `continue`
+
+```python
+for i in range(1, 10):
+    if i == 5:
+        break               # leave the loop entirely
+    print(i)                # 1 2 3 4
+
+for i in range(1, 6):
+    if i == 3:
+        continue            # skip just this one, carry on
+    print(i)                # 1 2 4 5
+```
+
+## Building up a result
+
+**The pattern you will use constantly:**
+
+```python
+marks = [78, 92, 45, 88]
+
+total = 0                   # start with an empty result
+for m in marks:
+    total += m              # add each item to it
+print(total)                # 303
+```
+
+```python
+names = ["arun", "priya"]
+
+capitalised = []            # start with an empty list
+for n in names:
+    capitalised.append(n.title())
+print(capitalised)          # ['Arun', 'Priya']
+```
+
+## Nested loops
+
+**A loop inside a loop. The inner one runs completely for each turn of the outer one.**
+
+```python
+for i in range(1, 4):
+    for j in range(1, 4):
+        print(f"{i} x {j} = {i * j}")
+    print("---")
+```
 
 ## 📘 Examples
 
-**Example 1 — defining, calling, returning**
+**Example 1 — `for` over a list**
+
+```python
+for city in ["Kochi", "Delhi", "Mumbai"]:
+    print(f"Welcome to {city}")
+```
+
+**Example 2 — `range` to count**
+
+```python
+for i in range(1, 6):
+    print(f"{i} squared is {i ** 2}")
+```
+
+**Example 3 — `while` until a condition changes**
+
+```python
+balance = 1000
+year = 0
+
+while balance < 2000:
+    balance = balance * 1.10       # 10% growth each year
+    year += 1
+
+print(f"It took {year} years to double")     # 8 years
+```
+
+**Example 4 — `enumerate` for a numbered list**
+
+```python
+tasks = ["wash", "cook", "study"]
+
+for number, task in enumerate(tasks, start=1):
+    print(f"{number}. {task}")
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — a canteen bill**
+
+```python
+prices = [15, 25, 20, 45]
+
+total = 0
+for p in prices:
+    total += p
+
+print(f"Items: {len(prices)}")
+print(f"Total: {total}")
+print(f"With 5% tax: {total * 1.05:.2f}")
+```
+
+**Scenario 2 — counting how many students passed**
+
+```python
+marks = [78, 32, 92, 45, 38, 61]
+
+passed = 0
+failed = 0
+for m in marks:
+    if m >= 40:
+        passed += 1
+    else:
+        failed += 1
+
+print(f"Passed: {passed}, Failed: {failed}")     # Passed: 4, Failed: 2
+```
+
+**Scenario 3 — a password retry loop**
+
+```python
+correct = "python123"
+attempts = 0
+
+while attempts < 3:
+    guess = input("Password: ")
+    if guess == correct:
+        print("Access granted")
+        break
+    attempts += 1
+    print(f"Wrong. {3 - attempts} attempts remaining.")
+else:
+    # This runs only if the while ended WITHOUT a break
+    print("Account locked")
+```
+
+## ✏️ Tasks
+
+1. Print the numbers 1 to 10, each on its own line.
+2. Given `[12, 45, 7, 89, 23]`, use a loop to find the total and the average without using `sum()`.
+3. Print the 7 times table from 7×1 to 7×10.
+4. Count how many vowels appear in a word the user types.
+5. Use a `while` loop to keep asking for a number until the user enters one above 100.
+
+<details><summary>Solutions</summary>
+
+```python
+# 1
+for i in range(1, 11):
+    print(i)
+
+# 2
+numbers = [12, 45, 7, 89, 23]
+total = 0
+for n in numbers:
+    total += n
+print(f"Total: {total}")                       # 176
+print(f"Average: {total / len(numbers):.2f}")  # 35.20
+
+# 3
+for i in range(1, 11):
+    print(f"7 x {i} = {7 * i}")
+
+# 4
+word = input("Enter a word: ").lower()
+vowel_count = 0
+for letter in word:
+    if letter in "aeiou":
+        vowel_count += 1
+print(f"'{word}' has {vowel_count} vowels")
+
+# 5
+number = 0
+while number <= 100:
+    number = int(input("Enter a number above 100: "))
+print(f"Thank you - {number} is above 100")
+```
+</details>
+
+## ❓ MCQs
+
+**Q1.** What does `range(5)` produce?
+- (a) 1, 2, 3, 4, 5  (b) 0, 1, 2, 3, 4  (c) 0, 1, 2, 3, 4, 5  (d) 5
+
+**Q2.** When should you use `while` instead of `for`?
+- (a) Always  (b) When you do not know in advance how many repeats you need  (c) For lists  (d) Never
+
+**Q3.** What does `break` do?
+- (a) Skips one turn  (b) Leaves the loop entirely  (c) Restarts the loop  (d) Causes an error
+
+**Q4.** What does `continue` do?
+- (a) Leaves the loop  (b) Skips the rest of this turn and moves to the next  (c) Restarts from the beginning  (d) Nothing
+
+**Q5.** What is wrong with `while count <= 5: print(count)`?
+- (a) Nothing  (b) `count` never changes, so it loops forever  (c) The syntax is invalid  (d) `while` needs `range`
+
+<details><summary>Answers</summary>
+
+**A1 — (b) 0, 1, 2, 3, 4.** Five numbers, starting at 0 and stopping before 5.
+
+**A2 — (b).** Known count → `for`. Unknown → `while`.
+
+**A3 — (b) Leaves the loop entirely.**
+
+**A4 — (b).** It skips to the next turn rather than leaving.
+
+**A5 — (b) An infinite loop.** It needs `count += 1` inside. Press **Ctrl+C** to escape one.
+</details>
+
+---
+
+## ⭐ Checkpoint Problem 4 — Multiplication table
+
+> **Uses only:** input, loops, f-strings.
+
+**The problem.** Ask the user for a number and print its multiplication table from 1 to 10, neatly aligned.
+
+<details><summary>Solution</summary>
+
+```python
+number = int(input("Which table would you like? "))
+
+print(f"\nMultiplication table for {number}")
+print("-" * 22)
+
+for i in range(1, 11):
+    print(f"{number:>3} x {i:>2} = {number * i:>4}")
+```
+
+**Sample run:**
+```text
+Which table would you like? 7
+
+Multiplication table for 7
+----------------------
+  7 x  1 =    7
+  7 x  2 =   14
+  7 x  3 =   21
+...
+  7 x 10 =   70
+```
+
+**The `:>3` and `:>4` right-align each number in a fixed width**, which is what makes the columns line up.
+</details>
+
+**Make it harder:**
+
+1. Print tables for every number from 1 to 5 using a nested loop.
+2. Ask for a start and an end, and print the table only for that range.
+3. Print a full 10×10 grid, with each row on one line.
+
+<details><summary>Solution to the 10×10 grid</summary>
+
+```python
+# The header row
+print("    ", end="")
+for col in range(1, 11):
+    print(f"{col:>4}", end="")
+print()
+print("    " + "-" * 40)
+
+# One line per row
+for row in range(1, 11):
+    print(f"{row:>3}|", end="")
+    for col in range(1, 11):
+        print(f"{row * col:>4}", end="")
+    print()                     # end the line after the inner loop finishes
+```
+
+**`end=""` stops `print` from starting a new line**, so the inner loop builds one row across. The bare `print()` afterwards ends it.
+</details>
+
+---
+
+# 14. Functions
+
+**A function is a named piece of code you can run whenever you like.**
+
+🧠 **Analogy: a recipe you have written down.** You write it once. After that you say *"make chai"* rather than repeating all the steps. **And if you improve the recipe, every future cup improves — you fix it in one place.**
+
+## Defining and calling
+
+```python
+def greet():                     # define it
+    print("Hello!")
+
+greet()                          # call it - now it runs
+greet()                          # call it again
+```
+
+**`def` starts the definition, the name follows, then `()` and a `:`. The body is indented** — the same rule as everything else.
+
+## Parameters — giving the function information
 
 ```python
 def greet(name):
-    """Print a greeting. This text is the docstring."""
     print(f"Hello, {name}!")
 
-greet("Asha")           # `def` only DEFINES; calling is what runs it
-
-def calculate_percentage(obtained, total=100):
-    """Return the percentage, rounded to 2 places."""
-    return round((obtained / total) * 100, 2)
-
-result = calculate_percentage(87)
-print(result)
-print(calculate_percentage(87, total=120))
-
-# print() SHOWS a value. return HANDS IT BACK so you can keep using it.
-print(calculate_percentage(45) * 2)
+greet("Priya")            # Hello, Priya!
+greet("Arun")             # Hello, Arun!
 ```
 
-**Example 2 — defaults and keyword arguments**
+## `return` — getting an answer back
 
 ```python
-def student_report(name, marks, passing=40, show_grade=True):
-    status = "PASS" if marks >= passing else "FAIL"
-    line = f"{name:<10} {marks:>3}  {status}"
-    if show_grade:
-        grade = "A" if marks >= 90 else "B" if marks >= 75 else "C"
-        line += f"  grade {grade}"
-    return line
+def add(a, b):
+    return a + b
 
-print(student_report("Asha", 87))                      # positional
-print(student_report(name="Ravi", marks=35))           # keyword - clearer
-print(student_report("Meera", 92, show_grade=False))
+result = add(3, 5)
+print(result)             # 8
 ```
 
-**Example 3 — small functions that build on each other**
+> ⚠️ **`print` shows a value; `return` hands it back.** A function that prints cannot have its answer used in a calculation. **A function that returns can.**
 
 ```python
-def average(numbers):
-    """Return the average, or 0 for an empty list."""
-    if not numbers:
-        return 0
-    return sum(numbers) / len(numbers)
+def show(a, b):
+    print(a + b)          # displays it, gives back None
 
-def grade_from(mark):
-    if mark >= 90: return "A"
-    if mark >= 75: return "B"
-    if mark >= 60: return "C"
+def give(a, b):
+    return a + b          # hands the value back
+
+total = give(2, 3) * 10   # 50 - works
+print(total)
+
+print(show(2, 3))         # prints 5, then prints None - THAT is what it gave back
+# total = show(2, 3) * 10 # TypeError: unsupported operand type(s) for *:
+                          # 'NoneType' and 'int'.  Uncomment it to see.
+```
+
+## Default values
+
+```python
+def greet(name, greeting="Hello"):
+    print(f"{greeting}, {name}!")
+
+greet("Priya")                        # Hello, Priya!
+greet("Priya", "Good morning")        # Good morning, Priya!
+```
+
+**Parameters with defaults must come after those without.**
+
+## Keyword arguments
+
+```python
+def describe(name, age, city):
+    print(f"{name}, {age}, from {city}")
+
+describe("Priya", 20, "Kochi")                      # by position
+describe(age=20, city="Kochi", name="Priya")        # by name - order free
+```
+
+## Returning several values
+
+```python
+def statistics(numbers):
+    return min(numbers), max(numbers), sum(numbers) / len(numbers)
+
+low, high, average = statistics([78, 92, 45])       # a tuple, unpacked
+print(f"{low}, {high}, {average:.2f}")
+```
+
+**This works because of tuple unpacking from Topic 10.**
+
+## `*args` and `**kwargs` — any number of arguments
+
+```python
+def total(*numbers):             # collects them into a TUPLE
+    return sum(numbers)
+
+print(total(1, 2))               # 3
+print(total(1, 2, 3, 4, 5))      # 15
+
+def show_details(**details):     # collects them into a DICTIONARY
+    for key, value in details.items():
+        print(f"{key}: {value}")
+
+show_details(name="Priya", age=20, city="Kochi")
+```
+
+## Scope — where a variable lives
+
+```python
+def my_function():
+    inside = "I only exist in here"
+    print(inside)
+
+my_function()
+# print(inside)          # NameError - it does not exist out here
+```
+
+> **A variable created inside a function is invisible outside it.** This is a feature: it stops functions accidentally interfering with each other.
+
+## Docstrings
+
+```python
+def calculate_area(length, width):
+    """Return the area of a rectangle in square metres."""
+    return length * width
+
+print(calculate_area.__doc__)
+```
+
+## Lambda — a tiny one-line function
+
+```python
+square = lambda x: x ** 2
+print(square(5))          # 25
+
+# The same thing, written normally - usually clearer
+def square(x):
+    return x ** 2
+```
+
+**Use `lambda` only for very short throwaway functions**, typically passed to `sorted()` or similar.
+
+## 📘 Examples
+
+**Example 1 — no parameters**
+
+```python
+def print_banner():
+    print("=" * 30)
+    print("  CAMPUS CAFE")
+    print("=" * 30)
+
+print_banner()
+```
+
+**Example 2 — parameters and a return**
+
+```python
+def area_of_rectangle(length, width):
+    return length * width
+
+print(area_of_rectangle(5, 3))      # 15
+print(area_of_rectangle(2.5, 4))    # 10.0
+```
+
+**Example 3 — a default value**
+
+```python
+def apply_discount(price, percent=10):
+    return price * (1 - percent / 100)
+
+print(apply_discount(1000))         # 900.0  - uses the default
+print(apply_discount(1000, 25))     # 750.0
+```
+
+**Example 4 — returning several values**
+
+```python
+def analyse(numbers):
+    return min(numbers), max(numbers), sum(numbers) / len(numbers)
+
+low, high, avg = analyse([45, 78, 92, 61])
+print(f"Low {low}, High {high}, Average {avg:.2f}")
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — a reusable grade calculator**
+
+```python
+def grade_for(marks):
+    """Return the letter grade for a mark out of 100."""
+    if marks >= 90:
+        return "A"
+    elif marks >= 75:
+        return "B"
+    elif marks >= 60:
+        return "C"
+    elif marks >= 40:
+        return "D"
     return "F"
 
-def class_report(students):
-    all_avgs = []
-    for name, marks in students.items():
-        avg = average(marks)
-        all_avgs.append(avg)
-        print(f"  {name:<10} {avg:>6.1f}  {grade_from(avg)}")
-    print(f"  {'CLASS':<10} {average(all_avgs):>6.1f}")
-
-class_report({"Asha": [78, 92, 65], "Ravi": [88, 74, 91]})
+for m in [95, 82, 67, 45, 30]:
+    print(f"{m:>3} -> {grade_for(m)}")
 ```
 
-## ✏️ Practice
+**Scenario 2 — a bill calculator used everywhere in a shop**
 
-1. Write `square(n)` returning `n` squared. Test on 7.
-2. Write `is_even(n)` returning `True`/`False`. Test on 4 and 7.
-3. Write `bigger(a, b)` returning the larger, **without** `max()`.
-4. Write `greet(name, greeting="Hello")` with a default. Call it both ways.
-5. Write `count_vowels(text)` returning how many vowels are in a string.
+```python
+def final_price(amount, tax_percent=18, discount_percent=0):
+    """Apply a discount, then tax, and return the amount to pay."""
+    after_discount = amount * (1 - discount_percent / 100)
+    return after_discount * (1 + tax_percent / 100)
+
+print(f"{final_price(1000):.2f}")                        # 1180.00
+print(f"{final_price(1000, discount_percent=10):.2f}")   # 1062.00
+```
+
+**Scenario 3 — cleaning up messy names**
+
+```python
+def clean_name(raw):
+    """Strip surrounding spaces and fix the capitalisation."""
+    return raw.strip().title()
+
+messy = ["  priya sharma ", "ARUN KUMAR", "  ravi  "]
+for name in messy:
+    print(f"[{clean_name(name)}]")
+```
+
+## ✏️ Tasks
+
+1. Write `celsius_to_fahrenheit(c)` that returns the converted temperature. Test it on three values.
+2. Write `is_even(n)` that returns `True` or `False`, and use it on a list of numbers.
+3. Write `calculate_bill(price, quantity, tax=18)` returning the total. Call it with and without the tax argument.
+4. Write `name_stats(full_name)` returning the number of words, the number of letters, and the initials.
+5. Write `count_vowels(text)` that returns how many vowels a piece of text has.
 
 <details><summary>Solutions</summary>
 
 ```python
-def square(n): return n ** 2                                  # 1
-print(square(7))
+# 1
+def celsius_to_fahrenheit(c):
+    """Convert Celsius to Fahrenheit."""
+    return (c * 9 / 5) + 32
 
-def is_even(n): return n % 2 == 0                             # 2
-print(is_even(4), is_even(7))
+for t in [0, 37, 100]:
+    print(f"{t}C = {celsius_to_fahrenheit(t):.1f}F")
 
-def bigger(a, b):                                             # 3
-    if a > b:
-        return a
-    return b
-print(bigger(10, 25))
+# 2
+def is_even(n):
+    return n % 2 == 0
 
-def greet(name, greeting="Hello"):                            # 4
-    return f"{greeting}, {name}!"
-print(greet("Asha")); print(greet("Ravi", "Good morning"))
+for n in [4, 7, 10, 13]:
+    print(f"{n}: {is_even(n)}")
 
-def count_vowels(text):                                       # 5
-    return sum(1 for ch in text.lower() if ch in "aeiou")
-print(count_vowels("Machine Learning"))
+# 3
+def calculate_bill(price, quantity, tax=18):
+    return price * quantity * (1 + tax / 100)
+
+print(f"{calculate_bill(150, 3):.2f}")            # 531.00
+print(f"{calculate_bill(150, 3, tax=5):.2f}")     # 472.50
+
+# 4
+def name_stats(full_name):
+    parts = full_name.strip().split()
+    letters = len(full_name.replace(" ", ""))
+    initials = ""
+    for p in parts:
+        initials += p[0].upper() + "."
+    return len(parts), letters, initials
+
+words, letters, initials = name_stats("priya raj sharma")
+print(f"{words} words, {letters} letters, initials {initials}")
+
+# 5
+def count_vowels(text):
+    count = 0
+    for letter in text.lower():
+        if letter in "aeiou":
+            count += 1
+    return count
+
+print(count_vowels("Machine Learning"))           # 6
 ```
 </details>
 
 ## ❓ MCQs
 
-**Q1.** What is the difference between `print()` and `return` inside a function?
-- (a) None
-- (b) `print` shows a value; `return` hands it back so the caller can use it
-- (c) `return` shows a value; `print` hands it back
-- (d) `return` only works with numbers
+**Q1.** What keyword defines a function?
+- (a) `function`  (b) `def`  (c) `func`  (d) `define`
 
-**Q2.** Does `def greet(name):` run the function?
-- (a) Yes, immediately  (b) No, it only defines it  (c) Only if it has a docstring  (d) Only inside a loop
+**Q2.** What is the difference between `print` and `return`?
+- (a) None  (b) `print` displays a value; `return` hands it back so it can be used  (c) `return` displays it  (d) `print` is faster
 
-**Q3.** In `def f(x, total=100):`, what is `total=100`?
-- (a) A required argument  (b) A default argument  (c) A return value  (d) A global variable
+**Q3.** What does a function return if it has no `return` statement?
+- (a) `0`  (b) `None`  (c) An error  (d) An empty string
 
-**Q4.** Why prefer `student_report(name="Ravi", marks=35)` over `student_report("Ravi", 35)`?
-- (a) It runs faster
-- (b) It is self-documenting and order-independent
-- (c) Positional arguments are deprecated
-- (d) It uses less memory
+**Q4.** In `def greet(name, greeting="Hello")`, what is `greeting`?
+- (a) Required  (b) A parameter with a default value  (c) Invalid  (d) A return value
 
-**Q5.** You have written the same six lines in four places. What should you do?
-- (a) Leave it; duplication is fine
-- (b) Copy it into a fifth place for safety
-- (c) Put it in a function, so a bug is fixed in one place
-- (d) Turn it into a class
+**Q5.** A variable created inside a function is…
+- (a) Available everywhere  (b) Only available inside that function  (c) Automatically printed  (d) Deleted immediately
 
 <details><summary>Answers</summary>
 
-**A1 — (b).** A function that only prints cannot be built upon.
+**A1 — (b) `def`.**
 
-**A2 — (b).** `def` creates the recipe card. Nothing runs until you **call** it.
+**A2 — (b).** **`total = show(2, 3) * 10` fails because `show` returned `None`.** This trips up beginners constantly.
 
-**A3 — (b) a default argument.** Callers may leave it out.
+**A3 — (b) `None`.**
 
-**A4 — (b).** With four or five arguments, positional calls become unreadable and easy to get wrong.
+**A4 — (b).** Parameters with defaults must come after those without.
 
-**A5 — (c).** Otherwise you must fix the bug four times — and you will miss one.
+**A5 — (b).** That isolation is a feature — functions cannot accidentally interfere with each other.
 </details>
-
-## 🎯 Tasks
-
-**Task 1 — Marks toolkit.** Write `average`, `highest`, `lowest` (no `max`/`min`), `grade`, `passed(marks, cutoff=40)`, then `summary(name, marks)` that uses them all, then `class_summary(students)` for `{name: [marks]}`. Give every function a docstring.
-
-**Task 2 — Temperature converter.** Write `c_to_f`, `f_to_c` (check `f_to_c(c_to_f(25)) == 25`), `describe(c)` returning Cold/Pleasant/Hot/Very Hot, a table of day/°C/°F/description using `zip`, `hottest_day(days, temps)` returning the **day name**, and `weekly_report`. **Every function should `return`, not print** — print only in the calling code.
 
 ---
 
-# 8. Classes and objects
+## ⭐ Checkpoint Problem 5 — Prime number checker
 
-🧠 **Analogy: the blueprint and the houses.**
+> **Uses only:** functions, loops, conditionals, `%`.
 
-A **class** is a blueprint. It does not exist as a thing you can live in — it describes what every house of that kind will have: rooms, doors, a roof.
+**The problem.** Write a function `is_prime(n)` that returns `True` if `n` is a prime number. Then use it to print every prime below 50.
 
-An **object** is a house built from that blueprint. You can build a hundred houses from one blueprint, and each has its **own** rooms with its own furniture in them.
+**A prime number is greater than 1 and divides evenly only by 1 and itself.**
 
-```text
-class Student:          <- the blueprint (written once)
-      │
-      ├── asha  = Student("Asha", 21)     <- an object
-      ├── ravi  = Student("Ravi", 22)     <- another object
-      └── meera = Student("Meera", 20)    <- another
+<details><summary>Solution</summary>
+
+```python
+def is_prime(n):
+    """Return True if n is a prime number."""
+    if n < 2:                    # 0, 1 and negatives are not prime
+        return False
+
+    # Try every possible divisor from 2 up to n-1.
+    for divisor in range(2, n):
+        if n % divisor == 0:     # it divided evenly, so it is NOT prime
+            return False         # return immediately - no need to keep going
+
+    return True                  # nothing divided it: it is prime
+
+
+for number in range(1, 50):
+    if is_prime(number):
+        print(number, end=" ")
+print()
 ```
 
-**Why bother?** Once you have three or four related things — a name, marks, a method that grades them — passing them around as separate variables gets messy. A class keeps the **data and the things you do to it** in one place.
+**Output:**
+```text
+2 3 5 7 11 13 17 19 23 29 31 37 41 43 47
+```
 
-> You will meet this constantly in ML without writing it yourself. `LinearRegression()` is a class; `model = LinearRegression()` builds an object; `model.fit(...)` calls one of its methods. **Recognising the pattern matters more than writing your own.**
+**Two things worth noticing:**
 
-## 📘 Examples
+1. **`return False` inside the loop stops immediately.** Once you find one divisor, the answer is settled — carrying on would be wasted work.
+2. **`return True` is outside the loop.** It only runs if the loop finished without ever finding a divisor.
+</details>
 
-**Example 1 — your first class**
+**Make it harder:**
+
+1. Make it faster: you only need to test divisors up to the square root of `n`. *(Use `int(n ** 0.5) + 1` as the range end.)*
+2. Write `next_prime(n)` returning the first prime larger than `n`.
+3. Count how many primes there are below 1000.
+
+<details><summary>Solution to the faster version</summary>
+
+```python
+def is_prime_fast(n):
+    """Return True if n is prime. Only tests divisors up to sqrt(n)."""
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:               # every other even number is out at once
+        return False
+
+    # If n has a divisor larger than its square root, it must also have
+    # a matching one SMALLER than the square root - which we would have
+    # found already. So there is no point looking any higher.
+    for divisor in range(3, int(n ** 0.5) + 1, 2):
+        if n % divisor == 0:
+            return False
+    return True
+
+
+count = 0
+for n in range(2, 1000):
+    if is_prime_fast(n):
+        count += 1
+print(f"There are {count} primes below 1000")      # 168
+```
+</details>
+
+---
+
+# 15. Classes and Objects
+
+**Everything so far has kept data and the code that works on it separate.** A class puts them together.
+
+🧠 **Analogy: a cookie cutter and the cookies.** The cutter is the **class** — one design. Each cookie you press out is an **object** — same shape, its own icing. **You define the class once; you make as many objects as you like.**
+
+## Why bother?
+
+Suppose you track three students. Without classes:
+
+```python
+name1, marks1 = "Arun", 78
+name2, marks2 = "Priya", 92
+name3, marks3 = "Ravi", 45
+```
+
+**This falls apart quickly.** Add a third field and you are editing everywhere. A class bundles the fields together and keeps the related behaviour with them.
+
+## Defining a class
 
 ```python
 class Student:
-    """A student with a name, an age, and some marks."""
+    def __init__(self, name, marks):
+        self.name = name
+        self.marks = marks
 
+
+arun = Student("Arun", 78)
+priya = Student("Priya", 92)
+
+print(arun.name)        # Arun
+print(priya.marks)      # 92
+```
+
+**Class names use `PascalCase`** — capitals, no underscores. Variables stay `snake_case`.
+
+## `__init__` and `self`
+
+**`__init__` runs automatically when you create an object.** It is where you set the starting values. The name has two underscores on each side.
+
+**`self` is the object being worked on.** When you write `arun.name`, Python passes `arun` in as `self`.
+
+```python
+class Student:
+    def __init__(self, name, marks):
+        self.name = name        # store on THIS object
+        self.marks = marks
+```
+
+> ⚠️ **`self` must be the first parameter of every method.** You never pass it yourself — Python supplies it.
+
+## Methods — functions that belong to the class
+
+```python
+class Student:
+    def __init__(self, name, marks):
+        self.name = name
+        self.marks = marks
+
+    def grade(self):                      # a METHOD
+        if self.marks >= 90:
+            return "A"
+        elif self.marks >= 75:
+            return "B"
+        elif self.marks >= 40:
+            return "C"
+        return "F"
+
+    def has_passed(self):
+        return self.marks >= 40
+
+
+arun = Student("Arun", 78)
+print(arun.grade())          # B
+print(arun.has_passed())     # True
+```
+
+**A method is just a function that lives inside the class and takes `self` first.**
+
+## Properties (attributes) and methods
+
+| | What it is | Example |
+|---|---|---|
+| **Attribute** | A piece of data on the object | `arun.name` |
+| **Method** | Something the object can do | `arun.grade()` |
+
+**Attributes have no brackets; methods do.**
+
+```python
+arun = Student("Arun", 78)         # from the class defined just above
+
+print(arun.name)     # attribute - no brackets
+print(arun.grade())  # method    - brackets
+```
+
+**Attributes can be changed:**
+
+```python
+arun.marks = 85
+print(arun.grade())    # B - recalculated from the new value
+```
+
+> These two blocks continue from the `Student` class above. If you are running
+> them on their own, define the class first.
+
+## `__str__` — how the object prints
+
+```python
+class Student:
+    def __init__(self, name, marks):
+        self.name = name
+        self.marks = marks
+
+    def __str__(self):
+        return f"{self.name} ({self.marks} marks)"
+
+
+arun = Student("Arun", 78)
+print(arun)            # Arun (78 marks)   - instead of an ugly memory address
+```
+
+## A complete, useful class
+
+```python
+class BankAccount:
+    def __init__(self, holder, balance=0):
+        self.holder = holder
+        self.balance = balance
+
+    def deposit(self, amount):
+        if amount <= 0:
+            return "Deposit must be positive"
+        self.balance += amount
+        return f"Deposited {amount}. Balance: {self.balance}"
+
+    def withdraw(self, amount):
+        if amount > self.balance:
+            return "Insufficient funds"
+        self.balance -= amount
+        return f"Withdrew {amount}. Balance: {self.balance}"
+
+    def __str__(self):
+        return f"{self.holder}: {self.balance}"
+
+
+account = BankAccount("Priya", 1000)
+print(account.deposit(500))       # Deposited 500. Balance: 1500
+print(account.withdraw(2000))     # Insufficient funds
+print(account)                    # Priya: 1500
+```
+
+**Notice what the class gives you:** the balance and the rules that protect it live together. **Nothing outside can withdraw more than the balance**, because the check sits inside `withdraw`.
+
+## Inheritance — one class built on another
+
+```python
+class Person:
     def __init__(self, name, age):
-        # __init__ runs automatically when you build an object.
-        # `self` is the object being built - "this particular student".
-        self.name = name        # these are ATTRIBUTES:
-        self.age = age          # data belonging to THIS object
-        self.marks = []
+        self.name = name
+        self.age = age
+
+    def introduce(self):
+        return f"I am {self.name}, {self.age} years old"
+
+
+class Student(Person):                   # Student INHERITS from Person
+    def __init__(self, name, age, course):
+        super().__init__(name, age)      # run Person's __init__ first
+        self.course = course
+
+    def introduce(self):                 # replace the inherited version
+        return f"{super().introduce()} and I study {self.course}"
+
+
+p = Person("Ravi", 45)
+s = Student("Priya", 20, "B.Tech")
+print(p.introduce())     # I am Ravi, 45 years old
+print(s.introduce())     # I am Priya, 20 years old and I study B.Tech
+```
+
+## Why this matters for the rest of the course
+
+**Every scikit-learn model you meet from Session 4 onwards is an object of a class.** When you write:
+
+```python
+# This is Session 4 code - it will not run yet. Read it for the SHAPE.
+model = RandomForestClassifier(n_estimators=100)   # __init__ runs
+model.fit(X_train, y_train)                        # a method
+model.predict(X_test)                              # another method
+model.feature_importances_                         # an attribute
+```
+
+**you are doing exactly what you just did with `BankAccount`.** Here is the shape, in miniature:
+
+```python
+class SimpleAverager:
+    """Predicts the average of whatever it was trained on."""
+
+    def __init__(self):
+        self.prediction = None            # nothing learned yet
+
+    def fit(self, y):
+        """Learn from the data."""
+        self.prediction = sum(y) / len(y)
+        return self                       # so you can chain .fit().predict()
+
+    def predict(self, n):
+        """Predict for n new items."""
+        if self.prediction is None:
+            raise ValueError("Call fit() before predict()")
+        return [self.prediction] * n
+
+
+model = SimpleAverager()
+model.fit([10, 20, 30, 40])
+print(model.predict(3))         # [25.0, 25.0, 25.0]
+```
+
+> **That is the entire scikit-learn pattern.** Create with settings, `fit` to learn, `predict` to use. Every model in Sessions 4 to 8 follows it.
+
+## 📘 Examples
+
+**Example 1 — the simplest useful class**
+
+```python
+class Dog:
+    def __init__(self, name, breed):
+        self.name = name
+        self.breed = breed
+
+    def bark(self):
+        return f"{self.name} says woof!"
+
+
+d = Dog("Bruno", "Labrador")
+print(d.name)       # Bruno
+print(d.bark())     # Bruno says woof!
+```
+
+**Example 2 — several objects from one class**
+
+```python
+class Rectangle:
+    def __init__(self, length, width):
+        self.length = length
+        self.width = width
+
+    def area(self):
+        return self.length * self.width
+
+    def perimeter(self):
+        return 2 * (self.length + self.width)
+
+
+for r in [Rectangle(5, 3), Rectangle(10, 2)]:
+    print(f"Area {r.area()}, perimeter {r.perimeter()}")
+```
+
+**Example 3 — attributes can change**
+
+```python
+class Counter:
+    def __init__(self):
+        self.count = 0
+
+    def increment(self):
+        self.count += 1
+        return self.count
+
+
+c = Counter()
+c.increment()
+c.increment()
+print(c.count)      # 2
+```
+
+**Example 4 — `__str__` for readable output**
+
+```python
+class Book:
+    def __init__(self, title, author, price):
+        self.title = title
+        self.author = author
+        self.price = price
+
+    def __str__(self):
+        return f"'{self.title}' by {self.author} - {self.price}"
+
+
+print(Book("Python Basics", "R. Nair", 450))
+```
+
+## 🌍 Scenarios
+
+**Scenario 1 — a library book that can be borrowed**
+
+```python
+class LibraryBook:
+    def __init__(self, title, copies):
+        self.title = title
+        self.copies = copies
+
+    def borrow(self):
+        if self.copies == 0:
+            return f"'{self.title}' is not available"
+        self.copies -= 1
+        return f"Borrowed '{self.title}'. {self.copies} left"
+
+    def return_book(self):
+        self.copies += 1
+        return f"Returned '{self.title}'. {self.copies} available"
+
+
+book = LibraryBook("Python Basics", 2)
+print(book.borrow())        # 1 left
+print(book.borrow())        # 0 left
+print(book.borrow())        # not available
+print(book.return_book())   # 1 available
+```
+
+**Scenario 2 — a student with several marks**
+
+```python
+class Student:
+    def __init__(self, name):
+        self.name = name
+        self.marks = []                    # start with no marks
 
     def add_mark(self, mark):
-        """A METHOD: a function that belongs to the class."""
         self.marks.append(mark)
 
     def average(self):
@@ -1006,208 +3969,200 @@ class Student:
             return 0
         return sum(self.marks) / len(self.marks)
 
+    def __str__(self):
+        return f"{self.name}: {len(self.marks)} subjects, average {self.average():.2f}"
 
-asha = Student("Asha", 21)        # build an object from the blueprint
-ravi = Student("Ravi", 22)        # a second, completely separate object
 
-asha.add_mark(78)
-asha.add_mark(92)
-ravi.add_mark(55)
-
-print(asha.name, asha.average())   # Asha 85.0
-print(ravi.name, ravi.average())   # Ravi 55.0
-print(asha.marks, ravi.marks)      # separate lists - they do not share
+s = Student("Priya")
+s.add_mark(92)
+s.add_mark(78)
+s.add_mark(85)
+print(s)                    # Priya: 3 subjects, average 85.00
 ```
 
-**Example 2 — `__str__`, so printing an object is readable**
+**Scenario 3 — a shopping cart**
 
 ```python
-class Book:
-    def __init__(self, title, author, pages):
-        self.title = title
-        self.author = author
-        self.pages = pages
+class Cart:
+    def __init__(self):
+        self.items = {}
+
+    def add(self, item, price, quantity=1):
+        self.items[item] = self.items.get(item, 0) + quantity
+        self.prices = getattr(self, "prices", {})
+        self.prices[item] = price
+
+    def total(self):
+        return sum(self.prices[i] * q for i, q in self.items.items())
 
     def __str__(self):
-        """What print() should show for this object."""
-        return f"'{self.title}' by {self.author} ({self.pages}p)"
-
-    def is_long(self):
-        return self.pages > 300
+        return f"Cart with {len(self.items)} items, total {self.total()}"
 
 
-b = Book("Python Basics", "Smith", 420)
-print(b)              # 'Python Basics' by Smith (420p)
-print(b.is_long())    # True
-
-# Without __str__ you would get something like:
-#   <__main__.Book object at 0x10f3c2d50>
+cart = Cart()
+cart.add("tea", 15, 2)
+cart.add("samosa", 20, 3)
+print(cart)                 # Cart with 2 items, total 90
 ```
 
-**Example 3 — the pattern you already use in scikit-learn**
+## ✏️ Tasks
 
-```python
-class SimpleAverager:
-    """A deliberately tiny model, to show the shape of the sklearn API."""
-
-    def __init__(self):
-        self.prediction = None      # nothing learned yet
-
-    def fit(self, y):
-        """Learn from data - here, just remember the average."""
-        self.prediction = sum(y) / len(y)
-        return self                 # sklearn returns self so you can chain
-
-    def predict(self, n):
-        """Use what was learned."""
-        if self.prediction is None:
-            raise ValueError("Call fit() before predict()")
-        return [self.prediction] * n
-
-
-model = SimpleAverager()            # 1. create, with settings
-model.fit([10, 20, 30, 40])         # 2. learn from data
-print(model.predict(3))             # 3. predict -> [25.0, 25.0, 25.0]
-
-# This is EXACTLY the shape of every scikit-learn model you will meet:
-#   model = LinearRegression()
-#   model.fit(X_train, y_train)
-#   model.predict(X_test)
-```
-
-## ✏️ Practice
-
-1. Write a class `Dog` with `name` and `breed`, and a method `bark()` printing `"<name> says Woof!"`. Create two dogs and bark both.
-2. Add a `Rectangle` class with `width` and `height`, and methods `area()` and `perimeter()`.
-3. Add `__str__` to `Rectangle` so `print(r)` shows `Rectangle 3x4, area 12`.
-4. Give `Rectangle` a method `is_square()` returning `True`/`False`.
-5. Create a `BankAccount` class with `deposit(amount)`, `withdraw(amount)` and `balance`. **Refuse a withdrawal that would go below zero**, and print a message instead.
+1. Write a `Circle` class with a radius, and methods `area()` and `circumference()`.
+2. Write a `BankAccount` class that refuses to withdraw more than the balance.
+3. Write a `Student` class storing a name and a list of marks, with `average()` and `grade()` methods.
+4. Add a `__str__` to your `Student` class so `print(student)` shows something readable.
+5. Write a `Person` class and a `Teacher` class that inherits from it, adding a subject.
 
 <details><summary>Solutions</summary>
 
 ```python
-class Dog:                                                    # 1
-    def __init__(self, name, breed):
-        self.name = name
-        self.breed = breed
-    def bark(self):
-        print(f"{self.name} says Woof!")
+# 1
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
 
-Dog("Rex", "Labrador").bark()
-Dog("Bruno", "Beagle").bark()
-
-
-class Rectangle:                                              # 2, 3, 4
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
     def area(self):
-        return self.width * self.height
-    def perimeter(self):
-        return 2 * (self.width + self.height)
-    def is_square(self):
-        return self.width == self.height
-    def __str__(self):
-        return f"Rectangle {self.width}x{self.height}, area {self.area()}"
+        return 3.14159 * self.radius ** 2
 
-r = Rectangle(3, 4)
-print(r, r.perimeter(), r.is_square())
+    def circumference(self):
+        return 2 * 3.14159 * self.radius
 
+c = Circle(7)
+print(f"Area {c.area():.2f}, circumference {c.circumference():.2f}")
 
-class BankAccount:                                            # 5
-    def __init__(self, owner, balance=0):
-        self.owner = owner
+# 2
+class BankAccount:
+    def __init__(self, holder, balance=0):
+        self.holder = holder
         self.balance = balance
-    def deposit(self, amount):
-        self.balance += amount
-        return self.balance
+
     def withdraw(self, amount):
         if amount > self.balance:
-            print(f"Refused: balance is {self.balance}, cannot withdraw {amount}")
-            return self.balance
+            return "Insufficient funds"
         self.balance -= amount
-        return self.balance
+        return f"Balance now {self.balance}"
 
-acc = BankAccount("Asha", 100)
-acc.deposit(50)
-acc.withdraw(500)      # refused
-print(acc.balance)     # 150
+a = BankAccount("Priya", 1000)
+print(a.withdraw(2000))       # Insufficient funds
+print(a.withdraw(400))        # Balance now 600
+
+# 3, 4
+class Student:
+    def __init__(self, name):
+        self.name = name
+        self.marks = []
+
+    def add_mark(self, mark):
+        self.marks.append(mark)
+
+    def average(self):
+        return sum(self.marks) / len(self.marks) if self.marks else 0
+
+    def grade(self):
+        avg = self.average()
+        if avg >= 90: return "A"
+        if avg >= 75: return "B"
+        if avg >= 40: return "C"
+        return "F"
+
+    def __str__(self):
+        return f"{self.name}: average {self.average():.2f}, grade {self.grade()}"
+
+s = Student("Priya")
+s.add_mark(92); s.add_mark(78); s.add_mark(85)
+print(s)                      # Priya: average 85.00, grade B
+
+# 5
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def introduce(self):
+        return f"I am {self.name}, {self.age}"
+
+class Teacher(Person):
+    def __init__(self, name, age, subject):
+        super().__init__(name, age)
+        self.subject = subject
+
+    def introduce(self):
+        return f"{super().introduce()} and I teach {self.subject}"
+
+print(Teacher("Mrs Nair", 42, "Physics").introduce())
 ```
 </details>
 
 ## ❓ MCQs
 
 **Q1.** What is the difference between a class and an object?
-- (a) They are the same thing
-- (b) A class is the blueprint; an object is a thing built from it
-- (c) An object is the blueprint; a class is built from it
-- (d) A class holds data; an object holds functions
+- (a) None  (b) The class is the design; an object is one thing made from it  (c) An object is the design  (d) Classes are faster
 
-**Q2.** What does `__init__` do?
-- (a) Deletes the object
-- (b) Runs automatically when an object is created, to set it up
-- (c) Prints the object
-- (d) Must be called manually
+**Q2.** When does `__init__` run?
+- (a) When you call it directly  (b) Automatically, when an object is created  (c) At the end  (d) Never
 
-**Q3.** What is `self` inside a method?
-- (a) The class itself
-- (b) The particular object the method was called on
-- (c) A required but meaningless keyword
-- (d) The return value
+**Q3.** What is `self`?
+- (a) A keyword  (b) The object the method is being called on  (c) The class  (d) A parameter you pass in yourself
 
-**Q4.** `asha = Student("Asha", 21)` and `ravi = Student("Ravi", 22)`. If you do `asha.marks.append(78)`, what happens to `ravi.marks`?
-- (a) It also gets 78  (b) Nothing — each object has its own attributes  (c) An error  (d) It is cleared
+**Q4.** Which is an attribute and which is a method?
+- (a) `arun.name` is a method, `arun.grade()` is an attribute
+- (b) `arun.name` is an attribute, `arun.grade()` is a method
+- (c) Both are attributes
+- (d) Both are methods
 
-**Q5.** Why add a `__str__` method?
-- (a) It is required for every class
-- (b) So `print(obj)` shows something readable instead of a memory address
-- (c) To make the class faster
-- (d) To allow the object to be sorted
+**Q5.** `model.fit(X, y)` in scikit-learn is…
+- (a) A special ML-only syntax  (b) An ordinary method call on an object, exactly like `account.deposit(500)`  (c) A function  (d) A class
 
 <details><summary>Answers</summary>
 
-**A1 — (b).** One blueprint, many houses. `Student` is the class; `asha` and `ravi` are objects.
+**A1 — (b).** Cookie cutter and cookies. One class, as many objects as you like.
 
-**A2 — (b).** It is the setup step: it gives the new object its starting attributes.
+**A2 — (b) Automatically**, the moment you create the object.
 
-**A3 — (b).** It means "this particular object", which is how `asha.average()` knows to use *Asha's* marks and not Ravi's.
+**A3 — (b) The object being worked on.** Python passes it in; you never do.
 
-**A4 — (b) Nothing.** Each object has its own attributes. That separation is the whole point of building objects from a blueprint.
+**A4 — (b).** **Attributes have no brackets; methods do.**
 
-**A5 — (b).** Without it you get `<__main__.Book object at 0x10f3c2d50>`, which tells a reader nothing.
+**A5 — (b).** **Every scikit-learn model is an object of a class.** You have just built the same pattern yourself.
 </details>
-
-## 🎯 Tasks
-
-**Task 1 — Library system.** Write a `Book` class (title, author, ISBN, `available`) and a `Library` class holding a list of books, with methods `add_book`, `find_by_author`, `borrow(isbn)`, `return_book(isbn)` and `available_count()`. `borrow` must **return a message** handling two problems: the book does not exist, and it is already borrowed. Add a `borrower` attribute and track who has what.
-
-**Task 2 — Build a tiny model class.** Extend `SimpleAverager` into `SimpleMedianModel` with the same `fit` / `predict` shape but predicting the **median**. Then write a function that takes *any* model object and some data, calls `fit` and `predict` on it, and reports the result — **without knowing which class it was given.**
-
-> That last part is the real lesson: because both classes share the same method names, code that uses them does not care which one it got. **That is why every scikit-learn model has `fit` and `predict`** — you can swap models without rewriting anything around them.
 
 ---
 
 # ✅ Before you move on
 
-- [ ] I can create variables and print them with f-strings
-- [ ] I can explain why `"21" + 5` fails, and fix it
-- [ ] I can use `%` to test whether a number is even
-- [ ] I can index and slice a string or a list
-- [ ] I can choose between a list, a dict, a set and a tuple, and say why
-- [ ] I know why string methods must be **captured**, not just called
-- [ ] I can write an `if`/`elif`/`else` chain that behaves correctly
-- [ ] I can write a function that **returns** a value
-- [ ] I can define a class, create two objects from it, and explain why their data is separate
-- [ ] I can recognise `model = X()`, `model.fit(...)`, `model.predict(...)` as the class pattern
-- [ ] I read the **last line** of an error first
+**Topics**
 
-Anything unticked? Redo that topic's five practice exercises.
+- [ ] I can write correctly indented Python and know why indentation matters
+- [ ] I write comments that explain *why*, not *what*
+- [ ] I can create variables and follow the `snake_case` convention
+- [ ] I know `int`, `float`, `str` and `bool`, and how to convert between them
+- [ ] I can use `+ - * / // % **` and know that `%` tests for even numbers
+- [ ] I know `input()` always returns a string, and I convert it
+- [ ] I use f-strings, including `:.2f` and alignment
+- [ ] I can index and slice strings, and I know they are immutable
+- [ ] I can use every comparison, logical and assignment operator
+- [ ] I can create, access, change, add to and remove from a list
+- [ ] I know when to use a tuple and when to use a set
+- [ ] I can use a dictionary, including `.get()` and `.items()`
+- [ ] I can write `if` / `elif` / `else` in the right order, and use `match`
+- [ ] I can write `for` and `while` loops, with `break` and `continue`
+- [ ] I can write functions with parameters, defaults and return values
+- [ ] I know the difference between `print` and `return`
+- [ ] I can write a class with `__init__`, `self`, attributes and methods
+- [ ] **I understand that `model.fit()` is just a method call on an object**
+
+**Checkpoint problems**
+
+- [ ] ⭐ 1 — Rectangle area
+- [ ] ⭐ 2 — Initials maker
+- [ ] ⭐ 3 — Even or odd
+- [ ] ⭐ 4 — Multiplication table
+- [ ] ⭐ 5 — Prime number checker
 
 ## More practice
 
 | Where | What |
 |---|---|
 | [Notebook](../notebooks/session-01-python-refresher.ipynb) | Every example above, runnable |
-| [Scenario worksheets](../notebooks/00c_python_scenarios.ipynb) | Ten real-world problems, task by task |
-| [Python drills](https://github.com/tech4alltraining/aiml/blob/main/python-internship/Python_Exercise1.md) | Topic-by-topic exercises |
-| [W3Schools Python](https://www.w3schools.com/python/) | Reference with a try-it editor |
+| [Exercises & assignments](../exercises-assignments.md) | Longer graded work |
+| [Session 2 — NumPy & Pandas](session-02-numpy-pandas.md) | Where this all starts paying off |
