@@ -4,10 +4,33 @@
 
 | Related | For |
 |---|---|
-| [Student Handbook](student-handbook.md) | The concepts these exercises practise |
+| [Sessions](sessions/) | The course itself — concepts, examples, MCQs and tasks |
 | [Notebooks](notebooks) | Runnable versions of the demos |
 | [Streamlit Apps](tutorials/apps/streamlit-apps-collection.md) | 15 apps, each with its own exercises |
 | [Setup Guide](setup-guide.md) · [Troubleshooting](troubleshooting.md) | Getting unstuck |
+
+---
+
+## Finding the right exercises for your session
+
+> **This file is grouped by module; the course runs as twelve sessions.** Each session already has its own practice exercises, MCQs and tasks built in — use this file for **extra** drill and for the graded assignments.
+
+| You have just finished | Do the exercises in |
+|---|---|
+| [Session 1 — Python Refresher](sessions/session-01-python-refresher.md) | Module 0 · Module 1 (Python parts) |
+| [Session 2 — NumPy & Pandas](sessions/session-02-numpy-pandas.md) | Module 1 |
+| [Session 3 — Visualisation & Preprocessing](sessions/session-03-visualisation-preprocessing.md) | Module 2 (visualisation, preprocessing) |
+| [Session 4 — Intro to ML & AI](sessions/session-04-intro-ml-ai.md) | Module 2 (concepts) |
+| [Session 5 — Supervised Learning](sessions/session-05-supervised-learning.md) | Module 2 (regression, classification, metrics) |
+| [Session 6 — Augmentation & Features](sessions/session-06-augmentation-features.md) | Module 3 (feature engineering, reduction) |
+| [Session 7 — Unsupervised Learning](sessions/session-07-unsupervised.md) | Module 4 (clustering) |
+| [Session 8 — Evaluation & Tuning](sessions/session-08-evaluation-tuning.md) | Module 3 (overfitting, CV, tuning) |
+| [Session 9 — Deep Learning](sessions/session-09-deep-learning.md) | Module 4 (neural networks) |
+| [Session 10 — GenAI & LLMs](sessions/session-10-genai-llms.md) | Module 4 (LLMs, prompting) |
+| [Session 11 — AI-Powered Applications](sessions/session-11-ai-apps.md) | Module 5 (apps, ML + GenAI) |
+| [Session 12 — Open Source & Responsible AI](sessions/session-12-opensource-ethics.md) | Module 5 (Hugging Face, capstone) |
+
+**The graded assignments below are unchanged.** Your instructor will tell you when each one is due.
 
 ---
 

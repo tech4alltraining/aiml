@@ -2,6 +2,35 @@
 
 **Every demo in this course, as a runnable notebook.** Open in Colab with one click, or run locally in Jupyter or VS Code.
 
+## The course — one notebook per session
+
+| # | Notebook | Topic | Needs API key? | Outputs saved? |
+|---|---|---|---|---|
+| 1 | [session-01-python-refresher.ipynb](session-01-python-refresher.ipynb) | Syntax, variables, types, strings, collections, loops, functions, classes | No | ✅ Yes |
+| 2 | [session-02-numpy-pandas.ipynb](session-02-numpy-pandas.ipynb) | NumPy, Pandas, loading data, EDA | No | ✅ Yes |
+| 3 | [session-03-visualisation-preprocessing.ipynb](session-03-visualisation-preprocessing.ipynb) | Matplotlib, Seaborn, missing values, outliers, scaling, encoding | No | ✅ Yes |
+| 4 | [session-04-intro-ml-ai.ipynb](session-04-intro-ml-ai.ipynb) | What ML is, types of ML, the workflow, ML/AI frameworks | No | ✅ Yes |
+| 5 | [session-05-supervised-learning.ipynb](session-05-supervised-learning.ipynb) | Regression, six classifiers, metrics, saving models, Streamlit | No | ✅ Yes |
+| 6 | [session-06-augmentation-features.ipynb](session-06-augmentation-features.ipynb) | Augmentation, SMOTE, feature engineering, feature reduction, PCA | No | ✅ Yes |
+| 7 | [session-07-unsupervised.ipynb](session-07-unsupervised.ipynb) | k-Means, hierarchical, DBSCAN, association rules, PCA | No | ✅ Yes |
+| 8 | [session-08-evaluation-tuning.ipynb](session-08-evaluation-tuning.ipynb) | Holdout, cross-validation, bootstrapping, overfitting, tuning | No | ✅ Yes |
+| 9 | [session-09-deep-learning.ipynb](session-09-deep-learning.ipynb) | Neural networks from scratch in NumPy, activations, backprop, optimizers | No | ✅ Yes |
+| 10 | [session-10-genai-llms.ipynb](session-10-genai-llms.ipynb) | Tokens, context, temperature, leading LLMs, prompt engineering | Optional | ✅ Yes |
+| 11 | [session-11-ai-apps.ipynb](session-11-ai-apps.ipynb) | Application patterns, retrieval & RAG, Streamlit chat, ML + GenAI | Optional | ✅ Yes |
+| 12 | [session-12-opensource-ethics.ipynb](session-12-opensource-ethics.ipynb) | Open models, Hugging Face, fairness auditing, capstone planning | No | ✅ Yes |
+
+**Every session notebook shows its outputs directly on GitHub** — charts, tables and printed results are saved inside the file, so you can read the whole lesson without running anything.
+
+**Notebooks 10 and 11 run without an API key too.** Their concept cells (tokenisation, temperature, retrieval, the ML half of the ML+GenAI pattern) execute normally; the cells that would call Gemini print the exact prompt they would send instead. Add a key to see real responses.
+
+The written guide for each session — with the exercises, MCQs and tasks — is in [`../sessions/`](../sessions/).
+
+---
+
+## Extra practice
+
+**Not part of the twelve-session path.** These cover similar ground in a different order, and are useful for revision or extra drill.
+
 | # | Notebook | Topic | Needs API key? | Outputs saved? |
 |---|---|---|---|---|
 | 00a | [00a_python_foundations.ipynb](00a_python_foundations.ipynb) | Python from scratch: printing, variables, types, operators, strings | No | ✅ Yes |
@@ -13,10 +42,6 @@
 | 4 | [04_module4a_clustering.ipynb](04_module4a_clustering.ipynb) | K-Means, and how LLMs actually work | No | ✅ Yes |
 | 5 | [05_module4b_genai_api.ipynb](05_module4b_genai_api.ipynb) | Gemini API, prompting, temperature, JSON, memory | **Yes** | ❌ Run it yourself |
 | 6 | [06_module5_huggingface.ipynb](06_module5_huggingface.ipynb) | `pipeline()`, open-source models, model cards | No (downloads models) | ❌ Run it yourself |
-
-**Notebooks 00a–04 show their outputs directly on GitHub** — charts, tables and printed results are saved inside the file. You can read the whole lesson without running anything.
-
-**Notebooks 5 and 6 ship deliberately empty.** Notebook 5 calls a live API with *your* key; notebook 6 downloads models. Their outputs would be misleading, and running them yourself is the point.
 
 ---
 

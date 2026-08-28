@@ -15,18 +15,19 @@ This folder has two doors. Take the one that applies to you.
 student/
 ├── README.md                    start here
 ├── setup-guide.md               install Python and the packages
-├── student-handbook.md          the main book
+├── sessions/                    THE COURSE — twelve sessions, in order
+├── notebooks/                   run these — one per session, Colab or local
 ├── exercises-assignments.md     practice and graded assignments
 ├── troubleshooting.md           every error and its fix
 ├── prompts.md                   copy-paste prompt library
 ├── requirements.txt
-├── notebooks/                   run these — Colab or local
+├── student-handbook.md          reference book (module-based, supplementary)
 └── tutorials/
     ├── apps/                    build something
     └── concepts/                read about something
 ```
 
-**Never written Python?** Start with `student/notebooks/00a`, `00b`, `00c`.
+**Never written Python?** [Session 1](student/sessions/session-01-python-refresher.md) starts from `print()` and assumes nothing.
 
 ## Trainers start here
 
