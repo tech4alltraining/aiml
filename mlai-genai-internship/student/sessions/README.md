@@ -8,7 +8,7 @@ The course runs as **twelve sessions**. Each one is self-contained: read it, run
 | 2 | [Python Libraries: NumPy & Pandas](session-02-numpy-pandas.md) | [open](../notebooks/session-02-numpy-pandas.ipynb) |
 | 3 | [Visualisation & Data Preprocessing](session-03-visualisation-preprocessing.md) | [open](../notebooks/session-03-visualisation-preprocessing.ipynb) |
 | 4 | [Introduction to Machine Learning & AI](session-04-intro-ml-ai.md) | [open](../notebooks/session-04-intro-ml-ai.ipynb) |
-| 5 | Supervised Learning & Deployment *(in preparation)* | — |
+| 5 | [Supervised Learning & Deployment](session-05-supervised-learning.md) | [open](../notebooks/session-05-supervised-learning.ipynb) |
 | 6 | Augmentation, Feature Engineering & Reduction *(in preparation)* | — |
 | 7 | Unsupervised Learning *(in preparation)* | — |
 | 8 | Model Evaluation & Improvement *(in preparation)* | — |
@@ -17,7 +17,7 @@ The course runs as **twelve sessions**. Each one is self-contained: read it, run
 | 11 | AI-Powered Applications *(in preparation)* | — |
 | 12 | Open Source, Hugging Face & Responsible AI *(in preparation)* | — |
 
-*4 of 12 sessions published.*
+*5 of 12 sessions published.*
 
 ---
 
