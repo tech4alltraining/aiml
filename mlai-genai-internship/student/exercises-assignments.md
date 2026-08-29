@@ -19,7 +19,7 @@
 |---|---|
 | [Session 1 — Python Refresher](sessions/session-01-python-refresher.md) | Module 0 · Module 1 (Python parts) |
 | [Session 2 — NumPy & Pandas](sessions/session-02-numpy-pandas.md) | Module 1 |
-| [Session 3 — Visualisation & Preprocessing](sessions/session-03-visualisation-preprocessing.md) | Module 2 (visualisation, preprocessing) |
+| [Session 3 — Visualisation & Preprocessing](sessions/session-03-eda-preprocessing.md) | Module 2 (visualisation, preprocessing) |
 | [Session 4 — Intro to ML & AI](sessions/session-04-intro-ml-ai.md) | Module 2 (concepts) |
 | [Session 5 — Supervised Learning](sessions/session-05-supervised-learning.md) | Module 2 (regression, classification, metrics) |
 | [Session 6 — Augmentation & Features](sessions/session-06-augmentation-features.md) | Module 3 (feature engineering, reduction) |

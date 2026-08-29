@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Notebook** | [session-04-intro-ml-ai.ipynb](../notebooks/session-04-intro-ml-ai.ipynb) |
-| **Previous** | [Session 3 — Visualisation & Preprocessing](session-03-visualisation-preprocessing.md) |
+| **Previous** | [Session 3 — Visualisation & Preprocessing](session-03-eda-preprocessing.md) |
 | **Stuck?** | [Troubleshooting](../troubleshooting.md) |
 
 > **Sessions 1–3 taught you to handle data. This session is where the Machine Learning starts.** Nothing here needs maths beyond arithmetic.

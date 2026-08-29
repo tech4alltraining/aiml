@@ -31,7 +31,7 @@ Everything for the taught sessions and the capstone project phase.
 |---|---|---|---|
 | 1 | Python Refresher — syntax to classes | [guide](sessions/session-01-python-refresher.md) | [open](notebooks/session-01-python-refresher.ipynb) |
 | 2 | Python Libraries: NumPy & Pandas | [guide](sessions/session-02-numpy-pandas.md) | [open](notebooks/session-02-numpy-pandas.ipynb) |
-| 3 | Visualisation & Data Preprocessing | [guide](sessions/session-03-visualisation-preprocessing.md) | [open](notebooks/session-03-visualisation-preprocessing.ipynb) |
+| 3 | EDA & Data Preprocessing | [guide](sessions/session-03-eda-preprocessing.md) | [open](notebooks/session-03-eda-preprocessing.ipynb) |
 | 4 | Introduction to Machine Learning & AI | [guide](sessions/session-04-intro-ml-ai.md) | [open](notebooks/session-04-intro-ml-ai.ipynb) |
 | 5 | Supervised Learning, Deployment & Streamlit | [guide](sessions/session-05-supervised-learning.md) | [open](notebooks/session-05-supervised-learning.ipynb) |
 | 6 | Data Augmentation & Feature Engineering | [guide](sessions/session-06-augmentation-features.md) | [open](notebooks/session-06-augmentation-features.ipynb) |

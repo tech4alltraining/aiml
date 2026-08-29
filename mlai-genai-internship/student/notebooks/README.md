@@ -8,7 +8,7 @@
 |---|---|---|---|---|
 | 1 | [session-01-python-refresher.ipynb](session-01-python-refresher.ipynb) | Syntax, variables, types, strings, collections, loops, functions, classes | No | ✅ Yes |
 | 2 | [session-02-numpy-pandas.ipynb](session-02-numpy-pandas.ipynb) | NumPy, Pandas, loading data, EDA | No | ✅ Yes |
-| 3 | [session-03-visualisation-preprocessing.ipynb](session-03-visualisation-preprocessing.ipynb) | Matplotlib, Seaborn, missing values, outliers, scaling, encoding | No | ✅ Yes |
+| 3 | [session-03-eda-preprocessing.ipynb](session-03-eda-preprocessing.ipynb) | Matplotlib, Seaborn, missing values, outliers, scaling, encoding | No | ✅ Yes |
 | 4 | [session-04-intro-ml-ai.ipynb](session-04-intro-ml-ai.ipynb) | What ML is, types of ML, the workflow, ML/AI frameworks | No | ✅ Yes |
 | 5 | [session-05-supervised-learning.ipynb](session-05-supervised-learning.ipynb) | Regression, six classifiers, metrics, saving models, Streamlit | No | ✅ Yes |
 | 6 | [session-06-augmentation-features.ipynb](session-06-augmentation-features.ipynb) | Augmentation, SMOTE, feature engineering, feature reduction, PCA | No | ✅ Yes |

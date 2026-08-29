@@ -6,7 +6,7 @@
 |---|---|
 | **Notebook** | [session-02-numpy-pandas.ipynb](../notebooks/session-02-numpy-pandas.ipynb) |
 | **Previous** | [Session 1 — Python Refresher](session-01-python-refresher.md) |
-| **Next** | [Session 3 — Visualisation & Preprocessing](session-03-visualisation-preprocessing.md) |
+| **Next** | [Session 3 — Visualisation & Preprocessing](session-03-eda-preprocessing.md) |
 | **Stuck?** | [Troubleshooting](../troubleshooting.md) |
 
 > **Session 1 gave you Python. This session gives you the two libraries that turn Python into a data tool.** Everything from Session 3 onwards is built on them.
@@ -5145,4 +5145,4 @@ WHAT IT DOES NOT SAY
 |---|---|
 | [Notebook](../notebooks/session-02-numpy-pandas.ipynb) | Every example above, runnable |
 | [Exercises & assignments](../exercises-assignments.md) | Longer graded work |
-| [Session 3 — Visualisation & Preprocessing](session-03-visualisation-preprocessing.md) | Where this becomes model-ready data |
+| [Session 3 — Visualisation & Preprocessing](session-03-eda-preprocessing.md) | Where this becomes model-ready data |

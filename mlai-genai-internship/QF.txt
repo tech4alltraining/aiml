@@ -94,10 +94,42 @@ Project Grouping & Topic Selection
 Capstone Project Planning
 Internship Guidelines & Mentoring Plan
 
-
+Now onwards do not need to run any code in the notebook, instead provide the code snippets only for the concepts and problems.
 [1]For session 2 add these topics: Python Libraries for Data Visualization: Matplotlib & Seaborn
 [2] For session 3 change & restructure the topics: Exploratory Data Analysis with Examples
 Data Preprocessing Techniques: Handling Missing Values, Remove Duplicates, Outlier Detection & Removal, Data Transformation & Scaling (MinMax, StandardScaler), Data Encoding Techniques(Label Encoding, Dummy Variable Encoding), Train-Test Split(use normal conventions X_train, X_test, y_train, y_test for all experiments)
+[3] Introduction Artificial Intelligence: 
+- What do you use your intelligence for every day?
+- What is Human Intelligence? Daily applications of Human Intelligence (Activity - Intelligence in Daily Life)
+- Artificial Intelligence (AI means teaching computers to think, learn, and solve problems like humans)
+- Human Intelligence vs Artificial Intelligence (the mapping))
+- Artificial Intelligence (Simple Definition & Concepts)
+- Applications of Artificial Intelligence & GenAI in Real Life (Face recognition, Self-driving cars, Virtual assistants, Healthcare diagnostics, Fraud detection, Recommendation systems, Google Maps, Smart home devices, Language translation, Social media content moderation, Predictive maintenance, Financial trading,  Drug discovery, Personalized marketing, Virtual reality and gaming, Cybersecurity, Climate modeling and prediction, Supply chain optimization, Education and e-learning, Agriculture and precision farming)
+- Introduction to Generative AI (GenAI) & its Applications (Text Generation, Image Generation, Music Generation, Video Generation, Code Generation, Data Augmentation, Virtual Assistants and Chatbots, Personalized Content Creation, Gaming and Entertainment, Healthcare and Drug Discovery, Education and E-learning, Marketing and Advertising, Design and Creativity)
+What is Machine Learning? 
+- What is a Machine? (Give analogies)
+- What is Learning? (Give analogies)
+- What is Machine Learning? (Give analogies)
+    - Creating predictive models by finding relationships in data
+    - Machine Learning is a subset of AI that enables computers to learn from data and improve their performance without being explicitly programmed
+- Demo: Google AI Experiments (Teachable Machine) Dataset: /datasets/cv/image-classification.zip
+- Examples of Machine Learning : Appple v/s Orange Classification, Predicting House Prices, Spam Email Detection, Stock Price Prediction, Customer Churn Prediction etc.
+Types of Machine Learning: (Concept only with examples & scenarios)
+- Supervised Learning: Regression, Classification 
+- Unsupervised Learning: Clustering, Dimensionality Reduction, Association Rule Mining 
+- Reinforcement Learning
+Types of Data in Machine Learning (From real-world to number): (Concept only with examples & scenarios)
+- Structured Data: Tabular data, CSV files, Excel spreadsheets, SQL databases
+- Unstructured Data: Text, Images, Audio, Video, Social Media Data
+- Semi-structured Data: JSON, XML, HTML, Log files
+Mathematical Foundations for Machine Learning: (Brief Concept only with examples & scenarios)
+Building AI
+- AI Programming Languages: Tools & Ecosystem for Machine Learning: (Concept only with examples)
+- Coding AI: Local, Cloud, and Edge Computing, No Code AI Platforms: (Concept only with examples)
+- AIML Dataset Repositories: (Concept only with examples)
+Machine Learning Workflow/Lifecycle: (with examples:- Loan Application Prediction, Diabetes Prediction)
+- Problem Definition, Data Collection, Data Cleaning & Preprocessing, Feature Engineering & Selection, Model Selection & Training, Model Evaluation & Tuning, Model Deployment 
+ML&AI APIs: Scikit-learn, TensorFlow, PyTorch, Keras
 
 Explain each concepts with the following structure(if applicable): 3/4 simple examples;  3 scenario based examples; 5 scenario based tasks, 5 MCQs; Add 5 simple problems in between topics; Maintain a flow from each topic to next topic; 
 
