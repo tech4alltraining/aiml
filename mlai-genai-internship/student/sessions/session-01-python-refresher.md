@@ -3652,7 +3652,9 @@ name3, marks3 = "Ravi", 45
 **This falls apart quickly.** Add a third field and you are editing everywhere. A class bundles the fields together and keeps the related behaviour with them.
 
 ## Defining a class
+Start with `class`, then the name, then a colon. The body is indented.
 
+*Student class example:*
 ```python
 class Student:
     def __init__(self, name, marks):
@@ -3669,6 +3671,56 @@ print(priya.marks)      # 92
 
 **Class names use `PascalCase`** — capitals, no underscores. Variables stay `snake_case`.
 
+*Car Class Example:*
+```python
+class Car:
+    brand = None
+    color = None
+    model = None
+    year = None
+    
+    def drive(self):
+        print(f"Car {self.brand} is driving")
+        
+    def reverse(self):
+        print(f"Car {self.brand} is reversing")
+        
+    def breaking(self):
+        print(f"Car {self.brand} is breaking")
+        
+    def accelerate(self):
+        print(f"Car {self.brand} is accelerating")
+        
+    def display(self):
+        print("==============================")
+        print(f"Brand: {self.brand}")
+        print(f"Color: {self.color}")
+        print(f"Model: {self.model}")
+        print(f"Year: {self.year}")
+        print("==============================")
+
+
+car1 = Car()
+car1.brand = "Maruti"
+car1.color = "Black"
+car1.model = "Baleno"
+car1.year = "2025"
+
+car2 = Car()
+car2.brand = "Hyundai"
+car2.color = "Blue"
+car2.model = "Venue"
+car2.year = "2024"
+
+car1.display()
+car2.display()
+
+car1.drive()
+car2.drive()
+car2.breaking()
+car1.accelerate()
+car2.reverse()
+```
 ## `__init__` and `self`
 
 **`__init__` runs automatically when you create an object.** It is where you set the starting values. The name has two underscores on each side.
