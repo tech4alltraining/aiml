@@ -431,19 +431,18 @@ sns.boxplot(df2['Age'])
 plt.show()
 ```
 
+![Box plot of Age, showing no outliers](images/s3-boxplot-age.png)
+
 **How to read a box plot:**
 
-```text
-        |------[=====|=====]------|      o     o
-        |         box   |         |      outliers
-      lower       median         upper
-      whisker                    whisker
+![An annotated box plot showing Q1, the median, Q3, the whiskers and the IQR](images/s3-boxplot-explained.png)
 
-  the BOX    spans the middle 50% of the values (Q1 to Q3)
-  the LINE   inside the box is the median
-  the WHISKERS reach the furthest value within 1.5 x IQR
-  the DOTS   beyond the whiskers are flagged as OUTLIERS
-```
+| Part | Means |
+|---|---|
+| The **box** | The middle 50% of the values, from Q1 to Q3 |
+| The **line** inside it | The median — half the values are either side |
+| The **whiskers** | Reach the furthest value still within 1.5 × IQR |
+| **Dots** beyond them | Flagged as **outliers** |
 
 **For `Age`, there are no dots.** Every age sits comfortably inside the whiskers — the values run from 27 to 50, with nothing unusual.
 
@@ -452,7 +451,13 @@ sns.boxplot(df2['Salary'])
 plt.show()
 ```
 
-**For `Salary`, the picture is completely different.** The box is squashed almost flat near the bottom of the chart, and there are dots far above it. **That squashing is itself the signal** — one enormous value has stretched the axis so far that all the real salaries are compressed into a sliver.
+![Box plot of Salary, with the box squashed at the left and two outlier dots](images/s3-boxplot-salary.png)
+
+**For `Salary`, the picture is completely different.** The box is squashed almost flat against the left edge, and there are **two dots** far to the right of it.
+
+**That squashing is itself the signal.** One enormous value has stretched the axis to 1.5 million, so every real salary — all of them between 48,000 and 83,000 — is compressed into a sliver you can barely see.
+
+**Look at the two dots.** One sits at roughly 0.2 million and one at 1.5 million. **Note that there are two, not one** — we will come back to why in a moment.
 
 ### Measuring them — the IQR rule
 
@@ -545,6 +550,17 @@ df2
 ```
 
 **Nine rows remain, from an original twelve.**
+
+**Draw the box plot again and the difference is obvious:**
+
+```python
+sns.boxplot(df2['Salary'])
+plt.show()
+```
+
+![Salary box plots before and after outlier removal, side by side](images/s3-boxplot-salary-before-after.png)
+
+**The axis now runs from about 48,000 to 83,000 instead of to 1,500,000**, and the box has expanded to fill the chart. **The real spread of salaries was always there — one extreme value was hiding it.**
 
 > ⚠️ **Do not delete rows just because a formula flagged them.** The IQR rule is mechanical. **Look at what was flagged and decide.** Here one row was a real error and one was our own doing — and the rule could not tell them apart.
 
@@ -738,6 +754,16 @@ df2
 ```
 
 **Values now centre on 0**, with negatives below average and positives above. **Row 1 has the lowest age and the lowest salary, so both are strongly negative. Row 8 has the highest of both.**
+
+### Seeing what scaling did
+
+**The three versions of the same two columns, side by side:**
+
+![Box plots of Age and Salary: original, MinMax scaled, and Standard scaled](images/s3-scaling-comparison.png)
+
+**The left panel is the reason scaling exists.** `Age` is the flat line at the bottom — not because ages do not vary, but because a range of 27–50 is invisible next to a range of 48,000–83,000. **Any method that measures distance would treat `Salary` as the entire story.**
+
+**After either scaler, the two columns are comparable.** MinMax puts everything between 0 and 1; StandardScaler centres both on 0. **Notice the shape of each box is unchanged** — scaling moves and stretches a column, it does not reorder it.
 
 ### Choosing between them
 
