@@ -3929,229 +3929,354 @@ print(iris.shape)
 
 # 18. The Machine Learning Workflow
 
-**Every ML project follows the same seven stages, in the same order.** Learn them once and every project — including your capstone — has a shape.
+**Every machine learning project — a bank's loan system, a hospital's screening tool, a road-safety camera, a news classifier — follows the same seven stages in the same order.**
+
+**The stages never change. What fills them changes completely.** This topic explains each stage properly, and then shows how it plays out on four genuinely different kinds of data.
 
 ```text
-1. PROBLEM DEFINITION        what exactly are we predicting?
-2. DATA COLLECTION           where does the data come from?
-3. DATA CLEANING & PREPROCESSING   most of the work lives here
-4. FEATURE ENGINEERING & SELECTION which columns, and what new ones?
-5. MODEL SELECTION & TRAINING      pick a model and fit it
+1. PROBLEM DEFINITION              what exactly are we predicting, and why?
+2. DATA COLLECTION                 where does the data come from?
+3. DATA CLEANING & PREPROCESSING   getting it into a usable state
+4. FEATURE ENGINEERING & SELECTION deciding what the model gets to see
+5. MODEL SELECTION & TRAINING      choosing an approach and fitting it
 6. MODEL EVALUATION & TUNING       is it any good, honestly?
-7. MODEL DEPLOYMENT                put it where someone can use it
+7. MODEL DEPLOYMENT                putting it where someone can use it
 ```
 
-> **Stages 2 to 4 are roughly 70% of the work.** Nobody puts that in the demo video, and it is why Sessions 2 and 3 came before this one.
+> **Stages 2 to 4 are roughly 70% of the work on a real project.** Nobody puts that in the demo video, and it is why Sessions 2 and 3 came before this one.
 
 ---
 
-## Worked example A — Loan Application Prediction
+## The four datasets we will follow
 
-### 1. Problem definition
+**To see why the stages behave so differently, we will carry four projects through all seven.**
 
-```text
-QUESTION   will this loan application be approved?
-TARGET     loan_status - 0 or 1        -> CLASSIFICATION
-WHY        to give loan officers a consistent first opinion
-SUCCESS    clearly beat "approve everyone"; report recall as well as
-           accuracy; be explainable to an applicant
-NOT        an automatic approver. A person decides.
-```
+| | Dataset | Kind of data | The question |
+|---|---|---|---|
+| **A** | `loan_data_10k.csv` | **Tabular** — 10,000 rows, 14 columns | Will this loan application be approved? |
+| **B** | `diabetes_prediction_dataset.csv` | **Tabular**, but only 8.5% positive | Is this patient likely to have diabetes? |
+| **C** | `cv/helmet_dataset` | **Images** — 60 training photographs | Is this rider wearing a helmet? |
+| **D** | `nlp/bbc-text.csv` | **Text** — 2,225 articles, ~337 words each | Which section does this article belong to? |
 
-**Writing the last line at stage 1 changes what you build.**
-
-### 2. Data collection
-
-```text
-SOURCE   10,000 historical applications with their outcomes
-COLUMNS  age, income, employment, loan amount, intent, rate,
-         credit history length, credit score, prior defaults
-LABELS   arrived by themselves - the outcome is known months later
-CHECK    is this data allowed to be used for this purpose?
-```
-
-### 3. Data cleaning and preprocessing
-
-```python
-import pandas as pd
-BASE = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/"
-
-df = pd.read_csv(BASE + "loan_data_10k.csv")
-print(f"loaded {df.shape}")
-print(f"duplicates      : {df.duplicated().sum()}")
-print(f"missing         : {df.isna().sum().sum()}")
-print(f"impossible ages : {(df['person_age'] > 100).sum()}")
-print(f"target balance  : {df['loan_status'].mean():.1%} approved")
-```
-
-**Everything here is Session 3.** Clean, encode, then split into `X_train`, `X_test`, `y_train`, `y_test`.
-
-### 4. Feature engineering and selection
-
-```python
-df["loan_to_income"] = df["loan_amnt"] / df["person_income"]
-
-print("correlation with approval:")
-print(df[["loan_amnt", "person_income", "loan_to_income", "loan_percent_income"]]
-      .corrwith(df["loan_status"]).round(3).to_string())
-```
-
-**The ratio carries what neither column carries alone** — a banker would tell you that, and no algorithm discovers it for you. **This is Session 6.**
-
-### 5. Model selection and training
-
-```text
-BASELINE   "approve everyone" - the score anything must beat
-SIMPLE     Logistic Regression - fast, explainable
-STRONG     Random Forest - usually best on tables
-
-Start simple. Add complexity only when it earns its place.
-```
-
-### 6. Evaluation and tuning
-
-```text
-NOT accuracy alone. Report:
-  - accuracy, precision, recall, F1
-  - 5-fold cross-validation mean +/- std      (Session 8)
-  - a bootstrap confidence interval           (Session 8)
-  - performance BY GROUP, for fairness        (Session 12)
-
-Then tune - and do not report a gain smaller than your noise.
-```
-
-### 7. Deployment
-
-```text
-SAVE     the whole PIPELINE, not just the model  (Session 5)
-SERVE    a Streamlit page a loan officer can use (Session 5, 11)
-EXPLAIN  an LLM turns the decision into plain English (Session 11)
-MONITOR  do next year's applicants still look like this year's?
-```
+**They were chosen because they differ on the things that actually change your decisions:** how much data there is, how balanced it is, what a mistake costs, and whether the raw input is already numbers.
 
 ---
 
-## Worked example B — Diabetes Prediction
+## Stage 1 — Problem definition
 
-**The same seven stages, and a different answer at almost every one.**
+### What this stage is
 
-### 1. Problem definition
+**Problem definition is turning a wish into a question a model can answer.**
 
-```text
-QUESTION   is this patient likely to have diabetes?
-TARGET     diabetes - 0 or 1              -> CLASSIFICATION
-WHY        to prioritise who gets a confirmatory blood test
-SUCCESS    HIGH RECALL. Missing a diabetic patient is far worse
-           than sending a healthy one for one extra test.
-NOT        a diagnosis. A clinician decides.
-```
+A wish sounds like *"use AI to reduce bad loans"*. A question sounds like *"given the information on an application form, predict whether this loan will be approved"*. **The difference is that the second one names an input, an output and a moment in time.**
 
-> **Compare stage 1 with the loan example.** Same problem type, and a completely different definition of success — **because the cost of each kind of mistake is different.**
+### What you must settle before writing any code
 
-### 2. Data collection
+| Decision | Why it cannot wait |
+|---|---|
+| **What is the target?** | It determines whether this is regression or classification, and everything downstream |
+| **What information exists at the moment of prediction?** | Anything recorded *after* the decision cannot be used — that is leakage |
+| **What does success mean, numerically?** | "Good accuracy" is not a target. 85%? Better than the current process? |
+| **What does a mistake cost, and to whom?** | This decides your metric more than any other consideration |
+| **What is this system *not*?** | A decision-support tool and an autonomous decider are different products |
 
-```python
-d = pd.read_csv(BASE + "classification/diabetes_prediction_dataset.csv")
-print(f"{d.shape[0]:,} patients, {d.shape[1]} columns")
-print(f"positive rate: {d['diabetes'].mean():.1%}   <- IMBALANCED")
-```
+> **The last row is the one people skip, and it changes what you build.** Writing *"this is not an automatic approver — a person decides"* at stage 1 means you will design for a human reader at stage 7. Deciding that at the end is too late.
 
-### 3–4. Cleaning, preprocessing and features
+### The four projects
 
-```text
-SAME TOOLS as the loan example, different judgements:
-  - 8.5% positive, so stratify=y is essential at the split
-  - clinical limits: HbA1c, glucose and BMI all have plausible ranges
-  - BMI is already an engineered feature - weight / height squared
-```
+**A — Loan.** *Given an application, predict approval.* The target is `loan_status`, which is 0 or 1, so this is **binary classification**. It is roughly 50/50, so accuracy will be a fair headline number. **The system is decision support: it gives a loan officer a consistent first opinion, and the officer decides.**
 
-### 5–6. Training and evaluation
+**B — Diabetes.** *Given routine health measurements, predict whether a patient likely has diabetes.* Also binary classification — but here **the two mistakes are wildly unequal.** Missing a diabetic patient may delay treatment for years; a false alarm means one confirmatory blood test. **Success is therefore defined as high recall**, and the system is a *screening* tool, never a diagnosis.
 
-```text
-BASELINE   "predict no diabetes for everyone" scores 91.5% ACCURACY
-           and finds ZERO patients.
+**C — Helmet.** *Given a photograph of a rider, decide whether they are wearing a helmet.* Binary classification again, but the input is an image rather than a row. **The purpose shapes everything:** a tool that flags photographs for a human reviewer needs different accuracy from one that issues automatic fines. **We define it as flagging for review**, which makes a false alarm cheap.
 
-That single fact decides the whole evaluation: ACCURACY IS THE WRONG
-METRIC HERE. Report RECALL, and F1, and look at the confusion matrix.
-Session 5 measures exactly this.
-```
+**D — BBC news.** *Given an article, predict which section it belongs to.* **Five categories, so this is multi-class classification** — and that alone changes the metrics, because "accuracy" now averages over five classes that may not be equally easy.
 
-### 7. Deployment
-
-```text
-SERVE    a screening tool, used by a clinician
-DISPLAY  a probability, not a yes/no - so the clinician can judge
-STATE    clearly, on screen, that this is not a diagnosis
-AUDIT    performance BY GROUP before deployment (Session 12)
-MONITOR  does it still work on next year's patients?
-```
+| | A — Loan | B — Diabetes | C — Helmet | D — News |
+|---|---|---|---|---|
+| Task type | Binary classification | Binary classification | Binary classification | **Multi-class** (5) |
+| Target balance | 50 / 50 | **8.5% positive** | 30 / 30 | Roughly even |
+| Costly mistake | False approval | **False negative** — a missed case | Depends on the use | Neither, particularly |
+| Success measure | Accuracy, plus recall | **Recall** | Precision if it fines, recall if it flags | Accuracy and per-class F1 |
+| What it is *not* | An auto-approver | A diagnosis | An automatic fine | An editor |
 
 ---
 
-## What the two examples show
+## Stage 2 — Data collection
 
-| Stage | Loan | Diabetes |
+### What this stage is
+
+**Data collection is getting hold of the raw material, and establishing that you are allowed to use it.**
+
+It sounds administrative. **It is where projects most often die**, and always for the same reason: someone chose the question before checking whether the data existed.
+
+### The four questions
+
+1. **Does the data exist, and can you actually get it?** Not "is it on the internet somewhere" — have you downloaded it and opened it?
+2. **Is there enough?** A few hundred rows will give you noise, not results.
+3. **Do the labels exist, and who made them?** Supervised learning needs answers, and someone has to have produced them.
+4. **Are you permitted to use it for this purpose?** Consent, licence, and personal-data rules all live here.
+
+> **The cost and quality of labels is often the real constraint on a project — more than the choice of algorithm.** Some labels arrive free; some cost a specialist's time per example.
+
+### The four projects
+
+**A — Loan.** 10,000 historical applications with their outcomes. **The labels arrived by themselves** — whether a loan was approved is simply recorded. That is the easiest possible labelling situation, and it is why tabular business problems are a good place to start.
+
+**B — Diabetes.** 100,000 patient records. The labels come from confirmed diagnoses, which are reliable but **arrive slowly** — a patient's status may only be established months after the measurements were taken. **And this is personal medical data**, so consent and data-protection rules are not optional extras; they may decide where the model is allowed to run at all.
+
+**C — Helmet.** **Sixty training photographs.** That is the striking fact about this project. Thirty riders with helmets, thirty without. Somebody had to photograph or gather them, and somebody had to sort them into two folders — **labelling images is manual work, and it is why image projects so often stall here.**
+
+**D — BBC news.** 2,225 articles, each already tagged with its section. **The labels were a by-product of publishing** — the newspaper had to file each article somewhere anyway. **When labels are a by-product of an existing process, you have found a good project.**
+
+| | A — Loan | B — Diabetes | C — Helmet | D — News |
+|---|---|---|---|---|
+| Volume | 10,000 rows | 100,000 rows | **60 images** | 2,225 articles |
+| Where labels came from | Recorded automatically | Clinical diagnosis | **Hand-sorted into folders** | A by-product of publishing |
+| Cost per label | Effectively zero | Expensive, and slow | Manual, but cheap | Effectively zero |
+| Legal weight | Financial regulation | **Medical privacy** | Photographs of people | Low |
+| Biggest risk | Data may not reflect today | Consent and residency | **Far too few examples** | Articles may be dated |
+
+---
+
+## Stage 3 — Data cleaning and preprocessing
+
+### What this stage is
+
+**Cleaning is fixing what is wrong. Preprocessing is putting what remains into the shape a model can consume.** Together they are usually the largest single part of the work.
+
+**Session 3 covered this in full for tabular data:** missing values, duplicates, outliers, encoding, scaling, and the train-test split. The important thing to see here is that **the same idea applies to images and text, but the operations look nothing alike.**
+
+### Why the operations differ so much
+
+**A model consumes numbers.** How far your raw data is from being numbers determines how much work this stage takes.
+
+- **A table** is *already* numbers, apart from its text columns. Cleaning is repair work.
+- **An image** is already numbers too — a grid of pixel values — but they need to be made *consistent*: same size, same scale, same orientation.
+- **Text** is not numbers at all. It has to be converted, and how you convert it is a significant decision in itself.
+
+### The four projects
+
+**A — Loan.** Remove the one impossible age of 144. Fill three missing cells. Encode five text columns — one of which, education level, is genuinely ordered and must not be encoded alphabetically. Scale the numeric columns after splitting. **This is exactly Session 3.**
+
+**B — Diabetes.** The same operations, and one additional decision that dominates: **because only 8.5% of patients are positive, the split must be stratified**, or a test set could end up with too few positive cases to measure anything. **The imbalance is not a data-quality problem — it is a real property of the world — but it changes how you handle every later stage.**
+
+**C — Helmet.** Cleaning means something different here. **Every image must be resized to identical dimensions**, because a model needs a fixed input size. Pixel values are scaled from 0–255 down to 0–1. And with only sixty images, **augmentation becomes near-essential**: flipped, rotated and brightness-adjusted copies multiply the effective dataset. **A flipped photograph of a helmet is still a helmet — but you must check that claim for your own data, because flipping a photograph of text would not be.**
+
+**D — BBC news.** Text needs the most transformation. Articles are lowercased, punctuation handled, and very common words like *the* and *and* usually removed because they appear everywhere and distinguish nothing. **Then the text must become numbers** — either by counting words, or by converting to embeddings that place similar meanings near each other. **With a median length of 337 words, you also have to decide how much of each article to keep.**
+
+| | A — Loan | B — Diabetes | C — Helmet | D — News |
+|---|---|---|---|---|
+| Missing values | Fill or drop | Fill or drop | **Not applicable** | Empty articles |
+| The main operation | Encode and scale | Encode and scale | **Resize and normalise pixels** | **Tokenise into numbers** |
+| Special concern | Impossible values | **Stratify the split** | **Augment — 60 is very few** | Stop words, document length |
+| Result the model sees | A row of numbers | A row of numbers | A fixed-size pixel array | A vector per document |
+
+---
+
+## Stage 4 — Feature engineering and selection
+
+### What this stage is
+
+**Feature engineering is creating new inputs that make the pattern easier to see. Feature selection is deciding which inputs to keep.**
+
+**The two halves pull in opposite directions on purpose**: engineering adds columns that carry more meaning, selection removes columns that carry little.
+
+### Why this stage is where domain knowledge pays
+
+**A model can only find patterns among the columns you give it.** If the useful quantity is a *relationship* between two columns rather than either one alone, you have to construct it. **No amount of tuning discovers a ratio you never built.**
+
+### The four projects
+
+**A — Loan.** The single most useful feature is not in the raw data: **the ratio of loan amount to income.** A loan of ₹800,000 is modest against a large income and impossible against a small one, and **neither column alone carries that.** A banker would tell you this immediately; the algorithm would not.
+
+**B — Diabetes.** Much of the feature engineering has already been done by medicine. **BMI is itself an engineered feature** — weight divided by height squared — invented precisely because neither weight nor height alone is informative. **HbA1c is a deliberately constructed measure of long-term blood sugar.** You are inheriting decades of domain work.
+
+**C — Helmet.** **This is the great difference with deep learning: you do not engineer features at all.** A convolutional network learns its own — early layers find edges, later ones find shapes, and eventually something that responds to the presence of a helmet. **You gave up control and gained the ability to work with data you could never have described in columns.**
+
+**D — BBC news.** The choice of text representation *is* the feature engineering. Counting words treats each word independently. Weighting rarer words more heavily emphasises the terms that distinguish sections — *goal* and *striker* mark a sports article far better than *the* does. **Embeddings go further and capture meaning, so that *football* and *soccer* sit near each other.** Each choice produces genuinely different features.
+
+| | A — Loan | B — Diabetes | C — Helmet | D — News |
+|---|---|---|---|---|
+| Who creates the features | **You** | Medicine already did | **The network itself** | Your choice of representation |
+| A good example | loan ÷ income | BMI, HbA1c | Learned edge and shape detectors | Word weighting or embeddings |
+| Domain knowledge needed | High | Very high | Low | Moderate |
+| Can you explain a feature? | Yes, easily | Yes | **Often not** | Partly |
+
+---
+
+## Stage 5 — Model selection and training
+
+### What this stage is
+
+**Model selection is choosing the kind of model. Training is fitting it to the data.**
+
+**Training is usually the shortest part of the whole project** — often a single line of code and a few seconds of computation. The thinking is in the choosing.
+
+### The rule that saves the most time
+
+**Start with a baseline, then the simplest real model, and only then something more powerful.**
+
+**A baseline is a model that does something trivial** — always predicting the most common class, for instance. **It costs three lines, and it tells you the score that anything you build must clearly beat.** A model that cannot beat "always guess the majority" has learned nothing, whatever its accuracy looks like.
+
+### How the choice differs
+
+**The single biggest factor is whether your data is a table.**
+
+**A — Loan.** A table, so a Random Forest is the natural choice: it handles mixed types, needs no scaling, trains in seconds, and reports which columns mattered. **Logistic regression is worth trying first because it is explainable — and in lending, explainability may be a legal requirement rather than a nicety.**
+
+**B — Diabetes.** Also a table, so the same family applies. But the imbalance changes how you train: **you may weight the rare class more heavily**, so the model stops being rewarded for ignoring it.
+
+**C — Helmet.** A table-based model cannot use raw pixels sensibly, so this needs a neural network. **But with only sixty images, training one from scratch is hopeless** — it would simply memorise them. **The standard answer is transfer learning:** take a network already trained on millions of general images, and retrain only its final layer on your sixty. **You inherit its knowledge of edges, textures and shapes, and teach it only the last step.**
+
+**D — BBC news.** Once text is converted to numbers, classical models work surprisingly well — **Naive Bayes has been a strong baseline for text classification for decades and trains in moments.** A fine-tuned language model will usually do better, at considerably more cost.
+
+| | A — Loan | B — Diabetes | C — Helmet | D — News |
+|---|---|---|---|---|
+| Baseline | Always approve | Always predict "no" | Always guess "helmet" | Always guess "sport" |
+| Sensible first model | Logistic regression | Logistic regression | **A pretrained network** | Naive Bayes |
+| Likely best | Random Forest | Random Forest, class-weighted | **Transfer learning** | Fine-tuned language model |
+| Training time | Seconds | Seconds | Minutes | Seconds to hours |
+| Main risk | — | Ignoring the rare class | **Memorising 60 images** | Overfitting to vocabulary |
+
+---
+
+## Stage 6 — Model evaluation and tuning
+
+### What this stage is
+
+**Evaluation is finding out how good the model really is. Tuning is trying to improve it.**
+
+**They are in the same stage because they are dangerous together.** Every time you look at a score and change something, you learn a little about your test data — and your estimate becomes slightly less honest.
+
+### Choosing the metric
+
+**This is where stage 1 pays off.** You decided what a mistake costs; the metric is how you count them.
+
+| Metric | Answers | Right when |
 |---|---|---|
-| Target balance | 50/50 | **8.5% positive** |
-| Right metric | Accuracy is fair | **Recall** |
-| Cost of a false negative | A lost customer | **A missed illness** |
-| Cost of a false positive | An unnecessary decline | One extra blood test |
-| Deployment | Decision support | **Screening only** |
+| **Accuracy** | What fraction did I get right? | The classes are balanced |
+| **Precision** | When I say yes, how often am I right? | A false alarm is expensive |
+| **Recall** | Of all the real cases, how many did I catch? | **A miss is expensive** |
+| **F1** | One number balancing both | You need a single figure |
 
-> **Same seven stages, same tools, and almost every judgement different.** The workflow is a structure, not a recipe. **What fills it comes from understanding the problem.**
+> **Accuracy is the default and it is frequently the wrong choice.** On the diabetes data, a model that predicts "no diabetes" for every patient scores **91.5%** — and finds nobody. That number looks like success on a dashboard and represents total failure.
+
+### Evaluating honestly
+
+**One train-test split gives one number, and that number moves depending on which rows happened to land where.** Cross-validation repeats the split several times and reports a mean and a spread. **Reporting the spread matters: a difference smaller than it is not a result.**
+
+### The four projects
+
+**A — Loan.** Balanced classes, so accuracy is meaningful — **but report precision and recall too**, because approving a bad loan and declining a good customer are different failures with different costs.
+
+**B — Diabetes.** **Recall is the headline.** How many diabetic patients did we find? The 91.5% accuracy trap makes this vivid, and it is why the metric was decided at stage 1.
+
+**C — Helmet.** With sixty training images, the test set is tiny — perhaps a dozen photographs. **A single misclassification moves the score by eight percentage points.** Any number computed here carries enormous uncertainty, and **saying so is part of doing the work honestly.**
+
+**D — BBC news.** Five classes, so the useful output is a **per-class breakdown**. Overall accuracy can hide the fact that four sections are recognised easily and one is not — and the confusion matrix will often show which two categories the model mixes up, which is genuinely informative.
+
+| | A — Loan | B — Diabetes | C — Helmet | D — News |
+|---|---|---|---|---|
+| Headline metric | Accuracy + F1 | **Recall** | Recall, with a large caveat | Per-class F1 |
+| The trap | — | **91.5% by predicting "no"** | **The test set is far too small** | One weak class hidden by the average |
+| Confidence in the number | Good | Good | **Poor — and say so** | Reasonable |
+
+---
+
+## Stage 7 — Model deployment
+
+### What this stage is
+
+**Deployment is putting the model where the people who need it can actually use it.**
+
+**A model in a notebook helps nobody.** This stage is where a piece of analysis becomes a piece of software, and it raises questions that have nothing to do with accuracy.
+
+### What deployment actually requires
+
+| Question | Why it matters |
+|---|---|
+| **Who uses this, and on what screen?** | A loan officer's tool looks nothing like a camera system |
+| **Does it answer instantly, or overnight?** | Real-time and batch are different engineering problems |
+| **Where does it run?** | A server, or the device itself — privacy and connectivity decide this |
+| **What does the user see?** | A label, a probability, or an explanation |
+| **What happens when it is wrong?** | There must be a route to a human |
+| **How will anyone notice it degrading?** | Models decay as the world moves away from their training data |
+
+> **That last question is the one most projects never answer.** A model quietly gets worse as reality drifts, and without monitoring nobody finds out until something goes badly wrong.
+
+### The four projects
+
+**A — Loan.** A simple internal web page. The officer enters the details, sees a decision **with its confidence**, and reads a plain-English explanation of the main factors. **Showing the probability rather than a bare yes/no is what keeps a human genuinely in the loop.**
+
+**B — Diabetes.** A screening tool used inside a clinic. **It must display a probability, never a diagnosis**, and it must state plainly on screen what it is not. **If patient data cannot leave the building, the model runs locally — and that constraint is decided before anyone compares accuracy.**
+
+**C — Helmet.** Likely to run **on the camera itself**, because sending video to a server is expensive and slow. That forces the model to be small and fast, which in turn constrains stage 5. **Deployment decided the model choice, not the other way round.**
+
+**D — BBC news.** Batch, not real-time. Articles can be classified overnight, and a moderate delay costs nothing. **This is the easiest deployment of the four** — and it means you can afford a larger, slower, more accurate model.
+
+| | A — Loan | B — Diabetes | C — Helmet | D — News |
+|---|---|---|---|---|
+| Where it runs | Internal server | **Locally, for privacy** | **On the camera** | Batch job |
+| Response time | Seconds | Seconds | **Milliseconds** | Overnight |
+| What the user sees | Decision + confidence + reason | **A probability, never a diagnosis** | A flagged image | A suggested tag |
+| Monitor for | New applicant types | Population drift | New helmet styles, weather | New topics and vocabulary |
+
+---
+
+## What the four projects show
+
+**The seven stages are fixed. Almost every judgement inside them is not.**
+
+| Stage | The thing that differed most |
+|---|---|
+| **1. Problem definition** | What a mistake costs — and therefore what success means |
+| **2. Data collection** | Where labels came from, and what they cost |
+| **3. Cleaning & preprocessing** | How far the raw data was from being numbers |
+| **4. Features** | Whether *you* build them or the model learns them |
+| **5. Model & training** | Whether the data is a table |
+| **6. Evaluation** | Which metric, decided by stage 1 |
+| **7. Deployment** | Where it runs — which sometimes decides stage 5 |
+
+**Three lessons worth carrying forward:**
+
+1. **Stage 1 decides stage 6.** You cannot choose a metric sensibly without having decided what a mistake costs. **The diabetes project shows what happens when you skip that thinking: 91.5% accuracy and zero patients found.**
+
+2. **The amount of data changes what is possible, not just what is easy.** Sixty images rules out training a network from scratch and makes transfer learning and augmentation necessary rather than optional.
+
+3. **Deployment constraints can reach backwards.** The helmet model must be small because it runs on a camera — **a stage 7 requirement that determines a stage 5 decision.** Thinking about deployment at the start is not premature; it is how you avoid building the wrong thing.
 
 ## 📘 Examples
 
-**Example 1 — the workflow as a checklist**
+**Example 1 — a problem definition that would be approved**
 
-```python
-STAGES = [
-    ("1. Problem definition", "what exactly are we predicting, and what does success mean?"),
-    ("2. Data collection",    "where from, and are we allowed to use it?"),
-    ("3. Cleaning & prep",    "missing, duplicates, impossible values, encode, split"),
-    ("4. Features",           "which columns, and what new ones can I build?"),
-    ("5. Model & training",   "baseline first, then simple, then strong"),
-    ("6. Evaluation & tuning","mean +/- std, confidence interval, by group"),
-    ("7. Deployment",         "save the pipeline, serve it, monitor it"),
-]
-for stage, question in STAGES:
-    print(f"{stage:<26}{question}")
-```
+> **Question:** given the information on a loan application form, predict whether the application will be approved.
+> **Target:** `loan_status`, binary — this is classification.
+> **Success:** clearly beat "approve everyone"; report recall as well as accuracy; be explainable to an applicant.
+> **This is not:** an automatic approver. A loan officer decides.
 
-**Example 2 — the baseline, which stage 5 must not skip**
+**Every line does work.** The target fixes the model family, the success criterion fixes the metric, and the final line fixes the interface you will build at stage 7.
 
-```python
-from sklearn.dummy import DummyClassifier
-from sklearn.model_selection import cross_val_score
-from sklearn.preprocessing import LabelEncoder
+**Example 2 — the same definition done badly**
 
-df = pd.read_csv(BASE + "loan_data_10k.csv").dropna()
-for c in df.select_dtypes("object").columns:
-    df[c] = LabelEncoder().fit_transform(df[c])
-X, y = df.drop(columns=["loan_status"]), df["loan_status"]
+> **Question:** use AI to improve lending.
+> **Data:** we will find some.
+> **Success:** high accuracy.
 
-base = cross_val_score(DummyClassifier(strategy="most_frequent"), X, y, cv=5)
-print(f"baseline: {base.mean():.4f}")
-print("Anything you build must clearly beat this, or it has learned nothing.")
-```
+**Three failures.** The question names no target and no moment of prediction, the data does not exist yet, and "high accuracy" is meaningless without a baseline to beat.
 
-**Three lines, and it is the cheapest insurance in the whole course.**
+**Example 3 — how the metric follows from the cost**
 
-**Example 3 — why stage 1 is worth an hour**
+| Project | Cost of a false negative | Cost of a false positive | Metric that follows |
+|---|---|---|---|
+| Diabetes screening | A missed illness, possibly for years | One extra blood test | **Recall** |
+| Spam filtering | Junk reaches the inbox | **A job offer is lost** | **Precision** |
+| Helmet flagging | An unsafe rider is missed | A reviewer glances at one photo | **Recall** |
+| News tagging | An article is mis-filed | An article is mis-filed | Balanced — F1 |
 
-```text
-BAD  : "use AI to improve the college"
-GOOD : "predict which first-year students are at risk of dropping
-        out, early enough to offer support"
+**Read the two cost columns and the metric chooses itself.** That is what stage 1 is for.
 
-The second names the target, implies the data, suggests the metric
-(recall - a missed at-risk student is the costly error), and tells
-you what a useful answer would let someone DO.
-
-An hour at stage 1 saves a week at stage 5.
-```
-
-**Example 4 — where the time actually goes**
+**Example 4 — where the work actually goes**
 
 ```text
   Problem definition        5%
@@ -4161,473 +4286,422 @@ An hour at stage 1 saves a week at stage 5.
   Model selection           5%
   Evaluation & tuning      10%
   Deployment               10%
-
-The stage everyone imagines is ML - choosing and fitting the model -
-is the smallest one.
 ```
+
+**The stage everyone pictures when they imagine machine learning — choosing and fitting the model — is the smallest one.**
 
 ## 🌍 Scenarios
 
-**Scenario 1 — the same data, two different problems**
+**Scenario 1 — the same data, three different projects**
 
 ```text
 ONE loan dataset:
 
-  "Will this be approved?"          -> classification, recall matters
-  "How much will they borrow?"      -> regression, RMSE matters
-  "What kinds of borrower exist?"   -> clustering, no target at all
+  "Will this application be approved?"   -> classification; recall matters
+  "How much will this customer borrow?"  -> regression; RMSE matters
+  "What kinds of borrower do we have?"   -> clustering; no target at all
 
-STAGE 1 DECIDES EVERYTHING THAT FOLLOWS. Get it wrong and stages
-2 to 7 are all correct answers to the wrong question.
+STAGE 1 DECIDES EVERYTHING THAT FOLLOWS. Get it wrong and stages 2 to 7
+are all correct answers to the wrong question.
 ```
 
-**Scenario 2 — a project that failed at stage 2**
+**Scenario 2 — a project that died at stage 2**
 
 ```text
 A team chose "predict crop yield from satellite images".
 
-Stage 1: excellent. Stage 2: the satellite data was licensed, cost
-money, and the yield labels existed for only 40 fields.
+Stage 1 was excellent - a clear target, a real user, a measurable outcome.
 
-Discovered in week three. THE PROJECT DIED AT STAGE 2 because nobody
-did stage 2 first.
+Stage 2 was never done. The satellite imagery was licensed and costly,
+and the yield labels existed for only 40 fields.
 
-Download the data BEFORE you commit to the question.
+They discovered this in week three, and the project ended there.
+
+DOWNLOAD THE DATA BEFORE YOU COMMIT TO THE QUESTION.
 ```
 
-**Scenario 3 — deployment as a stage, not an afterthought**
+**Scenario 3 — deployment reaching backwards into model choice**
 
 ```text
-A model that lives in a notebook helps nobody.
+The helmet system must run on the camera, because streaming video to a
+server is too slow and too expensive.
 
-  Who will use this, and on what screen?
-  What do they need to see - a label, or a probability?
-  What happens when it is wrong?
-  How will anyone notice it has stopped working?
+That constraint means the model must fit in a few tens of megabytes and
+answer in milliseconds.
 
-Ask these at STAGE 1, not stage 7. They change what you build.
+Which rules out the largest and most accurate networks - at STAGE 5,
+because of a requirement from STAGE 7.
+
+This is why you ask "where will this run?" at the beginning.
 ```
 
 ## ✏️ Tasks
 
-1. Write the seven stages from memory, then check against the list.
-2. Complete stage 1 for a problem at your own college: target, type, success criterion, and what it is *not*.
-3. Compute a `DummyClassifier` baseline on a dataset before doing anything else.
-4. For the loan and diabetes examples, explain why the right metric differs.
-5. Take one project idea and write one paragraph for each of the seven stages.
+1. Write a full stage 1 definition for a problem at your own college: target, task type, success criterion, cost of each kind of mistake, and what the system is *not*.
+2. For a dataset of your choice, answer the four data-collection questions in writing — including where the labels would come from and what they would cost.
+3. Take the four projects in this topic and rank them by how much work stage 3 would take. **Justify the top and the bottom.**
+4. For a problem you care about, name two features you would engineer from domain knowledge, and say why a model could not discover them alone.
+5. Choose a metric for a problem of your own and defend it using the two cost columns from Example 3. Then write the monitoring plan: what three numbers would tell you it had stopped working?
 
 <details><summary>Solutions</summary>
 
-```python
-import pandas as pd
-from sklearn.dummy import DummyClassifier
-from sklearn.model_selection import cross_val_score
-from sklearn.preprocessing import LabelEncoder
-BASE = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/"
+```text
+1  A good answer names the target column, says whether it is regression
+   or classification, states success as a NUMBER to beat rather than
+   "high accuracy", says which of the two mistakes is worse and why,
+   and ends with a sentence about what the system is not.
+   The last line is the one that changes what you build.
 
-# 1 - Problem definition, data collection, cleaning & preprocessing,
-#     feature engineering & selection, model selection & training,
-#     evaluation & tuning, deployment.
+2  Does the data exist and have you opened it; is there enough; do the
+   labels exist and who made them; are you allowed to use it for this
+   purpose. If any answer is "we will find out later", the project is
+   not ready to start.
 
-# 2 - "Predict which first-year students are at risk of dropping out,
-#      early enough to offer support."
-#     TARGET   continued / did not continue -> classification
-#     SUCCESS  high RECALL - a missed at-risk student is the costly error
-#     NOT      an automatic decision about any student. A mentor decides.
+3  Most work : the helmet images - resizing, normalising, and heavy
+                augmentation to compensate for only 60 examples.
+     then     : the BBC text - lowercasing, stop words, and a real
+                decision about how to turn words into numbers.
+     then     : diabetes - ordinary tabular cleaning, plus stratifying
+                the split because of the 8.5% imbalance.
+   Least work : loan - ordinary tabular cleaning, and that is all.
+   The ranking follows one thing: how far the raw data is from numbers.
 
-df = pd.read_csv(BASE + "loan_data_10k.csv").dropna()                  # 3
-for c in df.select_dtypes("object").columns:
-    df[c] = LabelEncoder().fit_transform(df[c])
-X, y = df.drop(columns=["loan_status"]), df["loan_status"]
-print("baseline:", cross_val_score(DummyClassifier(strategy="most_frequent"),
-                                   X, y, cv=5).mean().round(4))
+4  For loans: loan-to-income ratio, and income per year of employment.
+   A model can only find patterns among the columns it is GIVEN. If the
+   useful quantity is a RELATIONSHIP between two columns, somebody has
+   to construct it. No amount of tuning discovers a ratio you never built.
 
-# 4 - The loan target is 50/50, so accuracy is meaningful.
-#     The diabetes target is 8.5% positive, so "predict no for everyone"
-#     scores 91.5% accuracy and finds ZERO patients. The COST of each
-#     error differs too: a missed illness is far worse than one extra
-#     blood test. Report RECALL.
-
-# 5 - One paragraph per stage. The test of a good answer is whether
-#     someone else could start work from it tomorrow.
+5  Metric follows cost. If a miss is worse than a false alarm, report
+   recall; if a false alarm is worse, report precision.
+   A monitoring plan might watch: the predicted positive rate against
+   its historical value; the score measured on newly confirmed cases;
+   and whether incoming data still resembles the training population.
+   Any of the three moving is a trigger to review.
 ```
 </details>
 
 ## ❓ MCQs
 
-**Q1.** Which stage takes the most time?
-- (a) Model selection  (b) Cleaning and preprocessing  (c) Deployment  (d) Problem definition
+**Q1.** Which stages take roughly 70% of the work on a real project?
+- (a) Model selection and training  (b) Data collection, cleaning and feature engineering  (c) Deployment  (d) Problem definition
 
-**Q2.** What should you do at stage 5 before training a real model?
-- (a) Tune hyperparameters  (b) Compute a baseline  (c) Deploy  (d) Write the report
+**Q2.** What should a stage 1 definition include that people usually leave out?
+- (a) The algorithm  (b) What the system is *not*  (c) The programming language  (d) The training time
 
-**Q3.** The diabetes example uses recall rather than accuracy because…
-- (a) Recall is always better  (b) The target is 8.5% positive, so "predict no" scores 91.5% and finds nobody  (c) Accuracy is broken  (d) It is regression
+**Q3.** A model predicts "no diabetes" for every patient and scores 91.5% accuracy. This shows…
+- (a) An excellent model  (b) That accuracy is the wrong metric when classes are imbalanced  (c) A coding error  (d) Too little data
 
-**Q4.** A team discovered in week three that their data was licensed and had only 40 labels. They failed at…
-- (a) Stage 1  (b) Stage 2, because they did not do it first  (c) Stage 5  (d) Stage 7
+**Q4.** With only 60 training images, training a network from scratch is…
+- (a) Ideal  (b) Hopeless — it would memorise them; use transfer learning instead  (c) Faster  (d) More accurate
 
-**Q5.** When should you ask "who will use this, and on what screen?"
-- (a) Stage 7  (b) Stage 1  (c) Never  (d) After deployment
+**Q5.** In the helmet project, deployment on the camera constrained…
+- (a) Nothing  (b) The model choice at stage 5, because it must be small and fast  (c) The labels  (d) The metric
 
 <details><summary>Answers</summary>
 
-**A1 — (b).** Stages 2–4 are roughly 70% of the work.
+**A1 — (b).** Stages 2 to 4. **The stage everyone imagines — fitting the model — is the smallest one.**
 
-**A2 — (b) A baseline.** Three lines, and the cheapest insurance in the course.
+**A2 — (b) What it is *not*.** Writing "this is not an automatic approver" at stage 1 means you design for a human reader at stage 7.
 
-**A3 — (b).** The cost of each error differs too.
+**A3 — (b).** It found **zero** patients. That number looks like success on a dashboard and represents total failure.
 
-**A4 — (b).** **Download the data before you commit to the question.**
+**A4 — (b).** Take a network trained on millions of general images and retrain only its last layer.
 
-**A5 — (b) Stage 1.** It changes what you build.
+**A5 — (b).** **A stage 7 requirement determining a stage 5 decision** — which is why you ask "where will this run?" at the beginning.
 </details>
 
 ---
-
-## ⭐ Checkpoint Problem 5 — Walk the workflow
-
-> **Uses everything in this session.**
-
-**The problem.** Take a dataset you have not used, and write out all seven stages for it — including what you would *not* do, the metric you would report, and how you would know it had stopped working.
-
-<details><summary>Solution</summary>
-
-```python
-import pandas as pd
-from sklearn.dummy import DummyClassifier
-from sklearn.model_selection import cross_val_score, train_test_split
-from sklearn.preprocessing import LabelEncoder
-BASE = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/"
-
-# ---------- STAGE 1: PROBLEM DEFINITION
-print("""STAGE 1 - PROBLEM DEFINITION
-  Question : is this patient likely to have diabetes?
-  Target   : diabetes (0/1)  -> CLASSIFICATION
-  Purpose  : prioritise who gets a confirmatory blood test
-  Success  : recall well above the baseline; audited by group
-  NOT      : a diagnosis. A clinician decides. Displayed as a
-             probability, never as a yes/no.""")
-
-# ---------- STAGE 2: DATA COLLECTION
-df = pd.read_csv(BASE + "classification/diabetes_prediction_dataset.csv")
-print(f"""
-STAGE 2 - DATA COLLECTION
-  Rows     : {len(df):,}
-  Columns  : {df.columns.tolist()}
-  Balance  : {df['diabetes'].mean():.1%} positive   <- IMBALANCED
-  Consent  : must be confirmed before any real deployment""")
-
-# ---------- STAGE 3: CLEANING & PREPROCESSING
-clean = df.copy()
-dups = clean.duplicated().sum()
-clean = clean.drop_duplicates().reset_index(drop=True)
-gaps = clean.isna().sum().sum()
-clean = clean.dropna().reset_index(drop=True)
-for c in clean.select_dtypes("object").columns:
-    clean[c] = LabelEncoder().fit_transform(clean[c])
-
-X = clean.drop(columns=["diabetes"])
-y = clean["diabetes"]
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42, stratify=y)
-
-print(f"""
-STAGE 3 - CLEANING & PREPROCESSING
-  Removed  : {dups} duplicate row(s), {gaps} gap(s)
-  Encoded  : {len(df.select_dtypes('object').columns)} text column(s)
-  Split    : stratify=y is ESSENTIAL at 8.5% positive
-  X_train  : {X_train.shape}    X_test: {X_test.shape}""")
-
-# ---------- STAGE 4: FEATURES
-print(f"""
-STAGE 4 - FEATURE ENGINEERING & SELECTION
-  BMI is already engineered (weight / height squared).
-  Correlations with the target:
-{X.corrwith(y).sort_values(ascending=False).head(4).round(3).to_string()}
-  No column dropped on correlation alone - a column can matter in
-  combination (Session 6 measures this).""")
-
-# ---------- STAGE 5: BASELINE, THEN MODEL
-base = cross_val_score(DummyClassifier(strategy="most_frequent"),
-                       X_train, y_train, cv=5)
-print(f"""
-STAGE 5 - MODEL SELECTION & TRAINING
-  Baseline accuracy : {base.mean():.4f}   <- and it finds ZERO patients
-  That single number proves accuracy is the WRONG metric here.
-  Plan: Logistic Regression first (explainable), then Random Forest.""")
-
-# ---------- STAGE 6 & 7
-print("""
-STAGE 6 - EVALUATION & TUNING
-  Report   : recall, precision, F1, and the confusion matrix
-  Robustly : 5-fold CV mean +/- std, plus a bootstrap interval
-  Fairness : performance BY GROUP before any deployment
-  Rule     : never report a gain smaller than the noise
-
-STAGE 7 - DEPLOYMENT
-  Save     : the whole pipeline, not the bare model
-  Serve    : a screening tool for a clinician, showing a PROBABILITY
-  State    : on screen, that this is not a diagnosis
-  Monitor  : the positive rate, the score by group, and whether new
-             patients still resemble the training population.
-             If the incoming distribution drifts, retrain.
-
-HOW I WOULD KNOW IT HAD STOPPED WORKING
-  The predicted positive rate drifts from the historical rate; recall
-  measured on newly confirmed cases falls; or the input distribution
-  moves away from the training data. Any of the three triggers review.""")
-```
-
-**The last block is the one students skip and professionals do not.** A model that nobody is watching has already started failing — **you just do not know yet.**
-</details>
-
-**Make it harder:**
-
-1. Do the same for a regression problem and note which stages change.
-2. Add a stage-1 paragraph on what harm a wrong prediction could cause, and to whom.
-3. Write the monitoring plan as three specific numbers you would put on a dashboard.
-
----
-
-# Part H — ML & AI APIs
 
 # 19. ML & AI APIs
 
-**You do not implement algorithms from scratch. You call libraries — and choosing the right one is a real decision.**
+**You will not write machine learning algorithms yourself.** You will use libraries that other people have written, tested and optimised over many years — and **choosing the right one is a real decision that this topic prepares you to make.**
 
-🧠 **Analogy: choosing a vehicle.** A bicycle for the corner shop. A van for moving house. A truck for freight. **All three "move things", and picking the truck for a loaf of bread is a mistake.**
+---
 
-| Library | Built for | Use it when | Not for |
-|---|---|---|---|
-| **scikit-learn** | Classical ML on **tables** | Rows and columns, under ~1M rows | Images, text, deep networks |
-| **TensorFlow** | Deep learning at production scale | Large deployments, mobile | Small tabular problems |
-| **Keras** | A friendly **front end** for TensorFlow | Building networks quickly and readably | Very unusual architectures |
-| **PyTorch** | Deep learning, research-first | Most new deep learning work; full control | Simple tabular problems |
+## What an API is, in this context
 
-> **Keras is not a competitor to TensorFlow — it runs on top of it.** You write Keras; TensorFlow does the work underneath. Since Keras 3 it can also run on PyTorch and JAX.
+**An API is a ready-made toolbox that someone else built, with a documented set of handles you can pull.**
 
-## The four methods that never change
+🧠 **Analogy: a kettle.** You do not build a heating element, a thermostat and a safety cut-off every time you want tea. **You press a switch.** The kettle's "API" is that switch, the lid and the spout — the parts you are meant to touch. Everything inside is somebody else's careful work.
 
-```python
-# illustrative: a syntax reference, not runnable as written.
-model = SomeModel(...)         # 1. create, with settings
-model.fit(X_train, y_train)    # 2. learn from training data
-model.predict(X_test)          # 3. predict on new data
-model.score(X_test, y_test)    # 4. a quick default score
+**In practice, an ML library gives you:**
+
+- **Algorithms** that are already written and heavily tested
+- **A consistent way to use them**, so learning one teaches you the rest
+- **Speed**, because the slow parts are written in a faster language underneath
+- **Correctness**, because thousands of people have found the bugs before you
+
+> **Writing your own algorithm is an excellent way to learn** — you will do exactly that in Session 9. **It is a poor way to build something people depend on.** A library that has been used by millions has had its edge cases found; yours has not.
+
+---
+
+## The four libraries
+
+**These are the four you will hear named constantly.** Each exists for a different job.
+
+### scikit-learn
+
+**The library for classical machine learning on tables.**
+
+If your data has rows and columns — a spreadsheet, a CSV, a database table — **this is almost always the right answer.** It covers the whole workflow from Topic 18: splitting data, filling gaps, scaling, encoding, training, and measuring how well it did.
+
+**It is the library used throughout Sessions 3 to 8 of this course.** You have already used parts of it in Session 3.
+
+### TensorFlow
+
+**A library for deep learning, built for large-scale production use.**
+
+Deep learning means models with many layers, used for data that is not a neat table — images, audio, video, text. **TensorFlow's particular strength is everything around the model:** tools for serving it to millions of users, and for shrinking it to run on a phone or a camera.
+
+### Keras
+
+**A friendly way of writing TensorFlow.**
+
+> ⚠️ **Keras is not a competitor to TensorFlow.** It sits *on top of* it. **You write Keras; TensorFlow does the work underneath.** This confuses almost everyone at first.
+
+**Keras exists because raw TensorFlow is verbose.** Keras lets you describe a network in a few readable lines, and it is the usual choice when learning deep learning or building something quickly.
+
+### PyTorch
+
+**A library for deep learning, built research-first.**
+
+PyTorch gives you more direct control over what happens during training. **You write more code, and in exchange you can change any step of the process** — which is exactly what you need when you are trying something nobody has tried before.
+
+**Most new deep learning research is published in PyTorch**, so if you go further into the field you will meet it.
+
+---
+
+## The one thing they all share
+
+**Every one of these libraries follows the same shape:**
+
+```text
+1. CREATE    make a model, and set how it should behave
+2. TRAIN     show it the training data, so it learns
+3. PREDICT   give it new data, and get answers back
+4. MEASURE   check those answers against the truth
 ```
 
-**Learn those four names once and every scikit-learn model works the same way.** Classifiers add `predict_proba` for confidence rather than just a decision.
+**Learn that shape once and every library becomes familiar.** The names differ slightly, but the sequence never does.
 
-> **You already built this shape yourself** — the `SimpleAverager` class at the end of Session 1, with `fit` and `predict`. **`model.fit()` is an ordinary method call on an object.**
+> **You have already built this pattern yourself.** At the end of Session 1 you wrote a small class with a method that learned from data and a method that made predictions. **That is the whole idea — a library is the same shape, done properly and at scale.**
+
+---
 
 ## How to choose
 
+**One question does most of the work: is your data a table?**
+
 ```text
-Is your data a table of rows and columns?
+Is your data rows and columns?
    YES -> scikit-learn.  Stop here.
    NO  |
-       Images, audio, video, or text?
-          YES -> a deep learning framework
-                    Learning / prototyping      -> Keras
-                    Research / full control     -> PyTorch
-                    Large production deployment -> TensorFlow
+       Is it images, audio, video, or text?
+          YES -> you need a deep learning library
+                    learning or prototyping      -> Keras
+                    research, or unusual ideas   -> PyTorch
+                    large-scale deployment       -> TensorFlow
 ```
 
-> ⚠️ **On tabular data a Random Forest usually beats a neural network and trains in seconds.** **Do not reach for deep learning because it sounds more advanced** — Session 5 measures exactly this.
+**This connects directly to Topic 13.** Structured data goes to scikit-learn; unstructured data goes to a deep learning library. **The type of your data chooses your library, not the other way round.**
+
+| Library | Built for | Reach for it when | Not the tool for |
+|---|---|---|---|
+| **scikit-learn** | Classical ML on **tables** | Rows and columns | Images, audio, raw text |
+| **TensorFlow** | Deep learning, production scale | Serving many users; running on phones | A simple spreadsheet problem |
+| **Keras** | Writing TensorFlow readably | Learning deep learning; building fast | Very unusual architectures |
+| **PyTorch** | Deep learning, research-first | Full control; trying new ideas | A simple spreadsheet problem |
+
+---
+
+## ⚠️ The mistake beginners make
+
+**Deep learning sounds more advanced, so people reach for it first.**
+
+**On a table of a few thousand rows, a classical model from scikit-learn will usually:**
+
+- **train in seconds** rather than many minutes
+- **score as well or better** than a neural network
+- **tell you which columns mattered**, which a neural network generally cannot
+- **need no special hardware**
+
+> **Choose the tool that fits the data, not the one that sounds impressive.** **Session 5 measures this directly on the loan dataset** — you will see the numbers rather than take it on trust.
+
+---
+
+## What does not change
+
+**Whichever library you pick, the seven stages from Topic 18 are unaffected.**
+
+You still define the problem, collect the data, clean it, decide what the model sees, train it, evaluate it honestly, and deploy it. **The library is a detail inside stage 5.**
+
+> **The workflow is the skill. The library is a tool you can swap.** Someone who understands Topic 18 can pick up a new library in a week. Someone who only knows one library's commands cannot do the reverse.
 
 ## 📘 Examples
 
-**Example 1 — the same task in scikit-learn**
+**Example 1 — the same question, four different answers**
 
-```python
-# illustrative: a syntax reference, not runnable as written.
-from sklearn.neural_network import MLPClassifier
+| The situation | The library | Why |
+|---|---|---|
+| A hospital predicting readmission from 30 columns of patient records | **scikit-learn** | It is a table, and the result must be explainable |
+| A startup sorting 200,000 product photographs | **Keras** | Images, and they want something working quickly |
+| A research group testing a new idea about how networks should learn | **PyTorch** | They must be able to change the training process itself |
+| A model that has to run on a phone with no internet | **TensorFlow** | Its tools for shrinking and deploying models are the strongest |
 
-model = MLPClassifier(hidden_layer_sizes=(16, 8), max_iter=500, random_state=42)
-model.fit(X_train, y_train)
-print(model.score(X_test, y_test))
-```
+**Example 2 — why "Keras or TensorFlow?" is the wrong question**
 
-**Three lines. For a table of numbers, this is almost always the right choice.**
+**It is like asking "steering wheel or car?".**
 
-**Example 2 — the same shape in Keras**
+**Keras is how you give instructions. TensorFlow is what carries them out.** When you write a network in Keras, TensorFlow is doing the actual computation underneath. **Choosing Keras *is* choosing TensorFlow, with a more comfortable way of writing it.**
 
-```python
-# illustrative: a syntax reference, not runnable as written.
-from tensorflow import keras
+**Example 3 — the four libraries against the four projects from Topic 18**
 
-model = keras.Sequential([
-    keras.layers.Dense(16, activation="relu", input_shape=(13,)),
-    keras.layers.Dense(8, activation="relu"),
-    keras.layers.Dense(1, activation="sigmoid"),
-])
-model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
-model.fit(X_train, y_train, epochs=10, validation_split=0.2)
-```
+| Project | Data | Library | Reason |
+|---|---|---|---|
+| **A — Loan approval** | A table of 10,000 rows | **scikit-learn** | Structured data, and lending decisions must be explainable |
+| **B — Diabetes screening** | A table of 100,000 rows | **scikit-learn** | Structured data, and a clinician needs to understand it |
+| **C — Helmet detection** | 60 photographs | **Keras or PyTorch** | Images cannot be handled by a table-based library |
+| **D — News classification** | 2,225 articles | **Either** | Once text becomes numbers, scikit-learn works well; a deep model may do better |
 
-**More code — but you control every layer**, which is what images and text need.
+**Notice that two of the four are plain scikit-learn.** **Most working machine learning in the world is classical ML on tables** — which is exactly what this course spends Sessions 5 to 8 teaching.
 
-**Example 3 — and in PyTorch**
+**Example 4 — what you are actually buying**
 
-```python
-# illustrative: a syntax reference, not runnable as written.
-import torch.nn as nn
+**When you use a library instead of writing your own algorithm, you gain:**
 
-model = nn.Sequential(
-    nn.Linear(13, 16), nn.ReLU(),
-    nn.Linear(16, 8),  nn.ReLU(),
-    nn.Linear(8, 1),   nn.Sigmoid(),
-)
-# ...and you write the training loop yourself
-```
+| | |
+|---|---|
+| **Years of testing** | Edge cases found by millions of users |
+| **Speed** | The heavy computation runs in a faster language underneath |
+| **A shared vocabulary** | Your code reads like everyone else's, so others can help |
+| **Documentation** | Someone has already written down what every setting does |
 
-**Most verbose, most control.** The explicit training loop is exactly why researchers prefer it — **and Session 9 writes one in pure NumPy so you can see what it contains.**
-
-**Example 4 — the four methods on real data**
-
-```python
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-BASE = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/"
-
-df = pd.read_csv(BASE + "loan_data_10k.csv").dropna()
-for c in df.select_dtypes("object").columns:
-    df[c] = LabelEncoder().fit_transform(df[c])
-X, y = df.drop(columns=["loan_status"]), df["loan_status"]
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42, stratify=y)
-
-model = RandomForestClassifier(n_estimators=100, random_state=42)   # 1. create
-model.fit(X_train, y_train)                                        # 2. fit
-preds = model.predict(X_test)                                      # 3. predict
-print("score:", round(model.score(X_test, y_test), 4))             # 4. score
-print("confidence for the first row:", model.predict_proba(X_test)[0].round(3))
-```
-
-**That is your first trained model.** Session 5 explains every line of it.
+**And you give up:** knowing exactly what is happening inside. **Session 9 gives that back for one algorithm, by having you build a neural network from scratch.**
 
 ## 🌍 Scenarios
 
-**Scenario 1 — choosing, with reasons**
+**Scenario 1 — the choice made for a reason that is not accuracy**
 
 ```text
-A hospital classifying 30 tabular columns
-  -> scikit-learn. It is a table, and explainability matters.
+A bank is deciding how to build its loan model.
 
-A startup classifying 200,000 product photos
-  -> a deep learning framework. Keras to prototype, PyTorch to control.
+  A deep learning model MIGHT score a fraction of a point higher.
+  It cannot easily explain WHY it declined an application.
 
-A research group trying a new attention mechanism
-  -> PyTorch. The training loop must be modifiable.
+  Regulation requires that an applicant can be told the reason.
 
-A model that must run on a phone
-  -> TensorFlow, via TensorFlow Lite. Its deployment ecosystem is
-     its main strength.
+The bank chooses a classical model from scikit-learn - not because it
+scored better, but because it can be EXPLAINED.
+
+Accuracy is one consideration among several, and often not the deciding one.
 ```
 
-**Scenario 2 — the mistake beginners make**
+**Scenario 2 — the library chosen by the deployment**
 
 ```text
-"I want to use deep learning for my capstone."
+The helmet-detection system must run on the camera itself, because
+sending video to a server would be too slow and too expensive.
 
-On a 5,000-row CSV, a Random Forest will:
-  - train in two seconds instead of twenty minutes
-  - usually score HIGHER
-  - tell you which features mattered
-  - need no GPU
+That means the model must be small and fast.
 
-Choose the tool that fits the data, not the one that sounds impressive.
+TensorFlow has the strongest tools for shrinking a model to fit on a
+small device - so the DEPLOYMENT requirement chose the library, before
+anyone compared accuracy.
+
+This is Topic 18's stage 7 reaching back into stage 5 again.
 ```
 
-**Scenario 3 — what stays the same across all of them**
+**Scenario 3 — starting simple, and being glad of it**
 
 ```text
-Whatever library you choose, you still:
-  define the problem, get the data, clean it, engineer features,
-  split it, train, evaluate honestly, deploy and monitor.
+A student has a spreadsheet of 3,000 rows and wants to predict a
+yes/no outcome.
 
-THE LIBRARY IS A DETAIL. The workflow in Topic 18 is the skill.
+  They could spend a week learning a deep learning library.
+  Or they could use scikit-learn this afternoon.
+
+The scikit-learn version trains in seconds, works, and tells them which
+columns mattered - which teaches them something about their problem.
+
+If it turns out not to be good enough, they have lost an afternoon and
+learned a great deal. Starting with the complicated option risks losing
+a week and learning less.
 ```
 
 ## ✏️ Tasks
 
-1. For four scenarios of your choice, recommend a library and name the one fact that would change your mind.
-2. Train a `RandomForestClassifier` on the loan data using the four standard methods.
-3. Print `predict_proba` for three rows and explain what the numbers mean.
-4. Explain the relationship between Keras and TensorFlow in one sentence.
-5. Say why a Random Forest usually beats a neural network on a small table.
+1. In your own words, explain the difference between Keras and TensorFlow to someone who has never heard of either. **Use an analogy of your own, not the one in this topic.**
+2. For each of the four Topic 18 projects, name the library you would choose and give one sentence of justification. **Then name the single fact that would change your mind.**
+3. List three things you gain by using a library instead of writing an algorithm yourself, and one thing you give up.
+4. Someone tells you they want to use deep learning for a 2,000-row spreadsheet. **Write three sentences explaining why a classical library is likely the better choice** — without using the word "advanced".
+5. Take a problem from your own life or college, decide which of the four libraries fits, and write a short paragraph defending the choice. **Your reason must not be "it is the most powerful".**
 
 <details><summary>Solutions</summary>
 
-```python
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-BASE = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/"
+```text
+1  A good answer makes clear that Keras and TensorFlow are not
+   alternatives - one runs on top of the other. Any analogy works if it
+   captures that relationship: a steering wheel and an engine, a light
+   switch and the wiring, a menu and a kitchen.
 
-# 1 - Tabular -> scikit-learn. Images -> Keras or PyTorch. Research ->
-#     PyTorch. Mobile deployment -> TensorFlow Lite.
-#     What would change my mind: the data turning out not to be tabular;
-#     a hard latency limit; a policy that data cannot leave the device.
+2  Loan     -> scikit-learn; it is a table, and the decision must be
+                explainable to an applicant.
+   Diabetes -> scikit-learn; a table again, and a clinician must be able
+                to understand what drove the result.
+   Helmet   -> Keras or PyTorch; images cannot be handled by a
+                table-based library.
+   News     -> either; once text becomes numbers, scikit-learn works
+                well, though a deep model may do better.
+   What would change my mind: the data turning out not to be a table;
+   a hard limit on response time; a rule that data cannot leave a device.
 
-df = pd.read_csv(BASE + "loan_data_10k.csv").dropna()                  # 2
-for c in df.select_dtypes("object").columns:
-    df[c] = LabelEncoder().fit_transform(df[c])
-X, y = df.drop(columns=["loan_status"]), df["loan_status"]
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=.2, random_state=42, stratify=y)
+3  GAIN: years of testing and bug-fixing; speed, because the heavy work
+     runs in a faster language underneath; a shared vocabulary, so other
+     people can read and help with your code; and documentation.
+   GIVE UP: knowing exactly what is happening inside. Session 9 gives
+     that back for one algorithm by having you build it yourself.
 
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-print("score:", round(model.score(X_test, y_test), 4))
+4  On a small table, a classical model trains in seconds rather than
+   minutes, usually scores at least as well, and can tell you which
+   columns mattered - which teaches you something about the problem.
+   It also needs no special hardware. If it proves not good enough, you
+   have lost an afternoon rather than a week.
 
-print(model.predict_proba(X_test)[:3].round(3))                        # 3
-# Each row is [P(class 0), P(class 1)] and the two sum to 1. It is the
-# model's CONFIDENCE, which lets you move the decision threshold instead
-# of always using 0.5.
-
-# 4 - Keras is a high-level front end; TensorFlow does the work
-#     underneath. Since Keras 3 it can also run on PyTorch and JAX.
-
-# 5 - A forest handles mixed feature scales and types without
-#     preprocessing, needs no GPU, trains in seconds, resists
-#     overfitting through averaging, and tells you which features
-#     mattered. A neural network needs far more data to beat that.
+5  A good answer gives a reason connected to the DATA (is it a table?),
+   the CONSTRAINTS (must it be explainable, fast, or run offline?), or
+   the SITUATION (how much time and hardware do you have?).
+   "It is the most powerful" is not a reason - it is a description.
 ```
 </details>
 
 ## ❓ MCQs
 
-**Q1.** You have a table of 20 columns and 50,000 rows. Which library?
+**Q1.** Your data is a table of rows and columns. Which library should you reach for?
 - (a) TensorFlow  (b) PyTorch  (c) scikit-learn  (d) Keras
 
 **Q2.** What is the relationship between Keras and TensorFlow?
-- (a) Competitors  (b) Keras is a high-level front end running on top of TensorFlow  (c) TensorFlow runs on Keras  (d) Unrelated
+- (a) They are competitors  (b) Keras runs on top of TensorFlow — you write Keras, TensorFlow does the work  (c) TensorFlow runs on top of Keras  (d) They are unrelated
 
-**Q3.** Which four methods does almost every scikit-learn model share?
-- (a) `open`, `read`, `write`, `close`  (b) constructor, `fit`, `predict`, `score`  (c) `load`, `clean`, `plot`, `save`  (d) `train`, `test`, `deploy`, `monitor`
+**Q3.** Which four steps do all these libraries share?
+- (a) Open, read, write, close  (b) Create, train, predict, measure  (c) Load, clean, plot, save  (d) Import, install, update, remove
 
-**Q4.** On tabular data, a neural network versus a Random Forest usually…
-- (a) Wins clearly  (b) Loses, and takes far longer to train  (c) Is identical  (d) Cannot be used
+**Q4.** On a small table, choosing deep learning over a classical model usually means…
+- (a) A much better score  (b) Longer training, no better result, and less explanation of which columns mattered  (c) Less code  (d) No difference at all
 
-**Q5.** `model.fit()` is…
-- (a) Special ML syntax  (b) An ordinary method call on an object, like the class you built in Session 1  (c) A function  (d) A keyword
+**Q5.** A bank picks a classical model over a deep one. The most likely reason is…
+- (a) It scored higher  (b) An applicant must be able to be told why they were declined  (c) It is newer  (d) It uses less memory
 
 <details><summary>Answers</summary>
 
-**A1 — (c) scikit-learn.** Rows and columns under about a million: stop there.
+**A1 — (c) scikit-learn.** Rows and columns: stop there. It is what Sessions 5 to 8 use.
 
-**A2 — (b).** You write Keras; TensorFlow does the work.
+**A2 — (b).** **Keras is not a competitor to TensorFlow — it sits on top of it.** Choosing Keras *is* choosing TensorFlow, with a more comfortable way of writing it.
 
-**A3 — (b).** Learn them once and every model works the same way.
+**A3 — (b) Create, train, predict, measure.** Learn the shape once and every library becomes familiar — and you already built it yourself in Session 1.
 
-**A4 — (b).** **Do not reach for deep learning because it sounds more advanced.**
+**A4 — (b).** **Choose the tool that fits the data, not the one that sounds impressive.** Session 5 shows you the actual numbers.
 
-**A5 — (b).** Session 1's `SimpleAverager` was exactly this shape.
+**A5 — (b) Explainability.** Accuracy is one consideration among several, and often not the deciding one.
 </details>
 
 ---
