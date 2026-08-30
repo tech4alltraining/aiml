@@ -10,7 +10,7 @@
 | 2 | [session-02-numpy-pandas.ipynb](session-02-numpy-pandas.ipynb) | NumPy, Pandas, loading data, EDA | No | ✅ Yes |
 | 3 | [session-03-eda-preprocessing.ipynb](session-03-eda-preprocessing.ipynb) | Matplotlib, Seaborn, missing values, outliers, scaling, encoding | No | ✅ Yes |
 | 4 | [session-04-intro-ml-ai.ipynb](session-04-intro-ml-ai.ipynb) | What ML is, types of ML, the workflow, ML/AI frameworks | No | ✅ Yes |
-| 5 | [session-05-supervised-learning.ipynb](session-05-supervised-learning.ipynb) | Regression, six classifiers, metrics, saving models, Streamlit | No | ✅ Yes |
+| 5 | [session-05-regression.ipynb](session-05-regression.ipynb) | Regression, six classifiers, metrics, saving models, Streamlit | No | ✅ Yes |
 | 6 | [session-06-augmentation-features.ipynb](session-06-augmentation-features.ipynb) | Augmentation, SMOTE, feature engineering, feature reduction, PCA | No | ✅ Yes |
 | 7 | [session-07-unsupervised.ipynb](session-07-unsupervised.ipynb) | k-Means, hierarchical, DBSCAN, association rules, PCA | No | ✅ Yes |
 | 8 | [session-08-evaluation-tuning.ipynb](session-08-evaluation-tuning.ipynb) | Holdout, cross-validation, bootstrapping, overfitting, tuning | No | ✅ Yes |

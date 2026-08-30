@@ -33,7 +33,9 @@ Everything for the taught sessions and the capstone project phase.
 | 2 | Python Libraries: NumPy & Pandas | [guide](sessions/session-02-numpy-pandas.md) | [open](notebooks/session-02-numpy-pandas.ipynb) |
 | 3 | EDA & Data Preprocessing | [guide](sessions/session-03-eda-preprocessing.md) | [open](notebooks/session-03-eda-preprocessing.ipynb) |
 | 4 | Introduction to Machine Learning & AI | [guide](sessions/session-04-intro-ml-ai.md) | [open](notebooks/session-04-intro-ml-ai.ipynb) |
-| 5 | Supervised Learning, Deployment & Streamlit | [guide](sessions/session-05-supervised-learning.md) | [open](notebooks/session-05-supervised-learning.ipynb) |
+| 5 | Regression | [guide](sessions/session-05-regression.md) | [open](notebooks/session-05-regression.ipynb) |
+| 5B | Classification | [guide](sessions/session-05b-classification.md) | [open](notebooks/session-05b-classification.ipynb) |
+| 5C | Model Deployment & Streamlit | [guide](sessions/session-05c-deployment.md) | [open](notebooks/session-05c-deployment.ipynb) |
 | 6 | Data Augmentation & Feature Engineering | [guide](sessions/session-06-augmentation-features.md) | [open](notebooks/session-06-augmentation-features.ipynb) |
 | 7 | Unsupervised Learning | [guide](sessions/session-07-unsupervised.md) | [open](notebooks/session-07-unsupervised.ipynb) |
 | 8 | Model Evaluation & Improvement | [guide](sessions/session-08-evaluation-tuning.md) | [open](notebooks/session-08-evaluation-tuning.ipynb) |

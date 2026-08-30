@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Notebook** | [session-06-augmentation-features.ipynb](../notebooks/session-06-augmentation-features.ipynb) |
-| **Previous** | [Session 5 — Supervised Learning](session-05-supervised-learning.md) |
+| **Previous** | [Session 5 — Supervised Learning](session-05-regression.md) |
 | **Stuck?** | [Troubleshooting](../troubleshooting.md) |
 
 > **This session is about the data, not the model.** In Session 5 you swapped models and gained a few points. Here you change the *columns and rows* — which in real projects moves the needle far more.

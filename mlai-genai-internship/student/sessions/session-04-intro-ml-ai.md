@@ -6,7 +6,7 @@
 |---|---|
 | **Notebook** | [session-04-intro-ml-ai.ipynb](../notebooks/session-04-intro-ml-ai.ipynb) |
 | **Previous** | [Session 3 — EDA & Data Preprocessing](session-03-eda-preprocessing.md) |
-| **Next** | [Session 5 — Supervised Learning](session-05-supervised-learning.md) |
+| **Next** | [Session 5 — Supervised Learning](session-05-regression.md) |
 | **Stuck?** | [Troubleshooting](../troubleshooting.md) |
 
 > **Sessions 1–3 taught you to handle data. This session is where the Machine Learning starts.**
@@ -4745,4 +4745,4 @@ a week and learning less.
 | [Notebook](../notebooks/session-04-intro-ml-ai.ipynb) | Every example above, runnable |
 | [Teachable Machine](https://teachablemachine.withgoogle.com/) | Train a real classifier with no code |
 | [Exercises & assignments](../exercises-assignments.md) | Longer graded work |
-| [Session 5 — Supervised Learning](session-05-supervised-learning.md) | Where you build the models properly |
+| [Session 5 — Supervised Learning](session-05-regression.md) | Where you build the models properly |

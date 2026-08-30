@@ -1,6 +1,6 @@
 # Sessions
 
-The course runs as **twelve sessions**. Each one is self-contained: read it, run the code, do the exercises, check yourself with the MCQs.
+The course runs as **twelve sessions**, with Session 5 split into three parts. Each one is self-contained: read it, run the code, do the exercises, check yourself with the MCQs.
 
 | # | Session | Notebook |
 |---|---|---|
@@ -8,7 +8,9 @@ The course runs as **twelve sessions**. Each one is self-contained: read it, run
 | 2 | [Python Libraries: NumPy, Pandas & Visualisation](session-02-numpy-pandas.md) | [open](../notebooks/session-02-numpy-pandas.ipynb) |
 | 3 | [EDA & Data Preprocessing](session-03-eda-preprocessing.md) | [open](../notebooks/session-03-eda-preprocessing.ipynb) |
 | 4 | [Introduction to AI & Machine Learning](session-04-intro-ml-ai.md) | [open](../notebooks/session-04-intro-ml-ai.ipynb) |
-| 5 | [Supervised Learning & Deployment](session-05-supervised-learning.md) | [open](../notebooks/session-05-supervised-learning.ipynb) |
+| 5 | [Regression](session-05-regression.md) | [open](../notebooks/session-05-regression.ipynb) |
+| 5B | [Classification](session-05b-classification.md) | [open](../notebooks/session-05b-classification.ipynb) |
+| 5C | [Model Deployment & Streamlit](session-05c-deployment.md) | [open](../notebooks/session-05c-deployment.ipynb) |
 | 6 | [Data Augmentation & Feature Engineering](session-06-augmentation-features.md) | [open](../notebooks/session-06-augmentation-features.ipynb) |
 | 7 | [Unsupervised Learning](session-07-unsupervised.md) | [open](../notebooks/session-07-unsupervised.ipynb) |
 | 8 | [Model Evaluation & Improvement](session-08-evaluation-tuning.md) | [open](../notebooks/session-08-evaluation-tuning.ipynb) |
@@ -17,7 +19,7 @@ The course runs as **twelve sessions**. Each one is self-contained: read it, run
 | 11 | [AI-Powered Applications](session-11-ai-apps.md) | [open](../notebooks/session-11-ai-apps.ipynb) |
 | 12 | [Open Source, Hugging Face & Responsible AI](session-12-opensource-ethics.md) | [open](../notebooks/session-12-opensource-ethics.ipynb) |
 
-*12 of 12 sessions published.*
+*14 of 14 sessions published.*
 
 ---
 
