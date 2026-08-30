@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Notebook** | [session-07-unsupervised.ipynb](../notebooks/session-07-unsupervised.ipynb) |
-| **Previous** | [Session 6 — Augmentation & Feature Engineering](session-06-augmentation-features.md) |
+| **Previous** | [Session 6 — Augmentation & Feature Engineering](session-06-augmentation-feature-engg-red.md) |
 | **Stuck?** | [Troubleshooting](../troubleshooting.md) |
 
 > **Everything so far had an answer key.** From here there is none. Nobody can tell you your clustering is "correct" — which makes judgement, not code, the hard part of this session.

@@ -6,7 +6,7 @@
 |---|---|
 | **Notebook** | [session-05c-deployment.ipynb](../notebooks/session-05c-deployment.ipynb) |
 | **Previous** | [Session 5B — Classification](session-05b-classification.md) |
-| **Next** | [Session 6 — Augmentation & Feature Engineering](session-06-augmentation-features.md) |
+| **Next** | [Session 6 — Augmentation & Feature Engineering](session-06-augmentation-feature-engg-red.md) |
 | **Stuck?** | [Troubleshooting](../troubleshooting.md) |
 
 > **You have trained models. Nobody can use them yet.**

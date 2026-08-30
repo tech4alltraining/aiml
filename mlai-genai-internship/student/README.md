@@ -36,7 +36,7 @@ Everything for the taught sessions and the capstone project phase.
 | 5 | Regression | [guide](sessions/session-05-regression.md) | [open](notebooks/session-05-regression.ipynb) |
 | 5B | Classification | [guide](sessions/session-05b-classification.md) | [open](notebooks/session-05b-classification.ipynb) |
 | 5C | Model Deployment & Streamlit | [guide](sessions/session-05c-deployment.md) | [open](notebooks/session-05c-deployment.ipynb) |
-| 6 | Data Augmentation & Feature Engineering | [guide](sessions/session-06-augmentation-features.md) | [open](notebooks/session-06-augmentation-features.ipynb) |
+| 6 | Data Augmentation & Feature Engineering | [guide](sessions/session-06-augmentation-feature-engg-red.md) | [open](notebooks/session-06-augmentation-feature-engg-red.ipynb) |
 | 7 | Unsupervised Learning | [guide](sessions/session-07-unsupervised.md) | [open](notebooks/session-07-unsupervised.ipynb) |
 | 8 | Model Evaluation & Improvement | [guide](sessions/session-08-evaluation-tuning.md) | [open](notebooks/session-08-evaluation-tuning.ipynb) |
 | 9 | Deep Learning | [guide](sessions/session-09-deep-learning.md) | [open](notebooks/session-09-deep-learning.ipynb) |

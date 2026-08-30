@@ -6,7 +6,7 @@
 |---|---|
 | **Notebook** | [session-05b-classification.ipynb](../notebooks/session-05b-classification.ipynb) |
 | **Previous** | [Session 5 — Regression](session-05-regression.md) |
-| **Next** | [Session 6 — Augmentation & Feature Engineering](session-06-augmentation-features.md) |
+| **Next** | [Session 6 — Augmentation & Feature Engineering](session-06-augmentation-feature-engg-red.md) |
 | **Stuck?** | [Troubleshooting](../troubleshooting.md) |
 
 > **Session 5 predicted numbers. This one predicts categories** — and that single change means every metric has to be rebuilt from scratch.

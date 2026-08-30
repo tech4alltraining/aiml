@@ -22,7 +22,7 @@
 | [Session 3 — Visualisation & Preprocessing](sessions/session-03-eda-preprocessing.md) | Module 2 (visualisation, preprocessing) |
 | [Session 4 — Intro to ML & AI](sessions/session-04-intro-ml-ai.md) | Module 2 (concepts) |
 | [Session 5 — Supervised Learning](sessions/session-05-regression.md) | Module 2 (regression, classification, metrics) |
-| [Session 6 — Augmentation & Features](sessions/session-06-augmentation-features.md) | Module 3 (feature engineering, reduction) |
+| [Session 6 — Augmentation & Features](sessions/session-06-augmentation-feature-engg-red.md) | Module 3 (feature engineering, reduction) |
 | [Session 7 — Unsupervised Learning](sessions/session-07-unsupervised.md) | Module 4 (clustering) |
 | [Session 8 — Evaluation & Tuning](sessions/session-08-evaluation-tuning.md) | Module 3 (overfitting, CV, tuning) |
 | [Session 9 — Deep Learning](sessions/session-09-deep-learning.md) | Module 4 (neural networks) |
