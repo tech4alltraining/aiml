@@ -1,14 +1,17 @@
 # Session 8 — Model Evaluation & Improvement
 
-**Holdout Validation · Cross-Validation · Bootstrapping · K-Fold & LOOCV · Overfitting & Underfitting · Hyperparameter Tuning: Grid Search, Random Search, Bayesian Optimization**
+**Holdout · Cross-Validation · Bootstrapping · K-Fold · Leave-One-Out · Overfitting & Underfitting · Grid Search · Random Search · Bayesian Optimization**
 
 | | |
 |---|---|
 | **Notebook** | [session-08-evaluation-tuning.ipynb](../notebooks/session-08-evaluation-tuning.ipynb) |
-| **Previous** | [Session 7 — Unsupervised Learning](session-07-unsupervised.md) |
+| **Previous** | [Session 7 — Unsupervised Learning: Clustering](session-07-unsupervised.md) |
+| **Next** | [Session 9 — Deep Learning](session-09-deep-learning.md) |
 | **Stuck?** | [Troubleshooting](../troubleshooting.md) |
 
-> **Until now you have trusted a single number from a single split.** This session shows you that number moves by more than a percentage point for no reason at all — and teaches you how to report a score you can actually defend.
+> **In Sessions 5 and 5B you trained models and reported a number. This session asks the uncomfortable question: *was that number real?***
+>
+> **On the dataset used throughout this session, changing nothing but the random seed moved the accuracy from 0.650 to 0.817.** **Both numbers came from correct code. Only one of them would have been reported.**
 
 ---
 
@@ -16,855 +19,1679 @@
 
 By the end of this session you can:
 
-1. Show that a single train/test split is unreliable, with measured evidence
-2. Run K-Fold and Stratified K-Fold cross-validation, and report mean ± std
-3. Explain when LOOCV is worth it and when it is a waste
-4. Use bootstrapping to put a **confidence interval** on a score
-5. Diagnose overfitting and underfitting from a train-versus-test curve
-6. Run Grid Search, Random Search and Bayesian optimisation
-7. Explain why Random Search usually beats Grid Search
-8. **Recognise when tuning is not worth doing at all**
+1. Explain why a single train/test split is not a reliable estimate
+2. Run holdout, k-fold, stratified k-fold, leave-one-out and bootstrap validation
+3. **Say which validation strategy fits which situation**
+4. Spot the two leaks — scaling before the split, and resampling before the split — and **fix both with a pipeline**
+5. Recognise underfitting and overfitting from the **train–test gap**
+6. Read a validation curve and a learning curve
+7. **Fix** underfitting and overfitting, deliberately
+8. Distinguish parameters from hyperparameters
+9. Tune with manual, grid, random and Bayesian search — and **say what each costs**
+10. **Never let the test set choose a hyperparameter**
+11. Select between models with cross-validation
 
 ---
 
-## The five topics
+## How this session is organised
 
-| # | Topic | The one thing to take away |
-|---|---|---|
-| 1 | [Why one split is not enough](#1-holdout-validation-and-why-one-split-is-not-enough) | The seed alone moves your score by 1.4pp |
-| 2 | [Cross-validation](#2-cross-validation-k-fold-stratified-and-loocv) | Report **mean ± std**, never a lone number |
-| 3 | [Bootstrapping](#3-bootstrapping-and-confidence-intervals) | "0.89" is really "0.88 to 0.91" |
-| 4 | [Overfitting & underfitting](#4-overfitting-and-underfitting) | Watch the **gap**, not the training score |
-| 5 | [Hyperparameter tuning](#5-hyperparameter-tuning) | Random beats Grid. And often nothing beats both |
-
----
-
-# 1. Holdout validation, and why one split is not enough
-
-**Holdout** is what you have been doing since Session 3: one `train_test_split`, train on 80%, score on 20%.
-
-🧠 **Analogy: judging a restaurant from one meal.** It could have been an off night, or the chef's best dish. **One visit is evidence; it is not a verdict.**
-
-## 📘 Examples
-
-**Example 1 — the same model, ten different seeds**
-
-```python
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-
-scores = []
-for seed in range(10):
-    a, b, c, d = train_test_split(X, y, test_size=.2, random_state=seed, stratify=y)
-    scores.append(RandomForestClassifier(n_estimators=100, random_state=42).fit(a, c).score(b, d))
-```
-
-Measured:
-
-| | |
+| Part | Question it answers |
 |---|---|
-| Mean | 0.8945 |
-| Std | 0.0038 |
-| **Lowest** | **0.8880** |
-| **Highest** | **0.9020** |
-| **Spread** | **0.0140** |
+| **A — [Is my number real?](#part-a--is-my-number-real)** | *How do I estimate performance honestly?* |
+| **B — [Overfitting & underfitting](#part-b--overfitting--underfitting)** | *Is my model too simple, too complex, or right?* |
+| **C — [Hyperparameter tuning](#part-c--hyperparameter-tuning)** | *How do I make it better, without cheating?* |
 
-**Nothing changed except the random seed, and the score moved by 1.4 percentage points.**
+| # | Topic | | # | Topic |
+|---|---|---|---|---|
+| 1 | [One split is not an answer](#1-one-split-is-not-an-answer) | | 11 | [Validation curves](#11-validation-curves) |
+| 2 | [Holdout validation](#2-holdout-validation) | | 12 | [Learning curves](#12-learning-curves) |
+| 3 | [K-Fold cross-validation](#3-k-fold-cross-validation) | | 13 | [Fixing each problem](#13-fixing-each-problem) |
+| 4 | [Stratified K-Fold](#4-stratified-k-fold) | | 14 | [Parameters vs hyperparameters](#14-parameters-vs-hyperparameters) |
+| 5 | [Leave-One-Out](#5-leave-one-out-cross-validation) | | 15 | [Manual search](#15-manual-search-and-the-trap-in-it) |
+| 6 | [Bootstrapping](#6-bootstrapping) | | 16 | [Grid search](#16-grid-search) |
+| 7 | [The two leaks](#7-the-two-leaks-that-make-every-number-a-lie) | | 17 | [Random search](#17-random-search) |
+| 8 | [Choosing a strategy](#8-choosing-a-validation-strategy) | | 18 | [Bayesian optimization](#18-bayesian-optimization) |
+| 9 | [The three fits](#9-the-three-fits) | | 19 | [Tuning inside a pipeline](#19-tuning-inside-a-pipeline) |
+| 10 | [Reading the gap](#10-reading-the-gap) | | 20 | [Model selection with CV](#20-model-selection-with-cross-validation) |
 
-If you had run seed 0 you would report 0.89. Run another and you report 0.90. **Both are the same model on the same data.** Every time you see two models "compared" on a single split with a gap smaller than this, the comparison is meaningless.
-
-**Example 2 — what this means for your reports**
-
-```python
-# ❌ Not defensible
-print(f"Accuracy: {model.score(X_test, y_test):.4f}")
-
-# ✅ Defensible
-from sklearn.model_selection import cross_val_score
-cv = cross_val_score(model, X, y, cv=5)
-print(f"Accuracy: {cv.mean():.4f} ± {cv.std():.4f}")
-```
-
-**Example 3 — when holdout is still the right choice**
-
-Holdout is not wrong; it is *cheap*. Use it when:
-
-- The dataset is large (millions of rows — the split variance shrinks)
-- Training takes hours, and 5 folds means 5× the hours
-- You are iterating quickly and only need a rough signal
-
-> **Use holdout to explore. Use cross-validation to report.**
-
-## ✏️ Practice
-
-1. Run the ten-seed experiment. What spread do you get?
-2. Repeat with `test_size=0.1`. Is the spread larger or smaller? Why?
-3. Repeat with a `DecisionTreeClassifier`. Is it more or less stable than a forest?
-4. Take a 500-row sample and repeat. What happens to the spread?
-5. Two models score 0.891 and 0.894 on one split. What can you conclude?
-
-<details><summary>Solutions</summary>
-
-```python
-import numpy as np, pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
-BASE = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/"
-
-L = pd.read_csv(BASE + "loan_data_10k.csv").dropna().reset_index(drop=True)
-for c in L.select_dtypes(include="object").columns:
-    L[c] = LabelEncoder().fit_transform(L[c])
-X, y = L.drop(columns=["loan_status"]), L["loan_status"]
-
-def spread(model_fn, Xd=X, yd=y, test_size=.2, seeds=10):
-    s = []
-    for seed in range(seeds):
-        a, b, c, d = train_test_split(Xd, yd, test_size=test_size,
-                                      random_state=seed, stratify=yd)
-        s.append(model_fn().fit(a, c).score(b, d))
-    return np.mean(s), np.std(s), max(s) - min(s)
-
-rf = lambda: RandomForestClassifier(n_estimators=100, random_state=42)
-dt = lambda: DecisionTreeClassifier(random_state=42)
-
-print("forest, 20%% test : mean %.4f std %.4f spread %.4f" % spread(rf))          # 1
-print("forest, 10%% test : mean %.4f std %.4f spread %.4f" % spread(rf, test_size=.1))  # 2
-# A SMALLER test set gives a LARGER spread -- fewer rows to average over.
-print("tree,   20%% test : mean %.4f std %.4f spread %.4f" % spread(dt))          # 3
-# The single tree is less stable: a forest already averages 100 trees.
-
-small = L.sample(500, random_state=0)                                            # 4
-print("forest, 500 rows : mean %.4f std %.4f spread %.4f" %
-      spread(rf, small.drop(columns=["loan_status"]), small["loan_status"]))
-# Much larger spread. Small data means unreliable estimates -- and this is
-# exactly when people report a single number most confidently.
-
-# 5 - NOTHING. A 0.003 gap is far inside the 0.014 the seed alone produces.
-#     To compare them you need cross-validation on both, and even then you
-#     compare mean +/- std, not the means alone.
-```
-</details>
-
-## ❓ MCQs
-
-**Q1.** Changing only `random_state` moved accuracy from 0.888 to 0.902. This shows…
-- (a) The model is broken  (b) A single split is an unreliable estimate  (c) The data is corrupt  (d) You need more trees
-
-**Q2.** Two models score 0.891 and 0.894 on one split. You can conclude…
-- (a) The second is better  (b) Nothing — the gap is smaller than split-to-split noise  (c) The first is better  (d) Both are overfitted
-
-**Q3.** A smaller test set produces…
-- (a) A more reliable estimate  (b) A less reliable estimate with more variance  (c) The same variance  (d) No estimate
-
-**Q4.** When is plain holdout a reasonable choice?
-- (a) Never  (b) On very large data, or when training is slow and you need a rough signal  (c) Always  (d) Only for regression
-
-**Q5.** What should a defensible report show?
-- (a) The best score you saw  (b) Mean ± standard deviation across folds  (c) The training score  (d) A single test score
-
-<details><summary>Answers</summary>
-
-**A1 — (b).** Same model, same data, same everything except which rows landed where.
-
-**A2 — (b).** **This is the most common mistake in student projects.** The gap is inside the noise.
-
-**A3 — (b).** Fewer rows to average over means a noisier estimate.
-
-**A4 — (b).** **Use holdout to explore, cross-validation to report.**
-
-**A5 — (b).** A number without a spread is not a result.
-</details>
-
-## 🎯 Tasks
-
-**Task 1 — Your own variance study.** Take a dataset and model of your choice and run 20 seeds. Report mean, std and spread, and **draw a histogram of the scores.** Then state the smallest difference between two models you would be willing to call real on this data.
-
-**Task 2 — Re-audit your past work.** Go back to your Session 5 six-model comparison. **Were any of the gaps you reported smaller than the split noise?** Rewrite the conclusion honestly if so. This is the single most valuable exercise in the session.
+**Practices sit between the topics.** The [20 MCQs](#-session-8--20-mcqs) and [tasks](#-session-8--tasks) are at the end.
 
 ---
 
-# 2. Cross-validation: K-Fold, Stratified and LOOCV
+## The dataset used throughout Part A and Part C
 
-**Do not split once. Split k times, so every row is tested exactly once.**
+**Heart failure clinical records: 299 patients, 13 measurements, and whether the patient died.**
 
-🧠 **Analogy: five judges instead of one.** Each judge sits out one round and scores the round they did not compete in. Everyone gets judged, everyone gets to judge, and you report the average. **One judge might be harsh; five together are hard to fool.**
-
-```text
-5-Fold Cross-Validation
-
-fold 1  [TEST ][train][train][train][train]
-fold 2  [train][TEST ][train][train][train]
-fold 3  [train][train][TEST ][train][train]
-fold 4  [train][train][train][TEST ][train]
-fold 5  [train][train][train][train][TEST ]
-                                              -> mean ± std of 5 scores
-```
-
-| Method | Folds | Use when |
-|---|---|---|
-| **K-Fold** | k (usually 5 or 10) | The default |
-| **Stratified K-Fold** | k | **Classification — keeps class balance in every fold** |
-| **LOOCV** | n (one per row) | Very small datasets only |
-
-> `cross_val_score` uses **Stratified** K-Fold automatically for classifiers. You get the right behaviour by default.
-
-## 📘 Examples
-
-**Example 1 — 5-fold on the loan data**
-
-```python
-from sklearn.model_selection import cross_val_score
-
-cv = cross_val_score(RandomForestClassifier(n_estimators=100, random_state=42), X, y, cv=5)
-print(cv.round(4))
-print(f"{cv.mean():.4f} ± {cv.std():.4f}")
-```
-
-Measured: `[0.8915 0.8945 0.8804 0.9075 0.8999]` → **0.8948 ± 0.0090**
-
-**Look at the individual folds: 0.8804 to 0.9075.** That range is the honest picture of how much your score depends on which rows you happened to test on.
-
-**Example 2 — is 10-fold better than 5-fold?**
-
-| | Mean | Std | Time |
-|---|---|---|---|
-| 5-fold | 0.8948 | 0.0090 | 2.7 s |
-| 10-fold | 0.8946 | 0.0103 | 6.1 s |
-
-**The same answer for 2.3× the time.** More folds means each model trains on more data, but you pay linearly for it and the estimate barely improves. **5-fold is the sensible default; 10-fold when data is scarce.**
-
-**Example 3 — LOOCV, and its real cost**
-
-LOOCV trains **n** models, each leaving out one row. On 200 rows:
-
-| Method | Mean | Fits |
-|---|---|---|
-| LOOCV | 0.8500 | **200** |
-| 5-fold | 0.7900 | **5** |
-
-**LOOCV scores higher because each of its models trains on 199 rows, while each 5-fold model trains on only 160.** With 200 rows that difference is substantial — which is exactly why LOOCV exists.
-
-But scale it up: LOOCV on the full 9,997-row dataset would mean **9,997 model fits**. At roughly half a second each, that is well over an hour for one number.
-
-> **LOOCV is for when data is so scarce that you cannot spare 20% for a test set.** Below a few hundred rows, consider it. Above that, use 5-fold.
-
-## ✏️ Practice
-
-1. Run 5-fold on the loan data. Report mean ± std and the individual folds.
-2. Compare 3-fold, 5-fold and 10-fold on mean, std and runtime.
-3. Take a 200-row sample and compare LOOCV with 5-fold. Explain the gap.
-4. Why does `cross_val_score` use *stratified* folds for classifiers?
-5. Use `cross_val_score(..., scoring="f1")`. Does the ranking of two models change?
-
-<details><summary>Solutions</summary>
-
-```python
-import time, numpy as np, pandas as pd
-from sklearn.model_selection import cross_val_score, LeaveOneOut
-from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
-BASE = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/"
-
-L = pd.read_csv(BASE + "loan_data_10k.csv").dropna().reset_index(drop=True)
-for c in L.select_dtypes(include="object").columns:
-    L[c] = LabelEncoder().fit_transform(L[c])
-X, y = L.drop(columns=["loan_status"]), L["loan_status"]
-rf = lambda: RandomForestClassifier(n_estimators=100, random_state=42)
-
-cv = cross_val_score(rf(), X, y, cv=5)                                 # 1
-print(cv.round(4), f"-> {cv.mean():.4f} +/- {cv.std():.4f}")
-
-for k in [3, 5, 10]:                                                   # 2
-    t0 = time.time(); s = cross_val_score(rf(), X, y, cv=k)
-    print(f"{k:>2}-fold  mean {s.mean():.4f}  std {s.std():.4f}  {time.time()-t0:.1f}s")
-# More folds costs linearly and the estimate barely improves.
-
-sub = L.sample(200, random_state=42)                                   # 3
-Xs, ys = sub.drop(columns=["loan_status"]), sub["loan_status"]
-dt = lambda: DecisionTreeClassifier(max_depth=4, random_state=42)
-print("LOOCV :", round(cross_val_score(dt(), Xs, ys, cv=LeaveOneOut()).mean(), 4), "(200 fits)")
-print("5-fold:", round(cross_val_score(dt(), Xs, ys, cv=5).mean(), 4), "(5 fits)")
-# LOOCV is higher because each of its models trains on 199 rows,
-# while each 5-fold model trains on only 160.
-
-# 4 - Without stratification a fold could get very few (or none) of a rare
-#     class, making that fold's score meaningless. Stratifying keeps the
-#     class balance of the full dataset inside every fold.
-
-for name, m in [("forest", rf()), ("tree", dt())]:                     # 5
-    acc = cross_val_score(m, X, y, cv=5).mean()
-    f1 = cross_val_score(m, X, y, cv=5, scoring="f1").mean()
-    print(f"{name:<8} acc {acc:.4f}   f1 {f1:.4f}")
-# Ranking usually holds here because the classes are balanced. On the
-# IMBALANCED diabetes data from Session 6 it can flip -- which is why you
-# choose the metric BEFORE you compare.
-```
-</details>
-
-## ❓ MCQs
-
-**Q1.** In 5-fold cross-validation, each row is used for testing…
-- (a) Five times  (b) Exactly once  (c) Never  (d) It depends on the seed
-
-**Q2.** Why does `cross_val_score` stratify by default for classifiers?
-- (a) It is faster  (b) So every fold keeps the class balance of the full data  (c) It reduces overfitting  (d) It does not
-
-**Q3.** 10-fold gave the same mean as 5-fold for 2.3× the time. This suggests…
-- (a) 10-fold is broken  (b) 5-fold is a sensible default on data this size  (c) Always use 10-fold  (d) Always use 3-fold
-
-**Q4.** LOOCV on 10,000 rows requires how many model fits?
-- (a) 10  (b) 100  (c) 10,000  (d) 1
-
-**Q5.** LOOCV scored higher than 5-fold on the same 200 rows because…
-- (a) It is more accurate  (b) Each of its models trains on more data (199 vs 160 rows)  (c) It uses a different metric  (d) Random chance
-
-**Q6.** When is LOOCV genuinely worth it?
-- (a) Always  (b) When data is so scarce you cannot spare a test set  (c) On large datasets  (d) For deep learning
-
-<details><summary>Answers</summary>
-
-**A1 — (b) Exactly once.** That is the whole point: every row contributes to the estimate.
-
-**A2 — (b).** Otherwise a fold might contain almost none of a rare class.
-
-**A3 — (b).** More folds is not automatically better — you pay linearly for a marginal gain.
-
-**A4 — (c) 10,000.** Over an hour for one number.
-
-**A5 — (b).** With only 200 rows, 199-vs-160 training rows is a real difference.
-
-**A6 — (b).** Below a few hundred rows. Above that, use 5-fold.
-</details>
-
-## 🎯 Tasks
-
-**Task 1 — The honest comparison.** Take three models and compare them with 5-fold CV, reporting mean ± std for each. **Then state which differences you believe are real** — a difference smaller than the standard deviations overlapping is not a finding.
-
-**Task 2 — The fold-count curve.** Plot CV mean and runtime against k for k = 2, 3, 5, 10, 20. **Mark the k you would use and justify it with both axes.**
-
-**Task 3 — Small-data study.** Sample 100, 200, 500 and 1,000 rows. For each, compare LOOCV with 5-fold on score and on runtime. **At what dataset size does LOOCV stop being worth it?**
-
----
-
-# 3. Bootstrapping and confidence intervals
-
-**Bootstrapping answers a question none of the above do: how uncertain is my number?**
-
-🧠 **Analogy: an exit poll.** You cannot ask every voter. So you sample, and sample again, and again — and the spread across your samples tells you the margin of error. **"52%, ±3 points" is a far more honest statement than "52%".**
-
-The trick is **resampling with replacement**: draw a new test set the same size as the original, allowing duplicates. Score. Repeat 200 times. The middle 95% of those scores is your confidence interval.
+**It arrives with the same two problems you fixed in [Session 6](session-06-augmentation-feature-engg-red.md#11-example-2--heart-failure): the yes/no columns are text, and three numeric columns have gaps. Fix them once, here, and the rest of the session can get on with the real subject.**
 
 ```python
 import numpy as np
+import pandas as pd
 
-boots = []
-rng = np.random.default_rng(0)
-for _ in range(200):
-    idx = rng.integers(0, len(X_test), len(X_test))       # with replacement
-    boots.append(model.score(X_test.iloc[idx], y_test.iloc[idx]))
+dataset_url = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/heart_failure_raw.csv"
+heart = pd.read_csv(dataset_url)
 
-lo, hi = np.percentile(boots, [2.5, 97.5])
-print(f"{np.mean(boots):.4f}   95% CI [{lo:.4f}, {hi:.4f}]")
+# Yes/No text -> 1/0
+for col in ["anaemia", "diabetes", "high_blood_pressure", "sex", "smoking", "DEATH_EVENT"]:
+    heart[col] = heart[col].map({"Yes": 1, "No": 0})
+
+# one text column with four categories -> dummy variables
+heart = pd.get_dummies(heart, columns=["treatment_type"], drop_first=True)
+
+# three numeric columns have gaps -> median fill
+for col in ["age", "ejection_fraction", "serum_creatinine"]:
+    heart[col] = heart[col].fillna(heart[col].median())
+
+X = heart.drop(columns=["DEATH_EVENT"])
+y = heart["DEATH_EVENT"]
+
+print("X:", X.shape, " missing:", X.isnull().sum().sum())
+print("class balance:", y.value_counts().to_dict())
 ```
 
-## 📘 Examples
+**Output:**
 
-**Example 1 — a real confidence interval**
-
-Measured on the loan data:
-
-| | |
-|---|---|
-| Point estimate | 0.8949 |
-| **95% CI** | **[0.8805, 0.9075]** |
-| Width | 0.0270 |
-
-**Your "89.5% accurate" model is really "somewhere between 88.1% and 90.8%".**
-
-Now go back to Session 5's six-model table, where Random Forest scored 0.8910 and SVM 0.8780. **That 1.3-point gap sits comfortably inside a 2.7-point confidence interval.** The forest is probably better — but "probably" is the honest word, and a single split could never have told you that.
-
-**Example 2 — what the interval is telling you**
-
-```python
-import matplotlib.pyplot as plt
-plt.hist(boots, bins=30)
-plt.axvline(lo, color="red", ls="--")
-plt.axvline(hi, color="red", ls="--")
+```text
+X: (299, 15)  missing: 0
+class balance: {0: 203, 1: 96}
 ```
 
-The histogram is the distribution of scores you might have reported **if the world had handed you a slightly different test set.**
-
-**Example 3 — the three techniques compared**
-
-| Technique | Answers |
-|---|---|
-| **Holdout** | *What did this model score once?* |
-| **Cross-validation** | *What does it score on average, and how much does that vary?* |
-| **Bootstrapping** | *What is the range my true score plausibly lies in?* |
-
-> They are not competitors. **Cross-validate to choose your model; bootstrap to report its uncertainty.**
-
-## ✏️ Practice
-
-1. Compute a 95% bootstrap CI for your model. How wide is it?
-2. Try 50, 200 and 1,000 resamples. Does the interval stabilise?
-3. Compute a 99% interval. Is it wider or narrower? Why?
-4. Bootstrap a 500-row test set instead. What happens to the width?
-5. Two models differ by 0.008 and both CIs are 0.027 wide. What do you report?
-
-<details><summary>Solutions</summary>
-
-```python
-import numpy as np, pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestClassifier
-BASE = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/"
-
-L = pd.read_csv(BASE + "loan_data_10k.csv").dropna().reset_index(drop=True)
-for c in L.select_dtypes(include="object").columns:
-    L[c] = LabelEncoder().fit_transform(L[c])
-X, y = L.drop(columns=["loan_status"]), L["loan_status"]
-a, b, c, d = train_test_split(X, y, test_size=.2, random_state=42, stratify=y)
-m = RandomForestClassifier(n_estimators=100, random_state=42).fit(a, c)
-
-def boot(Xt, yt, n=200, pct=(2.5, 97.5), seed=0):
-    rng = np.random.default_rng(seed)
-    s = [m.score(Xt.iloc[i], yt.iloc[i])
-         for i in (rng.integers(0, len(Xt), len(Xt)) for _ in range(n))]
-    lo, hi = np.percentile(s, pct)
-    return np.mean(s), lo, hi
-
-for n in [50, 200, 1000]:                                              # 1, 2
-    mu, lo, hi = boot(b, d, n=n)
-    print(f"n={n:<5} {mu:.4f}  CI [{lo:.4f}, {hi:.4f}]  width {hi-lo:.4f}")
-# The interval settles down by about 200 resamples.
-
-mu, lo, hi = boot(b, d, pct=(0.5, 99.5))                               # 3
-print(f"99% CI [{lo:.4f}, {hi:.4f}] width {hi-lo:.4f}")
-# WIDER. More confidence requires a bigger net.
-
-small_b, small_d = b.iloc[:500], d.iloc[:500]                          # 4
-mu, lo, hi = boot(small_b, small_d)
-print(f"500-row test CI width {hi-lo:.4f}")
-# Much wider -- a smaller test set means a less certain estimate.
-
-# 5 - Report BOTH with their intervals and say the difference is not
-#     established. A 0.008 gap inside 0.027-wide intervals is not evidence.
-#     If the decision matters, get more test data or use paired CV folds.
-```
-</details>
-
-## ❓ MCQs
-
-**Q1.** Bootstrapping resamples…
-- (a) Without replacement  (b) With replacement, so rows can repeat  (c) Only the training set  (d) The features
-
-**Q2.** A 95% CI of [0.8805, 0.9075] means…
-- (a) The model is 95% accurate  (b) The true score plausibly lies in that range  (c) 95% of predictions are right  (d) An error
-
-**Q3.** A 99% interval compared with a 95% interval is…
-- (a) Narrower  (b) Wider  (c) The same  (d) Undefined
-
-**Q4.** Two models differ by 0.008 with overlapping 0.027-wide intervals. You should report…
-- (a) The better model wins  (b) That the difference is not established  (c) Only the higher score  (d) Neither model
-
-**Q5.** Which technique tells you the *uncertainty* of a score?
-- (a) Holdout  (b) Grid search  (c) Bootstrapping  (d) Stratification
-
-**Q6.** A smaller test set gives a bootstrap interval that is…
-- (a) Narrower  (b) Wider  (c) Unchanged  (d) Zero
-
-<details><summary>Answers</summary>
-
-**A1 — (b) With replacement.** That is what simulates "a slightly different test set".
-
-**A2 — (b).** It is a statement about the *estimate*, not about individual predictions.
-
-**A3 — (b) Wider.** More confidence needs a bigger net.
-
-**A4 — (b).** **This is intellectual honesty, and it is what separates a real report from a student project.**
-
-**A5 — (c) Bootstrapping.**
-
-**A6 — (b).** Fewer rows means more uncertainty.
-</details>
-
-## 🎯 Tasks
-
-**Task 1 — Put an interval on your model.** Compute a 95% bootstrap CI and **draw the histogram with the interval marked.** Write the one-sentence version you would say in a presentation.
-
-**Task 2 — Revisit Session 5 honestly.** Bootstrap the top three models from your Session 5 comparison. **Do their intervals overlap?** Rewrite your recommendation in light of the answer.
+> **299 rows is small, and 203 vs 96 is imbalanced.** **Both facts will matter enormously in the next few pages** — small data makes estimates unstable, and imbalance makes some validation strategies unsafe.
 
 ---
 
-# 4. Overfitting and underfitting
+# Part A — Is my number real?
 
-🧠 **Analogy: two students preparing for an exam.**
+# 1. One split is not an answer
 
-- **The memoriser** learns every past paper by heart, including the typos. Perfect on those papers, lost on a new question. **That is overfitting.**
-- **The skimmer** reads the chapter titles only. Bad on the past papers *and* the new ones. **That is underfitting.**
-- **The one you want** understood the method: good on both.
-
-| | Training score | Test score | Gap |
-|---|---|---|---|
-| **Underfitting** | Low | Low | Small |
-| **Good fit** | High | High | Small |
-| **Overfitting** | **Very high** | **Lower** | **Large** |
-
-> **Watch the gap, not the training score.** A training accuracy of 1.0000 is not an achievement — it is a warning.
-
-## 📘 Examples
-
-**Example 1 — a decision tree overfitting in real time**
-
-Measured on the loan data:
-
-| max_depth | Train | Test | Gap |
-|---|---|---|---|
-| 1 | 0.8286 | 0.8240 | +0.005 |
-| 3 | 0.8327 | 0.8070 | +0.026 |
-| 5 | 0.8803 | 0.8515 | +0.029 |
-| **8** | 0.9007 | **0.8665** ← best | +0.034 |
-| 12 | 0.9416 | 0.8600 | +0.082 |
-| 20 | 0.9961 | 0.8480 | +0.148 |
-| **None** | **1.0000** | **0.8435** | **+0.157** |
-
-**Read the last row.** The tree gets **every single training row right** — and is the *worst* model in the table on unseen data. It memorised.
-
-**The test score peaks at depth 8 and falls after.** That peak is the model you ship. Everything to the left is underfitting; everything to the right is overfitting.
-
-**Example 2 — the fixes**
-
-| Problem | Fixes |
-|---|---|
-| **Underfitting** | A more capable model, more features, less regularisation, train longer |
-| **Overfitting** | **More data** (best), simpler model, regularisation, `max_depth`, early stopping, ensembles |
-
-**Example 3 — how a Random Forest fights overfitting**
+**Here is the experiment. The same model, the same data, the same code. The only thing that changes is `random_state` — which decides *which rows land in the test set*.**
 
 ```python
-DecisionTreeClassifier()                          # train 1.0000, test 0.8435
-RandomForestClassifier(n_estimators=200)          # train ~1.0000, test ~0.8910
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.pipeline import make_pipeline
+from sklearn.svm import SVC
+
+for seed in range(10):
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=seed, stratify=y)
+    model = make_pipeline(MinMaxScaler(), SVC()).fit(X_train, y_train)
+    print(f"random_state={seed}   accuracy {model.score(X_test, y_test):.4f}")
 ```
 
-**Both memorise the training set. Only one generalises.** Each tree in the forest overfits a *different* random slice, and averaging cancels their individual mistakes — the panel-of-doctors analogy from Session 5, now with numbers attached.
+**Output:**
 
-## ✏️ Practice
+```text
+random_state=0   accuracy 0.7500
+random_state=1   accuracy 0.7667
+random_state=2   accuracy 0.7333
+random_state=3   accuracy 0.7500
+random_state=4   accuracy 0.7833
+random_state=5   accuracy 0.7667
+random_state=6   accuracy 0.7833
+random_state=7   accuracy 0.7333
+random_state=8   accuracy 0.8167
+random_state=9   accuracy 0.6500
+```
 
-1. Build the depth table above. Where does test accuracy peak?
-2. Plot train and test accuracy against depth on one chart. Where do the lines diverge?
-3. What is the gap at unlimited depth? What does a training score of 1.0 tell you?
-4. Compare an unlimited-depth single tree with a 200-tree forest. Explain the difference.
-5. Take 500 rows and rebuild the curve. Does overfitting start earlier or later?
+![The same model, ten seeds, a 17-point swing](images/s8-holdout-instability.png)
+
+> **0.6500 to 0.8167 — a swing of 16.7 percentage points, from nothing but which 60 patients happened to land in the test set.**
+>
+> **Both are "the accuracy". Neither is wrong. And a report that quotes one of them is not lying — it is just not saying anything reliable.**
+
+## Why this happens
+
+**The test set here is 60 patients. One patient is 1.67 percentage points.** **Ten unusual patients landing in test instead of train moves the number by 17 points, and nothing warns you.**
+
+| Test set size | One row is worth |
+|---|---|
+| 60 rows | **1.67 points** |
+| 1,000 rows | 0.10 points |
+| 100,000 rows | 0.001 points |
+
+> **This is why small datasets need cross-validation and large ones can sometimes get away without it.** **299 rows is small.**
+
+## What to do about it
+
+> **Never report a single split's score as *the* accuracy on a small dataset.** **Report a mean and a spread from several splits** — which is exactly what cross-validation automates.
+
+---
+
+# 2. Holdout validation
+
+**The method you already know: split once, train on one part, test on the other.**
+
+```python
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y)
+
+model = make_pipeline(MinMaxScaler(), SVC()).fit(X_train, y_train)
+print("holdout accuracy:", round(model.score(X_test, y_test), 4))
+```
+
+**Output:** `holdout accuracy: 0.7833`
+
+| | |
+|---|---|
+| **Cost** | **One model. The cheapest option there is** |
+| **Uses for training** | 80% of the data |
+| **Uses for testing** | 20%, **once** |
+| **Good for** | Large datasets, quick checks, the final unbiased test |
+| **Bad for** | **Small datasets — as §1 just demonstrated** |
+
+## ⚠️ `stratify=y` is not optional here
+
+```python
+a, b, c, d = train_test_split(X, y, test_size=0.2, random_state=9)
+print("without stratify — test set class balance:", d.value_counts().to_dict())
+
+a, b, c, d = train_test_split(X, y, test_size=0.2, random_state=9, stratify=y)
+print("with stratify    — test set class balance:", d.value_counts().to_dict())
+```
+
+**Output:**
+
+```text
+without stratify — test set class balance: {0: 45, 1: 15}
+with stratify    — test set class balance: {0: 41, 1: 19}
+```
+
+> **The full dataset is 32% positive. Without stratifying, this test set came out 25% positive** — a different problem from the one the model trained on.
+>
+> **`stratify=y` forces the test set to have the same class proportions as the full dataset.** **Without it, on a 203/96 split, a test set can drift badly** — and you end up measuring a different problem from the one you trained on.
+
+---
+
+# 3. K-Fold cross-validation
+
+> **Instead of one split, make k of them — and let every row be in the test set exactly once.**
+
+🧠 **Analogy: five examiners marking one script.** One examiner's mark could be harsh or generous. **Five marks, averaged, tell you far more — and the spread between them tells you how much to trust the average.**
+
+## How it works
+
+```text
+5-fold cross-validation, 299 rows:
+
+fold 1:  [TEST ][         TRAIN          ]   -> score 1
+fold 2:  [ TRAIN ][TEST][     TRAIN      ]   -> score 2
+fold 3:  [    TRAIN    ][TEST][  TRAIN   ]   -> score 3
+fold 4:  [        TRAIN       ][TEST][TR ]   -> score 4
+fold 5:  [           TRAIN         ][TEST]   -> score 5
+
+Five models are trained. Every row is tested exactly once.
+The answer is the MEAN of the five scores, and the SPREAD tells you the uncertainty.
+```
+
+```python
+from sklearn.model_selection import KFold, cross_val_score
+
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+scores = cross_val_score(make_pipeline(MinMaxScaler(), SVC()), X, y, cv=kf)
+
+print("each fold:", scores.round(4))
+print(f"mean {scores.mean():.4f}  +/-  {scores.std():.4f}")
+```
+
+**Output:**
+
+```text
+each fold: [0.6833 0.6833 0.75   0.7833 0.7627]
+mean 0.7325  +/-  0.0416
+```
+
+> **The single holdout said 0.7833 — which is the *best* of the five folds.** **The honest answer is 0.7325 ± 0.0416.**
+
+## Reading the two numbers
+
+| | What it tells you |
+|---|---|
+| **Mean** | Your best estimate of performance |
+| **Standard deviation** | **How much to trust the mean** |
+
+> **Always report both.** **"0.73 ± 0.04" is a statement. "0.78" is a claim you cannot support.**
+>
+> **And when comparing two models: if their means differ by less than the spread, you have not shown a difference.**
+
+## ⚠️ `shuffle=True` matters
+
+**Without shuffling, `KFold` takes the rows in file order.** **If the file is sorted — by date, by class, by hospital — each fold gets a systematically different slice**, and the scores become meaningless.
+
+```python
+# illustrative: a syntax reference, not runnable as written.
+KFold(n_splits=5)                                    # takes rows in file order - risky
+KFold(n_splits=5, shuffle=True, random_state=42)     # always prefer this
+```
+
+## How many folds?
+
+| k | Trade-off |
+|---|---|
+| **3** | Fast; each model trains on only 67% of the data |
+| **5** | **The usual default.** Good balance |
+| **10** | More reliable, twice the cost |
+| **n (LOOCV)** | Maximum training data, maximum cost — see §5 |
+
+---
+
+# 4. Stratified K-Fold
+
+**Plain `KFold` splits at random. On imbalanced data, that is a problem.**
+
+**Our target is 203 negatives to 96 positives — roughly 2:1. A random fold could easily end up 3:1 or 1.5:1, and each fold is then measuring a slightly different problem.**
+
+```python
+from sklearn.model_selection import StratifiedKFold
+
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+strat_scores = cross_val_score(make_pipeline(MinMaxScaler(), SVC()), X, y, cv=skf)
+
+print("plain KFold      :", scores.round(4), f"  mean {scores.mean():.4f}  std {scores.std():.4f}")
+print("StratifiedKFold  :", strat_scores.round(4), f"  mean {strat_scores.mean():.4f}  std {strat_scores.std():.4f}")
+```
+
+**Output:**
+
+```text
+plain KFold      : [0.6833 0.6833 0.75   0.7833 0.7627]   mean 0.7325  std 0.0416
+StratifiedKFold  : [0.7667 0.7333 0.7667 0.7667 0.7966]   mean 0.7660  std 0.0200
+```
+
+> **Stratifying more than halved the spread — 0.0416 down to 0.0200 — and raised the mean.**
+>
+> **Look at the folds themselves.** Plain KFold's worst fold is 0.6833 and its best is 0.7833: a 10-point range. Stratified runs from 0.7333 to 0.7966. **The extra variation in the first was not about the model at all — it was about how the classes happened to fall.**
+
+> ✅ **Rule: for classification, always use `StratifiedKFold`.** **`cross_val_score` uses it automatically when you pass `cv=5` and the estimator is a classifier** — but write it explicitly so the reader can see the decision.
+
+---
+
+# 5. Leave-One-Out cross-validation
+
+> **k-fold taken to its extreme: k = n. Every single row gets its own turn as the entire test set.**
+
+**With 299 patients, that means training 299 models, each on 298 rows.**
+
+```python
+from sklearn.model_selection import LeaveOneOut
+
+loo_scores = cross_val_score(make_pipeline(MinMaxScaler(), SVC()), X, y,
+                             cv=LeaveOneOut(), n_jobs=-1)
+
+print("models trained:", len(loo_scores))
+print("LOOCV accuracy:", round(loo_scores.mean(), 4))
+```
+
+**Output:**
+
+```text
+models trained: 299
+LOOCV accuracy: 0.7492
+```
+
+> **Each individual "score" is either 0 or 1** — one row is either classified correctly or not. **The mean over all 299 is the useful number.**
+
+| | |
+|---|---|
+| ✅ **Maximum training data** | Every model sees 298 of 299 rows |
+| ✅ **No randomness at all** | There is only one way to leave one out. **Run it twice, get the same answer** |
+| ❌ **Cost** | **n models.** 299 here; 100,000 on a large dataset |
+| ❌ **High variance estimate** | The 299 models are almost identical to each other, so their errors are correlated |
+
+> **Use LOOCV when the dataset is genuinely tiny** — a few dozen rows, where holding out 20% would leave nothing to test on. **Otherwise 5- or 10-fold gives a comparable answer for a fraction of the cost.**
+
+---
+
+# 6. Bootstrapping
+
+> **Sample rows *with replacement* to build a new training set of the same size, and test on whatever was left out.**
+
+🧠 **Analogy: drawing names from a hat and putting each one back.** **Some names get drawn twice, some not at all.** The ones never drawn are your test set.
+
+**On average, each bootstrap sample contains about 63.2% of the unique rows — so roughly 36.8% are left over.** **Those left-over rows are called *out-of-bag*, and they are free test data.**
+
+```python
+rng = np.random.default_rng(42)
+n = len(X)
+boot_scores = []
+
+for _ in range(200):
+    idx = rng.integers(0, n, n)                       # sample WITH replacement
+    oob = np.setdiff1d(np.arange(n), np.unique(idx))  # rows never drawn
+    model = make_pipeline(MinMaxScaler(), SVC()).fit(X.iloc[idx], y.iloc[idx])
+    boot_scores.append(model.score(X.iloc[oob], y.iloc[oob]))
+
+boot_scores = np.array(boot_scores)
+print(f"mean accuracy   {boot_scores.mean():.4f}")
+print(f"95% interval    [{np.percentile(boot_scores, 2.5):.4f}, "
+      f"{np.percentile(boot_scores, 97.5):.4f}]")
+```
+
+**Output:**
+
+```text
+mean accuracy   0.7385
+95% interval    [0.6567, 0.8131]
+```
+
+> **This is what bootstrapping gives you that k-fold does not: a *confidence interval*.**
+>
+> **"Accuracy is 0.74, and 95% of the time it lands between 0.66 and 0.81."** **That is a far more honest sentence than "accuracy is 0.78"** — and notice the interval is almost exactly the range we saw from the ten random seeds in §1.
+
+| | |
+|---|---|
+| ✅ **Gives a confidence interval**, not just a point estimate | |
+| ✅ Works on very small datasets | |
+| ❌ Training rows are duplicated | Which slightly biases some models |
+| ❌ Expensive | 200 models here |
+
+> **You have already used bootstrapping without knowing it: a Random Forest bootstraps its rows for every tree.** **That is where the "bagging" in bagged trees comes from.**
+
+---
+
+# 7. The two leaks that make every number a lie
+
+**Every number above used `make_pipeline(MinMaxScaler(), SVC())` rather than scaling first. That was deliberate.**
+
+## Leak 1 — scaling before the split
+
+```python
+from sklearn.preprocessing import MinMaxScaler
+
+# ❌ WRONG - the scaler sees every row, including the test rows
+X_scaled_all = MinMaxScaler().fit_transform(X)
+leaky = cross_val_score(SVC(), X_scaled_all, y, cv=skf)
+
+# ✅ RIGHT - the scaler is fitted inside each fold, on that fold's training rows only
+correct = cross_val_score(make_pipeline(MinMaxScaler(), SVC()), X, y, cv=skf)
+
+print("leaky  :", round(leaky.mean(), 4))
+print("correct:", round(correct.mean(), 4))
+```
+
+**Output:**
+
+```text
+leaky  : 0.7593
+correct: 0.7660
+```
+
+> **The gap is small here — and notice it went the "wrong" way: the leaky version scored *lower*.**
+>
+> **That is the real danger.** **A leak does not reliably inflate your score, so you cannot detect one by looking for a suspiciously high number.** **`MinMaxScaler` uses the minimum and maximum of every column — so a single extreme test-set patient shifts the scaling of every training row.** The result is simply *not the number you think it is*.
+
+## Leak 2 — resampling before the split
+
+**This one is far more serious, and it is easy to write by accident.**
+
+```python
+# needs-install: pip install imbalanced-learn
+from imblearn.over_sampling import SMOTE
+
+# ❌ WRONG - SMOTE first, split second
+X_res, y_res = SMOTE(random_state=42).fit_resample(X, y)
+a, b, c, d = train_test_split(X_res, y_res, test_size=0.2, random_state=42)
+
+original_rows = set(map(tuple, X.to_numpy()))
+synthetic_in_test = sum(1 for row in b.to_numpy() if tuple(row) not in original_rows)
+
+print("rows before SMOTE:", len(X), " after:", len(X_res))
+print(f"test rows: {len(b)}, of which SYNTHETIC: {synthetic_in_test} "
+      f"({synthetic_in_test / len(b):.0%})")
+```
+
+**Output:**
+
+```text
+rows before SMOTE: 299  after: 406
+test rows: 82, of which SYNTHETIC: 19 (23%)
+```
+
+> **23% of the test set is invented data** — each synthetic row interpolated from real patients, most of whom are now sitting in the training set.
+>
+> **You are testing the model on rows built out of its own training data.** **Whatever number comes out is not an estimate of anything.**
+
+**The fix — split first, then resample the training half only:**
+
+```python
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y)
+
+X_bal, y_bal = SMOTE(random_state=42).fit_resample(X_train, y_train)   # TRAIN only
+
+model = make_pipeline(MinMaxScaler(), SVC()).fit(X_bal, y_bal)
+print("honest test accuracy:", round(model.score(X_test, y_test), 4))
+```
+
+**Output:** `honest test accuracy: 0.7833`
+
+> **This is Session 6's rule, restated: augment the training set, never the test set.** **A trainer notebook that runs SMOTE on the full dataset before splitting is making exactly this mistake — and its reported accuracy cannot be compared with anything.**
+
+## The one habit that prevents both
+
+> **Put every step that *learns something from the data* inside a `Pipeline`, and let cross-validation drive the pipeline.**
+
+```python
+from sklearn.pipeline import Pipeline
+
+pipe = Pipeline([
+    ("scaler", MinMaxScaler()),      # learns min and max      -> must be inside
+    ("model", SVC()),                # learns everything else  -> must be inside
+])
+scores = cross_val_score(pipe, X, y, cv=skf)
+```
+
+**Scaling, imputation, encoding, feature selection and PCA all learn from data.** **All of them belong inside the pipeline. Structure beats discipline.**
+
+---
+
+# 8. Choosing a validation strategy
+
+| Strategy | Models trained | Gives you | Use it when |
+|---|---|---|---|
+| **Holdout** | **1** | One number | **Large data**, or the final untouched test |
+| **K-Fold (k=5)** | 5 | Mean ± spread | **The default for everything else** |
+| **Stratified K-Fold** | 5 | Mean ± spread | **Always, for classification** |
+| **LOOCV** | **n** | A stable mean | **Very small data** (tens of rows) |
+| **Bootstrap** | 100–1000 | **A confidence interval** | You need to state uncertainty |
+
+## The three-way split, for when you tune
+
+**As soon as you start choosing hyperparameters, two splits are not enough.**
+
+```text
+Full data
+├── TRAIN      -> fit the model
+├── VALIDATION -> choose hyperparameters        (cross-validation lives here)
+└── TEST       -> touched ONCE, at the very end
+```
+
+> **The test set exists to answer one question, once: *how will this do on data it has never seen?*** **Every time you look at it and change something, it becomes a little more like a training set** — and its answer becomes a little less true.
+>
+> **In practice: `train_test_split` once to carve off the test set, then cross-validate inside the training half. That is the pattern Part C uses throughout.**
+
+## ✏️ Practice — validation strategies
+
+1. Run the holdout with `random_state` 0…9 and report the min, max and mean. **How large is the swing?**
+2. Compare 3-fold, 5-fold and 10-fold cross-validation. **Report mean and standard deviation for each. Does more folds mean a better estimate?**
+3. Run plain `KFold` and `StratifiedKFold` on this imbalanced data. **Which has the smaller spread, and why?**
+4. Run LOOCV. **Time it, and compare with 5-fold.** Was the extra cost worth it?
+5. Run 200 bootstraps and report a 95% confidence interval. **Write the one-sentence honest summary you would put in a report.**
 
 <details><summary>Solutions</summary>
+
+```python
+import time
+import numpy as np, pandas as pd
+from sklearn.model_selection import (train_test_split, cross_val_score, KFold,
+                                     StratifiedKFold, LeaveOneOut)
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.pipeline import make_pipeline
+from sklearn.svm import SVC
+
+dataset_url = ("https://raw.githubusercontent.com/tech4alltraining/aiml/"
+               "refs/heads/main/datasets/classification/heart_failure_raw.csv")
+heart = pd.read_csv(dataset_url)
+for col in ["anaemia", "diabetes", "high_blood_pressure", "sex", "smoking", "DEATH_EVENT"]:
+    heart[col] = heart[col].map({"Yes": 1, "No": 0})
+heart = pd.get_dummies(heart, columns=["treatment_type"], drop_first=True)
+for col in ["age", "ejection_fraction", "serum_creatinine"]:
+    heart[col] = heart[col].fillna(heart[col].median())
+X = heart.drop(columns=["DEATH_EVENT"]); y = heart["DEATH_EVENT"]
+pipe = lambda: make_pipeline(MinMaxScaler(), SVC())
+
+acc = []                                                               # 1
+for s in range(10):
+    a, b, c, d = train_test_split(X, y, test_size=.2, random_state=s, stratify=y)
+    acc.append(pipe().fit(a, c).score(b, d))
+print(f"min {min(acc):.4f}  max {max(acc):.4f}  mean {np.mean(acc):.4f}"
+      f"  swing {max(acc)-min(acc):.4f}")
+# A swing of about 17 points from the seed alone.
+
+for k in [3, 5, 10]:                                                   # 2
+    s = cross_val_score(pipe(), X, y, cv=StratifiedKFold(k, shuffle=True,
+                                                         random_state=42))
+    print(f"{k:>2}-fold  mean {s.mean():.4f}  std {s.std():.4f}")
+# More folds costs linearly and the mean barely moves. The std does NOT
+# reliably shrink either - with 10 folds each test set is only 30 rows,
+# so individual fold scores get NOISIER even as the mean stabilises.
+
+a = cross_val_score(pipe(), X, y, cv=KFold(5, shuffle=True, random_state=42))  # 3
+b = cross_val_score(pipe(), X, y, cv=StratifiedKFold(5, shuffle=True, random_state=42))
+print(f"KFold      mean {a.mean():.4f}  std {a.std():.4f}")
+print(f"Stratified mean {b.mean():.4f}  std {b.std():.4f}")
+# Stratified has less than HALF the spread. Plain KFold lets the 203/96
+# class balance drift between folds, so part of the variation it reports
+# is about the split, not about the model.
+
+t0 = time.time()                                                       # 4
+loo = cross_val_score(pipe(), X, y, cv=LeaveOneOut(), n_jobs=-1)
+t_loo = time.time() - t0
+t0 = time.time()
+five = cross_val_score(pipe(), X, y, cv=StratifiedKFold(5, shuffle=True,
+                                                        random_state=42))
+t_five = time.time() - t0
+print(f"LOOCV  {loo.mean():.4f}  ({len(loo)} models, {t_loo:.1f}s)")
+print(f"5-fold {five.mean():.4f}  (5 models, {t_five:.2f}s)")
+# Roughly 60x the models for an answer within about 2 points. Not worth
+# it here. It WOULD be worth it on 40 rows.
+
+rng = np.random.default_rng(42); n = len(X); boot = []                 # 5
+for _ in range(200):
+    idx = rng.integers(0, n, n)
+    oob = np.setdiff1d(np.arange(n), np.unique(idx))
+    boot.append(pipe().fit(X.iloc[idx], y.iloc[idx]).score(X.iloc[oob], y.iloc[oob]))
+boot = np.array(boot)
+print(f"mean {boot.mean():.4f}  95% CI "
+      f"[{np.percentile(boot, 2.5):.4f}, {np.percentile(boot, 97.5):.4f}]")
+# HONEST SUMMARY: "The model classifies about 74% of patients correctly.
+# Across 200 bootstrap resamples the accuracy fell between 66% and 81%,
+# so on a dataset this small a single reported figure should not be
+# trusted to better than about +/- 8 points."
+```
+</details>
+
+---
+
+# Part B — Overfitting & underfitting
+
+**Part A was about measuring honestly. Part B is about what the measurement tells you to *do*.**
+
+**The dataset changes here: car prices, 15,244 rows, predicting `selling_price` with a decision tree.** **A regression problem shows the effect far more starkly than a 299-row classification one.**
+
+---
+
+# 9. The three fits
+
+🧠 **Analogy: a student preparing for an exam.**
+>
+> - **The student who skims one chapter** fails the practice questions *and* the exam. **Underfitting.**
+> - **The student who memorises last year's paper word for word** gets 100% on last year's paper and fails the new one. **Overfitting.**
+> - **The student who understands the subject** does well on both. **A good fit.**
+
+**Here are all three, built deliberately.**
 
 ```python
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-BASE = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/"
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import r2_score
 
-L = pd.read_csv(BASE + "loan_data_10k.csv").dropna().reset_index(drop=True)
-for c in L.select_dtypes(include="object").columns:
-    L[c] = LabelEncoder().fit_transform(L[c])
-X, y = L.drop(columns=["loan_status"]), L["loan_status"]
-a, b, c, d = train_test_split(X, y, test_size=.2, random_state=42, stratify=y)
+cars_url = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/regression/cardekho_preprocessed.csv"
+cars = pd.read_csv(cars_url)
+y_cars = cars["selling_price"]
 
-for dep in [1, 2, 3, 5, 8, 12, 20, None]:                              # 1, 2, 3
-    t = DecisionTreeClassifier(max_depth=dep, random_state=42).fit(a, c)
-    tr, te = t.score(a, c), t.score(b, d)
-    print(f"depth {str(dep):<5} train {tr:.4f}  test {te:.4f}  gap {tr-te:+.4f}")
-# Test peaks at depth 8. The lines diverge sharply after depth 8.
-# At unlimited depth train = 1.0000 -- pure memorisation, and the WORST
-# test score in the table.
-
-tree = DecisionTreeClassifier(random_state=42).fit(a, c)               # 4
-forest = RandomForestClassifier(n_estimators=200, random_state=42).fit(a, c)
-print(f"\\nsingle tree  train {tree.score(a,c):.4f}  test {tree.score(b,d):.4f}")
-print(f"200 trees    train {forest.score(a,c):.4f}  test {forest.score(b,d):.4f}")
-# Both memorise. Only the forest generalises: each tree overfits a
-# DIFFERENT random slice, and averaging cancels their mistakes.
-
-small = L.sample(500, random_state=0)                                  # 5
-Xs, ys = small.drop(columns=["loan_status"]), small["loan_status"]
-a2, b2, c2, d2 = train_test_split(Xs, ys, test_size=.2, random_state=42, stratify=ys)
-print()
-for dep in [1, 3, 5, 8, 12, None]:
-    t = DecisionTreeClassifier(max_depth=dep, random_state=42).fit(a2, c2)
-    print(f"500 rows, depth {str(dep):<5} train {t.score(a2,c2):.4f}  test {t.score(b2,d2):.4f}")
-# Overfitting starts EARLIER with less data: there is less to learn before
-# the model runs out of real pattern and starts memorising noise.
+def fit_and_score(features, **tree_settings):
+    X_sub = cars[features]
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_sub, y_cars, test_size=0.2, random_state=42)
+    model = DecisionTreeRegressor(random_state=42, **tree_settings).fit(X_train, y_train)
+    train_r2 = r2_score(y_train, model.predict(X_train))
+    test_r2 = r2_score(y_test, model.predict(X_test))
+    return train_r2, test_r2
 ```
-</details>
 
-## ❓ MCQs
+## Model 1 — underfitting
 
-**Q1.** Training accuracy 1.0000 and test accuracy 0.8435 indicates…
-- (a) An excellent model  (b) Overfitting  (c) Underfitting  (d) A bug
+**One feature, and a tree allowed exactly one split.**
 
-**Q2.** Both training and test accuracy are low. This is…
-- (a) Overfitting  (b) Underfitting  (c) A good fit  (d) Data leakage
+```python
+train_r2, test_r2 = fit_and_score(["vehicle_age"], max_depth=1)
+print(f"UNDERFIT   train R² {train_r2:.4f}   test R² {test_r2:.4f}   gap {train_r2-test_r2:+.4f}")
+```
 
-**Q3.** Which number should you watch most closely?
-- (a) The training score  (b) The gap between training and test  (c) The number of features  (d) Training time
+**Output:** `UNDERFIT   train R² 0.0381   test R² 0.0497   gap -0.0116`
 
-**Q4.** The best fix for overfitting, when available, is…
-- (a) A more complex model  (b) More training data  (c) More features  (d) Training longer
+> **The model explains 4% of the variation in price. It cannot even fit the data it was trained on.**
+>
+> **Notice the gap is essentially zero — and the test score is slightly *higher* than the train score.** **That is the signature of underfitting: the model is equally bad everywhere.**
 
-**Q5.** Test accuracy peaks at depth 8 and falls after. You should ship…
-- (a) Unlimited depth  (b) Depth 8  (c) Depth 1  (d) Depth 20
+## Model 2 — a good fit
 
-**Q6.** With only 500 rows instead of 10,000, overfitting begins…
-- (a) Later  (b) Earlier  (c) At the same depth  (d) Never
+**Four sensible features, and a tree limited to depth 5 with at least 10 cars per leaf.**
 
-**Q7.** A Random Forest also reaches ~1.0 training accuracy, yet generalises far better. Why?
-- (a) It is simpler  (b) Each tree overfits a different slice, and averaging cancels the mistakes  (c) It uses fewer features  (d) It does not really overfit
+```python
+train_r2, test_r2 = fit_and_score(
+    ["vehicle_age", "km_driven", "engine", "max_power"],
+    max_depth=5, min_samples_leaf=10)
+print(f"GOOD FIT   train R² {train_r2:.4f}   test R² {test_r2:.4f}   gap {train_r2-test_r2:+.4f}")
+```
 
-<details><summary>Answers</summary>
+**Output:** `GOOD FIT   train R² 0.7961   test R² 0.7726   gap +0.0235`
 
-**A1 — (b) Overfitting.** It memorised, including the noise.
+> **High on both, and a gap of 2 points.** **This is what you are aiming for.**
 
-**A2 — (b) Underfitting.** The model is too simple to capture the pattern.
+## Model 3 — overfitting
 
-**A3 — (b) The gap.** A high training score on its own tells you nothing good.
+**Six features and a tree with no limits at all — it can keep splitting until every leaf holds one car.**
 
-**A4 — (b) More data.** Every other fix is a compromise; more data is a genuine solution.
+```python
+train_r2, test_r2 = fit_and_score(
+    ["vehicle_age", "km_driven", "mileage", "engine", "max_power", "seats"],
+    max_depth=None, min_samples_leaf=1)
+print(f"OVERFIT    train R² {train_r2:.4f}   test R² {test_r2:.4f}   gap {train_r2-test_r2:+.4f}")
+```
 
-**A5 — (b) Depth 8.** The peak of the *test* curve.
+**Output:** `OVERFIT    train R² 0.9993   test R² 0.2477   gap +0.7516`
 
-**A6 — (b) Earlier.** Less real pattern to learn before it starts memorising noise.
+> **99.93% on training data.** **A model that has essentially memorised the price of every car it was shown.**
+>
+> **And 24.77% on cars it has not seen — worse than the four-feature model with a depth limit, and using *more* information.**
 
-**A7 — (b).** The panel-of-doctors analogy from Session 5, now measured.
-</details>
-
-## 🎯 Tasks
-
-**Task 1 — The overfitting curve.** Plot training and test accuracy against model complexity for two different model families. **Mark the peak on each and state the depth you would ship.**
-
-**Task 2 — The learning curve.** Plot test accuracy against *training set size* (100, 500, 1,000, 5,000, all). **If the curve is still rising at the right-hand edge, more data would still help you** — say so explicitly, because it changes what you should do next.
-
-**Task 3 — Diagnose three models.** Deliberately build one underfitted, one well-fitted and one overfitted model on the same data. **Present all three with train, test and gap, and write the one-line diagnosis for each.**
+![The three fits, side by side](images/s8-fit-spectrum.png)
 
 ---
 
-# 5. Hyperparameter Tuning
+# 10. Reading the gap
 
-**Parameters are learned from data. Hyperparameters are set by you before training.**
-
-| | Examples |
-|---|---|
-| **Parameters** (learned) | Regression coefficients, tree split points |
-| **Hyperparameters** (yours) | `n_estimators`, `max_depth`, `k`, `C`, learning rate |
-
-🧠 **Analogy: tuning a radio.** The station is fixed; the dial is yours. Grid search turns the dial through every marked position. Random search jumps around. Bayesian optimisation **listens to where the signal was getting stronger and tries there next.**
-
-## The three strategies
-
-| Strategy | How it searches | Cost |
-|---|---|---|
-| **Grid Search** | Every combination in your grid | Explodes: 3 × 4 × 3 = 36 combos × 3 folds = 108 fits |
-| **Random Search** | n random combinations | **You choose the budget** |
-| **Bayesian** | Builds a model of the score surface, tries where it is most promising | Fewest evaluations |
-
-## 📘 Examples
-
-**Example 1 — Grid versus Random, measured**
-
-```python
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-from scipy.stats import randint
-
-grid = {"n_estimators": [50, 100, 200], "max_depth": [5, 10, 20, None],
-        "min_samples_split": [2, 5, 10]}
-gs = GridSearchCV(RandomForestClassifier(random_state=42), grid, cv=3, n_jobs=-1).fit(a, c)
-
-rs = RandomizedSearchCV(RandomForestClassifier(random_state=42),
-        {"n_estimators": randint(50, 250), "max_depth": [5, 10, 20, None],
-         "min_samples_split": randint(2, 15)},
-        n_iter=12, cv=3, random_state=42, n_jobs=-1).fit(a, c)
-```
-
-Measured:
-
-| | Fits | Time | Best CV | Test |
+| | Train | Test | Gap | Diagnosis |
 |---|---|---|---|---|
-| Grid Search | 108 | 12.2 s | 0.8936 | 0.8860 |
-| **Random Search** | **36** | **4.9 s** | **0.8937** | **0.8895** |
+| **Underfit** | 0.0381 | 0.0497 | **−0.01** | **Both low. Model too simple** |
+| **Good fit** | 0.7961 | 0.7726 | **+0.02** | **Both high, small gap** |
+| **Overfit** | 0.9993 | 0.2477 | **+0.75** | **Train high, test low** |
 
-**Random Search used one third of the fits, ran 2.5× faster, and came out slightly ahead on both scores.**
+> **The single most useful habit in this session: print the train score alongside the test score, every time.**
+>
+> **The test score alone cannot tell you what is wrong.** **0.2477 could be underfitting or overfitting** — and the fix for one is the exact opposite of the fix for the other. **The gap is what distinguishes them.**
 
-**Why does this happen?** Grid search wastes most of its budget on hyperparameters that barely matter. If `max_depth` matters a lot and `min_samples_split` barely at all, a grid still dutifully tries every `min_samples_split` value at every depth. Random search samples *different* depths every single time. **With the same budget, it explores the dimension that matters far more finely.**
+## The diagnosis table
 
-**Example 2 — the finding nobody puts in a tutorial**
+| What you see | Diagnosis | What to do |
+|---|---|---|
+| Train **low**, test **low** | **Underfitting** | **Add** complexity, features, or training time |
+| Train **high**, test **high** | **Good fit** | Ship it |
+| Train **high**, test **low** | **Overfitting** | **Remove** complexity; add data or regularisation |
+| Train **low**, test **high** | Usually a bug — or a lucky test split | Check your split |
 
-Compare the tuned results with the plain untuned default from Topic 2:
+## ⚠️ "More features" is not the same as "better"
 
-| | Score |
-|---|---|
-| **Untuned default, 5-fold CV** | **0.8948** |
-| Grid Search best, 3-fold CV | 0.8936 |
-| Random Search best, 3-fold CV | 0.8937 |
+**Look at the overfitting model again. It used *six* features against the good model's *four*, and scored 0.25 against 0.77.**
 
-**Tuning did not help.** All three are inside the ±0.009 standard deviation you measured in Topic 2, and inside the 0.027 bootstrap interval from Topic 3.
+> **The extra features were not the problem on their own — the unlimited depth was.** **But together they gave the tree enough freedom to describe noise, and it did.**
+>
+> **Capacity you do not need is capacity that will be spent memorising.**
 
-> **Sometimes the honest answer is "the defaults were fine".** scikit-learn's defaults are well chosen. Tune when you have a reason — a specific hyperparameter you suspect matters, or a metric you need to push. **Do not tune out of habit, and never report a tuning gain smaller than your noise.**
+---
 
-**Example 3 — Bayesian optimisation, built from scratch**
+# 11. Validation curves
+
+> **A validation curve plots one hyperparameter against train and validation performance. It shows you exactly where the good fit lives.**
+
+## First, why it must use cross-validation
+
+**Here is the same curve drawn two ways: with one train/test split, and with 5-fold cross-validation.**
 
 ```python
-from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import Matern, ConstantKernel
+from sklearn.model_selection import validation_curve, KFold
+import numpy as np
 
-# Fit a model of "score as a function of depth" to what we have tried so far
-gp = GaussianProcessRegressor(ConstantKernel(1.0) * Matern(length_scale=5.0, nu=2.5),
-                              alpha=1e-4, normalize_y=True).fit(tried, scores)
+FEATURES = ["vehicle_age", "km_driven", "mileage", "engine", "max_power", "seats"]
+X_cars = cars[FEATURES]
 
-mu, sd = gp.predict(all_depths, return_std=True)
-next_depth = all_depths[np.argmax(mu + 1.5 * sd)]     # promising OR unexplored
+depths = [1, 2, 3, 5, 8, 10, 12, 15, 20, 30]
+train_scores, cv_scores = validation_curve(
+    DecisionTreeRegressor(random_state=42), X_cars, y_cars,
+    param_name="max_depth", param_range=depths,
+    cv=KFold(5, shuffle=True, random_state=42), scoring="r2", n_jobs=-1)
+
+for d, tr, cv in zip(depths, train_scores.mean(axis=1), cv_scores.mean(axis=1)):
+    print(f"depth {d:>3}   train {tr:.4f}   CV {cv:.4f}   gap {tr-cv:+.4f}")
 ```
 
-That `mu + 1.5 * sd` is the whole idea. It scores each untried value by **how good we predict it is (`mu`) plus how uncertain we are about it (`sd`)** — so it tries things that look good *and* things nobody has checked. That balance has a name: **exploitation versus exploration.**
+**Output:**
 
-Measured, searching `max_depth` from 2 to 25:
+```text
+depth   1   train 0.4190   CV 0.4361   gap -0.0170
+depth   2   train 0.5885   CV 0.4528   gap +0.1357
+depth   3   train 0.7055   CV 0.5433   gap +0.1622
+depth   5   train 0.8701   CV 0.6124   gap +0.2577
+depth   8   train 0.9420   CV 0.7886   gap +0.1534
+depth  10   train 0.9696   CV 0.8377   gap +0.1319
+depth  12   train 0.9845   CV 0.8332   gap +0.1512
+depth  15   train 0.9940   CV 0.7149   gap +0.2791
+depth  20   train 0.9986   CV 0.7777   gap +0.2209
+depth  30   train 0.9992   CV 0.7866   gap +0.2126
+```
 
-| Method | Fits | Best depth found | CV score |
+![One split versus cross-validation](images/s8-validation-curve.png)
+
+> **Look at the left panel of that figure — the same sweep drawn from a single train/test split.** It goes 0.51, 0.32, 0.56, **0.20**, 0.83, 0.81, **0.24**, 0.80. **You cannot read anything from it.**
+>
+> **The right panel, from 5-fold CV, is a curve you can act on: it rises to a peak at depth 10 (CV R² 0.8377) and falls away after.**
+
+## How to read a validation curve
+
+```text
+        train ────────────────────────────  keeps rising, always
+                  ╱‾‾‾‾‾╲
+        CV      ╱         ╲                 rises, peaks, then FALLS
+              ╱             ╲
+        ─────┴───────┴───────┴──────
+         too simple  BEST   too complex
+        (underfit)         (overfit)
+```
+
+| Region | Train | CV | Name |
 |---|---|---|---|
-| Exhaustive | **24** | 8 | 0.8877 |
-| **Bayesian** | **10** | **8** | **0.8877** |
+| **Left** | Low | Low | **Underfitting** |
+| **Peak** | High | **Highest** | **The setting you want** |
+| **Right** | Very high | **Falling** | **Overfitting** |
 
-**The same optimum, for under half the work.** With a 12-hour training run, that difference is days.
+> **The train curve never turns down** — more capacity always fits the training data better. **Only the validation curve turns, and where it turns is the answer.**
 
-> **In production:** `pip install optuna` and let it handle the search. But the idea is exactly what you just read — model the surface, then try where the model is most hopeful.
+---
 
-## ✏️ Practice
+# 12. Learning curves
 
-1. Run Grid Search on the loan data. How many fits, and how long?
-2. Run Random Search with `n_iter=12`. Compare fits, time and best score.
-3. Compare both against the **untuned default**. Did tuning actually help?
-4. Explain why Random Search often beats Grid Search at equal budget.
-5. Explain `mu + 1.5 * sd` in one sentence.
+> **A validation curve asks "is my model the right complexity?". A learning curve asks a different question: *would more data help?***
+
+**It plots performance against the number of training rows used.**
+
+```python
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import learning_curve
+
+sizes, train_scores, cv_scores = learning_curve(
+    RandomForestRegressor(n_estimators=60, random_state=42, n_jobs=-1),
+    X_cars, y_cars, train_sizes=np.linspace(0.1, 1.0, 6),
+    cv=KFold(5, shuffle=True, random_state=42), scoring="r2",
+    n_jobs=-1, shuffle=True, random_state=42)
+
+for n, tr, cv in zip(sizes, train_scores.mean(axis=1), cv_scores.mean(axis=1)):
+    print(f"rows {n:>6}   train {tr:.4f}   CV {cv:.4f}   gap {tr-cv:+.4f}")
+```
+
+**Output:**
+
+```text
+rows   1219   train 0.9596   CV 0.8056   gap +0.1541
+rows   3414   train 0.9584   CV 0.8161   gap +0.1423
+rows   5609   train 0.9762   CV 0.8386   gap +0.1376
+rows   7804   train 0.9799   CV 0.8593   gap +0.1207
+rows   9999   train 0.9788   CV 0.8655   gap +0.1133
+rows  12195   train 0.9802   CV 0.8656   gap +0.1146
+```
+
+![Learning curve — has it flattened?](images/s8-learning-curve.png)
+
+## How to read it
+
+| Shape | Meaning | What to do |
+|---|---|---|
+| **CV still climbing at the right edge** | The model is starved of data | **Collect more rows** |
+| **CV has flattened, gap small** | You have enough data and the right model | **Ship it** |
+| **CV has flattened, gap still large** | **More data will not close this** | **Regularise, or simplify the model** |
+| **Both curves low and flat** | Underfitting | **A more capable model** |
+
+> **Here: the CV score climbed from 0.806 to 0.866 and then stopped — the last 2,000 rows bought 0.0001.** **Collecting more cars would be wasted effort.** The remaining 0.11 gap is not a data problem.
+>
+> ⚠️ **A forest was used here rather than a single tree for a reason.** **On this dataset a single deep tree's CV score bounces between 0.61 and 0.83 from one training size to the next** — the price is heavily skewed, so a few luxury cars in a fold dominate R². **A forest averages that away.** **If your learning curve is unreadable, the instability is itself the finding.**
+
+---
+
+# 13. Fixing each problem
+
+## Fixing underfitting
+
+| Fix | Example |
+|---|---|
+| **More capacity** | `max_depth` from 1 to 10; a forest instead of one tree |
+| **More features** | The good-fit model used 4 features; the underfit one used 1 |
+| **Better features** | **Session 6's feature engineering** |
+| **Less regularisation** | Lower `alpha` in Ridge/Lasso; higher `C` in SVM |
+| **Train longer** | For neural networks — Session 9 |
+
+## Fixing overfitting
+
+| Fix | Example |
+|---|---|
+| **Less capacity** | `max_depth=10` instead of `None`; `min_samples_leaf=10` instead of 1 |
+| **More data** | **If, and only if, the learning curve says it would help** |
+| **Regularisation** | Ridge/Lasso; `C` in SVM; `alpha` in a network |
+| **Fewer features** | **Session 6's feature selection** |
+| **Ensembling** | **A Random Forest averages many overfitted trees into one that is not** |
+| **Early stopping** | Stop training when validation stops improving |
+
+## The one that fixes the car model
+
+```python
+train_r2, test_r2 = fit_and_score(
+    ["vehicle_age", "km_driven", "mileage", "engine", "max_power", "seats"],
+    max_depth=10, min_samples_leaf=10)
+print(f"REGULARISED   train R² {train_r2:.4f}   test R² {test_r2:.4f}   gap {train_r2-test_r2:+.4f}")
+```
+
+**Output:** `REGULARISED   train R² 0.8461   test R² 0.8200   gap +0.0261`
+
+> **The same six features that scored 0.2477 unconstrained now score 0.8200, with a gap of under 3 points.** **Nothing was added — two limits were imposed.**
+>
+> **That is regularisation in one line: deliberately making the model less able to memorise.**
+
+## ✏️ Practice — diagnosing the fit
+
+1. Build all three car models and print train R², test R² and the gap for each. **Which number tells you which problem you have?**
+2. Take the overfitting model and add `max_depth=10, min_samples_leaf=10`. **How much does the test score improve?**
+3. Draw the validation curve for `max_depth` using **one split** and then using **5-fold CV**. **Which one can you actually read?**
+4. Draw a learning curve for the regularised model. **Has it flattened? Would collecting more cars help?**
+5. **Make the model underfit deliberately** in two different ways, and explain what each one removed.
 
 <details><summary>Solutions</summary>
 
 ```python
-import time, pandas as pd
-from scipy.stats import randint
-from sklearn.model_selection import (train_test_split, cross_val_score,
-                                     GridSearchCV, RandomizedSearchCV)
-from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestClassifier
-BASE = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/"
+import numpy as np, pandas as pd
+import matplotlib; matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from sklearn.model_selection import (train_test_split, validation_curve,
+                                     learning_curve, KFold)
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import r2_score
 
-L = pd.read_csv(BASE + "loan_data_10k.csv").dropna().reset_index(drop=True)
-for c in L.select_dtypes(include="object").columns:
-    L[c] = LabelEncoder().fit_transform(L[c])
-X, y = L.drop(columns=["loan_status"]), L["loan_status"]
-a, b, c, d = train_test_split(X, y, test_size=.2, random_state=42, stratify=y)
+cars_url = ("https://raw.githubusercontent.com/tech4alltraining/aiml/"
+            "refs/heads/main/datasets/regression/cardekho_preprocessed.csv")
+cars = pd.read_csv(cars_url)
+y = cars["selling_price"]
+FEATS = ["vehicle_age", "km_driven", "mileage", "engine", "max_power", "seats"]
 
-t0 = time.time()                                                       # 1
-gs = GridSearchCV(RandomForestClassifier(random_state=42),
-                  {"n_estimators": [50, 100, 200], "max_depth": [5, 10, 20, None],
-                   "min_samples_split": [2, 5, 10]}, cv=3, n_jobs=-1).fit(a, c)
-print(f"Grid   {len(gs.cv_results_['params'])*3:>4} fits {time.time()-t0:>6.1f}s "
-      f"cv {gs.best_score_:.4f} test {gs.score(b,d):.4f}")
+def score(features, **kw):                                             # 1
+    a, b, c, d = train_test_split(cars[features], y, test_size=.2, random_state=42)
+    m = DecisionTreeRegressor(random_state=42, **kw).fit(a, c)
+    return r2_score(c, m.predict(a)), r2_score(d, m.predict(b))
 
-t0 = time.time()                                                       # 2
-rs = RandomizedSearchCV(RandomForestClassifier(random_state=42),
-        {"n_estimators": randint(50, 250), "max_depth": [5, 10, 20, None],
-         "min_samples_split": randint(2, 15)},
-        n_iter=12, cv=3, random_state=42, n_jobs=-1).fit(a, c)
-print(f"Random {12*3:>4} fits {time.time()-t0:>6.1f}s "
-      f"cv {rs.best_score_:.4f} test {rs.score(b,d):.4f}")
+for name, args in [("underfit", (["vehicle_age"], dict(max_depth=1))),
+                   ("good fit", (["vehicle_age", "km_driven", "engine", "max_power"],
+                                 dict(max_depth=5, min_samples_leaf=10))),
+                   ("overfit ", (FEATS, dict(max_depth=None, min_samples_leaf=1)))]:
+    tr, te = score(args[0], **args[1])
+    print(f"{name}  train {tr:.4f}  test {te:.4f}  gap {tr-te:+.4f}")
+# The GAP is the diagnostic. Test alone cannot distinguish underfitting
+# (0.05) from overfitting (0.25) - and the fixes are opposites.
 
-untuned = cross_val_score(RandomForestClassifier(n_estimators=100,             # 3
-                          random_state=42), X, y, cv=5)
-print(f"\\nuntuned default 5-fold: {untuned.mean():.4f} +/- {untuned.std():.4f}")
-# Tuning did NOT help: every result is inside the untuned std.
-# Sometimes the honest answer is "the defaults were fine".
+tr, te = score(FEATS, max_depth=10, min_samples_leaf=10)               # 2
+print(f"regularised  train {tr:.4f}  test {te:.4f}  gap {tr-te:+.4f}")
+# From 0.2477 to 0.8200 - a 0.57 improvement from two limits, and
+# the gap collapses from +0.75 to +0.03.
 
-# 4 - Grid search wastes most of its budget on hyperparameters that barely
-#     matter: it dutifully tries every min_samples_split at every depth.
-#     Random search draws a DIFFERENT depth every single time, so at equal
-#     budget it explores the dimension that matters far more finely.
+depths = [1, 2, 3, 5, 8, 10, 12, 15, 20, 30]                          # 3
+a, b, c, d = train_test_split(cars[FEATS], y, test_size=.2, random_state=42)
+single = [r2_score(d, DecisionTreeRegressor(max_depth=k, random_state=42)
+                   .fit(a, c).predict(b)) for k in depths]
+t_s, c_s = validation_curve(DecisionTreeRegressor(random_state=42), cars[FEATS], y,
+    param_name="max_depth", param_range=depths,
+    cv=KFold(5, shuffle=True, random_state=42), scoring="r2", n_jobs=-1)
+print("one split:", np.round(single, 3))
+print("5-fold CV:", np.round(c_s.mean(axis=1), 3))
+# The single split jumps around unreadably. The CV curve rises to a clear
+# peak at depth 10 and falls after it. Only the second is a curve.
 
-# 5 - Try the value with the best PREDICTED score plus a bonus for being
-#     UNCERTAIN -- balancing exploiting what looks good against exploring
-#     what nobody has checked.
+s, ltr, lte = learning_curve(                                          # 4
+    DecisionTreeRegressor(max_depth=10, min_samples_leaf=10, random_state=42),
+    cars[FEATS], y, train_sizes=np.linspace(.2, 1.0, 5),
+    cv=KFold(5, shuffle=True, random_state=42), scoring="r2", n_jobs=-1,
+    shuffle=True, random_state=42)
+for n, x1, x2 in zip(s, ltr.mean(1), lte.mean(1)):
+    print(f"rows {n:>6}  train {x1:.4f}  cv {x2:.4f}")
+# The CV score rises and then flattens. More cars would buy very little -
+# the remaining gap is a model problem, not a data problem.
+
+print(score(["seats"], max_depth=1))                                   # 5
+print(score(FEATS, max_depth=1))
+# TWO WAYS TO UNDERFIT:
+#   (a) remove information - one weak feature instead of six
+#   (b) remove capacity - depth 1 allows exactly one split, so the model
+#       can only ever output two different prices
+# Both give low train AND low test. That is the signature.
 ```
 </details>
 
-## ❓ MCQs
+---
 
-**Q1.** Which is a hyperparameter?
-- (a) A regression coefficient  (b) `max_depth`  (c) A tree's split point  (d) The prediction
+# Part C — Hyperparameter tuning
 
-**Q2.** A grid of 3 × 4 × 3 with `cv=3` runs how many fits?
-- (a) 10  (b) 36  (c) 108  (d) 12
+**Part B showed that `max_depth=10` beats `max_depth=None`. Part C is about how to *find* that 10 without cheating.**
 
-**Q3.** Why does Random Search often beat Grid Search at equal budget?
-- (a) It is luckier  (b) It samples a different value of each hyperparameter every time, exploring the ones that matter more finely  (c) It uses fewer folds  (d) It skips bad models
-
-**Q4.** Tuning produced 0.8937 against an untuned 0.8948 ± 0.0090. You should conclude…
-- (a) Tuning hurt the model  (b) Tuning made no measurable difference here  (c) Tuning helped  (d) The grid was wrong
-
-**Q5.** In Bayesian optimisation, `mu + 1.5 * sd` balances…
-- (a) Speed and accuracy  (b) Exploitation and exploration  (c) Train and test  (d) Precision and recall
-
-**Q6.** Bayesian optimisation found the same optimum as exhaustive search in 10 fits instead of 24. Its advantage is greatest when…
-- (a) Data is small  (b) Each evaluation is expensive  (c) There is one hyperparameter  (d) Never
-
-**Q7.** Your search's best score beats the default by 0.002, with CV std 0.009. Report it as…
-- (a) A 0.2% improvement  (b) No measurable improvement  (c) The new best model  (d) A tuning success
-
-<details><summary>Answers</summary>
-
-**A1 — (b) `max_depth`.** You set it; the model does not learn it.
-
-**A2 — (c) 108.** 36 combinations × 3 folds. Grids explode fast.
-
-**A3 — (b).** Grid search re-tries the same depth values over and over; random search does not.
-
-**A4 — (b).** The difference is well inside the noise. **Do not report noise as a gain.**
-
-**A5 — (b).** Try what looks good, and what nobody has checked yet.
-
-**A6 — (b).** With a 12-hour training run, halving the evaluations saves days.
-
-**A7 — (b).** **A gain smaller than your standard deviation is not a gain.**
-</details>
-
-## 🎯 Tasks
-
-**Task 1 — The three-way search.** On one dataset run Grid, Random and (optionally) a Bayesian search with a matched budget. Report fits, runtime and best score for each. **Then compare all three with the untuned default and state honestly whether tuning was worth doing.**
-
-**Task 2 — The budget curve.** Run Random Search with `n_iter` = 5, 10, 25, 50, 100 and plot best-score-found against budget. **Where does the curve flatten?** That is where you should have stopped.
-
-**Task 3 — The full evaluation report.** For one model on one dataset, produce a single page containing: 5-fold CV mean ± std, a bootstrap 95% interval, a train-vs-test overfitting curve, and the tuning result. **Finish with a one-paragraph recommendation that states what you are confident about and what you are not.** This is the evaluation section of your capstone.
+**Back to the heart failure data — `X`, `y`, `X_train`, `X_test`, `y_train`, `y_test` from Part A.**
 
 ---
 
-# ✅ Before you move on
+# 14. Parameters vs hyperparameters
 
-- [ ] I can show that a single split moves by over a percentage point on seed alone
-- [ ] I report **mean ± std**, never a lone number
-- [ ] I know why `cross_val_score` stratifies for classifiers
-- [ ] I know when LOOCV is worth it and when it is a waste
-- [ ] I can put a bootstrap confidence interval on a score
-- [ ] I diagnose overfitting from the **gap**, not the training score
-- [ ] I know a training accuracy of 1.0 is a warning, not an achievement
-- [ ] I can run Grid, Random and Bayesian search, and explain why Random usually wins
-- [ ] **I never report a gain smaller than my noise**
+**Two words that sound identical and mean opposite things.**
 
-## More practice
+| | **Parameters** | **Hyperparameters** |
+|---|---|---|
+| Who sets them | **The model, during `fit()`** | **You, before `fit()`** |
+| Learned from data? | **Yes** | **No** |
+| Examples | Regression coefficients; the split points in a tree | `max_depth`, `n_neighbors`, `C`, `n_estimators` |
+| Changed by | Training on different data | **You, deliberately** |
 
-| Where | What |
+```python
+# illustrative: a syntax reference, not runnable as written.
+model = DecisionTreeRegressor(max_depth=10)   # <- HYPERparameter: your choice
+model.fit(X_train, y_train)                   # <- parameters: learned here
+model.tree_.threshold                         # <- the learned split points
+```
+
+> **Hyperparameter tuning means searching over the choices you make**, so the search has to happen *outside* training — which is why every method in this section wraps `fit()` in a loop.
+
+## The ones you have already met
+
+| Model | Hyperparameter | What it controls |
+|---|---|---|
+| **Decision tree** | `max_depth`, `min_samples_leaf` | **How much it can memorise** |
+| **Random Forest** | `n_estimators`, `max_depth` | How many trees, how deep |
+| **kNN** | `n_neighbors` | **How many neighbours vote** |
+| **SVM** | `C`, `kernel`, `gamma` | How hard it tries to fit; the boundary's shape |
+| **k-Means** | `n_clusters` | **How many groups** |
+
+---
+
+# 15. Manual search — and the trap in it
+
+**The obvious approach: try every value and pick the best.**
+
+```python
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler().fit(X_train)
+X_train_s, X_test_s = scaler.transform(X_train), scaler.transform(X_test)
+
+for k in range(1, 20):
+    knn = KNeighborsClassifier(n_neighbors=k).fit(X_train_s, y_train)
+    print(f"k={k:>2}   train {knn.score(X_train_s, y_train):.4f}   "
+          f"test {knn.score(X_test_s, y_test):.4f}")
+```
+
+**Output (abridged):**
+
+```text
+k= 1   train 1.0000   test 0.6667
+k= 2   train 0.7866   test 0.6833
+k= 4   train 0.7908   test 0.7167
+k= 7   train 0.7950   test 0.7000
+k=11   train 0.7364   test 0.7333     <- highest test score
+k=15   train 0.7071   test 0.7000
+k=19   train 0.7155   test 0.7000
+```
+
+**Two things to notice.**
+
+**First, `k=1` gets a perfect training score.** **Of course it does — the nearest neighbour of a training point is itself.** **And its test score is the worst of all: 0.6667.** That is overfitting in its purest form.
+
+**Second — and this is the trap — picking `k=11` because it scored highest *on the test set* is cheating.**
+
+## ⚠️ The test set is not allowed to vote
+
+```python
+from sklearn.model_selection import GridSearchCV
+from sklearn.pipeline import make_pipeline
+
+grid = GridSearchCV(
+    make_pipeline(MinMaxScaler(), KNeighborsClassifier()),
+    {"kneighborsclassifier__n_neighbors": list(range(1, 20))},
+    cv=5)
+grid.fit(X_train, y_train)
+
+print("k chosen by peeking at test :", 11, "-> reported accuracy 0.7333")
+print("k chosen by CV on train only:", grid.best_params_, "-> CV score",
+      round(grid.best_score_, 4))
+print("that model's HONEST test accuracy:", round(grid.score(X_test, y_test), 4))
+```
+
+**Output:**
+
+```text
+k chosen by peeking at test : 11 -> reported accuracy 0.7333
+k chosen by CV on train only: {'kneighborsclassifier__n_neighbors': 7} -> CV score 0.7155
+that model's HONEST test accuracy: 0.7000
+```
+
+![Choosing k without letting the test set vote](images/s8-knn-tuning.png)
+
+> **The manual search would have reported 0.7333. The honest answer is 0.7000.**
+>
+> **The 0.7333 is not a lie about the arithmetic — it is a lie about what the number *means*.** **It is the score of the k that happened to suit those particular 60 test patients.** **On the next 60 patients it will not repeat.**
+>
+> **Every time you look at the test set and change something, you spend a little of its ability to tell you the truth.** **You have 19 chances here, and the manual loop used all of them.**
+
+## When manual search is still the right thing
+
+> **For understanding, not for choosing.** **Sweeping k and plotting train against test is how you *see* overfitting** — the `k=1` result above teaches more than any grid search output. **Just do not let the plot pick your final model.**
+
+---
+
+# 16. Grid search
+
+> **Define a set of values for each hyperparameter, and try every combination — each one scored by cross-validation on the training data only.**
+
+```python
+from sklearn.model_selection import GridSearchCV
+from sklearn.svm import SVC
+
+param_grid = {
+    "svc__C": [1, 10, 100, 1000],
+    "svc__kernel": ["linear", "rbf"],
+    "svc__gamma": ["scale", "auto", 0.1, 0.2, 0.3, 0.5, 0.6],
+}
+
+pipe = make_pipeline(MinMaxScaler(), SVC(random_state=42))
+search = GridSearchCV(pipe, param_grid, cv=5, scoring="accuracy", n_jobs=-1)
+search.fit(X_train, y_train)
+
+print("combinations tried:", len(search.cv_results_["params"]))
+print("best parameters   :", search.best_params_)
+print("best CV score     :", round(search.best_score_, 4))
+print("test score        :", round(search.score(X_test, y_test), 4))
+```
+
+**Output:**
+
+```text
+combinations tried: 56
+best parameters   : {'svc__C': 100, 'svc__gamma': 'scale', 'svc__kernel': 'linear'}
+best CV score     : 0.8284
+test score        : 0.8333
+```
+
+> **4 × 2 × 7 = 56 combinations, each cross-validated 5 times = 280 model fits.** **Roughly 3 seconds here.**
+>
+> **CV said 0.8284 and the untouched test set said 0.8333.** **When those two agree, your estimate is trustworthy** — the search did not overfit to the validation folds.
+
+## What `GridSearchCV` gives you afterwards
+
+| Attribute | What it is |
 |---|---|
-| [Notebook](../notebooks/session-08-evaluation-tuning.ipynb) | Every example above, runnable |
-| [Exercises & assignments](../exercises-assignments.md) | Longer graded work |
+| `best_params_` | The winning combination |
+| `best_score_` | **Its mean cross-validated score** |
+| `best_estimator_` | **The model, already refitted on all the training data** |
+| `cv_results_` | Every combination's score — **a DataFrame waiting to happen** |
+
+```python
+results = pd.DataFrame(search.cv_results_)
+print(results[["param_svc__C", "param_svc__kernel", "mean_test_score"]]
+      .sort_values("mean_test_score", ascending=False).head())
+```
+
+> **`search.predict(X_test)` uses `best_estimator_` automatically** — you do not need to refit anything by hand.
+
+## ⚠️ The cost grows multiplicatively
+
+| Parameters | Values each | Combinations | × 5-fold CV |
+|---|---|---|---|
+| 2 | 5 | 25 | **125 fits** |
+| 3 | 5 | 125 | **625 fits** |
+| 4 | 10 | 10,000 | **50,000 fits** |
+| 6 | 10 | 1,000,000 | **5,000,000 fits** |
+
+> **Grid search is exhaustive, which is its strength and its fatal weakness.** **Past three or four hyperparameters it becomes unusable**, and that is exactly what random search is for.
+
+---
+
+# 17. Random search
+
+> **Instead of every combination, sample a fixed number of random ones.**
+
+```python
+from sklearn.model_selection import RandomizedSearchCV
+
+random_search = RandomizedSearchCV(
+    pipe, param_distributions=param_grid,
+    n_iter=10, cv=5, random_state=42, n_jobs=-1)
+random_search.fit(X_train, y_train)
+
+print("combinations tried:", 10)
+print("best parameters   :", random_search.best_params_)
+print("best CV score     :", round(random_search.best_score_, 4))
+print("test score        :", round(random_search.score(X_test, y_test), 4))
+```
+
+**Output:**
+
+```text
+combinations tried: 10
+best parameters   : {'svc__kernel': 'linear', 'svc__gamma': 0.3, 'svc__C': 1000}
+best CV score     : 0.8284
+test score        : 0.8333
+```
+
+## The comparison
+
+| | Combinations | Time | Best CV | Test |
+|---|---|---|---|---|
+| **Grid search** | **56** | 3.2 s | **0.8284** | **0.8333** |
+| **Random search** | **10** | **0.4 s** | **0.8284** | **0.8333** |
+
+> **Identical results for 18% of the work.**
+>
+> **And look at the parameters it chose: `gamma=0.3` where grid chose `gamma='scale'`.** **Different settings, same score — because with a linear kernel `gamma` is ignored entirely.** **Much of that 56-combination grid was spent on a parameter that did nothing.**
+
+## Why random search usually wins
+
+![Grid versus random coverage](images/s8-grid-vs-random.png)
+
+> **Read the figure.** **With 25 trials, grid search tests only 5 distinct values of each parameter. Random search tests 25 distinct values of each.**
+>
+> **In almost every real problem, one or two hyperparameters matter and the rest barely do.** **Grid search spends its budget uniformly. Random search, by accident, samples the important parameter far more finely** — and that is why it usually finds a better setting for the same cost.
+
+## Random search over ranges, not lists
+
+**Random search can sample from a *distribution*, which grid search cannot do at all.**
+
+```python
+# illustrative: a syntax reference, not runnable as written.
+from scipy.stats import uniform, randint
+
+param_dist = {
+    "svc__C": uniform(0.1, 1000),        # any real number in the range
+    "svc__gamma": uniform(0.001, 1),     # not just the 7 you thought of
+}
+RandomizedSearchCV(pipe, param_dist, n_iter=50, cv=5)
+```
+
+> **This is the real advantage.** **A grid can only ever return a value you typed in. A distribution can return `C = 37.4`.**
+
+## Which to use
+
+| Situation | Use |
+|---|---|
+| 1–2 hyperparameters, few values | **Grid search** — it is exhaustive and cheap |
+| 3+ hyperparameters | **Random search** |
+| Continuous parameters | **Random search** |
+| A very expensive model | **Random search with a small `n_iter`, then a small grid around the winner** |
+
+> **The standard professional recipe: random search to find the neighbourhood, then a narrow grid search inside it.**
+
+---
+
+# 18. Bayesian optimization
+
+> **Grid and random search have no memory. Every trial is chosen without reference to what the previous trials found. Bayesian optimization uses the results so far to decide what to try next.**
+
+🧠 **Analogy: searching a hillside for the highest point in fog.**
+>
+> - **Grid search** walks a fixed lattice, measuring everywhere, learning nothing as it goes.
+> - **Random search** wanders and measures at random.
+> - **Bayesian optimization** measures, notices the ground rising to the north, **and spends its remaining measurements to the north.**
+
+## How it works, in three parts
+
+| Part | What it is |
+|---|---|
+| **Objective function** | What you want to minimise — usually **1 − accuracy**, or the error |
+| **Search space** | The range each hyperparameter may take |
+| **Surrogate model** | **A cheap model of "which settings look promising"**, updated after every trial |
+
+**The loop:** try a setting → record the score → update the belief about where good settings live → **pick the most promising untried setting** → repeat.
+
+## What it buys you
+
+| | |
+|---|---|
+| ✅ **Far fewer trials** for the same quality | Typically 20–50 where random search needs hundreds |
+| ✅ **Handles expensive models** | Where each fit takes minutes, trial count is everything |
+| ❌ **Extra library**, extra complexity | `hyperopt`, `optuna` or `scikit-optimize` |
+| ❌ **Trials must be sequential** | **It cannot parallelise the way random search can** |
+| ❌ **Overkill for small problems** | On the 56-combination grid above it would save nothing |
+
+## What the code looks like
+
+**Two libraries dominate. Neither is installed by default — these are reference snippets, not exercises.**
+
+```python
+# needs-install: pip install optuna
+import optuna
+from sklearn.model_selection import cross_val_score, StratifiedKFold
+
+def objective(trial):
+    C = trial.suggest_float("C", 0.01, 1000, log=True)
+    kernel = trial.suggest_categorical("kernel", ["linear", "rbf"])
+    gamma = trial.suggest_categorical("gamma", ["scale", "auto"])
+    model = make_pipeline(MinMaxScaler(), SVC(C=C, kernel=kernel, gamma=gamma))
+    score = cross_val_score(model, X_train, y_train,
+                            cv=StratifiedKFold(5), scoring="accuracy").mean()
+    return 1 - score                      # Optuna MINIMISES, so return the error
+
+study = optuna.create_study(direction="minimize")
+study.optimize(objective, n_trials=30)
+print("best parameters:", study.best_params)
+```
+
+```python
+# needs-install: pip install hyperopt
+from hyperopt import hp, tpe, fmin, Trials, STATUS_OK
+
+space = {
+    "C": hp.choice("C", [1, 10, 100, 1000]),
+    "kernel": hp.choice("kernel", ["linear", "rbf"]),
+}
+
+def objective(params):
+    model = make_pipeline(MinMaxScaler(), SVC(**params))
+    score = cross_val_score(model, X_train, y_train, cv=5).mean()
+    return {"loss": 1 - score, "status": STATUS_OK}
+
+best = fmin(fn=objective, space=space, algo=tpe.suggest,
+            max_evals=30, trials=Trials())
+```
+
+## ⚠️ The mistake to avoid, whichever library you use
+
+> **The objective function must score on cross-validated *training* data — never on the test set.**
+>
+> **An objective that returns `accuracy_score(y_test, model.predict(X_test))` will run happily, report an excellent number, and mean nothing.** **You have simply run 30 experiments on your test set and kept the best.** **This is §15's trap wearing a more sophisticated hat.**
+
+## The four methods, compared
+
+| Method | Trials needed | Uses past results? | Parallel? | Use when |
+|---|---|---|---|---|
+| **Manual** | Whatever you type | **You do** | — | **Learning what a parameter does** |
+| **Grid** | All combinations | No | **Yes** | ≤ 3 parameters, small ranges |
+| **Random** | Your budget | No | **Yes** | **The everyday default** |
+| **Bayesian** | **Fewest** | **Yes** | Poorly | **Each fit is expensive** |
+
+---
+
+# 19. Tuning inside a pipeline
+
+**Everything in §7 applies with double force during a search: a grid search fits hundreds of models, and a leak in the setup contaminates every one of them.**
+
+```python
+from sklearn.pipeline import Pipeline
+from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestClassifier
+
+pipeline = Pipeline([
+    ("scaler", MinMaxScaler()),
+    ("pca", PCA()),
+    ("forest", RandomForestClassifier(random_state=42)),
+])
+
+param_grid = {
+    "pca__n_components": [5, 8, 10],
+    "forest__n_estimators": [100, 300],
+    "forest__max_depth": [3, 5, 10, None],
+}
+
+search = RandomizedSearchCV(pipeline, param_grid, n_iter=10, cv=5,
+                            random_state=42, n_jobs=-1)
+search.fit(X_train, y_train)
+
+print("best:", search.best_params_)
+print("CV  :", round(search.best_score_, 4))
+print("test:", round(search.score(X_test, y_test), 4))
+```
+
+**Output:**
+
+```text
+best: {'pca__n_components': 10, 'forest__n_estimators': 300, 'forest__max_depth': 5}
+CV  : 0.8160
+test: 0.7500
+```
+
+> **The scaler and the PCA are refitted inside every fold, on that fold's training rows only.** **Doing it by hand outside the search would leak test information into all 50 fits.**
+
+> ⚠️ **And look at the result: CV 0.8160, test 0.7500 — both *worse* than the untuned Random Forest's 0.8455 in §20.**
+>
+> **Adding PCA hurt.** **This is exactly Session 6's finding: PCA rotates the axes, and trees split along axes.** **Tuning cannot rescue a pipeline whose structure is wrong** — and a tuning run that comes out below your baseline is telling you something about the pipeline, not about the search.
+
+## The naming rule that trips everyone up
+
+```text
+Pipeline([("scaler", ...), ("pca", ...), ("forest", ...)])
+                                          └──┬──┘
+param_grid = {"forest__max_depth": [...]}    │
+              └──┬──┘  └───┬────┘            │
+            step name    parameter    must match EXACTLY
+```
+
+> ⚠️ **Two underscores, and the prefix must be the step's name.** **A pipeline whose step is called `random_forest` needs `random_forest__n_estimators`, not `rf__n_estimators`** — a mismatch raises `ValueError: Invalid parameter`. **This is the single most common error in this whole topic, and it is easy to make when copying a grid between projects.**
+>
+> **With `make_pipeline` the names are generated for you in lowercase** — `SVC()` becomes `svc`, hence `svc__C` in §16.
+
+---
+
+# 20. Model selection with cross-validation
+
+**Tuning chooses settings. The same machinery chooses *models*.**
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import StratifiedKFold
+
+models = {
+    "SVM": SVC(random_state=42),
+    "KNN": KNeighborsClassifier(),
+    "Random Forest": RandomForestClassifier(random_state=42),
+    "Gaussian NB": GaussianNB(),
+}
+
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+for name, model in models.items():
+    scores = cross_val_score(make_pipeline(MinMaxScaler(), model), X_train, y_train, cv=cv)
+    print(f"{name:<15} {scores.mean():.4f}  +/- {scores.std():.4f}")
+```
+
+**Output:**
+
+```text
+SVM             0.7535  +/- 0.0506
+KNN             0.7034  +/- 0.0565
+Random Forest   0.8455  +/- 0.0498
+Gaussian NB     0.7911  +/- 0.0703
+```
+
+> **Random Forest wins at 0.8455 — 9 points clear of SVM and 14 clear of KNN.**
+>
+> ⚠️ **But read the spreads before declaring a winner.** **Random Forest 0.8455 ± 0.0498 against Gaussian NB 0.7911 ± 0.0703: the intervals overlap.** **On 239 training rows that is a real result but not an overwhelming one** — and it is exactly why you report the spread.
+
+## The correct order of operations
+
+```text
+1. Split off the test set                      -> and do not touch it again
+2. Cross-validate several models on TRAIN      -> shortlist
+3. Tune the shortlisted model's hyperparameters on TRAIN, with CV
+4. Refit the winner on all of TRAIN            -> GridSearchCV does this for you
+5. Evaluate ONCE on TEST                       -> this is the number you report
+```
+
+> **Step 5 happens once.** **If you look at the test score, dislike it, change something and look again, you have quietly turned your test set into a validation set** — and you no longer have an unbiased estimate of anything.
+
+## ✏️ Practice — tuning
+
+1. Sweep `n_neighbors` from 1 to 19 and print train and test accuracy. **Why is `k=1`'s training score exactly 1.0?**
+2. Now choose k with `GridSearchCV` and 5-fold CV on the training data only. **Does it pick the same k as the test-score sweep? Which number would you report?**
+3. Run `GridSearchCV` on the SVM grid. **Report the number of combinations, the best parameters and both the CV and the test score. Do CV and test agree?**
+4. Run `RandomizedSearchCV` with `n_iter=10` on the same grid. **Compare score and time. Was anything lost?**
+5. Build a `Pipeline` of scaler → PCA → Random Forest and tune it. **Deliberately misname one grid key and read the error message.**
+6. Compare four models with cross-validation. **Report mean ± std for each and say whether the winner is a clear winner.**
+
+<details><summary>Solutions</summary>
+
+```python
+import time
+import numpy as np, pandas as pd
+from sklearn.model_selection import (train_test_split, cross_val_score,
+    GridSearchCV, RandomizedSearchCV, StratifiedKFold)
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.pipeline import make_pipeline, Pipeline
+from sklearn.decomposition import PCA
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
+
+dataset_url = ("https://raw.githubusercontent.com/tech4alltraining/aiml/"
+               "refs/heads/main/datasets/classification/heart_failure_raw.csv")
+heart = pd.read_csv(dataset_url)
+for col in ["anaemia", "diabetes", "high_blood_pressure", "sex", "smoking", "DEATH_EVENT"]:
+    heart[col] = heart[col].map({"Yes": 1, "No": 0})
+heart = pd.get_dummies(heart, columns=["treatment_type"], drop_first=True)
+for col in ["age", "ejection_fraction", "serum_creatinine"]:
+    heart[col] = heart[col].fillna(heart[col].median())
+X = heart.drop(columns=["DEATH_EVENT"]); y = heart["DEATH_EVENT"]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=.2, random_state=42, stratify=y)
+
+sc = MinMaxScaler().fit(X_train)                                       # 1
+Xtr, Xte = sc.transform(X_train), sc.transform(X_test)
+for k in [1, 4, 7, 11, 19]:
+    kn = KNeighborsClassifier(n_neighbors=k).fit(Xtr, y_train)
+    print(f"k={k:>2}  train {kn.score(Xtr, y_train):.4f}  test {kn.score(Xte, y_test):.4f}")
+# k=1 scores exactly 1.0 on train because the nearest neighbour of any
+# training point IS that point. It has memorised the training set - and
+# it has the WORST test score of all. Pure overfitting.
+
+gs = GridSearchCV(make_pipeline(MinMaxScaler(), KNeighborsClassifier()),   # 2
+                  {"kneighborsclassifier__n_neighbors": list(range(1, 20))}, cv=5)
+gs.fit(X_train, y_train)
+print("CV picks:", gs.best_params_, "CV score", round(gs.best_score_, 4))
+print("its honest test score:", round(gs.score(X_test, y_test), 4))
+# CV picks k=7, not the k=11 that maximised the TEST score. Report the
+# CV-chosen model's test score (0.70), not the peeked 0.7333 - the higher
+# number is the score of the k that suited these particular 60 patients.
+
+grid = {"svc__C": [1, 10, 100, 1000], "svc__kernel": ["linear", "rbf"],   # 3
+        "svc__gamma": ["scale", "auto", 0.1, 0.2, 0.3, 0.5, 0.6]}
+pipe = make_pipeline(MinMaxScaler(), SVC(random_state=42))
+t0 = time.time(); g = GridSearchCV(pipe, grid, cv=5, n_jobs=-1).fit(X_train, y_train)
+tg = time.time() - t0
+print(f"GRID  {len(g.cv_results_['params'])} combos  CV {g.best_score_:.4f}"
+      f"  test {g.score(X_test, y_test):.4f}  {tg:.1f}s  {g.best_params_}")
+# CV 0.8284 and test 0.8333 agree closely - the search did not overfit
+# the validation folds, so the estimate is trustworthy.
+
+t0 = time.time()                                                       # 4
+r = RandomizedSearchCV(pipe, grid, n_iter=10, cv=5, random_state=42,
+                       n_jobs=-1).fit(X_train, y_train)
+tr = time.time() - t0
+print(f"RAND  10 combos  CV {r.best_score_:.4f}  test "
+      f"{r.score(X_test, y_test):.4f}  {tr:.1f}s  {r.best_params_}")
+# Same CV and same test score for 18% of the combinations. Nothing lost.
+# It even chose a different gamma - which is ignored under a linear
+# kernel, so much of the 56-combination grid was wasted effort.
+
+pipeline = Pipeline([("scaler", MinMaxScaler()), ("pca", PCA()),        # 5
+                     ("forest", RandomForestClassifier(random_state=42))])
+ok = {"pca__n_components": [5, 8, 10], "forest__n_estimators": [100, 300],
+      "forest__max_depth": [3, 5, 10, None]}
+s = RandomizedSearchCV(pipeline, ok, n_iter=10, cv=5, random_state=42,
+                       n_jobs=-1).fit(X_train, y_train)
+print("pipeline best:", s.best_params_, " CV", round(s.best_score_, 4),
+      " test", round(s.score(X_test, y_test), 4))
+# CV 0.816, test 0.75 - BELOW the plain forest's 0.8455. Adding PCA hurt,
+# because trees split along axes and PCA rotates them (Session 6). Always
+# compare a tuned pipeline against the untuned baseline.
+try:
+    RandomizedSearchCV(pipeline, {"rf__max_depth": [3]}, n_iter=1,
+                       cv=5).fit(X_train, y_train)
+except ValueError as e:
+    print("MISNAMED KEY ->", str(e)[:110])
+# The step is called "forest", so the key must be forest__max_depth.
+# "rf__max_depth" raises "Invalid parameter". Two underscores, and the
+# prefix must match the step name exactly.
+
+cv = StratifiedKFold(5, shuffle=True, random_state=42)                  # 6
+for name, m in [("SVM", SVC(random_state=42)), ("KNN", KNeighborsClassifier()),
+                ("Random Forest", RandomForestClassifier(random_state=42)),
+                ("Gaussian NB", GaussianNB())]:
+    s2 = cross_val_score(make_pipeline(MinMaxScaler(), m), X_train, y_train, cv=cv)
+    print(f"{name:<15} {s2.mean():.4f} +/- {s2.std():.4f}")
+# Random Forest wins at 0.8455. But its +/- 0.0498 OVERLAPS Gaussian NB's
+# 0.7911 +/- 0.0703, so on 239 training rows this is a real result rather
+# than an overwhelming one. Report the spread, and say so.
+```
+</details>
+
+---
+
+# ❓ Session 8 — 20 MCQs
+
+**Answer from memory first, then check.**
+
+### Validation
+
+**Q1.** The same SVM on the same 299 rows scored 0.6500 and 0.8167 depending only on `random_state`. This shows…
+- (a) The code is buggy  (b) **A single split is an unreliable estimate on small data**  (c) SVM is a bad model  (d) The data is corrupt
+
+**Q2.** `cross_val_score(model, X, y, cv=5)` trains…
+- (a) One model  (b) **Five models, each tested on a different fifth of the data**  (c) Five models on the same data  (d) 25 models
+
+**Q3.** You should report cross-validation results as…
+- (a) The best fold  (b) **The mean and the standard deviation**  (c) The mean only  (d) The worst fold
+
+**Q4.** On a 203/96 imbalanced target, `StratifiedKFold` beat plain `KFold` because…
+- (a) It is faster  (b) **It keeps each fold's class balance the same as the whole dataset, so fold-to-fold variation reflects the model rather than the split**  (c) It uses more data  (d) It shuffles better
+
+**Q5.** `KFold(n_splits=5)` without `shuffle=True` is risky because…
+- (a) It is slower  (b) **It takes rows in file order, so a sorted file gives systematically different folds**  (c) It uses less data  (d) It cannot be reproduced
+
+**Q6.** Leave-One-Out cross-validation on 299 rows trains…
+- (a) 1 model  (b) 5 models  (c) **299 models**  (d) 598 models
+
+**Q7.** The thing bootstrapping gives you that k-fold does not is…
+- (a) Higher accuracy  (b) **A confidence interval**  (c) Faster training  (d) Stratification
+
+**Q8.** Roughly what fraction of unique rows appears in one bootstrap sample?
+- (a) 50%  (b) **63%**  (c) 80%  (d) 100%
+
+**Q9.** `MinMaxScaler().fit_transform(X)` before cross-validation is wrong because…
+- (a) MinMax is the wrong scaler  (b) **The scaler sees the test rows in every fold, so each fold's "test" data influenced the transform**  (c) It is slow  (d) It needs the target
+
+**Q10.** Running SMOTE on the full dataset before `train_test_split` produced a test set that was…
+- (a) Too small  (b) **23% synthetic — rows interpolated from patients now sitting in the training set**  (c) Unbalanced  (d) Correctly balanced
+
+**Q11.** The habit that prevents both leaks is…
+- (a) Setting `random_state`  (b) **Putting every step that learns from data inside a `Pipeline`**  (c) Using more folds  (d) Scaling twice
+
+### Overfitting and underfitting
+
+**Q12.** Train R² 0.9993, test R² 0.2477. This is…
+- (a) Underfitting  (b) **Overfitting**  (c) A good fit  (d) A bug
+
+**Q13.** Train R² 0.0381, test R² 0.0497. This is…
+- (a) Overfitting  (b) **Underfitting**  (c) A good fit  (d) Data leakage
+
+**Q14.** The test score alone cannot diagnose the problem because…
+- (a) It is unreliable  (b) **A low test score is produced by both underfitting and overfitting, and the fixes are opposites — only the gap distinguishes them**  (c) It needs scaling  (d) It is always wrong
+
+**Q15.** In a validation curve, the training score…
+- (a) Peaks in the middle  (b) **Keeps rising as complexity increases — only the validation curve turns**  (c) Falls  (d) Stays flat
+
+**Q16.** A learning curve whose validation score has flattened tells you…
+- (a) Collect more data  (b) **More data will not help; change the model instead**  (c) The model is broken  (d) Reduce the folds
+
+### Tuning
+
+**Q17.** `max_depth` is a hyperparameter and a tree's split thresholds are parameters because…
+- (a) One is an integer  (b) **You set `max_depth` before training; the thresholds are learned during `fit()`**  (c) There is no difference  (d) The thresholds are set by you
+
+**Q18.** Sweeping k from 1 to 19 and keeping the k with the best **test** score is wrong because…
+- (a) It is slow  (b) **The test set has then chosen a hyperparameter, so its score is no longer an unbiased estimate**  (c) k should be even  (d) 19 is too many
+
+**Q19.** Random search matched grid search's score using 10 of 56 combinations. The general reason is…
+- (a) Luck  (b) **Usually only one or two hyperparameters matter, and random sampling covers those far more finely for the same budget**  (c) Grid search is broken  (d) It used more folds
+
+**Q20.** Bayesian optimization differs from grid and random search because…
+- (a) It is always more accurate  (b) **It uses the results of previous trials to decide what to try next**  (c) It needs no objective function  (d) It parallelises better
+
+<details><summary>Answers</summary>
+
+**A1 — (b) A single split is unreliable on small data.** **The test set is 60 patients, so one patient is worth 1.67 points.** Both numbers came from correct code.
+
+**A2 — (b) Five models.** Every row is in the test set exactly once, across the five.
+
+**A3 — (b) The mean and the standard deviation.** **"0.73 ± 0.04" is a statement; "0.78" is a claim you cannot support.** And if two models' means differ by less than the spread, you have not shown a difference.
+
+**A4 — (b) It keeps each fold's class balance.** **The spread more than halved, 0.0416 to 0.0200.** Part of what plain KFold reported as model variation was really split variation.
+
+**A5 — (b) It takes rows in file order.** Sorted by date, by class or by source, and each fold is a different problem.
+
+**A6 — (c) 299 models.** Each trains on 298 rows and is tested on the remaining one.
+
+**A7 — (b) A confidence interval.** **"74%, and 95% of the time between 66% and 81%"** is a far more honest sentence than a single figure.
+
+**A8 — (b) 63%** (1 − 1/e ≈ 63.2%). **The other ~37% are the out-of-bag rows — free test data.**
+
+**A9 — (b) The scaler sees the test rows.** **MinMax uses each column's minimum and maximum, so one extreme test patient shifts the scaling of every training row.** Note it made the score *lower* here — a leak does not reliably inflate, which is why you cannot spot one by looking for a suspiciously good number.
+
+**A10 — (b) 23% synthetic.** **You are testing the model on rows built out of its own training data.** Split first, resample the training half only.
+
+**A11 — (b) A `Pipeline`.** **Scaling, imputation, encoding, feature selection and PCA all learn from data, so all of them belong inside it.** Structure beats discipline.
+
+**A12 — (b) Overfitting.** It has memorised the training cars. **The gap of +0.75 is the tell.**
+
+**A13 — (b) Underfitting.** **Both scores are low and the gap is essentially zero** — the model is equally bad everywhere.
+
+**A14 — (b) Both produce a low test score.** **0.2477 was overfitting; 0.0497 was underfitting.** Adding capacity fixes one and worsens the other.
+
+**A15 — (b) It keeps rising.** More capacity always fits training data better. **Where the *validation* curve turns is the answer.**
+
+**A16 — (b) More data will not help.** Here the CV score climbed from 0.806 to 0.866 and stopped; the last 2,000 rows bought 0.0001.
+
+**A17 — (b) You set it before training.** That is the entire distinction, and it is why tuning has to loop around `fit()` rather than happen inside it.
+
+**A18 — (b) The test set has then chosen a hyperparameter.** **The manual sweep would have reported 0.7333; the honest CV-chosen answer was 0.7000.** The higher number is the score of the k that suited those particular 60 patients.
+
+**A19 — (b) Only one or two hyperparameters usually matter.** **With a linear kernel, `gamma` is ignored entirely** — much of that 56-combination grid was spent on a parameter that did nothing.
+
+**A20 — (b) It uses previous results.** Grid and random search have no memory; Bayesian optimization builds a model of where good settings live and spends its remaining trials there.
+</details>
+
+---
+
+# 🎯 Session 8 — Tasks
+
+## Validation
+
+**Task 1 — The seed experiment.** On any dataset under 1,000 rows, run a holdout split with 20 different `random_state` values. **Plot the 20 accuracies and report the range.** Write the one sentence you would say to someone who quotes a single split's score.
+
+**Task 2 — Fold count.** Compare 3-, 5-, 10-fold and LOOCV on the same model: mean, standard deviation and wall-clock time. **Produce a four-row table and recommend one.**
+
+**Task 3 — Stratification matters.** On an imbalanced dataset, run plain `KFold` and `StratifiedKFold` and print each fold's class balance alongside its score. **Show the connection between the two.**
+
+**Task 4 — Bootstrap a confidence interval.** Run 500 bootstrap resamples and report a 95% interval. **Write the sentence you would put in a report to a non-technical stakeholder.**
+
+**Task 5 — Build the leak, then measure it.** Scale before splitting, record the score; scale inside a pipeline, record it again. **Then do the same with SMOTE.** Report both gaps and say which leak was more dangerous, and why.
+
+**Task 6 — The three-way split.** Carve a dataset into train / validation / test. Tune on validation, evaluate once on test. **Then deliberately tune on test as well and show how much the reported score improves — that improvement is the size of the lie.**
+
+## Overfitting and underfitting
+
+**Task 7 — Build all three.** On a dataset of your choice, deliberately construct an underfitting, a good-fit and an overfitting model. **Report train, test and gap for each in one table.**
+
+**Task 8 — The gap plot.** Plot train and test score against `max_depth` for a decision tree. **Mark the three regions on the image and label them.**
+
+**Task 9 — Validation curve, done properly.** Draw the same curve from a single split and from 5-fold CV. **Put them side by side and write two sentences on why one is unusable.**
+
+**Task 10 — Learning curve.** Draw one for your model. **Answer, in a sentence: would collecting more data help?** Justify from the shape.
+
+**Task 11 — Regularise deliberately.** Take your overfitting model and fix it three different ways (limit capacity, reduce features, ensemble). **Report which worked best and by how much.**
+
+**Task 12 — Two ways to underfit.** Make the same model underfit by removing information and by removing capacity. **Explain the difference.**
+
+## Tuning
+
+**Task 13 — Manual sweep.** Sweep one hyperparameter and plot train, test and cross-validated score together. **Mark the value each of the three would choose. Which is the honest one?**
+
+**Task 14 — Grid search.** Tune a model with `GridSearchCV`. **Report combinations tried, total fits, best parameters, CV score and test score.** Do CV and test agree?
+
+**Task 15 — Grid against random.** Run both on the same grid. **Report score and time for each and compute how much of the grid's budget random search needed.**
+
+**Task 16 — Beyond the grid.** Use `RandomizedSearchCV` with `scipy.stats` distributions instead of lists. **Report a best value that no grid you would have typed could have found.**
+
+**Task 17 — Pipeline tuning.** Tune a scaler → reducer → model pipeline. **Deliberately misname one grid key, read the error, and write down the naming rule in your own words.**
+
+**Task 18 — Beat the baseline, or admit it.** Compare your tuned model against the untuned default. **If tuning did not help, say so and explain why** — that is a legitimate and common result.
+
+**Task 19 — Model selection.** Cross-validate at least four models on the same data. **Report mean ± std, and state whether the winner is clearly ahead or within the noise.**
+
+**Task 20 — The complete honest workflow.** On one dataset, run all five steps: split off the test set, shortlist models by CV, tune the winner, refit, and evaluate **once** on test. **Write up the result as you would for a stakeholder — including the uncertainty.**
+
+---
+
+## ✅ Session 8 checklist
+
+- [ ] I never report a single split's score as *the* accuracy on small data
+- [ ] I report cross-validation as **mean ± standard deviation**
+- [ ] I use **`StratifiedKFold` for classification**, always
+- [ ] I can explain LOOCV and bootstrapping, and when each is worth its cost
+- [ ] **Every step that learns from data goes inside a `Pipeline`**
+- [ ] I augment and resample **after** the split, never before
+- [ ] I print the **train score next to the test score**, every time
+- [ ] I can diagnose underfitting and overfitting from the gap
+- [ ] I can read a validation curve and a learning curve
+- [ ] I know the difference between a parameter and a hyperparameter
+- [ ] **I never let the test set choose a hyperparameter**
+- [ ] I know when to use grid, random and Bayesian search
+- [ ] **I compare a tuned model against the untuned baseline** — and report honestly when tuning did not help
+
+---
+
+| | |
+|---|---|
+| **Previous** | [Session 7 — Unsupervised Learning: Clustering](session-07-unsupervised.md) |
+| **Next** | [Session 9 — Deep Learning](session-09-deep-learning.md) |
+| **Notebook** | [session-08-evaluation-tuning.ipynb](../notebooks/session-08-evaluation-tuning.ipynb) |
+| **More practice** | [Exercises & assignments](../exercises-assignments.md) |
