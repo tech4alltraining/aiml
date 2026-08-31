@@ -28,9 +28,10 @@ By the end of this session you can:
 7. Explain **quantization** and the trade it makes
 8. Name the leading LLMs and what each is known for
 9. Call the Gemini API from Python and **read the raw response**
-10. Explain what **temperature** does
-11. Write a prompt with all **five core elements**
-12. Choose between **zero-shot, one-shot, few-shot and chain-of-thought** — and write each one
+10. Explain what **temperature** does, and why `temperature=0` is not exactly deterministic
+11. Read `thoughts_token_count` and explain why a two-word prompt can cost 196 tokens
+12. Write a prompt with all **five core elements**
+13. Choose between **zero-shot, one-shot, few-shot and chain-of-thought** — and write each one
 
 ---
 
@@ -501,9 +502,9 @@ prompt -> [tokenize] -> [model] -> probability over every possible next token
 
 **Follows `genai_api_demo.ipynb`.**
 
-> ⚠️ **Every output in Parts C and D is a *typical* response, not a fixed one.**
+> **Every output marked "Measured" in Parts C and D was produced by running the code against `gemini-3.5-flash`.** **Token counts, word counts and run-to-run variation are all real numbers, not illustrations.**
 >
-> **You will not get the same text I did.** **That is not a bug in the guide — it is the defining property of a generative model, and [§16](#16-the-temperature-dial) is the dial that controls it.**
+> ⚠️ **You will still not get the same text.** **A generative model gives a different answer each time** — that is the defining property, and [§16](#16-the-temperature-dial) is the dial that controls it. **Several of the measurements below are *about* that variation.**
 
 ---
 
@@ -531,7 +532,7 @@ pip install -q google-genai
 | 1 | Go to **[aistudio.google.com/apikey](https://aistudio.google.com/apikey)** |
 | 2 | Sign in with a Google account |
 | 3 | **Create API key** |
-| 4 | Copy it — it looks like `AIza...` and is about 39 characters |
+| 4 | Copy it — a long string beginning with `AIza` |
 
 **There is a free tier. It is rate-limited, and it is enough for everything in this session.**
 
@@ -595,12 +596,33 @@ api_key = os.environ["GEMINI_API_KEY"]
 
 ```python
 # api-only: needs a Gemini API key.
-MODEL_ID = "gemini-2.5-flash"
+MODEL_ID = "gemini-3.5-flash"
 ```
 
 > ⚠️ **Model IDs change every few months.** **Put it in one variable at the top and every call in your file updates with one edit.**
+
+**Do not guess which models exist — ask.**
+
+```python
+# api-only: needs a Gemini API key.
+for m in client.models.list():
+    print(m.name.replace("models/", ""))
+```
+
+**A trimmed excerpt of what that returned when this guide was written:**
+
+```text
+gemini-2.5-flash          gemini-3.1-flash-lite     gemini-3.6-flash
+gemini-2.5-flash-lite     gemini-3.1-pro-preview    gemini-3.7-flash
+gemini-2.5-pro            gemini-3.5-flash          gemini-flash-latest
+gemini-3-flash-preview    gemini-3.5-flash-lite     gemini-pro-latest
+```
+
+> **Both IDs in the trainer's notebook are real** — `gemini-3.5-flash` and `gemini-2.5-flash-lite`. **This guide uses `gemini-3.5-flash` to match it.**
 >
-> **The trainer's notebook uses `gemini-3.5-flash` in most cells and `gemini-2.5-flash-lite` in the first one.** **If a call fails with a "model not found" error, that is why** — check the current list in the [Gemini API docs](https://ai.google.dev/gemini-api/docs/models) and change this one line.
+> **`gemini-flash-latest` is an alias that always points at the current flash model.** **Convenient for experiments; risky in production, because the model underneath can change without you touching your code.**
+>
+> **If a call fails with a 404, run the listing above** — it is faster than searching the documentation.
 
 ---
 
@@ -615,17 +637,17 @@ from google import genai
 client = genai.Client(api_key=api_key)
 
 response = client.models.generate_content(
-    model="gemini-2.5-flash",
+    model=MODEL_ID,
     contents="Hi"
 )
 
 print(response.text)
 ```
 
-**A typical response:**
+**The response, run against `gemini-3.5-flash`:**
 
 ```text
-Hi there! How can I help you today?
+Hello! How can I help you today?
 ```
 
 > **That is a working Generative AI program.** **Three lines of real code.**
@@ -636,7 +658,7 @@ Hi there! How can I help you today?
 |---|---|
 | `genai.Client(api_key=api_key)` | **Opens a connection.** Do this once, not per request |
 | `client.models.generate_content(...)` | **Sends the request over the internet** and waits |
-| `model="gemini-2.5-flash"` | **Which model.** Different models, different speed, cost and quality |
+| `model=MODEL_ID` | **Which model.** Different models, different speed, cost and quality |
 | `contents="Hi"` | **Your prompt.** A plain string is enough |
 | `response.text` | **The generated text.** [§15](#15-what-the-machine-sees--the-raw-json) shows what else is in there |
 
@@ -658,7 +680,7 @@ else:
     print("Sending request to Gemini...")
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model=MODEL_ID,
         contents="Hi Gemini"
     )
 
@@ -667,14 +689,14 @@ else:
     print(response.text)
 ```
 
-**A typical run:**
+**An actual run:**
 
 ```text
 Sending request to Gemini...
 
 Success! Here is the response:
 ------------------------------
-Hi there! How can I help you today?
+Hello! How can I help you today?
 ```
 
 > **If this prints, everything else in this session will work.** **If it does not, the problem is the key or the model name — nothing else.**
@@ -704,7 +726,7 @@ response = client.models.generate_content(
 print(response.text)
 ```
 
-**Typical:** `Sunlight scatters off air molecules, and blue light scatters most.`
+**Measured:** `The sky is blue because Earth's atmosphere scatters blue light from the sun more than other colors.`
 
 ## A constraint on the length
 
@@ -717,9 +739,11 @@ response = client.models.generate_content(
 print(response.text)
 ```
 
-**Typical:** `Air scatters blue light most.`
+**Measured — three runs, all identical:** `Air molecules scatter blue light.`
 
 > **Compare the two.** **The only difference is four words of instruction — and the output changed completely.** **That is prompt engineering, and you have just done it.**
+>
+> **And count the words in the second: exactly five, three times out of three.** **Older and smaller models are notoriously bad at exact counts, because they work in tokens rather than words** — this one was not. **Check your model rather than assuming either way.**
 
 ## Something a predictive model could never do
 
@@ -788,26 +812,29 @@ print("=== WHAT THE MACHINE SEES (RAW JSON) ===")
 print(response.model_dump_json(indent=2))
 ```
 
-**The raw response has roughly this shape:**
+**The real response, for a one-sentence question:**
 
 ```text
 {
   "candidates": [
     {
       "content": {
-        "parts": [ { "text": "Sunlight scatters off air molecules..." } ],
+        "parts": [ { "text": "The sky is blue because Earth's atmosphere..." } ],
         "role": "model"
       },
       "finish_reason": "STOP",
-      "safety_ratings": [ ... ]
+      "avg_logprobs": ...,
+      "safety_ratings": ...
     }
   ],
   "usage_metadata": {
-    "prompt_token_count": 12,
-    "candidates_token_count": 14,
-    "total_token_count": 26
+    "prompt_token_count": 13,
+    "thoughts_token_count": 473,          <- read this one twice
+    "candidates_token_count": 24,
+    "total_token_count": 510
   },
-  "model_version": "gemini-2.5-flash"
+  "model_version": "gemini-3.5-flash",
+  "response_id": "..."
 }
 ```
 
@@ -816,11 +843,90 @@ print(response.model_dump_json(indent=2))
 | Field | Why you care |
 |---|---|
 | **`candidates`** | **A list.** You can ask for more than one answer to the same prompt |
-| **`finish_reason`** | **`STOP` means it finished. `MAX_TOKENS` means it was cut off mid-sentence** |
-| **`usage_metadata`** | **Tokens in, tokens out — this is what you are billed on** |
-| **`safety_ratings`** | Why a response might have been blocked |
+| **`finish_reason`** | **`STOP` means it finished. `MAX_TOKENS` means it ran out of budget** |
+| **`usage_metadata`** | **What you are billed on** |
+| **`model_version`** | **Which model actually answered** — essential when you used an alias like `gemini-flash-latest` |
 
-> ⚠️ **Check `finish_reason` in any real application.** **A truncated answer still has `response.text`, and it still looks like an answer.** **`MAX_TOKENS` is how you find out it was not one.**
+---
+
+## ⚠️ `thoughts_token_count` — the field that will surprise you
+
+**Modern reasoning models generate hidden "thinking" tokens before they answer. You do not see them. You are billed for them.**
+
+**Measured across four prompts:**
+
+| Prompt | Prompt tokens | **Thinking tokens** | Output tokens | **Total** |
+|---|---|---|---|---|
+| `"Hi"` | 2 | **185** | 9 | **196** |
+| `"What is 2+2?"` | 8 | **83** | 7 | **98** |
+| *"Why is the sky blue? One short sentence."* | 13 | **473** | 24 | **510** |
+| The widget puzzle | 34 | **468** | 77 | **579** |
+
+> **Read the first row again.** **A two-token prompt and a nine-token answer cost 196 tokens.**
+>
+> **The hidden reasoning is 94% of the bill, and `response.text` gives you no hint that it happened.**
+
+## Turning it off
+
+```python
+# api-only: needs a Gemini API key.
+from google.genai import types
+
+response = client.models.generate_content(
+    model=MODEL_ID,
+    contents="Why is the sky blue? Answer in one short sentence.",
+    config=types.GenerateContentConfig(
+        thinking_config=types.ThinkingConfig(thinking_budget=0)
+    ),
+)
+```
+
+**Measured, same question:**
+
+| | Thinking tokens | **Total tokens** |
+|---|---|---|
+| Default | 473 | **510** |
+| **`thinking_budget=0`** | **none** | **39** |
+
+> **A 13× reduction, and the answer was still a correct one-sentence explanation.**
+>
+> **Use thinking for reasoning tasks. Turn it off for extraction, classification and formatting** — where it buys nothing and costs everything.
+
+## ⚠️ And `max_output_tokens` is a budget for *both*
+
+**This is the trap. `max_output_tokens` caps thinking tokens *and* answer tokens together.**
+
+```python
+# api-only: needs a Gemini API key.
+response = client.models.generate_content(
+    model=MODEL_ID,
+    contents="Explain gradient descent in detail, with examples.",
+    config=types.GenerateContentConfig(max_output_tokens=20),
+)
+print(response.text)
+```
+
+**Measured at four caps:**
+
+| `max_output_tokens` | `finish_reason` | Thinking tokens | **Answer tokens** |
+|---|---|---|---|
+| **20** | `MAX_TOKENS` | 15 | **1** |
+| **100** | `MAX_TOKENS` | 93 | **3** |
+| **500** | `MAX_TOKENS` | 481 | **14** |
+| 2000 | `MAX_TOKENS` | 1344 | 652 |
+
+> **At a cap of 500, thinking consumed 481 tokens and the answer got 14.**
+>
+> ⚠️ **And `response.text` can come back as `None`** — that happened at a cap of 20 in one of the runs here. **Code that does `response.text.strip()` will raise `AttributeError` on a real user's request.**
+>
+> **Always check `finish_reason`, and never assume `response.text` is a string.**
+
+```python
+# api-only: needs a Gemini API key.
+if response.candidates[0].finish_reason.name != "STOP":
+    print("warning: response was cut short —", response.candidates[0].finish_reason)
+text = response.text or ""
+```
 
 ## Tokens, and why they are the unit
 
@@ -833,11 +939,13 @@ print(response.model_dump_json(indent=2))
 
 | | |
 |---|---|
-| **You are billed per token**, input and output | `usage_metadata` is your meter |
+| **You are billed per token** — prompt, thinking and output | `usage_metadata` is your meter |
 | **The context window is measured in tokens** | How much the model can consider at once |
-| **Rare words cost more tokens** | `"antidisestablishmentarianism"` is several tokens; `"the"` is one |
+| **Rare words cost more tokens** | `"antidisestablishmentarianism"` is several; `"the"` is one |
 
-> **`total_token_count: 26` for a one-sentence exchange.** **A 40-page document is roughly 20,000.** **That arithmetic is your bill, and it is the first thing to check when a GenAI feature turns out to be expensive.**
+> **A one-sentence exchange cost 510 tokens, of which 473 were invisible.** **A 40-page document is roughly 20,000 prompt tokens before the model thinks at all.**
+>
+> **That arithmetic is your bill, and `thoughts_token_count` is the first place to look when a GenAI feature turns out to cost more than you budgeted.**
 
 ---
 
@@ -892,15 +1000,32 @@ for temp in [0.0, 1.0]:
     print()
 ```
 
-## What you will see
+## What was actually measured
 
-| Temperature | Behaviour |
-|---|---|
-| **0.0** | **All five attempts nearly or completely identical.** Safe, predictable, slightly bland |
-| **1.0** | **Five genuinely different taglines** — different tones, angles and vocabulary |
-| **2.0** | **Wild.** Often interesting, sometimes incoherent. Try it — it is instructive |
+| Temperature | **Distinct outputs in 5 runs** | Behaviour |
+|---|---|---|
+| **0.0** | **2 of 5** | **Near-identical.** The two variants differed by a single comma |
+| **1.0** | **5 of 5** | Genuinely different taglines — different tones, angles and vocabulary |
+| **2.0** | **5 of 5** | Different again, and more elaborate |
 
-> **Run it. Watching five identical outputs become five different ones is worth more than the explanation.**
+> ⚠️ **Temperature 0 was *nearly* deterministic, not exactly deterministic.** **Five runs gave two variants separated by one comma.**
+>
+> **This matters if you are writing tests.** **Do not assert on exact strings, even at temperature 0** — assert on structure, or on a parsed field.
+
+## ⚠️ And look at what came back at all
+
+**The prompt says *"Write **a** tagline"*. Every single response was a menu:**
+
+```text
+Here are a few options, depending on the vibe of your coffee shop:
+
+**The Clever & Energetic**
+* ...
+```
+
+> **Not one run returned a single tagline.**
+>
+> **This is [§18](#18-the-core-elements-of-a-prompt)'s missing element — format — caught in the wild.** **`"Write one tagline. Output only the tagline, nothing else."` is the fix**, and it is worth running both versions to see the difference.
 
 ## Choosing a temperature
 
@@ -1087,19 +1212,58 @@ response_a = client.models.generate_content(model=MODEL_ID, contents=prompt_a)
 print(response_a.text)
 ```
 
-**Typical:**
+**Measured — and read the first line carefully:**
 
 ```text
+```json
 {
   "name": "Sarah",
   "occupation": "mechanical engineer",
   "city": "Seattle"
 }
 ```
+```
 
-> **No example of the JSON shape was given.** **The model knows what JSON is, and it inferred sensible key names.**
+> **No example of the JSON shape was given, and the model inferred sensible key names.** **Three runs gave identical keys** — `name`, `occupation`, `city`.
+
+## ⚠️ But it is wrapped in a markdown fence, and that breaks your code
+
+```python
+# api-only: needs a Gemini API key.
+import json
+
+response = client.models.generate_content(model=MODEL_ID, contents=prompt_a)
+data = json.loads(response.text)          # <- this raises
+```
+
+**Measured:** `json.JSONDecodeError`
+
+**Two fixes, and the second is the one to use.**
+
+```python
+# api-only: needs a Gemini API key.
+# Fix 1 - ask nicely
+prompt = prompt_a + "\nOutput only the raw JSON. No markdown fences, no other text."
+response = client.models.generate_content(model=MODEL_ID, contents=prompt)
+json.loads(response.text)          # measured: works
+```
+
+```python
+# api-only: needs a Gemini API key.
+# Fix 2 - make it structural
+from google.genai import types
+
+response = client.models.generate_content(
+    model=MODEL_ID,
+    contents=prompt_a,
+    config=types.GenerateContentConfig(response_mime_type="application/json"),
+)
+json.loads(response.text)          # measured: works, and does not depend on the model obeying
+```
+
+> **Fix 1 is an instruction the model may ignore. Fix 2 is a constraint on the API.**
 >
-> ⚠️ **It inferred them.** **Ask twice and you might get `"job"` instead of `"occupation"`.** **If your code depends on the key names, name them in the prompt** — or use [§21](#21-one-shot-prompting).
+> **This is [Session 5C](session-05c-deployment.md#7-the-pattern-extracted)'s lesson again: structure beats discipline.**
 
 ## Example B — a creative constraint
 
@@ -1117,15 +1281,27 @@ response_b = client.models.generate_content(model=MODEL_ID, contents=prompt_b)
 print(response_b.text)
 ```
 
-**Typical:**
+**Measured, three runs — with the word counts checked in code:**
 
 ```text
-The screen lit up alone. Nobody was home.
+run 1: "My phone tracked two faces. I was alone."        -> [5, 3] ✅
+run 2: "My phone took a photo. I was sleeping."          -> [5, 3] ✅
+run 3: "The phone filmed me sleeping. I live alone."     -> [5, 3] ✅
 ```
 
-> ⚠️ **Count the words.** **Models are unreliable at exact counting**, because they work in tokens, not words. **Run it three times and you will often see a 6-word or 4-word sentence.**
+> **Three for three.** **This model counts words correctly, because it reasons before it answers** — see [§15](#15-what-the-machine-sees--the-raw-json)'s thinking tokens.
 >
-> **This is a genuinely useful thing to learn early: an LLM is a language engine, not a counting engine.** **If exact counts matter, verify them in code.**
+> ⚠️ **Do not generalise that.** **Smaller and older models are genuinely unreliable at exact counts, because they work in tokens rather than words.** **If an exact count matters, verify it in code rather than trusting either the model or this guide:**
+
+```python
+# api-only: needs a Gemini API key.
+import re
+
+text = response_b.text.strip()
+sentences = [s for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]
+counts = [len(re.findall(r"[\w'-]+", s)) for s in sentences]
+print(counts, "-> expected [5, 3]")
+```
 
 ## When zero-shot is the right choice
 
@@ -1163,7 +1339,7 @@ response_a = client.models.generate_content(model=MODEL_ID, contents=prompt_a)
 print(response_a.text.strip())
 ```
 
-**Typical:** `"We need to do an enormous amount of work to change how this industry thinks."`
+**Measured:** `"We need to make a massive effort to completely change how this industry works."`
 
 > **Notice what the one example communicated that a description could not: the *level* of simplicity, the *length*, and the fact that the answer is a quoted sentence.**
 >
@@ -1187,9 +1363,30 @@ response_b = client.models.generate_content(model=MODEL_ID, contents=prompt_b)
 print(response_b.text.strip())
 ```
 
-**Typical:** `United | 88 | ORD | SFO | tomorrow`
+**Measured, three runs — all identical:** `United | 88 | ORD | SFO | tomorrow`
 
-> **Compare this with §20's JSON.** **There, the key names were the model's choice. Here the format is pinned exactly** — field order, separator, spacing, all of it — **by one line of example.**
+> **The format is pinned exactly** — field order, separator, spacing, all of it — **by one line of example.**
+
+## ⚠️ But test whether you needed it
+
+**Delete the example and run the same task zero-shot:**
+
+```python
+# api-only: needs a Gemini API key.
+prompt_zero = """Extract the flight details into a pipe-separated format.
+
+Input: "Book me on United 88 departing from ORD and arriving at SFO tomorrow."
+Output:"""
+
+response = client.models.generate_content(model=MODEL_ID, contents=prompt_zero)
+print(response.text.strip())
+```
+
+**Measured, two runs:** `United | 88 | ORD | SFO | tomorrow` — **identical to the one-shot version.**
+
+> **The example bought nothing here.** **"Pipe-separated" was enough of a description on its own for this model.**
+>
+> **That is not an argument against one-shot** — the example still *guarantees* the field order, and on a harder or more idiosyncratic format it would earn its place. **It is an argument for measuring instead of assuming.** **Every example you include is tokens you pay for on every single call.**
 
 ## The pattern to copy
 
@@ -1237,11 +1434,30 @@ response_a = client.models.generate_content(model=MODEL_ID, contents=prompt_a)
 print(response_a.text.strip())
 ```
 
-**Typical:** `[SALES]`
+**Measured, three runs at the default temperature:** `[SALES]`, `[SALES]`, **`[BILLING]`**
 
-> **That last ticket is genuinely ambiguous — upgrading an account touches billing *and* sales.** **The three examples are what settle it:** they show that money already charged is `[BILLING]` while buying more is `[SALES]`.
+> **It flipped.** **Two runs said `[SALES]`, one said `[BILLING]` — same prompt, same model, same everything.**
 >
-> **You could not have written that rule down in one sentence. The examples carry it.**
+> **That last ticket is genuinely ambiguous:** upgrading an account touches billing *and* sales. **The three examples narrow it, and they do not settle it.**
+
+## ⚠️ The fix, measured
+
+```python
+# api-only: needs a Gemini API key.
+from google.genai import types
+
+response = client.models.generate_content(
+    model=MODEL_ID,
+    contents=prompt_a,
+    config=types.GenerateContentConfig(temperature=0.0),
+)
+```
+
+**Measured, five runs at `temperature=0.0`:** `[SALES]` every time — **5 of 5 identical.**
+
+> **This is the rule from [§16](#16-the-temperature-dial), arriving with consequences.** **Any classification you intend to rely on runs at temperature 0**, or your categories change between requests and nobody can reproduce a bug report.
+>
+> **And the deeper lesson: instability in the output is often information about the *input*.** **The ticket flipped because the ticket really is ambiguous** — a fourth example covering "upgrades" would settle it properly, where temperature 0 only settles it consistently.
 
 ## Example B — mapping real items to your labels
 
@@ -1270,7 +1486,7 @@ response_b = client.models.generate_content(model=MODEL_ID, contents=prompt_b)
 print(response_b.text.strip())
 ```
 
-**Typical:** `[PRODUCE]`
+**Measured:** `[PRODUCE]`
 
 > **The examples map *real-world names* to *your system's labels*.** *"Sourdough Loaf"* → `[BAKERY]` teaches something no category description would.
 
@@ -1324,7 +1540,7 @@ response_a = client.models.generate_content(model=MODEL_ID, contents=prompt_a)
 print(response_a.text)
 ```
 
-**A typical response works through it:**
+**A measured response works through it:**
 
 ```text
 Step 1: 5 machines make 5 widgets in 5 minutes.
@@ -1333,11 +1549,32 @@ Step 3: 100 machines each make 1 widget in the same 5 minutes.
 Answer: 5 minutes.
 ```
 
-> **The intuitive answer is 100 minutes, and it is wrong.** **Models jump to it too, for the same reason people do — the numbers scale together and it *feels* proportional.**
+**The correct answer is 5 minutes. The intuitive-but-wrong answer is 100 minutes.**
+
+## ⚠️ The classic demonstration no longer works — and that is the lesson
+
+**The textbook version of this section says: *without* chain-of-thought, models answer 100 minutes. So I tested it, four ways, three runs each.**
+
+| | Plain prompt | With *"step-by-step"* |
+|---|---|---|
+| **Thinking on** (default) | **3/3 correct** | **3/3 correct** |
+| **Thinking off** (`thinking_budget=0`) | **3/3 correct** | **3/3 correct** |
+
+> **Twelve out of twelve. The model gets it right whatever you do.**
 >
-> **Forcing the steps makes the model state the per-machine rate explicitly, and once that sentence exists the right answer follows.**
->
-> ⚠️ **Try it both ways.** **Ask without the step-by-step instruction and see what you get.** That comparison is the whole lesson.
+> **The "models say 100 minutes" result is real, and it is from 2022-era models.** **A 2026 reasoning model is not fooled by this puzzle any more** — and the [§15](#15-what-the-machine-sees--the-raw-json) thinking tokens are part of why: it reasons before answering whether or not you ask it to.
+
+## So what is chain-of-thought still for?
+
+**Three things, and only the first one was ever about accuracy.**
+
+| Purpose | Still true? |
+|---|---|
+| **Getting a hard reasoning problem right** | **Sometimes** — on genuinely hard problems, and on smaller or older models |
+| **Seeing the reasoning so you can check it** | **Always.** This is now the main reason |
+| **Making the model's assumptions visible** | **Always** — the schedule example below shows why |
+
+> **Do not take a textbook's word for what a model can and cannot do — including this one.** **Run the two versions and count.** **That test took four lines of code and overturned the claim I was about to make.**
 
 ## Example B — schedule resolution
 
@@ -1359,9 +1596,17 @@ response_b = client.models.generate_content(model=MODEL_ID, contents=prompt_b)
 print(response_b.text)
 ```
 
-> **The correct answer is 10:30–11:15**, the overlap of all three windows, taken as early as possible.
+**Measured, two runs — both correct:**
+
+```text
+...Adding the 45-minute duration to the start time: 10:30 AM + 45 minutes = 11:15 AM.
+
+The earliest possible meeting time is from 10:30 AM to 11:15 AM.
+```
+
+> **10:30–11:15 is right** — the overlap of all three windows, taken as early as possible.
 >
-> **Without the step-by-step instruction, models often propose a time that excludes one person** — usually by anchoring on two of the three windows. **Writing the overlaps out forces all three to be considered.**
+> **And here the written steps earn their place even though the answer was already correct.** **The response shows you it checked 11:15 against Alice's 11:30 cut-off.** **If it had been wrong, you would be able to see *which* constraint it dropped** — which you cannot do with a bare "10:00 AM".
 
 ## Why it works
 
@@ -1375,10 +1620,10 @@ print(response_b.text)
 
 | ✅ Use CoT for | ❌ Skip it for |
 |---|---|
-| **Arithmetic and logic** | Simple lookups |
+| **Anything you need to be able to audit** | Simple lookups |
 | **Multi-step constraints** | Classification |
 | **Debugging and diagnosis** | Formatting and extraction |
-| Anything where you want to **check the reasoning** | Anywhere latency matters |
+| Genuinely hard reasoning, or a **smaller model** | Anywhere latency or cost matters |
 
 ⚠️ **A written chain of reasoning is not a guarantee of correctness.** **A model can produce a fluent, plausible, entirely wrong chain — and it is more persuasive precisely because it showed working.** **Read the steps; do not just trust their presence.**
 
@@ -1408,6 +1653,20 @@ Start with ZERO-SHOT.
 ```
 
 > **They combine.** **Few-shot chain-of-thought — several examples, each with its reasoning written out — is the strongest and most expensive option.**
+
+## ⚠️ Measure at every step of that flow
+
+**Running the experiments for this session overturned three things I expected:**
+
+| Expected | **Measured** |
+|---|---|
+| One-shot needed to pin the pipe format | **Zero-shot produced the identical format** |
+| Few-shot settles the ambiguous ticket | **It flipped between `[SALES]` and `[BILLING]` across runs** |
+| Chain-of-thought rescues the widget puzzle | **The model got it right 12/12 without any prompting help** |
+
+> **Every extra example and every "think step by step" is tokens on every call, forever.**
+>
+> **Add complexity when a measurement tells you to, not when a guide does.**
 
 ## What to do when none of them work
 
@@ -1653,7 +1912,9 @@ Start with ZERO-SHOT.
 - [ ] I can compute a model's memory from its **parameter count**, at any precision
 - [ ] I can explain **quantization** and the trade it makes
 - [ ] **My API key is never in my code**
-- [ ] I check **`finish_reason`** and **`usage_metadata`**
+- [ ] I check **`finish_reason`**, and never assume `response.text` is a string
+- [ ] I read **`thoughts_token_count`** — hidden reasoning can be 94% of the bill
+- [ ] I know **`max_output_tokens` budgets thinking and answer together**
 - [ ] I set **temperature 0 for anything structured**
 - [ ] I include all five **core elements** in a prompt that matters
 - [ ] I can write **zero-shot, one-shot, few-shot and chain-of-thought** prompts, and choose between them
