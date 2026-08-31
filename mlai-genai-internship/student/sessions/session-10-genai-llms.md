@@ -1,15 +1,17 @@
 # Session 10 — Generative AI & Large Language Models
 
-**Introduction to Generative AI · Language Models, LLM parameters, Leading LLMs, LLM Applications · Prompt Engineering Basics · Types of Prompts: Zero-shot, One-shot, Few-shot, Chain-of-Thought**
+**What GenAI is · Predictive vs Generative · Transformers · LLMs · Parameters & Quantization · Prompt Engineering · Zero-shot, One-shot, Few-shot, Chain-of-Thought**
 
 | | |
 |---|---|
 | **Notebook** | [session-10-genai-llms.ipynb](../notebooks/session-10-genai-llms.ipynb) |
-| **Prompt library** | [prompts.md](../prompts.md) — every prompt here, ready to copy |
 | **Previous** | [Session 9 — Deep Learning](session-09-deep-learning.md) |
+| **Next** | [Session 11 — AI-Powered Applications](session-11-ai-apps.md) |
 | **Stuck?** | [Troubleshooting](../troubleshooting.md) |
 
-> **Session 9 ended with next-token prediction. This session is what that becomes at scale.** You will need a free [Google AI Studio](https://aistudio.google.com/) API key — see [setup-guide.md](../setup-guide.md).
+> **Sessions 5 to 8 built models that *choose* — a class, a number, a cluster.** **This session is about models that *produce*.**
+>
+> **Parts A and B are concepts, with analogies and no code.** **Part C is your first working GenAI program — a single word, "Hi".** **Part D is how to make it do useful work.**
 
 ---
 
@@ -17,1010 +19,1651 @@
 
 By the end of this session you can:
 
-1. Say what makes an AI system *generative*
-2. Explain tokens, parameters, context window and temperature — and what each costs you
-3. Predict what temperature does to output, and demonstrate it with numbers
-4. Place GPT, BERT, T5, LLaMA, Falcon, Mistral, Gemini and Claude in a sensible map
-5. Explain why BERT cannot chat with you
-6. Write a prompt with all five parts
-7. Choose between zero-shot, one-shot, few-shot and chain-of-thought — with a reason
-8. Call the Gemini API and get structured JSON back
+1. Say what Generative AI is, and give **ten real applications**
+2. Explain the difference between **Predictive AI and Generative AI**, and pick the right one for a problem
+3. Describe the **GenAI workflow** end to end
+4. Explain **how deep learning became Transformers, and Transformers became GenAI**
+5. Define a **language model**, and say what "large" actually added
+6. Explain what **parameters** are and why the count matters
+7. Explain **quantization** and the trade it makes
+8. Name the leading LLMs and what each is known for
+9. Call the Gemini API from Python and **read the raw response**
+10. Explain what **temperature** does
+11. Write a prompt with all **five core elements**
+12. Choose between **zero-shot, one-shot, few-shot and chain-of-thought** — and write each one
 
 ---
 
-## The five topics
+## How this session is organised
 
-| # | Topic | The one thing to take away |
-|---|---|---|
-| 1 | [What GenAI is](#1-what-generative-ai-is) | It creates; it does not choose from a list |
-| 2 | [LLM anatomy](#2-large-language-models-tokens-parameters-context) | Tokens are the unit of everything, including cost |
-| 3 | [Leading LLMs](#3-leading-llms-and-what-they-are-for) | Open vs closed matters more than "which is best" |
-| 4 | [Prompt engineering](#4-prompt-engineering-basics) | Five parts: role, task, context, constraints, format |
-| 5 | [Prompt types](#5-types-of-prompts) | Few-shot fixes format; CoT fixes reasoning |
+| Part | What it covers |
+|---|---|
+| **A — [What Generative AI is](#part-a--what-generative-ai-is)** | **Concepts only.** What it is, where it is used, how it differs from what you have built |
+| **B — [The fundamentals](#part-b--the-fundamentals)** | **Concepts only.** Deep learning → Transformers → GenAI → LLMs |
+| **C — [Your first GenAI program](#part-c--your-first-genai-program)** | **Code.** Setup, `"Hi"`, the raw response, the temperature dial |
+| **D — [Prompt engineering](#part-d--prompt-engineering)** | **Concepts and code.** Elements, principles, and the four prompt types |
+
+| # | Topic | | # | Topic |
+|---|---|---|---|---|
+| 1 | [What is Generative AI](#1-what-is-generative-ai) | | 13 | ["Hi" — your first program](#13-hi--your-first-genai-program) |
+| 2 | [Applications of GenAI](#2-applications-of-generative-ai) | | 14 | [A few more first programs](#14-a-few-more-first-programs) |
+| 3 | [Predictive AI vs GenAI](#3-predictive-ai-vs-generative-ai) | | 15 | [What the machine sees](#15-what-the-machine-sees--the-raw-json) |
+| 4 | [How GenAI works](#4-how-genai-works--the-workflow) | | 16 | [The temperature dial](#16-the-temperature-dial) |
+| 5 | [Deep learning → Transformers](#5-from-deep-learning-to-transformers) | | 17 | [What prompt engineering is](#17-what-prompt-engineering-is) |
+| 6 | [Transformers → GenAI](#6-from-transformers-to-generative-ai) | | 18 | [The core elements of a prompt](#18-the-core-elements-of-a-prompt) |
+| 7 | [From LMs to LLMs](#7-language-models-from-lms-to-llms) | | 19 | [The principles](#19-the-principles) |
+| 8 | [Parameters in LLMs](#8-parameters-in-llms) | | 20 | [Zero-shot prompting](#20-zero-shot-prompting) |
+| 9 | [Quantization](#9-quantization) | | 21 | [One-shot prompting](#21-one-shot-prompting) |
+| 10 | [The leading LLMs](#10-the-leading-llms) | | 22 | [Few-shot prompting](#22-few-shot-prompting) |
+| 11 | [LLM applications](#11-llm-applications) | | 23 | [Chain-of-thought prompting](#23-chain-of-thought-prompting) |
+| 12 | [Setup](#12-setup--install-and-api-key) | | 24 | [Choosing a prompt type](#24-choosing-a-prompt-type) |
+
+**The [practices](#-session-10--practice), [20 MCQs](#-session-10--20-mcqs) and [tasks](#-session-10--tasks) are at the end.**
 
 ---
 
-# 1. What Generative AI is
+# Part A — What Generative AI is
 
-Every model in Sessions 5–8 **chose from options that already existed**: approved or rejected, a number, a cluster number. **Generative models produce something that did not exist before.**
+# 1. What is Generative AI
 
-| | Predictive AI | Generative AI |
-|---|---|---|
-| Output | A label or a number | New text, images, audio, code |
-| Question | *Which one?* | *Make me one* |
-| Answer space | Fixed and known | Effectively unlimited |
-| Your Session 5 model | ✅ | ❌ |
+> **Generative AI is a model that produces new content rather than choosing from a fixed set of answers.**
 
-🧠 **Analogy: a music critic and a musician.** The critic listens and classifies — *this is jazz, this is three stars*. Useful, and bounded. The musician **writes a piece that has never been played.** Same domain, entirely different job.
+🧠 **Analogy: a multiple-choice exam versus an essay.**
+>
+> **Everything you built in Sessions 5 to 8 sat a multiple-choice exam.** *Approved or rejected? Setosa, versicolor or virginica? What number?* **The set of possible answers existed before the model ran.**
+>
+> **Generative AI writes the essay.** **Nobody wrote the answer in advance — not even the people who built the model.**
+
+## What "new" actually means
+
+**A generative model does not retrieve a stored answer. It builds one, one piece at a time.**
+
+```text
+Prompt:  "Write a tagline for a coffee shop."
+
+The model does NOT look up a list of taglines.
+It predicts the most likely next word, then the next, then the next:
+
+  "Your"  ->  "Your daily"  ->  "Your daily grind,"  ->  "Your daily grind, perfected."
+
+Each word is chosen given every word before it.
+```
+
+> **That is the whole mechanism, and it is worth sitting with.** **A model that only ever predicts the next word can write a working program, summarise a legal document and translate Tamil into Portuguese** — because doing all of those well *is* predicting the next word well.
 
 ## The families
 
-| Type | Produces | Examples |
+| Family | Produces | Examples |
 |---|---|---|
-| **Text** | Prose, code, analysis | Gemini, GPT, Claude, Llama |
-| **Image** | Pictures from descriptions | Stable Diffusion, Imagen, DALL·E |
-| **Audio** | Speech, music | ElevenLabs, MusicGen |
-| **Video** | Clips from descriptions | Veo, Sora |
-| **Multimodal** | Handles several at once | Gemini, GPT-4o, Claude |
+| **Text** | Words | ChatGPT, Gemini, Claude |
+| **Image** | Pictures | DALL·E, Midjourney, Stable Diffusion |
+| **Audio** | Speech, music | ElevenLabs, Suno |
+| **Video** | Moving images | Sora, Veo |
+| **Code** | Programs | GitHub Copilot, Cursor |
+| **Multimodal** | **Several at once** | Gemini, GPT-4o — text in, image out; image in, text out |
 
-> **This course focuses on text**, because text models are where the immediate practical value is for the applications you will build in Sessions 11 and 12.
+**This session is about the first one. Text models are where the ideas are clearest, and they are what you will build with in [Session 11](session-11-ai-apps.md).**
 
-## 📘 Examples
+---
 
-**Example 1 — the same problem, both ways**
+# 2. Applications of Generative AI
 
-```python
-# PREDICTIVE (Session 5): choose from a fixed set
-model.predict(loan_application)          # -> 0 or 1
+**Ten that are in production somewhere today.**
 
-# GENERATIVE (this session): produce something new
-llm("Explain in two kind sentences why this loan was declined.")
-# -> a paragraph nobody wrote in advance
+| # | Where | What it does |
+|---|---|---|
+| 1 | **Customer support** | Drafts replies, summarises a ticket history, routes by intent |
+| 2 | **Software development** | **Writes code, explains code, writes the tests** |
+| 3 | **Content and marketing** | Product descriptions, ad copy, translations |
+| 4 | **Education** | **Explains a concept five different ways until one lands** |
+| 5 | **Healthcare admin** | Summarises clinical notes; drafts discharge letters *(a human signs them)* |
+| 6 | **Legal** | Summarises contracts; finds the clause you are looking for |
+| 7 | **Search** | **Answers the question instead of returning ten links** |
+| 8 | **Accessibility** | Image descriptions, live captions, text-to-speech |
+| 9 | **Data work** | **Writes the SQL, explains the error, documents the table** |
+| 10 | **Design** | First-draft images, layouts, icons |
+
+## What they have in common
+
+> **Every one of them is a task where *many answers are acceptable* and *a human checks the result*.**
+>
+> **That is the shape of a good GenAI problem.** **It is also the shape of its limits** — see [§3](#3-predictive-ai-vs-generative-ai).
+
+## ⚠️ Where it does not belong
+
+| Task | Why not | Use instead |
+|---|---|---|
+| Calculating a tax bill | **There is exactly one right answer** | Arithmetic |
+| Deciding a loan | **Must be auditable and consistent** | [Session 5B](session-05b-classification.md)'s classifier |
+| Checking a password | Exact match required | A comparison |
+| Anything safety-critical without review | **It can be confidently wrong** | A human |
+
+---
+
+# 3. Predictive AI vs Generative AI
+
+**You have spent five sessions on Predictive AI. This is what changes.**
+
+| | **Predictive AI** (Sessions 5–8) | **Generative AI** (this session) |
+|---|---|---|
+| **Question** | *Which one? How much?* | ***Make me something*** |
+| **Output** | **A label or a number** | **New content** |
+| **Answer space** | **Fixed and known in advance** | **Unbounded** |
+| **Training data** | **Labelled** — `X` and `y` | **Unlabelled text** — the next word IS the label |
+| **Training cost** | Seconds to hours on a laptop | **Weeks on thousands of GPUs** |
+| **Who trains it** | **You** | **You almost never do** — you use somebody's |
+| **Evaluation** | **Accuracy, R², F1** — one number | **Hard.** Often human judgement |
+| **Same input twice** | **Same answer** | **Usually a different answer** |
+| **Explainability** | Feature importance, coefficients | **Very limited** |
+| **Typical size** | Kilobytes to megabytes | **Gigabytes to terabytes** |
+
+## 🧠 Analogy: a sorting machine versus a writer
+
+> **A predictive model is a machine on a factory line that sorts apples into three bins.** **Fast, consistent, and it will never produce anything except "bin 1, 2 or 3".**
+>
+> **A generative model is a writer you brief.** **Ask twice and you get two different pieces.** **Brief them badly and you get something confident and useless.**
+
+## The four differences that will bite you
+
+**1. Non-determinism.** **The same prompt gives different answers.** [§16](#16-the-temperature-dial) shows the dial that controls this. **If your application needs reproducibility, you must design for it.**
+
+**2. No accuracy score.** **There is no `accuracy_score(y_test, y_pred)` for an essay.** **Evaluation is human review, or a second model, or a checklist — all of them harder than a number.**
+
+**3. Confident wrongness.** **A classifier that is unsure gives you a probability of 0.51.** **A language model that is unsure gives you a fluent, well-punctuated, completely invented answer.** This is called *hallucination*, and it is the single biggest practical risk.
+
+**4. You are renting, not building.** **Your model comes from Google, OpenAI or Meta.** **Its price, its behaviour and its availability are decisions somebody else makes.**
+
+## Choosing between them
+
+| If the task is… | Use |
+|---|---|
+| **One correct answer exists** | **Predictive** — or plain code |
+| You must explain every decision | **Predictive** |
+| The answer must be identical every time | **Predictive** |
+| **Many answers are acceptable** | **Generative** |
+| **The output is language, images or code** | **Generative** |
+| **You have no labelled data** | **Generative** |
+
+> **They are not competitors.** **[Session 11](session-11-ai-apps.md) puts them in the same application: a classifier makes the decision, and a language model explains it to the customer.**
+
+---
+
+# 4. How GenAI works — the workflow
+
+**Five stages. You will only ever perform the last two.**
+
+```text
+1. PRE-TRAINING          read an enormous amount of text; learn to predict the next word
+        |                  (months, thousands of GPUs, millions of dollars)
+        v
+2. FINE-TUNING           learn to follow instructions rather than just continue text
+        |                  (much smaller, still expensive)
+        v
+3. ALIGNMENT (RLHF)      learn which answers humans actually prefer
+        |                  (human reviewers rank outputs)
+        v
+--------- everything above is done by the model provider ---------
+        v
+4. PROMPTING             you write an instruction                  <- YOUR JOB
+        |
+        v
+5. INFERENCE             the model generates a response, token by token
 ```
 
-**Example 2 — your first API call**
+## Stage by stage
+
+**1. Pre-training — learning the language.**
+
+🧠 **Analogy: a child who has read every book in the library but has never been asked a question.** **They know how sentences work, what usually follows what, and an enormous amount of the world's information — but they will just carry on the text you start.**
+
+> **The training signal is free.** **Take any sentence, hide the next word, and ask the model to guess it.** **No labelling is needed — that is why it can train on trillions of words.**
+
+**2. Fine-tuning — learning to be asked.**
+
+🧠 **The same child, now taught that a question expects an answer.** **Trained on example conversations: prompt in, good response out.**
+
+> **This is the difference between a model that continues *"The capital of France is"* and a model that answers *"What is the capital of France?"***
+
+**3. Alignment — learning what humans prefer.**
+
+🧠 **An editor telling the writer which of two drafts is better, thousands of times.** **The model learns the pattern of "better".**
+
+> **This is where "helpful, harmless, honest" comes from** — and where the refusals come from too.
+
+**4. Prompting — your job.** **All of [Part D](#part-d--prompt-engineering).**
+
+**5. Inference — generation, one token at a time.**
+
+```text
+prompt -> [tokenize] -> [model] -> probability over every possible next token
+                          ^                    |
+                          |                    v
+                          +---------------- pick one, append, repeat
+                                            until a stop token
+```
+
+> **The loop is why responses stream in word by word rather than appearing at once.** **The model genuinely does not know how its sentence ends when it starts writing it.**
+
+---
+
+# Part B — The fundamentals
+
+# 5. From deep learning to Transformers
+
+**[Session 9](session-09-deep-learning.md) ended with a network that takes a fixed set of numbers and produces an answer. Language is not a fixed set of numbers.**
+
+## The problem with language
+
+| Problem | Why a plain network struggles |
+|---|---|
+| **Variable length** | A sentence can be 3 words or 3,000. A network has a fixed input size |
+| **Order matters** | *"dog bites man"* and *"man bites dog"* have identical words |
+| **Long-range dependence** | *"The **keys** I left on the table this morning, next to the letter from your mother, **are** missing."* — `keys` and `are` are 14 words apart |
+
+## What came before
+
+| Architecture | Idea | Why it was not enough |
+|---|---|---|
+| **RNN** (1990s) | Read one word at a time, keep a memory | **Forgets the start of a long sentence** |
+| **LSTM** (1997) | An RNN with gates that decide what to remember | Better memory — **but still strictly sequential, so it cannot be parallelised** |
+
+> 🧠 **An RNN reads a book through a keyhole, one word at a time, trying to remember everything.** **By chapter 12 it has forgotten chapter 1.**
+
+## The Transformer, 2017
+
+**One paper — *Attention Is All You Need* — replaced the sequential reading with something better.**
+
+> 🧠 **A Transformer reads the whole page at once, and for every word it asks: *which other words on this page matter for understanding this one?***
+>
+> **For `are`, it looks back and finds `keys`.** **Not because of where it sits, but because of what it means.**
+
+**That mechanism is called *self-attention*, and it has two consequences.**
+
+| Consequence | Why it changed everything |
+|---|---|
+| **Long-range dependencies are easy** | **Any word can attend directly to any other word.** Distance stops mattering |
+| **It parallelises** | **Every word is processed at once**, so you can use thousands of GPUs — and *that* is what made models this large possible |
+
+> **The second point is the one people miss.** **The Transformer is not just more accurate than an LSTM — it is *trainable at a scale an LSTM never could be*.** **Everything since has been built on that.**
+
+---
+
+# 6. From Transformers to Generative AI
+
+**A Transformer is an architecture. Generative AI is what happens when you train one on enough text.**
+
+## The three shapes
+
+| Shape | What it is good at | Example |
+|---|---|---|
+| **Encoder-only** | **Understanding** text — classification, search | **BERT** |
+| **Decoder-only** | **Generating** text — one token at a time | **GPT, LLaMA, Gemini, Claude** |
+| **Encoder–decoder** | **Transforming** text — translation, summarisation | **T5, BART** |
+
+> **Generative AI as you meet it is almost entirely *decoder-only*.** **The model reads what has been written so far and predicts what comes next — including its own previous output.**
+
+## The step nobody predicted
+
+**Researchers scaled these models up expecting steadily better next-word prediction. They got that. They also got things nobody trained for.**
+
+| Model size | What it could do |
+|---|---|
+| Small | Predict the next word. Grammatical, not useful |
+| Medium | Answer simple questions |
+| **Large** | **Translate, summarise, write code, do arithmetic, follow instructions** |
+
+> **None of those were training objectives.** **The only objective was ever "predict the next token".**
+>
+> **The claim is often overstated as magic. It is not magic — but it is genuinely surprising**, and it is why the field moved so fast after 2020.
+
+---
+
+# 7. Language models: from LMs to LLMs
+
+## What a language model is
+
+> **A language model assigns a probability to what comes next.**
+
+```text
+"The cat sat on the ___"
+
+   mat      0.31
+   floor    0.12
+   sofa     0.09
+   roof     0.04
+   ...
+```
+
+**That is the entire definition.** **Everything else is a matter of scale.**
+
+🧠 **Analogy: your phone's keyboard.** **It suggests the next word as you type. That is a language model — a tiny one.** **An LLM is the same idea, with a hundred billion times the machinery.**
+
+## The history, in one table
+
+| Era | Approach | How it worked |
+|---|---|---|
+| **1950s–90s** | **n-grams** | Count how often word B followed word A **in a corpus**. Look it up |
+| **2000s** | Neural LMs | A small network predicts the next word from the last few |
+| **2013** | **Word embeddings** (word2vec) | **Words became vectors, so "king − man + woman ≈ queen" worked** |
+| **2017** | **Transformers** | Self-attention; parallel training |
+| **2018–now** | **LLMs** | Transformers, scaled enormously |
+
+## From LM to LLM — what "large" added
+
+| | **Language Model** | **Large Language Model** |
+|---|---|---|
+| **Parameters** | Thousands to millions | **Billions to trillions** |
+| **Training text** | A corpus | **Much of the public internet** |
+| **Trained for** | One task | **Next-token prediction, generally** |
+| **Used for** | The task it was trained on | ***Any* task you can describe in words** |
+| **Needs task-specific training?** | **Yes** | **Usually no — you describe the task in the prompt** |
+
+> **The last row is the one that matters.**
+>
+> **A 2015 sentiment model was trained on labelled reviews and could do exactly one thing.** **An LLM does sentiment analysis because you asked it to in English** — and does translation in the next request without being retrained.
+>
+> **That shift — from *training a model per task* to *describing the task* — is what [Part D](#part-d--prompt-engineering) is about.**
+
+---
+
+# 8. Parameters in LLMs
+
+> **A parameter is one number the model learned during training — exactly the weights and biases of [Session 9](session-09-deep-learning.md#18-parameters-vs-hyperparameters).**
+
+**The iris network in Session 9 had 67 parameters. An LLM has billions of the same thing.**
+
+| Model | Parameters | Session 9's iris MLP as a unit |
+|---|---|---|
+| Session 9's MLP | **67** | 1× |
+| BERT-base | **110 million** | 1.6 million× |
+| GPT-3 | **175 billion** | 2.6 billion× |
+| LLaMA 3 (largest) | **405 billion** | 6 billion× |
+
+## What the count buys you
+
+| More parameters means | |
+|---|---|
+| ✅ **More capacity to store patterns** | Better reasoning, more knowledge, more languages |
+| ❌ **More memory to run it** | See the arithmetic below |
+| ❌ **More compute per token** | Slower and more expensive |
+| ❌ **More energy** | Both to train and to serve |
+
+## The arithmetic you need
+
+> **At standard 16-bit precision, every parameter costs 2 bytes.**
+
+```text
+7 billion parameters  x  2 bytes  =  14 GB just to hold the weights
+70 billion parameters x  2 bytes  = 140 GB
+175 billion           x  2 bytes  = 350 GB
+```
+
+> **A good consumer graphics card has 24 GB.** **A 7-billion model fits. A 70-billion model does not — not without help.**
+>
+> **That "help" is [§9](#9-quantization).**
+
+## ⚠️ Bigger is not automatically better
+
+> **Parameter count is not a quality score.** **A well-trained 7-billion model routinely beats a badly-trained 70-billion one**, and for most tasks a small fast model is the right choice.
+>
+> **This is [Session 8](session-08-evaluation-tuning.md#5-use-case-2--car-prices)'s lesson again: capacity you do not need is capacity you are paying for.**
+
+---
+
+# 9. Quantization
+
+> **Quantization stores each parameter using fewer bits.**
+
+🧠 **Analogy: photograph file sizes.** **A RAW photo holds enormous colour precision. A JPEG throws most of it away — and you usually cannot tell.** **Quantization is JPEG for model weights.**
+
+## What it costs and what it saves
+
+| Precision | Bits per parameter | **7B model size** | Quality |
+|---|---|---|---|
+| **FP32** (full) | 32 | **28 GB** | Reference |
+| **FP16 / BF16** | 16 | **14 GB** | Effectively identical |
+| **INT8** | 8 | **7 GB** | **Very slight loss** |
+| **INT4** | 4 | **3.5 GB** | **Noticeable but often acceptable** |
+
+> **A 70-billion model at 4-bit is about 35 GB — which fits on hardware where the full-precision version needs 280 GB.**
+>
+> **That single fact is why you can run a capable model on a laptop at all.**
+
+## The trade, stated plainly
+
+| ✅ Gains | ❌ Costs |
+|---|---|
+| **Fits on smaller hardware** | **Some accuracy is lost** |
+| **Faster** — less memory to move | **Loss grows as bits shrink** |
+| **Cheaper to serve** | Not every operation quantizes cleanly |
+| **Runs locally — your data never leaves the machine** | |
+
+> **The usual sweet spot is 8-bit or 4-bit.** **Below 4 bits, quality degrades quickly.**
+>
+> ⚠️ **And measure it.** **"It still seems fine" is not evidence.** **Run your actual task at each precision and compare** — the same discipline [Session 8](session-08-evaluation-tuning.md#part-b--model-validation-techniques) applied to everything else.
+
+---
+
+# 10. The leading LLMs
+
+| Model | From | Shape | Known for |
+|---|---|---|---|
+| **GPT** | OpenAI | Decoder-only | **The family that made this mainstream.** Strong general reasoning |
+| **BERT** | Google, 2018 | **Encoder-only** | **Understanding, not generating.** Still everywhere in search and classification |
+| **T5** | Google | **Encoder–decoder** | *"Text-to-text"* — every task framed as text in, text out |
+| **Gemini** | Google | Decoder-only | **Multimodal** — text, images, audio, video. **Used in [Part C](#part-c--your-first-genai-program)** |
+| **Claude** | Anthropic | Decoder-only | Long context; careful instruction-following |
+| **LLaMA** | Meta | Decoder-only | **Open weights** — you can download and run it |
+| **Mistral** | Mistral AI | Decoder-only | **Small and efficient.** Strong quality per parameter |
+| **Falcon** | TII, Abu Dhabi | Decoder-only | Open weights; permissively licensed |
+
+## The distinction that matters most
+
+| | **Closed / API** | **Open weights** |
+|---|---|---|
+| Examples | GPT, Gemini, Claude | **LLaMA, Mistral, Falcon** |
+| How you use it | **Send a request over the internet** | **Download the file and run it** |
+| Your data | **Leaves your machine** | **Stays on your machine** |
+| Cost | **Per token, forever** | Hardware, once |
+| Control | The provider can change or retire it | **Yours** |
+| Typical quality | Usually ahead | **Closing the gap fast** |
+
+> **This is a real decision, not a preference.** **A hospital cannot send patient notes to an API.** **A two-person startup cannot buy the GPUs to serve a 70-billion model.**
+>
+> **[Session 12](session-12-opensource-ethics.md) works through this properly, with Hugging Face.**
+
+⚠️ **Model names and versions change every few months.** **The table above is a map of the families, not a current price list.** **Check the provider's documentation for what exists today.**
+
+---
+
+# 11. LLM applications
+
+**The same eight patterns cover most of what gets built.**
+
+| Pattern | What it does | Example |
+|---|---|---|
+| **1. Generation** | Produce new text | Draft an email, write a product description |
+| **2. Summarisation** | **Long → short** | 40-page report → one page |
+| **3. Extraction** | **Unstructured → structured** | An email → `{name, date, amount}` |
+| **4. Classification** | **Sort into categories, with no training data** | Route a support ticket |
+| **5. Translation** | Language → language, or **jargon → plain English** | |
+| **6. Question answering** | **Answer from a supplied document** | "What does clause 7 say?" |
+| **7. Code** | Write, explain, fix, test | |
+| **8. Conversation** | **Multi-turn dialogue with memory** | A support assistant |
+
+> **Look at patterns 3 and 4 again.** **You built a classifier in Session 5B and it needed 10,000 labelled rows.** **An LLM classifies a support ticket with zero training data, because you describe the categories in the prompt** — you will do exactly that in [§22](#22-few-shot-prompting).
+>
+> **That does not make Session 5B obsolete.** **The classifier is cheaper, faster, reproducible and auditable.** **The LLM is available immediately with no data at all.** Different tools.
+
+---
+
+# Part C — Your first GenAI program
+
+**Follows `genai_api_demo.ipynb`.**
+
+> ⚠️ **Every output in Parts C and D is a *typical* response, not a fixed one.**
+>
+> **You will not get the same text I did.** **That is not a bug in the guide — it is the defining property of a generative model, and [§16](#16-the-temperature-dial) is the dial that controls it.**
+
+---
+
+# 12. Setup — install and API key
+
+## Step 1 — install the library
+
+```bash
+pip install -q google-genai
+```
+
+**In a Colab or Jupyter cell, prefix it with `!`:**
 
 ```python
+# needs-install: pip install google-genai
+!pip install -q google-genai
+```
+
+> **It is already in the course [`requirements.txt`](../requirements.txt)** — if you installed from that file into the `genai` environment, you have it.
+
+## Step 2 — get an API key
+
+| # | Step |
+|---|---|
+| 1 | Go to **[aistudio.google.com/apikey](https://aistudio.google.com/apikey)** |
+| 2 | Sign in with a Google account |
+| 3 | **Create API key** |
+| 4 | Copy it — it looks like `AIza...` and is about 39 characters |
+
+**There is a free tier. It is rate-limited, and it is enough for everything in this session.**
+
+## ⚠️ Step 3 — store it, do not type it
+
+**This is the single most important paragraph in Part C.**
+
+```python
+# illustrative: this is what NOT to do.
+api_key = "<your-39-character-key>"    # <- NEVER. Not even briefly. Not even in a comment.
+client = genai.Client(api_key=api_key)
+```
+
+> **A key pasted into a notebook is a key in your git history forever.** **Deleting the line does not remove it — `git log` still has it.**
+>
+> **Keys leaked this way get found by automated scanners within minutes, and the bill is yours.**
+
+### In Colab — use Secrets
+
+```python
+# api-only: needs a Gemini API key.
+from google.colab import userdata
+
+api_key = userdata.get("GEMINI_API_KEY")
+```
+
+**Click the 🔑 key icon in Colab's left sidebar, add a secret named `GEMINI_API_KEY`, and switch on notebook access.**
+
+### Locally — use an environment variable
+
+```bash
+export GEMINI_API_KEY="your-key-here"
+```
+
+```python
+# api-only: needs a Gemini API key.
+import os
+
+api_key = os.environ.get("GEMINI_API_KEY")
+if not api_key:
+    raise RuntimeError("Set GEMINI_API_KEY in your environment first.")
+```
+
+**Or keep it in a `.env` file that is listed in `.gitignore`:**
+
+```python
+# api-only: needs a Gemini API key.
+import os
+from dotenv import load_dotenv
+
+load_dotenv()                      # reads .env from the current directory
+api_key = os.environ["GEMINI_API_KEY"]
+```
+
+```text
+.env                    <- contains  GEMINI_API_KEY=AIza...
+.gitignore              <- contains  .env
+```
+
+## Step 4 — one place for the model name
+
+```python
+# api-only: needs a Gemini API key.
+MODEL_ID = "gemini-2.5-flash"
+```
+
+> ⚠️ **Model IDs change every few months.** **Put it in one variable at the top and every call in your file updates with one edit.**
+>
+> **The trainer's notebook uses `gemini-3.5-flash` in most cells and `gemini-2.5-flash-lite` in the first one.** **If a call fails with a "model not found" error, that is why** — check the current list in the [Gemini API docs](https://ai.google.dev/gemini-api/docs/models) and change this one line.
+
+---
+
+# 13. "Hi" — your first GenAI program
+
+**One word in, a sentence out. This is the whole thing.**
+
+```python
+# api-only: needs a Gemini API key.
 from google import genai
 
-client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+client = genai.Client(api_key=api_key)
 
 response = client.models.generate_content(
-    model="gemini-3.5-flash",
-    contents="Explain overfitting to a first-year student in three sentences.",
+    model="gemini-2.5-flash",
+    contents="Hi"
+)
+
+print(response.text)
+```
+
+**A typical response:**
+
+```text
+Hi there! How can I help you today?
+```
+
+> **That is a working Generative AI program.** **Three lines of real code.**
+
+## What each line does
+
+| Line | What it does |
+|---|---|
+| `genai.Client(api_key=api_key)` | **Opens a connection.** Do this once, not per request |
+| `client.models.generate_content(...)` | **Sends the request over the internet** and waits |
+| `model="gemini-2.5-flash"` | **Which model.** Different models, different speed, cost and quality |
+| `contents="Hi"` | **Your prompt.** A plain string is enough |
+| `response.text` | **The generated text.** [§15](#15-what-the-machine-sees--the-raw-json) shows what else is in there |
+
+## The version with the error handling you will actually want
+
+**This is the trainer notebook's connection test, tidied.**
+
+```python
+# api-only: needs a Gemini API key.
+import os
+from google import genai
+
+api_key = os.environ.get("GEMINI_API_KEY")
+if not api_key:
+    print("Error: set GEMINI_API_KEY in your environment (or Colab Secrets) first.")
+else:
+    client = genai.Client(api_key=api_key)
+
+    print("Sending request to Gemini...")
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents="Hi Gemini"
+    )
+
+    print("\nSuccess! Here is the response:")
+    print("-" * 30)
+    print(response.text)
+```
+
+**A typical run:**
+
+```text
+Sending request to Gemini...
+
+Success! Here is the response:
+------------------------------
+Hi there! How can I help you today?
+```
+
+> **If this prints, everything else in this session will work.** **If it does not, the problem is the key or the model name — nothing else.**
+
+## ⚠️ The three errors you will hit
+
+| Error | Cause | Fix |
+|---|---|---|
+| `API key not valid` | Wrong or expired key | Regenerate it in AI Studio |
+| `404 model not found` | **The model ID does not exist** | Check the current model list |
+| `429 RESOURCE_EXHAUSTED` | **Free-tier rate limit** | Wait a minute; add `time.sleep(1)` between calls in a loop |
+
+---
+
+# 14. A few more first programs
+
+**Same three lines. Only the prompt changes — and that is the point of the whole session.**
+
+## A question
+
+```python
+# api-only: needs a Gemini API key.
+response = client.models.generate_content(
+    model=MODEL_ID,
+    contents="Why is the sky blue? Answer in one short sentence."
 )
 print(response.text)
 ```
 
-**Example 3 — where each belongs**
+**Typical:** `Sunlight scatters off air molecules, and blue light scatters most.`
 
-| Task | Which |
-|---|---|
-| Will this customer churn? | Predictive |
-| Write the email asking them to stay | Generative |
-| Is this transaction fraud? | Predictive |
-| Explain to the customer why their card was blocked | Generative |
-
-> **The best applications use both.** Session 11 is entirely about joining them: a model that decides, and a model that explains.
-
-## ✏️ Practice
-
-1. List five generative tools you have used, and what each produces.
-2. Classify five tasks from your own life as predictive or generative.
-3. Get a Gemini API key and make your first call.
-4. Ask the same question three times. Are the answers identical? Why not?
-5. Name a task where a generative model would be the **wrong** choice.
-
-<details><summary>Solutions</summary>
+## A constraint on the length
 
 ```python
-# api-only: needs a Gemini API key; run this yourself in Colab or locally
-# 1 - ChatGPT/Gemini (text), GitHub Copilot (code), DALL-E (images),
-#     ElevenLabs (speech), Google Translate (text).
-
-# 2 - Predictive: will it rain, is this spam, is this face mine.
-#     Generative: write my email, summarise this chapter, make an image.
-
-import os
-from google import genai
-client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])         # 3
-r = client.models.generate_content(
-    model="gemini-3.5-flash",
-    contents="Explain overfitting to a first-year student in three sentences.")
-print(r.text)
-
-for i in range(3):                                                   # 4
-    print(client.models.generate_content(
-        model="gemini-3.5-flash", contents="Name one colour.").text)
-# Not identical. The model SAMPLES from a probability distribution over
-# the next token, so different runs take different paths. Set temperature
-# to 0 to make it (nearly) deterministic.
-
-# 5 - Anything requiring a guaranteed-correct, auditable answer:
-#     computing a tax bill, checking a password, calculating interest.
-#     Use a rule or a calculation. Session 4's lesson, still true.
-```
-</details>
-
-## ❓ MCQs
-
-**Q1.** What makes an AI system *generative*?
-- (a) It uses a neural network  (b) It produces new content rather than choosing from fixed options  (c) It is large  (d) It runs on a GPU
-
-**Q2.** Your Session 5 loan classifier is…
-- (a) Generative  (b) Predictive  (c) Both  (d) Neither
-
-**Q3.** Asking a model the same question twice gives different answers because…
-- (a) A bug  (b) It samples from a probability distribution over the next token  (c) The internet changed  (d) Different models were used
-
-**Q4.** Which task should **not** use a generative model?
-- (a) Writing a summary  (b) Computing a tax bill from published bands  (c) Drafting an email  (d) Explaining a decision
-
-**Q5.** A multimodal model is one that…
-- (a) Has many parameters  (b) Handles several input or output types  (c) Runs on many GPUs  (d) Uses several languages
-
-<details><summary>Answers</summary>
-
-**A1 — (b).** The answer space is effectively unlimited rather than a fixed list.
-
-**A2 — (b) Predictive.** It picks one of two existing labels.
-
-**A3 — (b).** Set temperature to 0 for near-determinism.
-
-**A4 — (b).** **Session 4's lesson again: if you can write the rule correctly, write the rule.** Tax must be exact and auditable.
-
-**A5 — (b).** Text, images, audio in one model.
-</details>
-
-## 🎯 Tasks
-
-**Task 1 — The audit.** Find five products you use that added a GenAI feature in the last two years. For each, write what it generates and **whether a predictive model would have done the job better.** At least one of them, the answer will be yes.
-
-**Task 2 — Both halves.** Take a problem from your own life and design a two-part system: a predictive model that decides, and a generative model that explains the decision to a person. **Sketch the inputs and outputs of each.** You will build this in Session 11.
-
----
-
-# 2. Large Language Models: tokens, parameters, context
-
-An LLM is a very large neural network — **exactly the kind you built in Session 9** — trained to predict the next token.
-
-## Tokens
-
-**Text is not processed as words. It is processed as tokens**, roughly ¾ of a word each.
-
-```python
-"Machine learning models predict the next token, repeatedly."
-# -> ['Machine', ' learning', ' models', ' predict', ' the',
-#     ' next', ' token', ',', ' repeatedly', '.']
-# 10 tokens for 8 words
-```
-
-**Notice the leading spaces.** ` learning` and `learning` are *different tokens*. This is why models occasionally behave oddly with spacing and punctuation.
-
-> **Tokens are the unit of everything: the context limit, the cost, and the speed.** A rough rule: **1 token ≈ 4 characters ≈ ¾ of a word.** 1,000 words ≈ 1,300 tokens.
-
-## Parameters
-
-The learned weights — the same `W1`, `b1`, `W2`, `b2` from Session 9, at enormous scale.
-
-| Scale | Parameters | Runs on |
-|---|---|---|
-| Your Session 9 network | 33 | Anything |
-| Small open model | ~7 billion | A good laptop |
-| Large open model | ~70 billion | A server with several GPUs |
-| Frontier models | Hundreds of billions | A data centre |
-
-> ⚠️ **More parameters is not automatically better.** A well-trained 7B model routinely beats a poorly-trained 70B one, and for many tasks a small fast model is the right engineering choice.
-
-## Context window
-
-**How much the model can "see" at once** — your prompt *and* its answer, together.
-
-| Model era | Context | Roughly |
-|---|---|---|
-| GPT-2 (2019) | 1,024 tokens | 2 pages |
-| GPT-3.5 | 4,096 tokens | 6 pages |
-| Llama 3 | 8,192 tokens | 12 pages |
-| Gemini 1.5 Pro | 1,000,000 tokens | ~1,500 pages |
-
-**Anything beyond the window is simply not there.** This is why long chats start "forgetting" the beginning — a fixed window slides forward.
-
-## Temperature
-
-**How sharply the model samples from its next-token probabilities.** You met the idea at the end of Session 9; here is what it actually does.
-
-Given these six candidate next tokens after *"Tomorrow will be"*:
-
-| Token | T=0.0 | T=0.3 | T=0.7 | T=1.0 | T=1.5 | T=2.5 |
-|---|---|---|---|---|---|---|
-| sunny | **1.000** | 0.966 | 0.711 | 0.565 | 0.427 | 0.314 |
-| cloudy | 0.000 | 0.025 | 0.148 | 0.188 | 0.205 | 0.202 |
-| raining | 0.000 | 0.009 | 0.096 | 0.139 | 0.168 | 0.179 |
-| cold | 0.000 | 0.000 | 0.027 | 0.057 | 0.092 | 0.125 |
-| windy | 0.000 | 0.000 | 0.013 | 0.034 | 0.066 | 0.102 |
-| **purple** | 0.000 | 0.000 | 0.005 | 0.017 | 0.041 | **0.077** |
-
-**At temperature 2.5, "Tomorrow will be purple" has a 7.7% chance.** That is what "creative" settings actually mean, and why they produce incoherence.
-
-| Temperature | Use for |
-|---|---|
-| **0.0 – 0.3** | Extraction, classification, JSON, anything factual |
-| **0.7** | General writing. The usual default |
-| **1.0+** | Brainstorming, where you want variety |
-
-## 📘 Examples
-
-**Example 1 — count your tokens**
-
-```python
-text = "Machine learning models predict the next token, repeatedly."
-print(len(text), "characters")
-print(len(text) / 4, "tokens (rough estimate)")
-```
-
-**Example 2 — temperature in the API**
-
-```python
-from google.genai import types
-
+# api-only: needs a Gemini API key.
 response = client.models.generate_content(
-    model="gemini-3.5-flash",
-    contents="Name one colour.",
-    config=types.GenerateContentConfig(temperature=0.0),   # deterministic
+    model=MODEL_ID,
+    contents="Why is the sky blue? Answer in exactly 5 words."
 )
+print(response.text)
 ```
 
-**Example 3 — what a context window costs you**
+**Typical:** `Air scatters blue light most.`
+
+> **Compare the two.** **The only difference is four words of instruction — and the output changed completely.** **That is prompt engineering, and you have just done it.**
+
+## Something a predictive model could never do
 
 ```python
-# A 1,000,000-token context sounds free. It is not:
-#   - you pay per input token
-#   - the model is slower on long inputs
-#   - accuracy on facts buried in the MIDDLE of a long context
-#     is measurably worse than at the start or the end
-#
-# Send what is relevant, not everything you have.
-```
-
-## ✏️ Practice
-
-1. Estimate the tokens in a 500-word essay.
-2. Build the temperature table above with softmax in NumPy.
-3. Sample 12 tokens at T = 0.0, 0.7 and 1.5. Describe the difference.
-4. Ask the model the same question at temperature 0 and 1.5, three times each.
-5. Why does a long chat start "forgetting" the beginning?
-
-<details><summary>Solutions</summary>
-
-```python
-import numpy as np
-
-print("500 words ~", int(500 / 0.75), "tokens")                        # 1
-
-logits = np.array([3.2, 2.1, 1.8, 0.9, 0.4, -0.3])                     # 2
-words = ["sunny", "cloudy", "raining", "cold", "windy", "purple"]
-
-def softmax_T(z, T):
-    if T <= 0:
-        p = np.zeros_like(z); p[np.argmax(z)] = 1.0; return p
-    e = np.exp((z - z.max()) / T)
-    return e / e.sum()
-
-for T in [0.0, 0.3, 0.7, 1.0, 1.5, 2.5]:
-    print(f"T={T}: " + "  ".join(f"{w} {p:.3f}" for w, p in zip(words, softmax_T(logits, T))))
-# At T=2.5, "purple" gets 7.7% -- that is what "creative" settings mean.
-
-rng = np.random.default_rng(3)                                         # 3
-for T in [0.0, 0.7, 1.5]:
-    picks = [words[rng.choice(len(words), p=softmax_T(logits, T))] for _ in range(12)]
-    print(f"T={T}: {picks}")
-# T=0.0 is identical every time. T=0.7 mostly picks the top token with
-# occasional variety. T=1.5 wanders, including into nonsense.
-
-# 5 - The context window is FIXED. Once the conversation exceeds it, the
-#     oldest tokens fall out of the window and are simply not there any
-#     more. The model is not "forgetting" -- it can no longer see them.
-```
-</details>
-
-## ❓ MCQs
-
-**Q1.** Roughly how many tokens is 1,000 words?
-- (a) 250  (b) 750  (c) 1,300  (d) 4,000
-
-**Q2.** ` learning` (with a leading space) and `learning` are…
-- (a) The same token  (b) Different tokens  (c) Not tokens  (d) Always merged
-
-**Q3.** The context window contains…
-- (a) Only your prompt  (b) Your prompt and the model's answer together  (c) Only the answer  (d) The training data
-
-**Q4.** For extracting JSON from a document, use temperature…
-- (a) 0.0 – 0.3  (b) 0.7  (c) 1.5  (d) 2.5
-
-**Q5.** At temperature 2.5 the token "purple" has 7.7% probability after "Tomorrow will be". This shows…
-- (a) The model is broken  (b) High temperature flattens the distribution, making nonsense possible  (c) Purple is a weather type  (d) Temperature has no effect
-
-**Q6.** A 7B model beating a 70B model is…
-- (a) Impossible  (b) Possible — training quality matters more than raw size  (c) A measurement error  (d) Only true for code
-
-**Q7.** Long chats "forget" the beginning because…
-- (a) Memory leaks  (b) Old tokens fall outside the fixed context window  (c) The model gets tired  (d) The API resets
-
-<details><summary>Answers</summary>
-
-**A1 — (c) ~1,300.** 1 token ≈ ¾ of a word.
-
-**A2 — (b) Different tokens.** Which is why spacing sometimes changes behaviour.
-
-**A3 — (b) Both together.** A long prompt leaves less room for the answer.
-
-**A4 — (a).** Anything factual or structured wants low temperature.
-
-**A5 — (b).** **That is what "creative" settings actually mean.**
-
-**A6 — (b).** **More parameters is not automatically better.**
-
-**A7 — (b).** They are not there to be recalled.
-</details>
-
-## 🎯 Tasks
-
-**Task 1 — The temperature study.** Ask one creative question and one factual question at temperatures 0, 0.7 and 1.5, five times each. **Present a table of what changed** and write the one-line rule you would give a teammate.
-
-**Task 2 — The token budget.** Take a real document and estimate its tokens. **Work out what it would cost to send it 1,000 times** at a published API rate, and what you could strip out to halve that. This is a real engineering decision in Session 11.
-
----
-
-# 3. Leading LLMs, and what they are for
-
-The question is rarely *"which is best?"* — it changes monthly. **The useful questions are: is it open or closed, and what is it built to do?**
-
-| Model | Made by | Open weights? | Built for |
-|---|---|---|---|
-| **GPT** | OpenAI | No | General-purpose generation and chat |
-| **Gemini** | Google | No | General-purpose, multimodal, long context |
-| **Claude** | Anthropic | No | General-purpose, long-form reasoning and code |
-| **LLaMA** | Meta | **Yes** | Open general-purpose; the base for many fine-tunes |
-| **Mistral** | Mistral AI | **Yes** (several) | Efficient open models, strong for their size |
-| **Falcon** | TII | **Yes** | Open general-purpose |
-| **BERT** | Google | **Yes** | **Understanding text, not generating it** |
-| **T5** | Google | **Yes** | Text-to-text: translation, summarisation |
-
-## The distinction that actually matters
-
-> ⚠️ **BERT cannot chat with you, and this is the most common misunderstanding in this topic.**
-
-| Architecture | Reads | Good for | Examples |
-|---|---|---|---|
-| **Encoder-only** | The whole text at once, both directions | *Understanding*: classification, search, embeddings | BERT |
-| **Decoder-only** | Left to right, predicting the next token | *Generating*: chat, writing, code | GPT, Gemini, Claude, LLaMA, Mistral |
-| **Encoder-decoder** | Reads all, then writes | *Transforming*: translation, summarisation | T5 |
-
-**BERT is an encoder.** It builds a rich understanding of text you give it — which is exactly what you want for classifying support tickets or powering search. **It was never designed to continue a sentence**, so asking it to write you an email is a category error.
-
-🧠 **Analogy.** BERT is a **reader** — give it a document and it understands it deeply. GPT is a **writer** — give it a start and it continues. T5 is a **translator** — give it something in one form and it produces another.
-
-## Open vs closed: the decision you will actually make
-
-| | Closed (GPT, Gemini, Claude) | Open (LLaMA, Mistral, Falcon) |
-|---|---|---|
-| Access | API call | Download and run |
-| Cost | Per token | Your hardware |
-| **Your data** | Leaves your machine | **Stays on your machine** |
-| Fine-tuning | Limited | Full control |
-| Setup | Minutes | Hours, plus a GPU |
-| Best for | Getting started, most apps | Privacy, scale, customisation |
-
-> **For a hospital or a bank, "the data stays on our machine" often decides it outright** — before anyone compares quality. Session 12 covers running open models via Hugging Face.
-
-## Applications
-
-| Application | What the LLM does |
-|---|---|
-| **Chatbots and assistants** | Answer questions in context |
-| **Summarisation** | Long document → key points |
-| **Extraction** | Unstructured text → structured JSON |
-| **Code** | Generate, explain, review, translate |
-| **Classification** | Sentiment, topic, intent — **often with no training data** |
-| **RAG** | Answer from *your* documents rather than memory |
-| **Translation** | Between languages, or between registers |
-
-**Zero-shot classification is the one that surprises people.** In Session 5 you needed thousands of labelled rows to build a classifier. An LLM will classify sentiment with **zero** training examples — worse than a properly trained model on a narrow task, but instantly, and on a task nobody has data for.
-
-## 📘 Examples
-
-**Example 1 — choosing a model, with reasons**
-
-```python
-# A hospital classifying patient notes, data must not leave the building
-#   -> an OPEN model (LLaMA / Mistral) running locally
-#
-# A student project needing a working demo this week
-#   -> a CLOSED API (Gemini) - free tier, no GPU, working in minutes
-#
-# Semantic search over 100,000 documents
-#   -> BERT-family EMBEDDINGS, not a chat model
-#
-# Summarising 300-page reports
-#   -> a long-context model (Gemini 1.5 Pro)
-```
-
-**Example 2 — zero-shot classification, no training data at all**
-
-```python
-reviews = ["The delivery was late and the box was damaged.",
-           "Works exactly as described, very happy.",
-           "It is fine. Nothing special."]
-
-for r in reviews:
-    out = client.models.generate_content(
-        model="gemini-3.5-flash",
-        contents=f"Classify sentiment as positive, negative or neutral. "
-                 f"Reply with one word only.\n\nReview: {r}",
-    )
-    print(f"{out.text.strip():<10} {r}")
-```
-
-**Example 3 — the honest comparison with Session 5**
-
-| | Trained classifier (Session 5) | LLM zero-shot |
-|---|---|---|
-| Training data needed | Thousands of labelled rows | **None** |
-| Setup time | Days | Minutes |
-| Cost per prediction | Effectively zero | An API call |
-| Accuracy on a narrow, well-defined task | **Usually higher** | Good, not best |
-| Handles a task you have no data for | ❌ | ✅ |
-
-> **Neither replaces the other.** If you have 10,000 labelled loan applications, train a Random Forest — it will be faster, cheaper and better. If you need to sort support emails by topic tomorrow and have no labels, use an LLM.
-
-## ✏️ Practice
-
-1. Why can BERT not write you an email?
-2. Which architecture for semantic search? For chat? For translation?
-3. Classify five reviews zero-shot. How accurate is it against your own judgement?
-4. For a bank that cannot let data leave its building, open or closed? Why?
-5. When would you still prefer a Session 5 classifier over an LLM?
-
-<details><summary>Solutions</summary>
-
-```python
-# api-only: needs a Gemini API key; run this yourself in Colab or locally
-# 1 - BERT is an ENCODER. It reads text in both directions to understand
-#     it; it was never trained to continue a sequence one token at a time.
-#     Asking it to write is a category error, not a limitation to work around.
-
-# 2 - Semantic search -> encoder (BERT-family embeddings)
-#     Chat            -> decoder-only (GPT, Gemini, Claude, LLaMA)
-#     Translation     -> encoder-decoder (T5) or a modern decoder-only model
-
-import os
-from google import genai
-client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])          # 3
-for r in ["Late and damaged.", "Exactly as described, very happy.",
-          "It is fine. Nothing special.", "Never buying here again.",
-          "Arrived early, great quality."]:
-    out = client.models.generate_content(
-        model="gemini-3.5-flash",
-        contents=f"Classify sentiment as positive, negative or neutral. "
-                 f"Reply with one word only.\n\nReview: {r}")
-    print(f"{out.text.strip():<10} {r}")
-
-# 4 - OPEN, run locally. "The data stays on our machine" often decides it
-#     outright, before anyone compares quality.
-
-# 5 - When you HAVE labelled data and the task is narrow and repeated:
-#     a Random Forest on 10,000 loan applications is faster, cheaper,
-#     auditable, and usually MORE accurate than an LLM on that task.
-```
-</details>
-
-## ❓ MCQs
-
-**Q1.** Why can BERT not generate a chat reply?
-- (a) It is too small  (b) It is an encoder, built to understand text, not continue it  (c) It is closed-source  (d) It has no context window
-
-**Q2.** Which architecture powers GPT, Gemini and Claude?
-- (a) Encoder-only  (b) Decoder-only  (c) Encoder-decoder  (d) Convolutional
-
-**Q3.** A hospital that cannot let patient data leave the building should use…
-- (a) A closed API  (b) An open model running locally  (c) Either  (d) No model
-
-**Q4.** T5 is best described as…
-- (a) A chat model  (b) An encoder-decoder for transforming text into other text  (c) An image model  (d) An embedding model
-
-**Q5.** Zero-shot classification with an LLM needs…
-- (a) Thousands of labelled examples  (b) No training examples at all  (c) A GPU  (d) Fine-tuning
-
-**Q6.** You have 10,000 labelled loan applications. Better choice?
-- (a) An LLM zero-shot  (b) A trained classifier — faster, cheaper, auditable and usually more accurate  (c) BERT  (d) T5
-
-**Q7.** "Open weights" means…
-- (a) Free to use commercially always  (b) You can download and run the model yourself  (c) The training data is public  (d) It has no licence
-
-<details><summary>Answers</summary>
-
-**A1 — (b).** **The most common misunderstanding in this topic.** BERT reads; it does not continue.
-
-**A2 — (b) Decoder-only.**
-
-**A3 — (b).** Data residency often decides before quality is even discussed.
-
-**A4 — (b).** Text-to-text: translation, summarisation.
-
-**A5 — (b) None.** That is what makes it useful for tasks nobody has data for.
-
-**A6 — (b).** **The LLM is not the answer to every question.**
-
-**A7 — (b).** Note it does *not* automatically mean an unrestricted licence — always check the terms.
-</details>
-
-## 🎯 Tasks
-
-**Task 1 — The model selection memo.** For four scenarios — a hospital classifying notes; a student demo due Friday; semantic search over 100,000 documents; summarising 300-page reports — recommend a model **and name the one fact that would change your mind.**
-
-**Task 2 — Zero-shot versus trained, measured.** Take 50 labelled rows from a classification dataset. Classify them zero-shot with an LLM and with your Session 5 model. **Report both accuracies and both costs**, and write which you would deploy and why.
-
-**Task 3 — The architecture map.** Draw the encoder / decoder / encoder-decoder diagram from memory, placing all eight models in the table. **Then explain to a classmate why BERT cannot chat.**
-
----
-
-# 4. Prompt Engineering Basics
-
-**A prompt is a program written in English.** Vague input gives vague output — and unlike a bug in Python, nothing errors. It just quietly gives you something mediocre.
-
-🧠 **Analogy: briefing an extremely capable new intern who has no context.** They can do almost anything, they have read enormously, and **they know nothing about your situation, your audience or your format.** Everything they need must be in the briefing.
-
-## The five parts
-
-```text
-ROLE        You are a ______________________
-TASK        ______________________________
-CONTEXT     The reader is ______________________
-CONSTRAINTS ______________________________
-FORMAT      ______________________________
-```
-
-**Weak:**
-
-> Tell me about overfitting.
-
-**Strong:**
-
-> **You are a machine learning tutor.** *(role)*
-> **Explain overfitting.** *(task)*
-> **The reader is a first-year student who has just learned what a decision tree is.** *(context)*
-> **Use no mathematical notation and keep it under 120 words. Include one everyday analogy.** *(constraints)*
-> **Format: one paragraph, then a two-line summary starting "In short:".** *(format)*
-
-**The second prompt is not longer for the sake of it.** Every added line removes a decision the model would otherwise make for you — badly.
-
-## The habits that matter most
-
-| Habit | Why |
-|---|---|
-| **Say what you want, not what you don't** | "Write three sentences" beats "don't be too long" |
-| **Give the audience** | "for a 10-year-old" changes everything downstream |
-| **Specify the format** | Otherwise you get whatever it feels like |
-| **Show an example** | One example beats a paragraph of description |
-| **Ask for reasoning on hard tasks** | See chain-of-thought below |
-| **Iterate** | Your first prompt is a draft, not a finished program |
-
-## 📘 Examples
-
-**Example 1 — weak versus strong, measured by usefulness**
-
-```python
-weak = "Tell me about overfitting."
-
-strong = """You are a machine learning tutor.
-Explain overfitting.
-The reader is a first-year student who has just learned what a decision tree is.
-Constraints: no mathematical notation, under 120 words, include one everyday analogy.
-Format: one paragraph, then a two-line summary starting "In short:"."""
-```
-
-Run both. **The weak prompt gives you a textbook definition; the strong one gives you something you could paste into your own teaching materials.**
-
-**Example 2 — system instructions set persistent behaviour**
-
-```python
-from google.genai import types
-
+# api-only: needs a Gemini API key.
 response = client.models.generate_content(
-    model="gemini-3.5-flash",
-    contents="What is a p-value?",
-    config=types.GenerateContentConfig(
-        system_instruction="You are a statistics tutor for beginners. "
-                           "Never use notation. Always give one concrete example. "
-                           "Keep answers under 100 words.",
-        temperature=0.3,
-    ),
+    model=MODEL_ID,
+    contents="Explain what a decision tree is to a ten-year-old, in three sentences."
 )
+print(response.text)
 ```
 
-**The system instruction applies to every message in the conversation.** Put your role and constraints here; put the actual question in `contents`.
+> **There was no training set of "explanations for ten-year-olds".** **The model was never trained on this task.** **[§7](#7-language-models-from-lms-to-llms)'s point, in one call.**
 
-**Example 3 — structured output, which makes an LLM programmable**
+## Asking it to write code
 
 ```python
+# api-only: needs a Gemini API key.
 response = client.models.generate_content(
-    model="gemini-3.5-flash",
-    contents="""Extract from this review: sentiment (positive/negative/neutral),
-the product mentioned, and any complaint.
-
-Review: "The headphones arrived two days late but the sound is excellent."
-""",
-    config=types.GenerateContentConfig(
-        response_mime_type="application/json",     # <- guaranteed valid JSON
-        temperature=0.0,
-    ),
+    model=MODEL_ID,
+    contents="Write a Python function that returns True if a number is prime. "
+             "Include a docstring and no explanation."
 )
-
-import json
-data = json.loads(response.text)
-print(data["sentiment"])
+print(response.text)
 ```
 
-> **`response_mime_type="application/json"` is the single most useful setting for building applications.** It turns a chatty model into a component you can call from code — which is exactly what Session 11 needs.
+> ⚠️ **Read anything it writes before you run it.** **The model produces code that *looks* right with complete confidence, and looking right is not the same as being right.**
 
-## ✏️ Practice
-
-1. Run the weak and strong prompts. Compare the outputs.
-2. Rewrite three of your own past prompts using all five parts.
-3. Use a system instruction to make the model answer only in bullet points.
-4. Extract structured JSON from three product reviews.
-5. What happens if you ask for JSON **without** setting `response_mime_type`?
-
-<details><summary>Solutions</summary>
+## A batch of prompts
 
 ```python
-# api-only: needs a Gemini API key; run this yourself in Colab or locally
-import os, json
-from google import genai
-from google.genai import types
-client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+# api-only: needs a Gemini API key.
+import time
 
-for label, p in [("WEAK", "Tell me about overfitting."),               # 1
-                 ("STRONG", """You are a machine learning tutor.
-Explain overfitting.
-The reader is a first-year student who has just learned what a decision tree is.
-Constraints: no mathematical notation, under 120 words, include one everyday analogy.
-Format: one paragraph, then a two-line summary starting "In short:".""")]:
-    print(f"--- {label} ---")
-    print(client.models.generate_content(model="gemini-3.5-flash", contents=p).text)
+prompts = [
+    "Summarise machine learning in one sentence.",
+    "Give me one reason to scale features before kNN.",
+    "What is overfitting? One sentence.",
+]
 
-r = client.models.generate_content(                                    # 3
-    model="gemini-3.5-flash", contents="Explain cross-validation.",
-    config=types.GenerateContentConfig(
-        system_instruction="Answer only in bullet points. Never write a paragraph.",
-        temperature=0.3))
-print(r.text)
-
-for rev in ["The headphones arrived two days late but the sound is excellent.",
-            "Perfect fit, shipped fast.",
-            "The screen cracked within a week."]:                      # 4
-    out = client.models.generate_content(
-        model="gemini-3.5-flash",
-        contents=f"Extract sentiment (positive/negative/neutral), product, "
-                 f"and complaint (or null).\n\nReview: {rev}",
-        config=types.GenerateContentConfig(
-            response_mime_type="application/json", temperature=0.0))
-    print(json.loads(out.text))
-
-# 5 - You often get valid JSON wrapped in a markdown code fence, or preceded by
-#     "Here is the JSON you asked for:". json.loads() then CRASHES.
-#     Setting response_mime_type makes the output parseable every time --
-#     which is what turns a chat model into a software component.
+for prompt in prompts:
+    response = client.models.generate_content(model=MODEL_ID, contents=prompt)
+    print(f"Q: {prompt}\nA: {response.text.strip()}\n")
+    time.sleep(1)          # stay under the free-tier rate limit
 ```
-</details>
 
-## ❓ MCQs
-
-**Q1.** What are the five parts of a good prompt?
-- (a) Question, answer, example, format, length
-- (b) Role, task, context, constraints, format
-- (c) Input, output, model, temperature, tokens
-- (d) Who, what, when, where, why
-
-**Q2.** "Don't be too long" is a weak constraint because…
-- (a) It is rude  (b) It says what you don't want instead of what you do  (c) It is too short  (d) It needs punctuation
-
-**Q3.** A system instruction differs from a normal prompt in that it…
-- (a) Is free  (b) Applies to every message in the conversation  (c) Runs faster  (d) Is required
-
-**Q4.** `response_mime_type="application/json"` guarantees…
-- (a) A correct answer  (b) Parseable JSON output  (c) Lower cost  (d) Higher temperature
-
-**Q5.** For structured extraction you should set temperature to…
-- (a) 0.0  (b) 0.7  (c) 1.5  (d) It does not matter
-
-**Q6.** Asking for JSON without setting the mime type often gives you…
-- (a) An error  (b) JSON wrapped in code fences or explanatory text, which breaks `json.loads`  (c) Nothing  (d) XML
-
-<details><summary>Answers</summary>
-
-**A1 — (b).** Role, task, context, constraints, format.
-
-**A2 — (b).** **Say what you want, not what you don't.**
-
-**A3 — (b).** Put your role and standing constraints there.
-
-**A4 — (b).** It does not make the content correct — only the *shape* reliable.
-
-**A5 — (a) 0.0.** You want the same input to give the same structured output.
-
-**A6 — (b).** **The single most common bug when students first build an app.**
-</details>
-
-## 🎯 Tasks
-
-**Task 1 — The prompt improvement log.** Take five weak prompts, rewrite each with all five parts, and record both outputs side by side. **Write one sentence per pair on exactly what improved.**
-
-**Task 2 — Build an extractor.** Write a function that takes any product review and returns a Python dict with sentiment, product, and complaint. **Handle the case where the model returns something unexpected** — Session 11 depends on this being robust.
-
-**Task 3 — The system instruction test.** Write one system instruction and ask five different questions under it. **Does the behaviour hold across all five?** Report any question where it broke.
+> **`time.sleep(1)` is not decoration.** **The free tier limits requests per minute, and a loop without a pause will hit `429` within seconds.**
 
 ---
 
-# 5. Types of Prompts
+# 15. What the machine sees — the raw JSON
 
-| Type | You provide | Use when |
-|---|---|---|
-| **Zero-shot** | Just the instruction | The task is common and the format is obvious |
-| **One-shot** | One example | You need a specific format |
-| **Few-shot** | 3–5 examples | Format *and* edge cases matter |
-| **Chain-of-thought** | "Think step by step" | Multi-step reasoning, arithmetic, logic |
-
-## Zero-shot
-
-```text
-Classify the sentiment of this review as positive, negative or neutral.
-
-Review: "The delivery was late but the product is excellent."
-Sentiment:
-```
-
-## One-shot — when the format matters
-
-```text
-Classify sentiment and give a confidence score.
-
-Review: "Perfect fit, arrived early."
-Sentiment: positive | Confidence: high
-
-Review: "The delivery was late but the product is excellent."
-Sentiment:
-```
-
-**The example does the work a paragraph of description would do badly.** The model now knows the exact separator, the exact vocabulary, the exact shape.
-
-## Few-shot — when edge cases matter
-
-```text
-Review: "Perfect fit, arrived early."
-Sentiment: positive | Confidence: high
-
-Review: "It broke in a week."
-Sentiment: negative | Confidence: high
-
-Review: "It is fine I suppose."
-Sentiment: neutral | Confidence: low
-
-Review: "Late delivery, but excellent product."
-Sentiment:
-```
-
-**The third example is the important one.** It teaches the model that *hedged* language means neutral **and** low confidence — a rule that is genuinely hard to state in words but obvious from one example.
-
-> **Few-shot is the highest-value technique in this session.** Most "the model won't follow my format" problems are solved by three examples.
-
-## Chain-of-thought — when reasoning matters
-
-**Without:**
-
-> A shop sells pens at ₹12. A customer buys 7 and pays with ₹100. How much change?
->
-> *Answer:* ₹16
-
-**With `Think step by step.`:**
-
-> 1. Cost = 7 × ₹12 = ₹84
-> 2. Paid = ₹100
-> 3. Change = ₹100 − ₹84 = ₹16
->
-> *Answer:* ₹16
-
-**Why this works:** the model generates one token at a time, and each token can only depend on what came before it. Asking for the intermediate steps gives it **somewhere to do the working** — the partial results become part of the context the final answer is computed from.
-
-🧠 **Analogy: mental arithmetic versus using paper.** Asked for 47 × 23 instantly, you might guess. Given paper, you get it right. **"Think step by step" hands the model the paper.**
-
-> ⚠️ **Chain-of-thought costs tokens** — you pay for all that working. Use it for reasoning tasks; skip it for "classify this as positive or negative".
-
-## 📘 Examples
-
-**Example 1 — the four types, same task**
+**`response.text` is a convenience. It hides most of what came back.**
 
 ```python
-prompts = {
-"zero-shot": """Classify sentiment as positive, negative or neutral.
-Review: "Late delivery, but excellent product."
-Sentiment:""",
+# api-only: needs a Gemini API key.
+prompt = "Why is the sky blue? Answer in one short sentence."
 
-"one-shot": """Classify sentiment and give a confidence score.
+response = client.models.generate_content(model=MODEL_ID, contents=prompt)
 
-Review: "Perfect fit, arrived early."
-Sentiment: positive | Confidence: high
+print("=== WHAT THE USER SEES ===")
+print(response.text)
+print()
 
-Review: "Late delivery, but excellent product."
-Sentiment:""",
+print("=== WHAT THE MACHINE SEES (RAW JSON) ===")
+print(response.model_dump_json(indent=2))
+```
 
-"few-shot": """Review: "Perfect fit, arrived early."
-Sentiment: positive | Confidence: high
+**The raw response has roughly this shape:**
 
-Review: "It broke in a week."
-Sentiment: negative | Confidence: high
-
-Review: "It is fine I suppose."
-Sentiment: neutral | Confidence: low
-
-Review: "Late delivery, but excellent product."
-Sentiment:""",
+```text
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [ { "text": "Sunlight scatters off air molecules..." } ],
+        "role": "model"
+      },
+      "finish_reason": "STOP",
+      "safety_ratings": [ ... ]
+    }
+  ],
+  "usage_metadata": {
+    "prompt_token_count": 12,
+    "candidates_token_count": 14,
+    "total_token_count": 26
+  },
+  "model_version": "gemini-2.5-flash"
 }
-
-for name, p in prompts.items():
-    out = client.models.generate_content(model="gemini-3.5-flash", contents=p)
-    print(f"{name:<12} {out.text.strip()}")
 ```
 
-**Example 2 — the classic reasoning test**
+## The four fields worth knowing
 
-```python
-puzzle = ("If 5 machines take 5 minutes to make 5 widgets, "
-          "how long do 100 machines take to make 100 widgets?")
+| Field | Why you care |
+|---|---|
+| **`candidates`** | **A list.** You can ask for more than one answer to the same prompt |
+| **`finish_reason`** | **`STOP` means it finished. `MAX_TOKENS` means it was cut off mid-sentence** |
+| **`usage_metadata`** | **Tokens in, tokens out — this is what you are billed on** |
+| **`safety_ratings`** | Why a response might have been blocked |
 
-plain = client.models.generate_content(model="gemini-3.5-flash", contents=puzzle)
-cot = client.models.generate_content(
-    model="gemini-3.5-flash", contents=puzzle + "\n\nThink step by step.")
-```
+> ⚠️ **Check `finish_reason` in any real application.** **A truncated answer still has `response.text`, and it still looks like an answer.** **`MAX_TOKENS` is how you find out it was not one.**
 
-**The answer is 5 minutes**, not 100. Each machine makes one widget in 5 minutes, so 100 machines make 100 widgets in the same 5 minutes. **Chain-of-thought makes this kind of trap far more reliable to avoid** — and, crucially, it makes the reasoning *visible*, so you can check it.
+## Tokens, and why they are the unit
 
-**Example 3 — choosing, with a rule**
+**Models do not read words. They read *tokens* — roughly 4 characters, or about ¾ of a word in English.**
 
 ```text
-Is the task classification with an obvious format?     -> zero-shot
-Do you need a specific output format?                  -> one-shot
-Are there edge cases the format alone won't capture?   -> few-shot
-Does it need arithmetic, logic or multiple steps?      -> chain-of-thought
-Both format AND reasoning?                             -> few-shot + CoT
+"Machine learning models predict the next token, repeatedly."
+  8 words  ->  about 10 tokens
 ```
 
-## ✏️ Practice
+| | |
+|---|---|
+| **You are billed per token**, input and output | `usage_metadata` is your meter |
+| **The context window is measured in tokens** | How much the model can consider at once |
+| **Rare words cost more tokens** | `"antidisestablishmentarianism"` is several tokens; `"the"` is one |
 
-1. Run all four prompt types on the same review. Which gives the most usable output?
-2. Add a fourth few-shot example covering sarcasm. Does it improve?
-3. Try the widget puzzle with and without "Think step by step".
-4. Try a three-step word problem of your own, both ways.
-5. When would chain-of-thought be a waste of tokens?
-
-<details><summary>Solutions</summary>
-
-```python
-# api-only: needs a Gemini API key; run this yourself in Colab or locally
-import os
-from google import genai
-client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-
-review = '"Late delivery, but excellent product."'
-zero = f'Classify sentiment as positive, negative or neutral.\nReview: {review}\nSentiment:'
-one = f'''Classify sentiment and give a confidence score.
-
-Review: "Perfect fit, arrived early."
-Sentiment: positive | Confidence: high
-
-Review: {review}
-Sentiment:'''
-few = f'''Review: "Perfect fit, arrived early."
-Sentiment: positive | Confidence: high
-
-Review: "It broke in a week."
-Sentiment: negative | Confidence: high
-
-Review: "It is fine I suppose."
-Sentiment: neutral | Confidence: low
-
-Review: {review}
-Sentiment:'''
-
-for name, p in [("zero-shot", zero), ("one-shot", one), ("few-shot", few)]:   # 1
-    print(f"{name:<12}",
-          client.models.generate_content(model="gemini-3.5-flash", contents=p).text.strip())
-# Few-shot gives the most CONSISTENT format, which is what matters when
-# you are parsing the output in code.
-
-puzzle = ("If 5 machines take 5 minutes to make 5 widgets, "                  # 3
-          "how long do 100 machines take to make 100 widgets?")
-print("\\nplain:", client.models.generate_content(
-    model="gemini-3.5-flash", contents=puzzle).text.strip()[:200])
-print("\\nCoT  :", client.models.generate_content(
-    model="gemini-3.5-flash", contents=puzzle + "\\n\\nThink step by step.").text.strip()[:400])
-# The answer is 5 MINUTES, not 100. CoT makes the reasoning VISIBLE so you
-# can check it -- which is often more valuable than the accuracy gain.
-
-# 5 - On simple one-step tasks: "classify this as positive or negative"
-#     needs no working. You would pay for tokens of reasoning that add
-#     nothing, and slow every request down.
-```
-</details>
-
-## ❓ MCQs
-
-**Q1.** Zero-shot means…
-- (a) No model  (b) The instruction only, with no examples  (c) Zero temperature  (d) No context
-
-**Q2.** You need output in an exact format. The cheapest fix is…
-- (a) A longer description of the format  (b) One or more examples  (c) Higher temperature  (d) A bigger model
-
-**Q3.** In the few-shot example, why does *"It is fine I suppose."* matter most?
-- (a) It is the longest  (b) It teaches that hedged language means neutral **and** low confidence — hard to state, obvious from an example  (c) It is negative  (d) It is a duplicate
-
-**Q4.** Chain-of-thought works because…
-- (a) The model thinks harder  (b) Generating intermediate steps gives the final answer something to build on  (c) It uses a bigger model  (d) It lowers temperature
-
-**Q5.** "If 5 machines take 5 minutes to make 5 widgets, how long do 100 machines take to make 100 widgets?"
-- (a) 100 minutes  (b) 5 minutes  (c) 20 minutes  (d) 1 minute
-
-**Q6.** Chain-of-thought is a waste when…
-- (a) The task is arithmetic  (b) The task is a simple one-step classification  (c) The task is logic  (d) Never
-
-**Q7.** For a task needing both an exact format and multi-step reasoning, use…
-- (a) Zero-shot  (b) Few-shot **and** chain-of-thought together  (c) One-shot only  (d) Higher temperature
-
-<details><summary>Answers</summary>
-
-**A1 — (b).** Just the instruction.
-
-**A2 — (b).** **One example beats a paragraph of description.**
-
-**A3 — (b).** Edge cases are exactly what examples are for.
-
-**A4 — (b).** **It hands the model the paper.**
-
-**A5 — (b) 5 minutes.** Each machine makes one widget in 5 minutes.
-
-**A6 — (b).** You would pay for reasoning tokens that add nothing.
-
-**A7 — (b).** They combine freely.
-</details>
-
-## 🎯 Tasks
-
-**Task 1 — The four-way comparison.** Run all four prompt types on the same ten reviews. **Report format consistency, not just correctness** — count how many outputs you could parse with code without special-casing.
-
-**Task 2 — Build a few-shot classifier.** Choose a classification task with a genuine edge case, write a four-example few-shot prompt, and test it on 20 items. **Report accuracy and note every item where it failed** — then add an example covering that failure and re-test.
-
-**Task 3 — Chain-of-thought, costed.** Take five reasoning problems and run each with and without CoT. **Record accuracy and output length for both.** Then state the rule you would give a team about when the extra tokens are worth paying for.
+> **`total_token_count: 26` for a one-sentence exchange.** **A 40-page document is roughly 20,000.** **That arithmetic is your bill, and it is the first thing to check when a GenAI feature turns out to be expensive.**
 
 ---
 
-# ✅ Before you move on
+# 16. The temperature dial
 
-- [ ] I can say what makes a system generative rather than predictive
-- [ ] I know roughly how many tokens my text is, and why that is the unit of cost
-- [ ] I can predict what temperature 0, 0.7 and 1.5 will do
-- [ ] I can explain why BERT cannot chat with me
-- [ ] I know when open weights matter more than model quality
-- [ ] I write prompts with role, task, context, constraints and format
-- [ ] I use `response_mime_type="application/json"` when I need parseable output
-- [ ] I choose zero-, one-, few-shot or CoT deliberately, with a reason
-- [ ] I know that few-shot fixes format and CoT fixes reasoning
-- [ ] **I know an LLM is not the right answer to every question**
+**[§3](#3-predictive-ai-vs-generative-ai) said the same prompt gives different answers. Temperature is why, and it is a number you control.**
 
-## More practice
+🧠 **Analogy: a chef following a recipe.**
+>
+> **Temperature 0 — follows the recipe exactly, every time.** Identical dish, identical result, no surprises.
+>
+> **Temperature 1 — improvises within the style.** Recognisably the same dish; different every time.
+>
+> **Temperature 2 — improvises wildly.** Sometimes brilliant, often inedible.
 
-| Where | What |
+## What it actually does
+
+**At each step the model has a probability for every possible next token. Temperature reshapes that distribution before one is picked.**
+
+```text
+Next-token probabilities:   "perfected" 0.31   "brewed" 0.12   "elevated" 0.09   ...
+
+Temperature 0.0  ->  always take the highest.          -> "perfected", every time
+Temperature 1.0  ->  sample in proportion.             -> usually "perfected", sometimes not
+Temperature 2.0  ->  flatten the distribution first.   -> the unlikely words get a real chance
+```
+
+## The demo
+
+```python
+# api-only: needs a Gemini API key.
+import time
+from google import genai
+from google.genai import types
+
+client = genai.Client(api_key=api_key)
+PROMPT = "Write a tagline for a coffee shop."
+
+print("THE TEMPERATURE DIAL DEMO\n" + "=" * 40)
+print(f"Prompt: '{PROMPT}'\n")
+
+for temp in [0.0, 1.0]:
+    print(f"--- TEMPERATURE {temp} ---")
+    for i in range(1, 6):
+        response = client.models.generate_content(
+            model=MODEL_ID,
+            contents=PROMPT,
+            config=types.GenerateContentConfig(temperature=temp),
+        )
+        print(f"Attempt {i}: {response.text.strip()}")
+        time.sleep(1)          # stay under the rate limit
+    print()
+```
+
+## What you will see
+
+| Temperature | Behaviour |
 |---|---|
-| [Notebook](../notebooks/session-10-genai-llms.ipynb) | Every example above, runnable |
-| [Prompt library](../prompts.md) | Every prompt here, ready to copy and paste |
-| [Google AI Studio](https://aistudio.google.com/) | Test prompts in the browser, no code |
-| [Setup guide](../setup-guide.md) | Getting your API key working |
+| **0.0** | **All five attempts nearly or completely identical.** Safe, predictable, slightly bland |
+| **1.0** | **Five genuinely different taglines** — different tones, angles and vocabulary |
+| **2.0** | **Wild.** Often interesting, sometimes incoherent. Try it — it is instructive |
+
+> **Run it. Watching five identical outputs become five different ones is worth more than the explanation.**
+
+## Choosing a temperature
+
+| Task | Temperature | Why |
+|---|---|---|
+| **Extracting structured data** | **0.0** | **You want the same answer every time** |
+| Classification | **0.0** | Same reason |
+| Factual questions | **0.0 – 0.3** | Reduce invention |
+| Summarising | 0.3 – 0.7 | Some phrasing freedom |
+| **Brainstorming, marketing copy** | **0.8 – 1.2** | **Variety is the product** |
+| Experimental / creative | 1.5 – 2.0 | Expect nonsense among the good ones |
+
+> ⚠️ **Temperature 0 reduces variation. It does not guarantee truth.** **A model can be perfectly deterministic and confidently wrong** — every single time, in the same way.
+
+## The other dials
+
+| Setting | What it does |
+|---|---|
+| **`max_output_tokens`** | **Caps the response length.** Watch for `finish_reason: MAX_TOKENS` |
+| `top_p` | Sample only from the most likely tokens that add up to `p` |
+| `top_k` | Sample only from the top `k` tokens |
+| **`system_instruction`** | **A standing instruction for every request** — *"You are a concise SQL tutor"* |
+| `seed` | Ask for reproducibility — **best-effort, not a guarantee** |
+
+```python
+# api-only: needs a Gemini API key.
+config = types.GenerateContentConfig(
+    temperature=0.0,
+    max_output_tokens=200,
+    system_instruction="You are a concise assistant. Never exceed three sentences.",
+)
+response = client.models.generate_content(
+    model=MODEL_ID, contents="Explain gradient descent.", config=config)
+print(response.text)
+```
+
+---
+
+# Part D — Prompt engineering
+
+# 17. What prompt engineering is
+
+> **Prompt engineering is writing the instruction well enough that the model does what you meant.**
+
+🧠 **Analogy: briefing a brilliant new colleague on their first morning.**
+>
+> **They are fast, widely read and eager.** **They have never met your company, your customers or your file formats, and they will not ask.**
+>
+> ***"Write something about the product"*** **gets you something.** ***"Write three bullet points for the product page, under 15 words each, aimed at first-time buyers, no jargon"*** **gets you what you wanted.**
+>
+> **The colleague did not get smarter. The brief did.**
+
+## Why this replaced training a model
+
+**[§7](#7-language-models-from-lms-to-llms) said it: the task moved from the training set into the prompt.**
+
+| | 2015 | **Now** |
+|---|---|---|
+| To build a sentiment classifier | **Label 10,000 reviews, train, evaluate, deploy** | **Write: *"Classify the sentiment as positive, negative or neutral."*** |
+| Time | Weeks | **Seconds** |
+| Data needed | **Thousands of labelled rows** | **None** |
+| Cost to change the categories | **Relabel and retrain** | **Edit the sentence** |
+
+> ⚠️ **And the honest other side:** **the classifier is cheaper per call, faster, reproducible, auditable, and it runs offline.** **[Session 5B](session-05b-classification.md) is not obsolete** — it is the right tool once you have the labels.
+
+## What a bad prompt costs
+
+| Bad prompt | What goes wrong |
+|---|---|
+| *"Summarise this."* | **How long? For whom? What matters?** You get a summary, not the one you needed |
+| *"Is this good?"* | **No criteria** — the model invents its own |
+| *"Fix the code."* | **Fix what?** It may rewrite working code |
+| *"Give me data about sales."* | **Invention.** The model has no sales data, and it may produce some anyway |
+
+---
+
+# 18. The core elements of a prompt
+
+**Five elements. Not every prompt needs all five — but when a prompt is not working, one of these is missing.**
+
+| # | Element | The question it answers | Example |
+|---|---|---|---|
+| **1** | **Role** | *Who is answering?* | *"You are an experienced data engineer."* |
+| **2** | **Task** | ***What do you want?*** — the one element you cannot skip | *"Summarise the report below."* |
+| **3** | **Context** | *What does it need to know?* | The report; the audience; the constraints |
+| **4** | **Format** | *What shape should the answer be?* | *"Three bullet points, under 15 words each."* |
+| **5** | **Examples** | *What does good look like?* | **[§21](#21-one-shot-prompting) and [§22](#22-few-shot-prompting)** |
+
+## All five, in one prompt
+
+```python
+# api-only: needs a Gemini API key.
+prompt = """
+You are a senior data analyst writing for a non-technical manager.        # 1 ROLE
+
+Summarise the model evaluation below into a recommendation.               # 2 TASK
+
+Evaluation: A random forest scored 0.84 cross-validated accuracy on 239   # 3 CONTEXT
+patients, but recall on the patients who died was only 0.53. The strongest
+feature was follow-up time, which is only known after the outcome.
+
+Answer in exactly three bullet points. No jargon. State the risk first.   # 4 FORMAT
+"""
+
+response = client.models.generate_content(model=MODEL_ID, contents=prompt)
+print(response.text)
+```
+
+> **Cover the four labelled parts and rewrite the prompt as just *"summarise this"*.** **You will get a summary. It will not be the one a manager can act on.**
+
+## The one element people skip
+
+> **Format.** **Almost every disappointing prompt is missing it.**
+>
+> **"Summarise" has no length. "List" has no count. "Explain" has no audience.** **The model picks something reasonable, and reasonable is rarely what you needed.**
+
+---
+
+# 19. The principles
+
+**Six rules. They are all forms of the same idea: say what you mean.**
+
+## 1. Be specific
+
+| ❌ Vague | ✅ Specific |
+|---|---|
+| *"Write about machine learning."* | *"Write 100 words explaining overfitting to a first-year student, with one analogy."* |
+
+## 2. State the format
+
+| ❌ | ✅ |
+|---|---|
+| *"Give me the details."* | *"Return JSON with keys `name`, `date` and `amount`. No other text."* |
+
+> **The phrase *"No other text"* is worth its weight.** **Without it you often get "Sure! Here is your JSON:" wrapped around the JSON, and your `json.loads()` fails.**
+
+## 3. Show, do not only tell
+
+> **One example is worth a paragraph of description.** **That is the entire justification for [§21](#21-one-shot-prompting) and [§22](#22-few-shot-prompting).**
+
+## 4. Say what to do, not only what to avoid
+
+| ❌ Negative | ✅ Positive |
+|---|---|
+| *"Don't be too technical."* | *"Use everyday words. Explain any term you cannot avoid."* |
+
+## 5. Give it room to think
+
+> **For anything involving reasoning, ask for the steps.** **[§23](#23-chain-of-thought-prompting) shows this changing a wrong answer into a right one.**
+
+## 6. Iterate
+
+> **Your first prompt is a draft.** **Run it, read what is wrong, and add the missing element from [§18](#18-the-core-elements-of-a-prompt).** **Two or three rounds is normal and is not a sign you did it badly.**
+
+## ⚠️ And the rule that outranks all six
+
+> **The model can be fluently, confidently wrong.**
+>
+> **No prompt fixes this.** **Prompting improves the odds; it does not make the output true.** **Anything that matters gets checked by a person or by code.**
+
+---
+
+# 20. Zero-shot prompting
+
+> **Zero-shot: you describe the task and give no examples.**
+
+🧠 **Analogy: asking a competent colleague to do something they have done before.** **No demonstration needed — they know what a summary is.**
+
+**This is what you have been doing since [§13](#13-hi--your-first-genai-program). It is the default, and it works more often than people expect.**
+
+## Example A — the formatting challenge
+
+**You ask for a specific format without showing what it looks like.**
+
+```python
+# api-only: needs a Gemini API key.
+prompt_a = """
+Extract the name, occupation, and city from the following sentence and output it as JSON:
+
+"My name is Sarah, I work as a mechanical engineer, and I just moved to Seattle."
+"""
+
+response_a = client.models.generate_content(model=MODEL_ID, contents=prompt_a)
+print(response_a.text)
+```
+
+**Typical:**
+
+```text
+{
+  "name": "Sarah",
+  "occupation": "mechanical engineer",
+  "city": "Seattle"
+}
+```
+
+> **No example of the JSON shape was given.** **The model knows what JSON is, and it inferred sensible key names.**
+>
+> ⚠️ **It inferred them.** **Ask twice and you might get `"job"` instead of `"occupation"`.** **If your code depends on the key names, name them in the prompt** — or use [§21](#21-one-shot-prompting).
+
+## Example B — a creative constraint
+
+**Testing whether it can follow strict structural rules first time.**
+
+```python
+# api-only: needs a Gemini API key.
+prompt_b = """
+Write a two-sentence horror story about a smartphone.
+The first sentence must be exactly 5 words.
+The second sentence must be exactly 3 words.
+"""
+
+response_b = client.models.generate_content(model=MODEL_ID, contents=prompt_b)
+print(response_b.text)
+```
+
+**Typical:**
+
+```text
+The screen lit up alone. Nobody was home.
+```
+
+> ⚠️ **Count the words.** **Models are unreliable at exact counting**, because they work in tokens, not words. **Run it three times and you will often see a 6-word or 4-word sentence.**
+>
+> **This is a genuinely useful thing to learn early: an LLM is a language engine, not a counting engine.** **If exact counts matter, verify them in code.**
+
+## When zero-shot is the right choice
+
+| ✅ Use it when | ❌ Reach for examples when |
+|---|---|
+| The task is **common and well-understood** | The task uses **your** categories or **your** format |
+| You want a **short prompt** (cheaper) | The output shape must be **exact** |
+| **You are prototyping** | Zero-shot gave inconsistent results |
+
+> **Always try zero-shot first.** **It is the cheapest prompt you can write, and if it works you are finished.**
+
+---
+
+# 21. One-shot prompting
+
+> **One-shot: you give exactly one worked example before the real input.**
+
+🧠 **Analogy: showing a new colleague one completed form before handing them the next one.** **Far faster than describing the form in words.**
+
+## Example A — tone translation
+
+```python
+# api-only: needs a Gemini API key.
+prompt_a = """
+Convert the corporate jargon into plain English.
+
+Corporate: "Let's synergize our bandwidth to touch base on the deliverables."
+Plain English: "Let's work together and meet to discuss the project."
+
+Corporate: "We need to boil the ocean to shift a paradigm in this vertical."
+Plain English:
+"""
+
+response_a = client.models.generate_content(model=MODEL_ID, contents=prompt_a)
+print(response_a.text.strip())
+```
+
+**Typical:** `"We need to do an enormous amount of work to change how this industry thinks."`
+
+> **Notice what the one example communicated that a description could not: the *level* of simplicity, the *length*, and the fact that the answer is a quoted sentence.**
+>
+> **Writing all that out in words would have taken a paragraph — and been less precise.**
+
+## Example B — strict data extraction
+
+```python
+# api-only: needs a Gemini API key.
+prompt_b = """
+Extract the flight details into a pipe-separated format.
+
+Input: "I'm flying on Delta flight 402 from JFK to LAX on Tuesday."
+Output: Delta | 402 | JFK | LAX | Tuesday
+
+Input: "Book me on United 88 departing from ORD and arriving at SFO tomorrow."
+Output:
+"""
+
+response_b = client.models.generate_content(model=MODEL_ID, contents=prompt_b)
+print(response_b.text.strip())
+```
+
+**Typical:** `United | 88 | ORD | SFO | tomorrow`
+
+> **Compare this with §20's JSON.** **There, the key names were the model's choice. Here the format is pinned exactly** — field order, separator, spacing, all of it — **by one line of example.**
+
+## The pattern to copy
+
+```text
+<instruction>
+
+<Input label>: <example input>
+<Output label>: <example output>
+
+<Input label>: <the real input>
+<Output label>:
+```
+
+> **Ending the prompt on the empty label is the trick.** **The model's job is to continue the text, and the only sensible continuation is the answer** — with no preamble, no "Sure!", nothing to strip.
+
+---
+
+# 22. Few-shot prompting
+
+> **Few-shot: several examples, so the model learns the *boundaries* of your categories, not just the format.**
+
+🧠 **Analogy: training a new sorter by showing them a handful of items already in the right bins.** **One example shows the format. Several show the judgement.**
+
+## Example A — custom routing logic
+
+```python
+# api-only: needs a Gemini API key.
+prompt_a = """
+Classify the customer support ticket into one of three categories: [BILLING], [TECH_ISSUE], or [SALES].
+
+Ticket: "My screen is cracked and the touch sensor won't work."
+Category: [TECH_ISSUE]
+
+Ticket: "Do you offer enterprise discounts for teams of 50 or more?"
+Category: [SALES]
+
+Ticket: "I was double-charged on my credit card this month."
+Category: [BILLING]
+
+Ticket: "How do I upgrade my account from basic to premium?"
+Category:
+"""
+
+response_a = client.models.generate_content(model=MODEL_ID, contents=prompt_a)
+print(response_a.text.strip())
+```
+
+**Typical:** `[SALES]`
+
+> **That last ticket is genuinely ambiguous — upgrading an account touches billing *and* sales.** **The three examples are what settle it:** they show that money already charged is `[BILLING]` while buying more is `[SALES]`.
+>
+> **You could not have written that rule down in one sentence. The examples carry it.**
+
+## Example B — mapping real items to your labels
+
+```python
+# api-only: needs a Gemini API key.
+prompt_b = """
+Categorize the grocery items into the correct department: [PRODUCE], [DAIRY], [BAKERY], or [MEAT].
+
+Item: Granny Smith Apples
+Department: [PRODUCE]
+
+Item: Whole Milk
+Department: [DAIRY]
+
+Item: Sourdough Loaf
+Department: [BAKERY]
+
+Item: Ground Beef
+Department: [MEAT]
+
+Item: Organic Carrots
+Department:
+"""
+
+response_b = client.models.generate_content(model=MODEL_ID, contents=prompt_b)
+print(response_b.text.strip())
+```
+
+**Typical:** `[PRODUCE]`
+
+> **The examples map *real-world names* to *your system's labels*.** *"Sourdough Loaf"* → `[BAKERY]` teaches something no category description would.
+
+## ⚠️ Look at what you have just built
+
+**That is a classifier. With zero training data.**
+
+| | **[Session 5B](session-05b-classification.md)'s classifier** | **This few-shot prompt** |
+|---|---|---|
+| Training data | **10,000 labelled rows** | **Three examples** |
+| Build time | An afternoon | **Two minutes** |
+| Cost per prediction | ~0 | **A few tokens** |
+| Speed | Microseconds | **Hundreds of milliseconds** |
+| Reproducible | **Yes** | **Only at temperature 0** |
+| Auditable | **Yes** — you can inspect the tree | **No** |
+| New category | **Relabel and retrain** | **Add a line** |
+
+> **Neither wins.** **Use few-shot to get something working today and to discover what the categories should be; use a trained classifier once you have the labels and the volume.**
+
+## How many examples?
+
+| Examples | Effect |
+|---|---|
+| **1** | Locks the **format** |
+| **3–5** | **Locks the format *and* the judgement.** The usual sweet spot |
+| 10+ | Diminishing returns, and you are paying for every token on every call |
+
+> ⚠️ **Balance your examples.** **If four of your five examples are `[BILLING]`, the model will lean towards `[BILLING]`.** **[Session 6](session-06-augmentation-feature-engg-red.md#2-when-augmentation-is-used)'s class-imbalance lesson, reappearing in a prompt.**
+
+---
+
+# 23. Chain-of-thought prompting
+
+> **Chain-of-thought: ask the model to show its reasoning *before* the answer.**
+
+🧠 **Analogy: "show your working" in a maths exam.** **A student forced to write the steps catches their own mistake.** **A student who writes only the answer does not.**
+
+**The instruction is usually one clause: *"Think step by step before answering."***
+
+## Example A — the logic puzzle
+
+```python
+# api-only: needs a Gemini API key.
+prompt_a = """
+Solve the following logic puzzle. Before giving the final answer, break down your reasoning step-by-step.
+
+Puzzle: If it takes 5 machines 5 minutes to make 5 widgets, how long would it take 100 machines to make 100 widgets?
+"""
+
+response_a = client.models.generate_content(model=MODEL_ID, contents=prompt_a)
+print(response_a.text)
+```
+
+**A typical response works through it:**
+
+```text
+Step 1: 5 machines make 5 widgets in 5 minutes.
+Step 2: So each machine makes 1 widget in 5 minutes.
+Step 3: 100 machines each make 1 widget in the same 5 minutes.
+Answer: 5 minutes.
+```
+
+> **The intuitive answer is 100 minutes, and it is wrong.** **Models jump to it too, for the same reason people do — the numbers scale together and it *feels* proportional.**
+>
+> **Forcing the steps makes the model state the per-machine rate explicitly, and once that sentence exists the right answer follows.**
+>
+> ⚠️ **Try it both ways.** **Ask without the step-by-step instruction and see what you get.** That comparison is the whole lesson.
+
+## Example B — schedule resolution
+
+```python
+# api-only: needs a Gemini API key.
+prompt_b = """
+Let's find a meeting time. Think through the constraints step-by-step before giving the final answer.
+
+Constraints:
+* Alice is available from 9:00 AM to 11:30 AM.
+* Bob is available from 10:00 AM to 12:00 PM.
+* Charlie is available from 10:30 AM to 2:00 PM.
+* The meeting needs to last exactly 45 minutes.
+
+What is the earliest possible time they can all meet?
+"""
+
+response_b = client.models.generate_content(model=MODEL_ID, contents=prompt_b)
+print(response_b.text)
+```
+
+> **The correct answer is 10:30–11:15**, the overlap of all three windows, taken as early as possible.
+>
+> **Without the step-by-step instruction, models often propose a time that excludes one person** — usually by anchoring on two of the three windows. **Writing the overlaps out forces all three to be considered.**
+
+## Why it works
+
+> **The model generates one token at a time, and each token is conditioned on everything before it.**
+>
+> **Reasoning written into the output becomes context for the next token.** **The model is, quite literally, giving itself more to think with.**
+>
+> **This is also why it is slower and costs more: you are paying for every reasoning token.** **Use it where reasoning matters, not everywhere.**
+
+## When to use it
+
+| ✅ Use CoT for | ❌ Skip it for |
+|---|---|
+| **Arithmetic and logic** | Simple lookups |
+| **Multi-step constraints** | Classification |
+| **Debugging and diagnosis** | Formatting and extraction |
+| Anything where you want to **check the reasoning** | Anywhere latency matters |
+
+⚠️ **A written chain of reasoning is not a guarantee of correctness.** **A model can produce a fluent, plausible, entirely wrong chain — and it is more persuasive precisely because it showed working.** **Read the steps; do not just trust their presence.**
+
+---
+
+# 24. Choosing a prompt type
+
+| Type | Examples given | Use it when | Cost |
+|---|---|---|---|
+| **Zero-shot** | **0** | The task is common and well-understood | **Cheapest** |
+| **One-shot** | **1** | **The format must be exact** | Low |
+| **Few-shot** | **3–5** | **Your own categories, or subtle judgement** | Medium |
+| **Chain-of-thought** | 0 or more | **Reasoning, arithmetic, multi-step constraints** | **Highest** |
+
+## The decision, as a flow
+
+```text
+Start with ZERO-SHOT.
+│
+├── Output is right?                   -> done. Do not add complexity you do not need.
+│
+├── Right content, wrong FORMAT?       -> ONE-SHOT
+│
+├── Wrong CATEGORY or wrong judgement? -> FEW-SHOT (3-5 balanced examples)
+│
+└── Wrong ANSWER on a reasoning task?  -> CHAIN-OF-THOUGHT
+```
+
+> **They combine.** **Few-shot chain-of-thought — several examples, each with its reasoning written out — is the strongest and most expensive option.**
+
+## What to do when none of them work
+
+| Symptom | Try |
+|---|---|
+| Invents facts | **Supply the source text in the prompt** and say *"answer only from the text above"* |
+| Inconsistent between runs | **Temperature 0** |
+| Ignores part of the instruction | **Split it into two calls** |
+| Too long / too short | **State the length as a number** |
+| Wraps JSON in chatter | Add *"Output only the JSON. No other text."* |
+| **Still wrong** | **The task may not suit an LLM.** [§3](#3-predictive-ai-vs-generative-ai) |
+
+---
+
+# ✏️ Session 10 — Practice
+
+**Parts A and B are pen-and-paper. Parts C and D need an API key.**
+
+## Concepts
+
+1. **In your own words, what makes a model "generative"?** Give one example of a task that is generative and one that only looks generative.
+2. **List ten GenAI applications you have personally seen or used.** For each, say whether a human checks the output.
+3. Take three problems from Sessions 5–8. **For each, say whether Predictive or Generative AI is the right tool, and why.**
+4. **Draw the five-stage GenAI workflow from memory.** Mark which stages you will ever perform.
+5. **Explain to a friend why the Transformer replaced the LSTM.** Use the "reads the whole page at once" analogy, and mention parallelisation.
+6. **What is the difference between a language model and a large language model?** Answer in three sentences.
+7. A 13-billion-parameter model at FP16. **How much memory for the weights?** At INT4?
+8. **When would you choose an open-weights model over an API model?** Give two concrete situations.
+
+## The API
+
+9. Install `google-genai`, get a key, store it **as an environment variable or Colab secret**, and run the `"Hi"` program.
+10. **Ask the same question with "in one short sentence" and then "in exactly 5 words".** Compare.
+11. Print `response.model_dump_json(indent=2)`. **Find `total_token_count` and `finish_reason`.**
+12. Set `max_output_tokens=20` and ask for a long explanation. **What is `finish_reason` now?**
+13. **Run the temperature demo.** Report what you saw at 0.0 and at 1.0, then try 2.0.
+14. Write a loop over five prompts with `time.sleep(1)`. **Remove the sleep and report what happens.**
+
+## Prompting
+
+15. **Write one prompt containing all five core elements**, and label each one in a comment.
+16. Take a vague prompt — *"summarise this"* — and improve it three times. **Show all four versions and what changed.**
+17. **Zero-shot:** ask for JSON with specific key names. Run it three times. **Did the keys stay the same?**
+18. **One-shot:** pin an output format with a single example. **Then delete the example and compare.**
+19. **Few-shot:** build a three-category classifier for something you care about. **Include one deliberately ambiguous test input.**
+20. **Chain-of-thought:** run the widget puzzle with and without *"think step by step"*. **Report both answers.**
+
+<details><summary>Answers to the numerical and factual ones</summary>
+
+**3.** Loan approval → **Predictive** (must be auditable and consistent). Explaining a loan decision to the customer → **Generative**. Car price prediction → **Predictive** (one number, and you have labels). Writing the listing text for that car → **Generative**.
+
+**6.** A language model assigns a probability to the next token. A **large** language model is the same idea with billions of parameters trained on a very large corpus. **The practical difference: an LM does the one task it was trained for; an LLM does any task you can describe in words, without retraining.**
+
+**7.** **FP16:** 13 × 10⁹ × 2 bytes = **26 GB**. **INT4:** 13 × 10⁹ × 0.5 bytes = **6.5 GB**. **The first does not fit on a 24 GB card; the second fits comfortably.**
+
+**8.** **(a) Regulated or private data** — a hospital cannot send patient notes to a third-party API. **(b) Cost at volume** — millions of calls a day may be cheaper on your own hardware. Also: **no dependency on a provider that can change, price or retire the model.**
+
+**12.** `finish_reason` becomes **`MAX_TOKENS`**. ⚠️ **`response.text` still returns something that looks like an answer** — that is exactly why you check the field.
+
+**14.** Without the sleep you will hit **`429 RESOURCE_EXHAUSTED`** — the free tier's requests-per-minute limit.
+
+**17.** **Not necessarily.** Zero-shot leaves key naming to the model, so `"occupation"` may become `"job"` or `"profession"`. **Name the keys in the prompt, or give one example.**
+
+**20.** **Without CoT, models frequently answer 100 minutes.** **With CoT the reasoning makes the per-machine rate explicit and the answer becomes 5 minutes.** The correct answer is **5 minutes**.
+</details>
+
+---
+
+# ❓ Session 10 — 20 MCQs
+
+**Answer from memory first, then check.**
+
+### What GenAI is
+
+**Q1.** The defining feature of Generative AI is that…
+- (a) It is more accurate  (b) **It produces new content rather than choosing from a fixed set of answers**  (c) It uses deep learning  (d) It needs no data
+
+**Q2.** A generative model produces a sentence by…
+- (a) Retrieving the closest stored sentence  (b) **Predicting the next token, repeatedly, each one conditioned on everything before it**  (c) Searching the internet  (d) Applying grammar rules
+
+**Q3.** Which is NOT a good use of GenAI?
+- (a) Drafting a support reply  (b) **Calculating a tax bill**  (c) Summarising a contract  (d) Explaining code
+
+**Q4.** The same prompt sent twice usually gives different answers because…
+- (a) The model is broken  (b) **The model samples from a probability distribution over the next token**  (c) The internet is unreliable  (d) The prompt changed
+
+**Q5.** "Hallucination" means…
+- (a) The model crashes  (b) **It produces a fluent, confident, invented answer**  (c) It refuses to answer  (d) It repeats itself
+
+**Q6.** The stage of the GenAI workflow you will actually perform is…
+- (a) Pre-training  (b) Fine-tuning  (c) Alignment  (d) **Prompting**
+
+### The fundamentals
+
+**Q7.** The Transformer's key advantage over the LSTM is…
+- (a) Fewer parameters  (b) **Self-attention lets any word attend directly to any other, and the whole sequence processes in parallel**  (c) It needs less data  (d) It is older
+
+**Q8.** The consequence of parallelisation that mattered most was…
+- (a) Faster inference  (b) **Models could be trained at a scale that was previously impossible**  (c) Smaller files  (d) Better grammar
+
+**Q9.** BERT is encoder-only, which makes it suited to…
+- (a) Generating stories  (b) **Understanding text — classification and search**  (c) Translation  (d) Image generation
+
+**Q10.** A language model is, at its core…
+- (a) A grammar checker  (b) **Something that assigns a probability to what comes next**  (c) A search engine  (d) A translator
+
+**Q11.** The practical difference between an LM and an LLM is…
+- (a) Only size  (b) **An LM does the one task it was trained for; an LLM does any task you can describe in words, with no retraining**  (c) LLMs are open source  (d) LMs are faster
+
+**Q12.** A 7-billion-parameter model at 16-bit precision needs roughly…
+- (a) 7 GB  (b) **14 GB**  (c) 28 GB  (d) 3.5 GB
+
+**Q13.** Quantization…
+- (a) Removes parameters  (b) **Stores each parameter in fewer bits, trading a little accuracy for much less memory**  (c) Retrains the model  (d) Compresses the prompt
+
+**Q14.** A 70-billion model at 4-bit needs about…
+- (a) 140 GB  (b) **35 GB**  (c) 280 GB  (d) 7 GB
+
+**Q15.** The most important practical difference between GPT and LLaMA is…
+- (a) Accuracy  (b) **LLaMA has open weights you can download and run; GPT is used through an API**  (c) Age  (d) Language support
+
+### The API and prompting
+
+**Q16.** An API key should be…
+- (a) Pasted into the notebook  (b) **Stored in an environment variable or Colab secret, never in code**  (c) Emailed to yourself  (d) Committed with the repo
+
+**Q17.** `finish_reason: MAX_TOKENS` means…
+- (a) The prompt was too long  (b) **The response was cut off mid-answer — and `response.text` still looks like a complete answer**  (c) You ran out of credit  (d) The model refused
+
+**Q18.** For extracting structured data you should set temperature to…
+- (a) 1.0  (b) **0.0**  (c) 2.0  (d) It makes no difference
+
+**Q19.** You need the model to use *your* categories with *your* exact labels, and zero-shot keeps drifting. Use…
+- (a) A longer description  (b) **Few-shot — three to five balanced examples**  (c) Higher temperature  (d) A bigger model
+
+**Q20.** Chain-of-thought works because…
+- (a) The model thinks harder  (b) **Reasoning written into the output becomes context for the next token — the model gives itself more to work with**  (c) It uses a different model  (d) It searches the web
+
+<details><summary>Answers</summary>
+
+**A1 — (b) It produces new content.** **The answer space is unbounded.** Everything in Sessions 5–8 chose from a set that existed before the model ran.
+
+**A2 — (b) Predicting the next token, repeatedly.** **That single mechanism is why it can write code, translate and summarise** — doing those well *is* predicting the next token well.
+
+**A3 — (b) Calculating a tax bill.** **There is exactly one right answer, and arithmetic gives it for free.**
+
+**A4 — (b) It samples.** **Temperature is the dial that controls how much.** At 0.0 it takes the most likely token every time.
+
+**A5 — (b) A fluent, confident, invented answer.** **This is the single biggest practical risk**, and no prompt eliminates it.
+
+**A6 — (d) Prompting.** **Stages 1–3 cost millions and are done by the model provider.**
+
+**A7 — (b) Self-attention and parallelism.** **An RNN reads through a keyhole and forgets chapter 1 by chapter 12.**
+
+**A8 — (b) Trainable at a new scale.** **The Transformer is not merely more accurate than an LSTM — it is trainable on thousands of GPUs, which an LSTM never could be.**
+
+**A9 — (b) Understanding text.** **BERT reads; GPT writes.** BERT is still everywhere in search and classification.
+
+**A10 — (b) A probability over what comes next.** **Your phone keyboard is a tiny one.**
+
+**A11 — (b) Task-specific training versus describing the task.** **That shift is what made prompt engineering a skill.**
+
+**A12 — (b) 14 GB.** 7 × 10⁹ × 2 bytes. **A 24 GB card fits it; a 70-billion model does not.**
+
+**A13 — (b) Fewer bits per parameter.** **JPEG for model weights.** The usual sweet spot is 8-bit or 4-bit.
+
+**A14 — (b) 35 GB.** 70 × 10⁹ × 0.5 bytes. **The full-precision version needs 280 GB.**
+
+**A15 — (b) Open weights.** **A hospital cannot send patient notes to an API.** That is a constraint, not a preference.
+
+**A16 — (b) An environment variable or secret.** **A key pasted into a notebook is in your git history forever, and deleting the line does not remove it.**
+
+**A17 — (b) Cut off mid-answer.** **Check the field in any real application** — the truncated text still reads like an answer.
+
+**A18 — (b) 0.0.** **You want the same answer every time.** ⚠️ It reduces variation, not error — a model can be deterministic and confidently wrong.
+
+**A19 — (b) Few-shot.** **Examples carry judgement that a description cannot.** Keep them balanced, or the model leans towards the over-represented category.
+
+**A20 — (b) The reasoning becomes context.** **It is also why CoT is slower and more expensive — you pay for every reasoning token.**
+</details>
+
+---
+
+# 🎯 Session 10 — Tasks
+
+## Concepts
+
+**Task 1 — The application audit.** Find **fifteen** GenAI applications in products you use. **For each: what does it generate, and does a human check it before it reaches anyone?**
+
+**Task 2 — Predictive or generative.** Take ten problems from your own domain. **Classify each, justify each, and find one that genuinely needs both.**
+
+**Task 3 — Explain the workflow.** Write a one-page explanation of the five-stage workflow for a non-technical manager. **Make clear which stages cost millions and which cost nothing.**
+
+**Task 4 — The Transformer, explained.** Explain self-attention to someone who knows Session 9 but not this session. **Use your own analogy**, and say why parallelisation mattered more than accuracy.
+
+**Task 5 — The memory table.** Build a table of five models with their parameter counts, and compute the memory needed at FP32, FP16, INT8 and INT4. **Mark which fit on a 24 GB card.**
+
+**Task 6 — Open or closed.** Write the case for an open-weights model and the case for an API model, for one specific organisation of your choosing. **Recommend one.**
+
+## The API
+
+**Task 7 — Set it up properly.** Get a key, store it as an environment variable, add `.env` to `.gitignore`, and run the `"Hi"` program. **Prove the key is not in your repository.**
+
+**Task 8 — The raw response.** Print the full JSON for three different prompts. **Report `total_token_count` for each and explain what drove the difference.**
+
+**Task 9 — Break it on purpose.** Trigger all three errors from §13: a bad key, a bad model name, and a rate limit. **Record the exact message for each.**
+
+**Task 10 — Cost arithmetic.** Look up the current price per million tokens for one model. **Estimate the monthly cost of a feature making 10,000 calls a day at 500 tokens each.**
+
+**Task 11 — The temperature study.** Run one prompt at temperatures 0.0, 0.5, 1.0 and 2.0, five times each. **Present all twenty outputs and describe the pattern.**
+
+**Task 12 — Reproducibility.** Try to make the model give an identical answer twice. **Report what worked, what did not, and what that means for testing a GenAI feature.**
+
+## Prompting
+
+**Task 13 — The five elements.** Write five prompts, each missing a different one of the five core elements. **Run all five and report what each omission cost.**
+
+**Task 14 — Prompt iteration, documented.** Start from a deliberately vague prompt and improve it over four rounds. **Show every version and every output**, and name the principle you applied each time.
+
+**Task 15 — All four types.** Solve the *same* task with zero-shot, one-shot, few-shot and chain-of-thought. **Compare output quality, token count and latency in one table.**
+
+**Task 16 — Build a classifier with three examples.** Few-shot a classifier for a task you care about. **Test it on twenty inputs and measure its accuracy by hand.**
+
+**Task 17 — Against Session 5B.** Take the loan data. Build a few-shot LLM classifier and compare it with your trained model on the same 100 rows. **Report accuracy, cost and speed for both, and recommend one.**
+
+**Task 18 — Chain-of-thought, measured.** Find five reasoning problems. **Run each with and without CoT and record how many each version gets right.**
+
+**Task 19 — Make it hallucinate.** Get the model to state something confidently false. **Record the prompt and the output**, then write the guardrail you would add in an application.
+
+**Task 20 — The unreliable counter.** Ask for outputs of an exact word count, ten times. **Count them yourself and report the hit rate.** Then write the code that would verify it automatically.
+
+---
+
+## ✅ Session 10 checklist
+
+- [ ] I can explain what makes a model **generative**, and name ten applications
+- [ ] I can choose between **Predictive and Generative AI** for a given problem
+- [ ] I can describe the **five-stage workflow** and say which stage is mine
+- [ ] I can explain **why the Transformer replaced the LSTM** — and that parallelism mattered most
+- [ ] I know the difference between **encoder-only, decoder-only and encoder–decoder**
+- [ ] I can define a **language model** in one sentence
+- [ ] I can say what **"large" added** — and that it moved the task from training into the prompt
+- [ ] I can compute a model's memory from its **parameter count**, at any precision
+- [ ] I can explain **quantization** and the trade it makes
+- [ ] **My API key is never in my code**
+- [ ] I check **`finish_reason`** and **`usage_metadata`**
+- [ ] I set **temperature 0 for anything structured**
+- [ ] I include all five **core elements** in a prompt that matters
+- [ ] I can write **zero-shot, one-shot, few-shot and chain-of-thought** prompts, and choose between them
+- [ ] **I never trust a fluent answer just because it is fluent**
+
+---
+
+| | |
+|---|---|
+| **Previous** | [Session 9 — Deep Learning](session-09-deep-learning.md) |
+| **Next** | [Session 11 — AI-Powered Applications](session-11-ai-apps.md) |
+| **Notebook** | [session-10-genai-llms.ipynb](../notebooks/session-10-genai-llms.ipynb) |
+| **More practice** | [Exercises & assignments](../exercises-assignments.md) |
