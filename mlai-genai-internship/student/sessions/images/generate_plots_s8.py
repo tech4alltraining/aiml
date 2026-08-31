@@ -50,27 +50,37 @@ Xc, yc = cars_clean[FEATS], cars_clean["selling_price"]
 yc_log = np.log(yc)
 
 # ------------------------------------------------- 1. holdout instability
-seeds, accs = list(range(10)), []
+seeds = list(range(10))
+accs, r2s = [], []
 for s in seeds:
     a, b, c, d = train_test_split(Xh, yh, test_size=.2, random_state=s, stratify=yh)
     accs.append(make_pipeline(MinMaxScaler(), SVC()).fit(a, c).score(b, d))
+    a2, b2, c2, d2 = train_test_split(cars_clean[FEATS], cars_clean["selling_price"],
+                                      test_size=.2, random_state=s)
+    m = DecisionTreeRegressor(random_state=42).fit(a2, c2)
+    r2s.append(r2_score(d2, m.predict(b2)))
 
-fig, ax = plt.subplots(figsize=(9, 4.6))
-bars = ax.bar([str(s) for s in seeds], accs, color=BLUE, alpha=.85)
-bars[int(np.argmax(accs))].set_color(GREEN)
-bars[int(np.argmin(accs))].set_color(RED)
-ax.axhline(np.mean(accs), color="black", ls="--", lw=1.3,
-           label=f"mean {np.mean(accs):.3f}")
-ax.annotate(f"{max(accs):.3f}", (int(np.argmax(accs)), max(accs)),
-            ha="center", va="bottom", weight="bold", color=GREEN)
-ax.annotate(f"{min(accs):.3f}", (int(np.argmin(accs)), min(accs)),
-            ha="center", va="bottom", weight="bold", color=RED)
-ax.set_ylim(0.55, 0.9)
-ax.set_xlabel("random_state — the ONLY thing that changed")
-ax.set_ylabel("test accuracy")
-ax.set_title(f"The same model, the same data: a {max(accs)-min(accs):.1%} swing from the seed alone")
-ax.legend(); ax.grid(alpha=.3, axis="y")
-save(fig, "s8-holdout-instability.png")
+fig, (p1, p2) = plt.subplots(1, 2, figsize=(14, 4.6))
+for ax, vals, ylab, title in [
+        (p1, accs, "test accuracy",
+         f"Heart failure, SVM\n{max(accs)-min(accs):.1%} swing from the seed alone"),
+        (p2, r2s, "test R²",
+         f"Car prices, unrestricted tree\n{max(r2s)-min(r2s):.2f} swing from the seed alone")]:
+    bars = ax.bar([str(s) for s in seeds], vals, color=BLUE, alpha=.85)
+    bars[int(np.argmax(vals))].set_color(GREEN)
+    bars[int(np.argmin(vals))].set_color(RED)
+    ax.axhline(np.mean(vals), color="black", ls="--", lw=1.3,
+               label=f"mean {np.mean(vals):.3f}")
+    ax.annotate(f"{max(vals):.3f}", (int(np.argmax(vals)), max(vals)),
+                ha="center", va="bottom", weight="bold", color=GREEN)
+    ax.annotate(f"{min(vals):.3f}", (int(np.argmin(vals)), min(vals)),
+                ha="center", va="bottom", weight="bold", color=RED)
+    ax.set_ylim(min(vals) - .12, max(vals) + .08)
+    ax.set_xlabel("random_state — the ONLY thing that changed")
+    ax.set_ylabel(ylab); ax.set_title(title, fontsize=11)
+    ax.legend(); ax.grid(alpha=.3, axis="y")
+fig.suptitle("One train/test split is not an answer", fontsize=13, y=1.02)
+fig.tight_layout(); save(fig, "s8-holdout-instability.png")
 
 # --------------------------------------------------------- 2. CV variants
 kf = KFold(5, shuffle=True, random_state=42)
@@ -102,10 +112,10 @@ save(fig, "s8-cv-variants.png")
 kf_c = KFold(5, shuffle=True, random_state=42)
 
 def fit_scores(feats, **kw):
-    r = cross_validate(DecisionTreeRegressor(random_state=42, **kw),
-                       cars_clean[feats], cars_clean["selling_price"],
-                       cv=kf_c, scoring="r2", return_train_score=True, n_jobs=-1)
-    return r["train_score"].mean(), r["test_score"].mean()
+    a, b, c, d = train_test_split(cars_clean[feats], cars_clean["selling_price"],
+                                  test_size=.2, random_state=42)
+    m = DecisionTreeRegressor(random_state=42, **kw).fit(a, c)
+    return r2_score(c, m.predict(a)), r2_score(d, m.predict(b))
 
 specs = [("UNDERFIT\n1 feature, depth 1", fit_scores(["vehicle_age"], max_depth=1)),
          ("GOOD FIT\n4 features, depth 5", fit_scores(
@@ -116,17 +126,17 @@ specs = [("UNDERFIT\n1 feature, depth 1", fit_scores(["vehicle_age"], max_depth=
 fig, ax = plt.subplots(figsize=(9.5, 5))
 x = np.arange(3); w = .36
 ax.bar(x - w/2, [s[1][0] for s in specs], w, label="Train R²", color=BLUE, alpha=.9)
-ax.bar(x + w/2, [s[1][1] for s in specs], w, label="5-fold CV R²", color=ORANGE, alpha=.9)
+ax.bar(x + w/2, [s[1][1] for s in specs], w, label="Test R²", color=ORANGE, alpha=.9)
 for i, (_, (tr, te)) in enumerate(specs):
     ax.text(i - w/2, tr + .015, f"{tr:.3f}", ha="center", fontsize=9.5)
     ax.text(i + w/2, te + .015, f"{te:.3f}", ha="center", fontsize=9.5)
     ax.annotate(f"gap {tr-te:+.3f}", (i, max(tr, te) + .09), ha="center",
                 weight="bold", fontsize=10.5,
-                color=RED if tr - te > .3 else "black")
+                color=RED if tr - te > .2 else "black")
 ax.set_xticks(x); ax.set_xticklabels([s[0] for s in specs])
 ax.set_ylim(0, 1.18); ax.set_ylabel("R²")
-ax.set_title("Underfitting, good fit, overfitting — read the GAP, not the train score")
-ax.set_xlabel("car prices, 15,240 rows, 5-fold cross-validated")
+ax.set_title("Car prices — one 80/20 split. The gap diagnoses; the test score does not rank")
+ax.set_xlabel("15,240 cars, single train/test split, random_state=42")
 ax.legend(loc="upper left"); ax.grid(alpha=.3, axis="y")
 save(fig, "s8-fit-spectrum.png")
 

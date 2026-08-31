@@ -1114,7 +1114,7 @@ joblib
 | **`n_estimators=100, max_depth=12`** | **0.8865** | **5.24 MB** |
 | `n_estimators=60, max_depth=10` | 0.8810 | **1.82 MB** |
 
-> **The smaller model is also the more accurate one** — the depth limit is [Session 8](session-08-evaluation-tuning.md#16-fixing-each-problem)'s regularisation, doing its job.
+> **The smaller model is also the more accurate one** — the depth limit is [Session 8](session-08-evaluation-tuning.md#6-fixing-each-problem)'s regularisation, doing its job.
 >
 > **Git is unhappy above about 50 MB and refuses above 100 MB.** **If your saved model is enormous, that is usually a signal to constrain the model, not to reach for Git LFS.**
 

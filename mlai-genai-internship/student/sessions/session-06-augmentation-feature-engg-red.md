@@ -1157,7 +1157,7 @@ pd.get_dummies(heart, columns=["treatment_type"], drop_first=True)
 **Session 3's next step is scaling. It is deliberately skipped here, for two reasons.**
 
 1. **Feature engineering must happen on the raw values.** A ratio, a threshold flag and a count are all computed from real units. **Scaling first would make `ejection_fraction < 40` meaningless** — 40 is a clinical number, not a scaled one.
-2. **Scaling belongs after the train-test split.** **A scaler learns each column's range, so fitting it on all the data lets the test rows influence the training rows.** You met this rule in [Session 3](session-03-eda-preprocessing.md#one-correction-to-the-order-above); [Session 8](session-08-evaluation-tuning.md#7-the-two-leaks-that-make-every-number-a-lie) measures what it costs.
+2. **Scaling belongs after the train-test split.** **A scaler learns each column's range, so fitting it on all the data lets the test rows influence the training rows.** You met this rule in [Session 3](session-03-eda-preprocessing.md#one-correction-to-the-order-above); [Session 8](session-08-evaluation-tuning.md#17-the-two-leaks-that-make-every-number-a-lie) measures what it costs.
 
 > **We are not training a model here — we are building columns.** **Scale later, inside a pipeline, once there is a model to scale for.**
 

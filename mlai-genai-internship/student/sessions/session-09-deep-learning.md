@@ -283,7 +283,7 @@ Two hidden neurons can, because between them they bend the space.
 
 > **If every helmet photograph in your training data was taken on a construction site and every bare head in an office, the network may learn "construction site → helmet".** **It will score beautifully on your test set and fail on the first office visitor wearing a helmet.**
 >
-> **This is [Session 8](session-08-evaluation-tuning.md#13-the-three-fits--heart-failure)'s leaky `time` column in visual form.** **A network cannot tell the difference between the reason and a reliable coincidence. Only you can.**
+> **This is [Session 8](session-08-evaluation-tuning.md#4-why-the-smallest-model-won)'s leaky `time` column in visual form.** **A network cannot tell the difference between the reason and a reliable coincidence. Only you can.**
 
 ---
 
@@ -709,7 +709,7 @@ Dataset: 1,000 examples,  batch size 100,  training for 5 epochs
 
 ## ⚠️ And Session 8 still applies
 
-> **More epochs is not better.** **A network trained long enough will memorise its training set exactly** — [Session 8](session-08-evaluation-tuning.md#12-reading-the-gap)'s overfitting, in a new costume.
+> **More epochs is not better.** **A network trained long enough will memorise its training set exactly** — [Session 8](session-08-evaluation-tuning.md#3-reading-the-gap)'s overfitting, in a new costume.
 >
 > **Watch the validation loss, not the training loss.** **When the training loss keeps falling and the validation loss starts rising, stop.** That is what *early stopping* means.
 
@@ -956,7 +956,7 @@ Test accuracy: 0.9333
 | `solver="adam"` | **[§11](#11-optimization-strategies)'s optimizer.** Momentum + per-weight step sizes |
 | `max_iter=2000` | The maximum number of **epochs** |
 | `random_state=42` | **The initial weights are random** — fix the seed or you get a different network each run |
-| `StandardScaler()` first | Inside the pipeline, so it refits on every fold — **[Session 8](session-08-evaluation-tuning.md#8-the-two-leaks-that-make-every-number-a-lie)'s rule** |
+| `StandardScaler()` first | Inside the pipeline, so it refits on every fold — **[Session 8](session-08-evaluation-tuning.md#17-the-two-leaks-that-make-every-number-a-lie)'s rule** |
 
 ## What scikit-learn worked out on its own
 
@@ -1023,7 +1023,7 @@ print(np.round(probs, 4))
 | `(16,)` | 0.9533 |
 | `(8, 8)` | 0.9600 |
 
-> **Two neurons is too few. Four is enough. Eight, sixteen and two layers buy nothing.** **Capacity beyond what the problem needs is not free — it is [Session 8](session-08-evaluation-tuning.md#11-the-three-fits--car-prices)'s overfitting risk with no upside.**
+> **Two neurons is too few. Four is enough. Eight, sixteen and two layers buy nothing.** **Capacity beyond what the problem needs is not free — it is [Session 8](session-08-evaluation-tuning.md#5-use-case-2--car-prices)'s overfitting risk with no upside.**
 
 **Does scaling help?** **On this dataset, measured: scaled 0.9533, unscaled 0.9733 in cross-validation.**
 
@@ -1208,7 +1208,7 @@ and **`δ₂ = −0.11090 × (−0.5) × 0.16832 = +0.009332`**.
 
 **A7 — (b) Edges and colour blobs.** **Nobody told it to.** It was shown pictures and told whether it was right, and edge detectors emerged — the same hierarchy the visual cortex uses.
 
-**A8 — (b) "Construction site → helmet".** **A network cannot distinguish the reason from a reliable coincidence.** This is [Session 8](session-08-evaluation-tuning.md#13-the-three-fits--heart-failure)'s leaky column in visual form.
+**A8 — (b) "Construction site → helmet".** **A network cannot distinguish the reason from a reliable coincidence.** This is [Session 8](session-08-evaluation-tuning.md#4-why-the-smallest-model-won)'s leaky column in visual form.
 
 **A9 — (b) Blame × the value that flowed along it.** **That single pattern is the whole of backpropagation.** A bias always carries 1, so its gradient is the blame itself.
 
