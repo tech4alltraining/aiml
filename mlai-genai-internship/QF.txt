@@ -56,9 +56,9 @@ ML Model Deployment: Model Saving, Loading, and Inference
 Streamlit App Development: Building Interactive Web Apps with Streamlit
 
 Session 6
-Data Augmentation Techniques
-Feature Engineering Techniques
-Feature Reduction Techniques
+Data Augmentation Techniques: What is Augmentation, When Augmentation is USed, Why to Use It, Types of Augmentation, Common Tabular Augmentation Tecniques, Image Augmentation Techniques, Text Augmentation Techniques
+Feature Engineering Techniques: What is, Benefits, Examples: Feature engg in Car dheko; hearfailure datasets
+Feature Reduction Techniques: Why it is needed, Types of Feature Reduction (Filter Methods, Wrapper Methods, Embedded Methods), Projection Methods (PCA, LDA, t-SNE),
 
 Session 7
 Introduction to Unsupervised Learning: Clustering, Association Rule Mining, Dimensionality Reduction
