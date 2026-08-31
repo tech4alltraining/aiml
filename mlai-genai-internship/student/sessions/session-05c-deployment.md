@@ -96,23 +96,9 @@ sklearn 1.9.0
 streamlit 1.59.2
 ```
 
-## If Streamlit is missing
+## Install packages if they are missing
 
 ```bash
-pip install streamlit joblib
-# numpy
-# pandas
-# matplotlib
-# seaborn
-# scikit-learn
-# joblib
-# jupyter
-# ipykernel
-# notebook
-# google-genai
-# streamlit
-# pillow
-# python-dotenv
 pip install numpy pandas matplotlib seaborn scikit-learn joblib google-genai streamlit pillow
 ```
 
