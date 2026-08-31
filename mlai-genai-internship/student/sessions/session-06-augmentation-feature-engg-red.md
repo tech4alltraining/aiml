@@ -48,7 +48,7 @@ By the end of this session you can:
 | 7 | [Text techniques](#7-text-augmentation-techniques) | | 14 | [Projection methods](#14-projection-methods) |
 | | | | 15 | [What reduction costs](#15-what-reduction-actually-costs) |
 
-**Practices sit between the topics.** The [20 MCQs](#-session-6--20-mcqs) and [tasks](#-session-6--tasks) are at the end.
+**Practices sit between the topics.** The [21 MCQs](#-session-6--21-mcqs) and [tasks](#-session-6--tasks) are at the end.
 
 ---
 
@@ -860,64 +860,308 @@ print("engineered", [round(v, 4) for v in ev(BASE + NEW)])
 
 ## ⚠️ First: this dataset needs preprocessing
 
-**The trainer's notebook has a comment saying "Do preprocessing first". Here is why that matters.**
+**The trainer's notebook has a comment saying "Do preprocessing first". That is not a throwaway remark — the feature code below will not run without it.**
+
+> **This is [Session 3](session-03-eda-preprocessing.md#the-sequence)'s sequence, applied to a real dataset:**
+>
+> ```text
+> 1. LOAD                2. EXPLORE (EDA)      3. DUPLICATES
+> 4. IMPOSSIBLE VALUES   5. MISSING VALUES     6. OUTLIERS
+> 7. ENCODING
+> ```
+>
+> **Every step except scaling** — "Why no scaling" at the end of this section says why that one is deliberately left out.
+
+---
+
+### Step 1 — Load
 
 ```python
+import pandas as pd
+import numpy as np
+
 dataset_url = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/heart_failure_raw.csv"
 heart = pd.read_csv(dataset_url)
 
 print(heart.shape)
-print(heart.dtypes)
-print("\nmissing:")
-print(heart.isnull().sum()[heart.isnull().sum() > 0])
+heart.head()
+```
+
+**Output:** `(299, 14)`
+
+---
+
+### Step 2 — Explore, before touching anything
+
+```python
+heart.info()
 ```
 
 **Output:**
 
 ```text
-(299, 14)
-
-anaemia                 object
-diabetes                object
-high_blood_pressure     object
-smoking                 object
-sex                     object
-DEATH_EVENT             object
-...
-
-missing:
-age                  15
-ejection_fraction    15
-serum_creatinine     15
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 299 entries, 0 to 298
+Data columns (total 14 columns):
+ #   Column                    Non-Null Count  Dtype
+---  ------                    --------------  -----
+ 0   age                       284 non-null    float64
+ 1   anaemia                   299 non-null    object
+ 2   creatinine_phosphokinase  299 non-null    int64
+ 3   diabetes                  299 non-null    object
+ 4   ejection_fraction         284 non-null    float64
+ 5   high_blood_pressure       299 non-null    object
+ 6   platelets                 299 non-null    float64
+ 7   serum_creatinine          284 non-null    float64
+ 8   serum_sodium              299 non-null    int64
+ 9   sex                       299 non-null    object
+ 10  smoking                   299 non-null    object
+ 11  time                      299 non-null    int64
+ 12  treatment_type            299 non-null    object
+ 13  DEATH_EVENT               299 non-null    object
 ```
 
-**Two problems:**
+**`info()` alone shows two of the three problems.**
 
-1. **The binary columns are text**, holding `"Yes"` and `"No"` — not 1 and 0
-2. **45 missing values** across three numeric columns
+| What you see | What it means |
+|---|---|
+| **`284 non-null`** in three columns | **15 gaps each — 45 missing values** |
+| **`object`** in seven columns | **They are text, not numbers** |
 
-> **The feature engineering below uses columns called `anaemia_bin`, `diabetes_bin` and so on.** **Those do not exist in the raw file — you have to create them.** That is precisely what "do preprocessing first" means.
+**The third problem only shows up in `describe()`.**
 
 ```python
-# Convert the Yes/No columns into 1/0
-BINARY = ["anaemia", "diabetes", "high_blood_pressure", "smoking"]
-for col in BINARY:
-    heart[col + "_bin"] = heart[col].map({"Yes": 1, "No": 0})
+print(heart[["age", "ejection_fraction", "serum_creatinine", "serum_sodium"]]
+      .describe().round(2))
+```
 
-# Fill the numeric gaps with the median (Session 3's rule for skewed columns)
+**Output:**
+
+```text
+          age  ejection_fraction  serum_creatinine  serum_sodium
+count  284.00             284.00            284.00        299.00
+mean    61.50              38.28              1.55        136.63
+std     14.18              12.02              1.98          4.41
+min     40.00              14.00              0.50        113.00
+50%     60.00              38.00              1.10        137.00
+max    160.00              80.00             27.00        148.00
+```
+
+> ⚠️ **`max` age is 160.** **Nobody is 160 years old.** **`describe()` is where impossible values reveal themselves, which is why Session 3 insists you run it before touching anything.**
+
+**And the text columns are not all the same kind of text:**
+
+```python
+print(heart["anaemia"].unique(), heart["DEATH_EVENT"].unique())
+print(heart["treatment_type"].unique())
+```
+
+**Output:**
+
+```text
+['No' 'Yes'] ['Yes' 'No']
+['Other' 'Lifestyle' 'Medication' 'Surgery']
+```
+
+> **Six columns hold `"Yes"`/`"No"`. One — `treatment_type` — has four unordered categories.** **Those two kinds need different encoding, and step 7 treats them differently.**
+
+---
+
+### Step 3 — Duplicates
+
+```python
+print("duplicate rows:", heart.duplicated().sum())
+```
+
+**Output:** `duplicate rows: 0`
+
+> **Zero — and you only know that because you checked.**
+>
+> **Run this on every dataset.** It costs one line, and a duplicated patient would be counted twice by everything downstream.
+
+---
+
+### Step 4 — Impossible values
+
+**An impossible value is not an outlier. It is an error.** **A 160-year-old patient is not a rare case — it is a typing mistake, and no amount of statistics will make it real.**
+
+```python
+impossible = heart["age"] > 120
+print("impossible ages:", heart.loc[impossible, "age"].tolist())
+
+heart.loc[impossible, "age"] = np.nan          # turn errors into gaps
+print("missing now:", heart.isnull().sum()[heart.isnull().sum() > 0].to_dict())
+```
+
+**Output:**
+
+```text
+impossible ages: [150.0, 160.0]
+missing now: {'age': 17, 'ejection_fraction': 15, 'serum_creatinine': 15}
+```
+
+> **Convert them to `NaN` rather than deleting the rows.** **The other thirteen columns for those two patients are perfectly good data** — throwing away twelve valid measurements to remove one bad one would be a poor trade on a 299-row dataset. **Step 5 will fill the gap.**
+>
+> **This is why impossible values come *before* missing values in the sequence.** Do it the other way round and the errors survive.
+
+**One value worth a second look:** `serum_creatinine` reaches **27**, where clinical values above about 10 are extraordinarily rare. **That is not obviously impossible — it is a question for a clinician.** **Flag it, ask, and do not silently delete it.**
+
+---
+
+### Step 5 — Missing values
+
+**Drop or impute?** **Session 3's question.** Dropping 47 rows from 299 loses **16% of a small medical dataset** — far too expensive. **Impute.**
+
+**And impute with the *median*, not the mean.** All three columns are skewed, and a few extreme patients would drag a mean upwards.
+
+```python
 for col in ["age", "ejection_fraction", "serum_creatinine"]:
     heart[col] = heart[col].fillna(heart[col].median())
 
 print("missing now:", heart.isnull().sum().sum())
-print("created:", [c + "_bin" for c in BINARY])
+print("age max now :", heart["age"].max())
 ```
 
 **Output:**
 
 ```text
 missing now: 0
-created: ['anaemia_bin', 'diabetes_bin', 'high_blood_pressure_bin', 'smoking_bin']
+age max now : 95.0
 ```
+
+> **The two impossible ages became 60 — the median.** **`age` now runs to 95, which is a life.**
+
+---
+
+### Step 6 — Outliers
+
+**Session 3's IQR rule: anything below `Q1 − 1.5×IQR` or above `Q3 + 1.5×IQR` is flagged.**
+
+```python
+NUMERIC = ["age", "creatinine_phosphokinase", "ejection_fraction",
+           "platelets", "serum_creatinine", "serum_sodium", "time"]
+
+flagged_rows = set()
+for col in NUMERIC:
+    q1, q3 = heart[col].quantile(0.25), heart[col].quantile(0.75)
+    iqr = q3 - q1
+    lower, upper = q1 - 1.5 * iqr, q3 + 1.5 * iqr
+    mask = (heart[col] < lower) | (heart[col] > upper)
+    flagged_rows |= set(heart.index[mask])
+    print(f"{col:<26} bounds [{lower:>9.1f}, {upper:>9.1f}]   flagged {mask.sum():>3}")
+
+print(f"\nrows flagged by at least one column: {len(flagged_rows)} "
+      f"({len(flagged_rows) / len(heart):.1%})")
+```
+
+**Output:**
+
+```text
+age                        bounds [     27.2,      93.2]   flagged   3
+creatinine_phosphokinase   bounds [   -581.8,    1280.2]   flagged  29
+ejection_fraction          bounds [      7.5,      67.5]   flagged   2
+platelets                  bounds [  76000.0,  440000.0]   flagged  21
+serum_creatinine           bounds [      0.2,       2.1]   flagged  30
+serum_sodium               bounds [    125.0,     149.0]   flagged   4
+time                       bounds [   -122.0,     398.0]   flagged   0
+
+rows flagged by at least one column: 77 (25.8%)
+```
+
+## ⚠️ Do NOT remove these
+
+**Session 3 removed its outliers. Here you must not — and the data says why.**
+
+```python
+death_rate_flagged = (heart.loc[sorted(flagged_rows), "DEATH_EVENT"] == "Yes").mean()
+death_rate_overall = (heart["DEATH_EVENT"] == "Yes").mean()
+
+print(f"death rate among flagged rows: {death_rate_flagged:.1%}")
+print(f"death rate overall           : {death_rate_overall:.1%}")
+```
+
+**Output:**
+
+```text
+death rate among flagged rows: 46.8%
+death rate overall           : 32.1%
+```
+
+> **The "outliers" are disproportionately the patients who died — 46.8% against 32.1%.**
+>
+> **Removing them would delete a quarter of the dataset, and with it the very patients the model exists to identify.** You would be left with something that predicts survival beautifully among people who were never at risk.
+
+**Look at what the IQR actually flagged:** `serum_creatinine` above 2.1. **The next section builds a clinical risk flag at `serum_creatinine > 1.5`.** **The same values are "noise to delete" under one rule and "the signal" under the other.**
+
+| When an outlier is | Do |
+|---|---|
+| **A data-entry error** (age 160) | **Fix it — that was step 4** |
+| **A genuine extreme case** (a very ill patient) | **Keep it — and often flag it as a feature** |
+
+> **Session 3's box plot and IQR rule find candidates. They do not make the decision.** **You do — and you need to know what the column means to decide.**
+
+---
+
+### Step 7 — Encoding with `LabelEncoder`
+
+**Six columns hold `"Yes"`/`"No"`. Each has exactly two categories, so Label Encoding is the right tool:** with only two values there is a single gap, so no false ordering is possible.
+
+```python
+from sklearn.preprocessing import LabelEncoder
+
+BINARY = ["anaemia", "diabetes", "high_blood_pressure", "smoking"]
+
+le = LabelEncoder()
+for col in BINARY:
+    heart[col + "_bin"] = le.fit_transform(heart[col])
+    print(f"{col:<22} {le.classes_.tolist()} -> {list(range(len(le.classes_)))}")
+
+heart["sex_bin"] = le.fit_transform(heart["sex"])
+heart["DEATH_EVENT"] = le.fit_transform(heart["DEATH_EVENT"])
+
+print("\ncreated:", [c + "_bin" for c in BINARY] + ["sex_bin"])
+print("shape after preprocessing:", heart.shape)
+```
+
+**Output:**
+
+```text
+anaemia                ['No', 'Yes'] -> [0, 1]
+diabetes               ['No', 'Yes'] -> [0, 1]
+high_blood_pressure    ['No', 'Yes'] -> [0, 1]
+smoking                ['No', 'Yes'] -> [0, 1]
+
+created: ['anaemia_bin', 'diabetes_bin', 'high_blood_pressure_bin', 'smoking_bin', 'sex_bin']
+shape after preprocessing: (299, 19)
+```
+
+> **Always print `le.classes_`.** **It is the only thing that tells you which way round the codes went.** Here alphabetical order happens to put `'No'` first, so `No = 0` and `Yes = 1` — which is what you want. **Do not assume it; check it.**
+>
+> **These are exactly the `*_bin` columns the feature code below needs.** **They do not exist in the raw file, which is what "do preprocessing first" means.**
+
+### `treatment_type` gets different treatment
+
+**Four unordered categories.** **Label-encoding it would claim `Surgery = 3` is three times `Lifestyle = 1`, which is meaningless.** **Session 3's answer for unordered categories is dummy variables:**
+
+```python
+# illustrative: a syntax reference, not runnable as written.
+pd.get_dummies(heart, columns=["treatment_type"], drop_first=True)
+```
+
+> **But not yet.** **The feature engineering below combines `treatment_type` with `age_group` into a single text label**, so it needs the original words. **Encode it after the features are built, not before.**
+>
+> **The order of preprocessing steps is a decision, not a ritual.**
+
+### ⚠️ Why no scaling
+
+**Session 3's next step is scaling. It is deliberately skipped here, for two reasons.**
+
+1. **Feature engineering must happen on the raw values.** A ratio, a threshold flag and a count are all computed from real units. **Scaling first would make `ejection_fraction < 40` meaningless** — 40 is a clinical number, not a scaled one.
+2. **Scaling belongs after the train-test split.** **A scaler learns each column's range, so fitting it on all the data lets the test rows influence the training rows.** You met this rule in [Session 3](session-03-eda-preprocessing.md#one-correction-to-the-order-above); [Session 8](session-08-evaluation-tuning.md#7-the-two-leaks-that-make-every-number-a-lie) measures what it costs.
+
+> **We are not training a model here — we are building columns.** **Scale later, inside a pipeline, once there is a model to scale for.**
+
+---
 
 ## Now the feature engineering
 
@@ -977,10 +1221,10 @@ heart.head()
 **Output:**
 
 ```text
-(299, 34)
+(299, 36)
 ```
 
-**Fourteen columns became thirty-four.**
+**Fourteen columns became thirty-six** — five from preprocessing, seventeen from feature engineering.
 
 ## The techniques on display
 
@@ -1009,46 +1253,86 @@ print(heart["comorbidity_count"].value_counts().sort_index())
 **Output:**
 
 ```text
-0     43
-1    120
-2     94
-3     37
-4      5
+0     35
+1    118
+2    103
+3     41
+4      2
 ```
 
 > **Four separate yes/no columns became one number from 0 to 4.** **A model now has a single "how ill is this person overall" signal**, rather than having to discover that those four columns should be added together.
+>
+> **And note how rare the extreme is: only 2 of 299 patients have all four conditions.** That is worth knowing before you build a feature around it.
 
 ## ✏️ Practice — heart failure features
 
-1. Load the dataset and print its shape, dtypes and missing values. **What two problems must be fixed before the feature code will run?**
-2. Create the four `*_bin` columns and fill the numeric gaps.
-3. Build all the engineered features and print the new shape.
-4. Print the distribution of `comorbidity_count`. **What does a value of 4 mean?**
-5. **Pick three features and say what clinical knowledge each one encodes.**
+1. Load the dataset. Run `info()` and `describe()`. **Name the three problems you can see, and say which output revealed each one.**
+2. Check for duplicates, fix the impossible ages, then impute the gaps with the median. **Print proof that all three problems are gone.**
+3. Apply the IQR rule to every numeric column. **How many rows are flagged, and should you remove them? Justify with the death rate.**
+4. Encode the binary columns with `LabelEncoder` and print `le.classes_` each time. **Which value became 0?**
+5. Build the engineered features and print the new shape and the distribution of `comorbidity_count`. **What does a value of 4 mean, and how many patients have it?**
+6. **Pick three features and say what clinical knowledge each one encodes.**
 
 <details><summary>Solutions</summary>
 
 ```python
 import pandas as pd, numpy as np
-dataset_url = "https://raw.githubusercontent.com/tech4alltraining/aiml/refs/heads/main/datasets/classification/heart_failure_raw.csv"
+from sklearn.preprocessing import LabelEncoder
+
+dataset_url = ("https://raw.githubusercontent.com/tech4alltraining/aiml/"
+               "refs/heads/main/datasets/classification/heart_failure_raw.csv")
 heart = pd.read_csv(dataset_url)
 
-print(heart.shape)                                                     # 1
-print(heart.dtypes.to_string())
-print(heart.isnull().sum()[heart.isnull().sum() > 0])
-# PROBLEM 1: anaemia, diabetes, high_blood_pressure and smoking are TEXT
-#   ("Yes"/"No"), but the feature code expects *_bin columns of 1/0.
-# PROBLEM 2: 45 missing values across age, ejection_fraction and
-#   serum_creatinine.
+heart.info()                                                           # 1
+print(heart[["age", "ejection_fraction", "serum_creatinine"]].describe().round(2))
+# PROBLEM 1 (info): seven columns are `object` - Yes/No text, not numbers.
+#   The feature code expects *_bin columns of 1/0, which do not exist.
+# PROBLEM 2 (info): "284 non-null" in three columns = 45 missing values.
+# PROBLEM 3 (describe): max age is 160. Impossible. info() cannot show
+#   this - only describe() can, which is why Session 3 runs both.
 
-BINARY = ["anaemia", "diabetes", "high_blood_pressure", "smoking"]      # 2
-for c in BINARY:
-    heart[c + "_bin"] = heart[c].map({"Yes": 1, "No": 0})
+print("duplicates:", heart.duplicated().sum())                         # 2
+impossible = heart["age"] > 120
+print("impossible ages:", heart.loc[impossible, "age"].tolist())
+heart.loc[impossible, "age"] = np.nan          # error -> gap, THEN impute
 for c in ["age", "ejection_fraction", "serum_creatinine"]:
     heart[c] = heart[c].fillna(heart[c].median())
-print("missing now:", heart.isnull().sum().sum())
+print("duplicates:", heart.duplicated().sum(),
+      "| missing:", heart.isnull().sum().sum(),
+      "| age max:", heart["age"].max())
+# 0 duplicates, 0 missing, age max 95.0 - all three problems gone.
 
-heart["low_ejection_fraction"] = (heart["ejection_fraction"] < 40).astype(int)  # 3
+NUMERIC = ["age", "creatinine_phosphokinase", "ejection_fraction",     # 3
+           "platelets", "serum_creatinine", "serum_sodium", "time"]
+flagged = set()
+for c in NUMERIC:
+    q1, q3 = heart[c].quantile(.25), heart[c].quantile(.75)
+    iqr = q3 - q1
+    flagged |= set(heart.index[(heart[c] < q1 - 1.5 * iqr)
+                               | (heart[c] > q3 + 1.5 * iqr)])
+print(f"flagged {len(flagged)} rows ({len(flagged)/len(heart):.1%})")
+print("death rate flagged:",
+      round((heart.loc[sorted(flagged), "DEATH_EVENT"] == "Yes").mean(), 3),
+      " overall:", round((heart["DEATH_EVENT"] == "Yes").mean(), 3))
+# 77 rows, 25.8%. DO NOT REMOVE THEM. Their death rate is 46.8% against
+# an overall 32.1% - the "outliers" ARE the patients who died. Deleting
+# them would remove a quarter of the data and most of the signal. The
+# impossible values were the errors, and step 2 already handled those.
+
+BINARY = ["anaemia", "diabetes", "high_blood_pressure", "smoking"]     # 4
+le = LabelEncoder()
+for c in BINARY:
+    heart[c + "_bin"] = le.fit_transform(heart[c])
+    print(f"{c:<22} {le.classes_.tolist()} -> {list(range(len(le.classes_)))}")
+heart["sex_bin"] = le.fit_transform(heart["sex"])
+heart["DEATH_EVENT"] = le.fit_transform(heart["DEATH_EVENT"])
+# 'No' became 0 and 'Yes' became 1 - LabelEncoder codes alphabetically,
+# and here alphabetical order happens to be the order you wanted. Print
+# le.classes_ every time rather than assuming it.
+
+heart["age_group"] = pd.cut(heart["age"], bins=[0, 40, 60, 80, 120],   # 5
+                            labels=["young", "middle_age", "senior", "elderly"])
+heart["low_ejection_fraction"] = (heart["ejection_fraction"] < 40).astype(int)
 heart["high_serum_creatinine"] = (heart["serum_creatinine"] > 1.5).astype(int)
 heart["low_serum_sodium"] = (heart["serum_sodium"] < 135).astype(int)
 heart["cpk_log"] = np.log1p(heart["creatinine_phosphokinase"])
@@ -1056,12 +1340,15 @@ heart["comorbidity_count"] = heart[[c + "_bin" for c in BINARY]].sum(axis=1)
 heart["renal_risk_score"] = (heart["high_serum_creatinine"]
                              + heart["low_serum_sodium"])
 print(heart.shape)
-
-print(heart["comorbidity_count"].value_counts().sort_index())          # 4
+print(heart["comorbidity_count"].value_counts().sort_index())
+print("age_group missing:", heart["age_group"].isna().sum())
 # A value of 4 means the patient has ALL FOUR conditions - anaemia,
-# diabetes, high blood pressure and smoking. Only 5 patients do.
+# diabetes, high blood pressure and smoking. Only 2 of 299 patients do.
+# NOTE age_group has 0 missing: fixing the impossible ages in step 2 also
+# fixed what would otherwise have been 2 NaNs here, because pd.cut's top
+# bin stops at 120 (and see Example 1 for the left-edge version of this).
 
-# 5 - low_ejection_fraction: below 40% is a clinically recognised
+# 6 - low_ejection_fraction: below 40% is a clinically recognised
 #       threshold for impaired heart function. A model cannot know that
 #       39 and 41 differ meaningfully; a cardiologist can tell it.
 #     high_serum_creatinine: above 1.5 indicates impaired kidney
@@ -1136,17 +1423,17 @@ print(heart["comorbidity_count"].value_counts().sort_index())          # 4
 |---|---|---|
 | What it does | **Keeps some original columns, drops the rest** | **Builds new columns from combinations of all of them** |
 | Output columns | `petal_length`, `petal_width` | `PC1`, `PC2` |
-| Explainable? | **Yes — they are your real columns** | **No — what is `PC1` in ₹?** |
+| Explainable? | **Yes — they are your real columns** | **No — what is `PC1` in centimetres?** |
 | Methods | Filter, Wrapper, Embedded | PCA, LDA, t-SNE |
 
-> **Selection is subtraction. Projection is rotation.** **This section covers selection; §14 covers projection.**
+> **Selection is subtraction. Projection is rotation.** **This topic covers selection as a set of ideas; [§14](#14-projection-methods) works through projection in code.**
 
-**Selection itself comes in three families:**
+**Selection itself comes in three families.**
 
-| Family | How it decides | Model involved? | Cost |
+| Family | How it decides | Trains a model? | Cost |
 |---|---|---|---|
-| **Filter** | Statistics on each column vs the target | **No** | **Very cheap** |
-| **Wrapper** | Trains a model on subsets and compares | **Yes, many times** | **Expensive** |
+| **Filter** | Statistics on each column against the target | **No** | **Very cheap** |
+| **Wrapper** | Trains the model on subsets and compares | **Yes, many times** | **Expensive** |
 | **Embedded** | The model selects while it trains | **Yes, once** | **Cheap** |
 
 ---
@@ -1155,123 +1442,40 @@ print(heart["comorbidity_count"].value_counts().sort_index())          # 4
 
 > **Score every column on its own, keep the best ones. No model is trained.**
 
-**Because no model is involved, filter methods are fast and model-agnostic — but they judge each column in isolation, so they cannot see that two columns are useful only *together*.**
+🧠 **Analogy: shortlisting job applications by reading each CV alone.** **Fast, and you can do hundreds — but you will never notice that two candidates would be brilliant *as a pair*.**
 
-### The four filters you will use
+**Because no model is involved, filter methods are fast and work for any model you later choose. The price is that they judge each column in isolation.**
 
-| Filter | Use when | What it measures |
+### The four filters you will meet
+
+| Filter | Asks | Use when |
 |---|---|---|
-| `VarianceThreshold` | Always, first | **Does the column vary at all?** |
-| `f_classif` (ANOVA F) | Numeric X, categorical y | **Do the class means differ?** |
-| `chi2` | **Non-negative** X, categorical y | Dependence between column and class |
-| `mutual_info_classif` | Anything | **Any** relationship, including non-linear |
+| **Variance threshold** | **Does this column vary at all?** | **Always, as a first pass** |
+| **ANOVA F (`f_classif`)** | **Do the classes have different averages for this column?** | Numeric columns, categorical target |
+| **Chi-squared (`chi2`)** | Are the column and the class related? | **Non-negative** columns, categorical target |
+| **Mutual information** | **How much does knowing this column reduce my uncertainty about the class?** | Anything — **it does not assume the relationship is a straight line** |
 
-### Step 1 — drop columns that barely vary
+### What each one is really measuring
 
-```python
-import pandas as pd
-from sklearn.datasets import load_iris
-from sklearn.feature_selection import VarianceThreshold
+**Variance threshold.** **A column whose values barely move cannot explain a target that does.** A column that is 99% the same value carries almost no information. **The catch: variance depends on units.** The same measurement in metres has 10,000× less variance than in centimetres, so a threshold above zero needs scaled data or a deliberate per-column decision. **A threshold of exactly zero — which drops only constant columns — is always safe.**
 
-iris = load_iris()
-X = pd.DataFrame(iris.data, columns=iris.feature_names)
-y = iris.target
+**ANOVA F.** **A high F means the classes have very different averages for that column, and very little spread within each class.** That is precisely what makes a column useful for telling classes apart. **On iris, petal length scores about 24 times higher than sepal width.**
 
-print(X.var().round(4).to_dict())
+**Chi-squared.** Measures whether a column and the class are independent. **It requires non-negative values** — so if you have standard-scaled your data, half the values are negative and `chi2` will raise an error. **Use min-max scaling, or use ANOVA F instead.**
 
-vt = VarianceThreshold(threshold=0.3).fit(X)
-print("kept:", list(X.columns[vt.get_support()]))
-```
+**Mutual information.** **The most general of the four.** It asks how much uncertainty about the class disappears once you know the column. **0 means nothing at all.** **It makes no assumption about the shape of the relationship**, which is why it can find patterns the other three miss — and why it is the safest default when you do not know what your data looks like.
 
-**Output:**
-
-```text
-{'sepal length (cm)': 0.6857, 'sepal width (cm)': 0.19,
- 'petal length (cm)': 3.1163, 'petal width (cm)': 0.581}
-
-kept: ['sepal length (cm)', 'petal length (cm)', 'petal width (cm)']
-```
-
-> **`sepal width` is dropped: its values barely move, so it cannot explain a target that does.**
->
-> ⚠️ **Variance depends on units.** A column measured in metres has 10,000× less variance than the same column in centimetres. **Either scale first, or set the threshold per column with your eyes open.** **A pure zero threshold — `VarianceThreshold(0)`, which drops only constant columns — is always safe.**
-
-### Step 2 — ANOVA F: do the classes have different means?
-
-```python
-from sklearn.feature_selection import SelectKBest, f_classif
-
-selector = SelectKBest(score_func=f_classif, k=2).fit(X, y)
-for name, score, p in zip(X.columns, selector.scores_, selector.pvalues_):
-    print(f"{name:<20} F = {score:>8.2f}   p = {p:.2e}")
-
-print("\nselected:", list(X.columns[selector.get_support()]))
-```
-
-**Output:**
-
-```text
-sepal length (cm)    F =   119.26   p = 1.67e-31
-sepal width (cm)     F =    49.16   p = 4.49e-17
-petal length (cm)    F =  1180.16   p = 2.86e-91
-petal width (cm)     F =   960.01   p = 4.17e-85
-
-selected: ['petal length (cm)', 'petal width (cm)']
-```
-
-> **How to read this: a high F means the three species have very different average petal lengths, and very little spread within each species.** **That is exactly what makes a column useful for telling classes apart.**
->
-> **`petal length` scores 1180 against `sepal width`'s 49 — a 24× difference.**
-
-### Step 3 — chi², for counts and non-negative values
-
-```python
-from sklearn.feature_selection import chi2
-
-chi_sel = SelectKBest(score_func=chi2, k=2).fit(X, y)
-for name, score in zip(X.columns, chi_sel.scores_):
-    print(f"{name:<20} chi2 = {score:>8.2f}")
-```
-
-**Output:**
-
-```text
-sepal length (cm)    chi2 =    10.82
-sepal width (cm)     chi2 =     3.71
-petal length (cm)    chi2 =   116.31
-petal width (cm)     chi2 =    67.05
-```
-
-> ⚠️ **`chi2` requires non-negative values.** **If you have standard-scaled your data, half your values are negative and `chi2` will raise an error.** Use `MinMaxScaler`, or use `f_classif` instead.
-
-### Step 4 — mutual information, which catches non-linear relationships
-
-```python
-from sklearn.feature_selection import mutual_info_classif
-
-mi = mutual_info_classif(X, y, random_state=42)
-for name, score in zip(X.columns, mi):
-    print(f"{name:<20} MI = {score:.4f}")
-```
-
-**Output:**
-
-```text
-sepal length (cm)    MI = 0.5114
-sepal width (cm)     MI = 0.2994
-petal length (cm)    MI = 0.9926
-petal width (cm)     MI = 0.9856
-```
-
-> **Mutual information asks: "how much does knowing this column reduce my uncertainty about the class?"** **0 means nothing at all. It does not assume the relationship is linear, which is why it is the safest general-purpose filter.**
-
-### They agree — and that is the point
+### They usually agree — and that is the point
 
 ![Four filter methods, one answer](images/s6-filter-methods-agree.png)
 
-> **Four different statistics, computed four different ways, all rank the two petal columns far above the two sepal columns.**
+> **Four different statistics, computed four different ways, all rank the two petal columns far above the two sepal columns on iris.**
 >
-> **When independent methods agree, you can act with confidence. When they disagree, that disagreement is telling you something** — usually that a column has a non-linear relationship (mutual information sees it, ANOVA does not) or that the scales are misleading you.
+> **When independent methods agree, act with confidence.** **When they disagree, the disagreement is itself information** — usually that a column has a non-linear relationship (mutual information sees it, ANOVA does not), or that the scales are misleading you.
+
+### ⚠️ The blind spot every filter shares
+
+**Filters score each column alone, so they cannot see that two columns are useful only together.** **Two columns that are individually useless but whose *difference* is decisive will both be discarded.** **If you suspect that, you need a wrapper or an embedded method — or you need to build the difference yourself, which is Part B's job.**
 
 ---
 
@@ -1279,66 +1483,25 @@ petal width (cm)     MI = 0.9856
 
 > **Actually train the model on different subsets of columns, and keep the subset that scores best.**
 
-**Filter methods guess. Wrapper methods measure.** The price is that you train the model many times.
+🧠 **Analogy: interviewing shortlists rather than individuals.** **Slow and expensive — but it is the only way to find out how people actually work together.**
 
-### RFE — recursive feature elimination
+**Filter methods guess. Wrapper methods measure.** The price is that you train the model many times over.
 
-**The algorithm:**
-
-```text
-1. Train the model on ALL features
-2. Ask the model which feature it relied on least
-3. Delete that feature
-4. Repeat from step 1 until only k features remain
-```
-
-```python
-from sklearn.feature_selection import RFE
-from sklearn.linear_model import LogisticRegression
-
-rfe = RFE(LogisticRegression(max_iter=1000), n_features_to_select=2).fit(X, y)
-
-for name, rank in zip(X.columns, rfe.ranking_):
-    print(f"{name:<20} rank {rank}")
-
-print("\nselected:", list(X.columns[rfe.support_]))
-```
-
-**Output:**
-
-```text
-sepal length (cm)    rank 3
-sepal width (cm)     rank 2
-petal length (cm)    rank 1
-petal width (cm)     rank 1
-
-selected: ['petal length (cm)', 'petal width (cm)']
-```
-
-> **Rank 1 means "kept". Higher ranks are the order in which columns were eliminated** — `sepal length` was dropped first, `sepal width` second.
->
-> **Note that RFE reached the same answer as every filter method — but it had to train logistic regression three times to get there.**
-
-### Forward and backward selection
+### The three you should know
 
 | Method | Starts with | Each step |
 |---|---|---|
-| **Forward selection** | **No features** | **Adds** the one that helps most |
-| **Backward elimination** | **All features** | **Removes** the one that hurts least |
-| **RFE** | All features | Removes the lowest-ranked, using the model's own weights |
+| **Forward selection** | **No features** | **Adds** the one that improves the score most |
+| **Backward elimination** | **All features** | **Removes** the one whose loss hurts least |
+| **Recursive Feature Elimination (RFE)** | All features | **Trains, asks the model which feature it relied on least, deletes it, and repeats** |
 
-```python
-# illustrative: a syntax reference, not runnable as written.
-from sklearn.feature_selection import SequentialFeatureSelector
+**RFE is the one you will see most often**, because it uses the model's own internal weights to decide what to drop, rather than retraining once per candidate. **On iris it reaches the same answer as every filter method — the two petal columns — but it has to train the model three times to get there.**
 
-forward = SequentialFeatureSelector(
-    LogisticRegression(max_iter=1000), n_features_to_select=2, direction="forward")
+### ⚠️ The cost is not a detail
 
-backward = SequentialFeatureSelector(
-    LogisticRegression(max_iter=1000), n_features_to_select=2, direction="backward")
-```
-
-> ⚠️ **The cost is real.** **With 100 columns, forward selection to 10 features trains roughly 955 models.** **On a large dataset that is hours.** **This is why wrapper methods are used on tens of columns, not thousands.**
+> **With 100 columns, forward selection down to 10 features trains roughly 955 models.** **At five seconds each that is over an hour, and that is for one choice of model.**
+>
+> **This is why wrapper methods are used on tens of columns, not thousands.** **The standard professional recipe is a filter first to cut a thousand columns down to fifty, then a wrapper on what survives.**
 
 ---
 
@@ -1346,61 +1509,29 @@ backward = SequentialFeatureSelector(
 
 > **The model selects features as a side effect of training. One training run, no extra cost.**
 
-### Lasso — the coefficients that go to exactly zero
+🧠 **Analogy: a manager who works out who is essential simply by running the team for a year.** **No separate assessment — the answer falls out of doing the job.**
 
-**Lasso is linear regression with a penalty that pushes small coefficients all the way to zero.** A coefficient of exactly zero means the column is not used at all.
+### Lasso — coefficients that go to exactly zero
 
-```python
-from sklearn.linear_model import Lasso
-from sklearn.preprocessing import StandardScaler
+**Lasso is linear regression with a penalty on the size of the coefficients, and that penalty pushes small ones all the way to zero.** **A coefficient of exactly zero means the column is not used at all.**
 
-X_scaled = StandardScaler().fit_transform(X)
-lasso = Lasso(alpha=0.1).fit(X_scaled, y)
+**On iris, Lasso zeroes two of the four columns by itself, without being told how many to keep.** **The strength dial is `alpha`: turn it up and more columns are dropped; turn it far enough and everything goes to zero, which is a useless model.**
 
-for name, coef in zip(X.columns, lasso.coef_):
-    kept = "kept   " if coef != 0 else "DROPPED"
-    print(f"{name:<20} coef = {coef:>8.4f}   {kept}")
-```
-
-**Output:**
-
-```text
-sepal length (cm)    coef =   0.0000   DROPPED
-sepal width (cm)     coef =  -0.0000   DROPPED
-petal length (cm)    coef =   0.2633   kept
-petal width (cm)     coef =   0.4275   kept
-```
-
-> **Lasso zeroed two of the four columns by itself, without being told to keep any particular number.**
->
-> ⚠️ **Always scale before Lasso.** **The penalty is applied to the raw coefficient size, so an unscaled column with large values gets unfairly punished.**
+> ⚠️ **Always scale before Lasso.** **The penalty is applied to the raw coefficient size, so a column measured in large units gets unfairly punished.**
 
 ### Tree importance
 
-**Every tree-based model records how much each feature reduced impurity across all its splits.**
+**Every tree-based model records how much each feature reduced impurity across all its splits.** **On iris the two petal columns account for about 88% of the total importance.**
 
-```python
-from sklearn.ensemble import RandomForestClassifier
-
-forest = RandomForestClassifier(n_estimators=200, random_state=42).fit(X, y)
-importances = pd.Series(forest.feature_importances_, index=X.columns)
-print(importances.sort_values(ascending=False).round(4))
-```
-
-**Output:**
-
-```text
-petal length (cm)    0.4593
-petal width (cm)     0.4179
-sepal length (cm)    0.1020
-sepal width (cm)     0.0209
-```
-
-> **The two petal columns account for 87.7% of the total importance.**
+> ⚠️ **Two traps.**
 >
-> ⚠️ **Two traps with tree importance.** **First, it is biased towards high-cardinality columns** — an ID column can look important because it can split anything. **Second, when two columns are correlated, the forest splits the credit between them arbitrarily**, so a genuinely important feature can look weak simply because a twin is standing beside it.
+> **First, importance is biased towards high-cardinality columns** — an ID column can look important simply because it can split anything.
+>
+> **Second, when two columns are correlated the forest splits the credit between them arbitrarily**, so a genuinely important feature can look weak just because a near-twin is standing beside it.
 
-### Choosing a family
+---
+
+## Choosing a family
 
 | Situation | Use |
 |---|---|
@@ -1409,75 +1540,40 @@ sepal width (cm)     0.0209
 | You are already training a linear or tree model | **Embedded** |
 | **In practice** | **Filter to cut it down, then embedded or wrapper on what survives** |
 
-## ✏️ Practice — feature selection
+## ✏️ Practice — feature selection concepts
 
-1. Load iris. Compute the variance of each column and apply `VarianceThreshold(0.3)`. **Which column is dropped, and does its low variance actually mean it is useless?**
-2. Run `SelectKBest(f_classif, k=2)` and `SelectKBest(chi2, k=2)`. Do they choose the same two columns?
-3. Run `RFE` with logistic regression to 2 features. Compare its answer with the filters'.
-4. Fit `Lasso(alpha=0.1)` on scaled data. **How many coefficients are exactly zero?** Now try `alpha=0.5` — what changes?
-5. **Rank the four columns by forest importance, and explain in one sentence why all four methods agree.**
+**These are written answers, not code.**
 
-<details><summary>Solutions</summary>
+1. **In your own words, what is the difference between selection and projection?** Give one situation where only selection is acceptable.
+2. A column of postcodes is stored as an integer. **A variance threshold keeps it and mutual information scores it highly. Should you keep it? What is going wrong?**
+3. You have **5,000 columns** and each model fit takes 30 seconds. **Design a selection strategy and estimate its cost.**
+4. **Two columns are individually useless but their difference perfectly separates the classes.** Which of the three families will find this, and which will miss it? Why?
+5. Your forest reports `height_cm` at importance 0.22 and `height_inches` at 0.21, while every other column is below 0.05. **What has happened, and what should you do?**
 
-```python
-import pandas as pd
-from sklearn.datasets import load_iris
-from sklearn.feature_selection import (VarianceThreshold, SelectKBest,
-                                       f_classif, chi2, RFE)
-from sklearn.linear_model import LogisticRegression, Lasso
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import StandardScaler
+<details><summary>Answers</summary>
 
-iris = load_iris()
-X = pd.DataFrame(iris.data, columns=iris.feature_names)
-y = iris.target
+**1.** **Selection keeps a subset of your original columns; projection replaces them all with new combinations.** **Only selection is acceptable when you must explain a decision** — a loan refusal has to be justified in terms of income and credit history, not "your PC1 was too low". Regulated domains (credit, insurance, medicine, hiring) usually rule projection out for the final model, though it is still fine for exploring.
 
-print(X.var().round(4).to_dict())                                       # 1
-vt = VarianceThreshold(threshold=0.3).fit(X)
-print("kept:", list(X.columns[vt.get_support()]))
-# sepal width is dropped (variance 0.19). Low variance is a HINT, not
-# proof - a column could vary little and still separate the classes
-# perfectly. Here the other methods happen to agree, so it is safe.
+**2.** **Keep it out.** Postcodes stored as integers vary a lot (so variance keeps them) and are genuinely informative about the target (so mutual information scores them). **But the numbers are labels, not quantities** — postcode 500001 is not "less than" 600001 in any meaningful sense, and a model will learn the specific postcodes in your training data rather than anything that generalises. **The filter is not wrong; it simply cannot know what the column means. You can.**
 
-f = SelectKBest(f_classif, k=2).fit(X, y)                               # 2
-c = SelectKBest(chi2, k=2).fit(X, y)
-print("f_classif:", list(X.columns[f.get_support()]))
-print("chi2     :", list(X.columns[c.get_support()]))
-# Both pick petal length and petal width.
+**3.** **Filter first, wrapper second.** Run a variance threshold and mutual information over all 5,000 columns — no model fits at all, so seconds. **Cut to perhaps 50.** Then run RFE on those 50 down to 10: roughly 40 fits at 30 seconds ≈ 20 minutes. **Total, well under an hour.** **Going straight to forward selection on 5,000 columns would need tens of thousands of fits — days of compute.**
 
-r = RFE(LogisticRegression(max_iter=1000), n_features_to_select=2).fit(X, y)  # 3
-print("RFE:", list(X.columns[r.support_]))
-# Same two columns - but RFE trained a model three times to get there.
+**4.** **Wrapper methods find it; filters miss it entirely.** **A filter scores each column alone**, and alone each of these two is worthless, so both are discarded before anything is trained. **A wrapper evaluates subsets, so it can discover that the pair works.** **Embedded methods sit in between — a tree can approximate the difference by splitting on both columns repeatedly, so it may partly recover it.** **The best answer, though, is Part B: build the difference as a feature yourself.**
 
-Xs = StandardScaler().fit_transform(X)                                  # 4
-for a in [0.1, 0.5]:
-    la = Lasso(alpha=a).fit(Xs, y)
-    print(f"alpha={a}", la.coef_.round(4), " zeros:", (la.coef_ == 0).sum())
-# alpha=0.1 -> 2 zeros. alpha=0.5 -> MORE zeros (a stronger penalty
-# drops more columns). Turn alpha up far enough and everything goes to
-# zero, which is a useless model - alpha is a dial, not a switch.
-
-rf = RandomForestClassifier(n_estimators=200, random_state=42).fit(X, y)  # 5
-print(pd.Series(rf.feature_importances_,
-                index=X.columns).sort_values(ascending=False).round(4))
-# petal length > petal width >> sepal length >> sepal width.
-# All four methods agree because the signal in iris is genuinely
-# concentrated in the petals: the three species overlap heavily in
-# sepal measurements and separate cleanly on petal measurements.
-```
+**5.** **They are the same measurement in two units, so they are perfectly correlated.** **The forest split the credit between them arbitrarily** — either one alone would have scored about 0.43 and been the clear top feature. **Drop one of them.** **And take the general warning: whenever you see two features with suspiciously similar mid-range importances, check whether they are duplicates in disguise.**
 </details>
 
 ---
 
 # 14. Projection methods
 
-> **Instead of choosing among your columns, build new ones — fewer, each a combination of all the originals.**
+> **Instead of choosing among your columns, build new ones — fewer, each a combination of all of them.**
 
 🧠 **Analogy: photographing a chair.** A chair is a 3-D object. **A photograph is 2-D — you have lost a dimension — but from the right angle you can still tell it is a chair.** **Projection is choosing that angle.**
 
-**The three methods differ in what "right angle" means.**
+**The three methods differ in what "the right angle" means.**
 
-| Method | Optimises for | Uses labels? | Use it for |
+| Method | Optimises for | Uses the labels? | Use it for |
 |---|---|---|---|
 | **PCA** | **Maximum spread** | **No** | Compression, de-correlation, preprocessing |
 | **LDA** | **Maximum class separation** | **Yes** | Classification preprocessing |
@@ -1485,44 +1581,113 @@ print(pd.Series(rf.feature_importances_,
 
 ---
 
+## The dataset
+
+**Iris: 150 flowers, 4 measurements each, 3 species.** **Four dimensions — one too many to plot.**
+
+```python
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+
+iris = load_iris()
+X = iris.data        # 150 samples, 4 features
+y = iris.target      # 3 species
+
+print(X.shape, y.shape)
+```
+
+**Output:** `(150, 4) (150,)`
+
+---
+
 ## 14.1 PCA — Principal Component Analysis
 
-**PCA finds the direction in which the data spreads out most, calls that PC1, then finds the direction of most remaining spread perpendicular to it, calls that PC2, and so on.**
+**PCA finds the direction in which the data spreads out most and calls it PC1, then the direction of most remaining spread at right angles to it and calls it PC2, and so on.**
 
 ```python
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-import numpy as np
 
-X_scaled = StandardScaler().fit_transform(X)
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
 
-pca_full = PCA().fit(X_scaled)
-print("each component :", (pca_full.explained_variance_ratio_ * 100).round(2))
-print("cumulative     :", (np.cumsum(pca_full.explained_variance_ratio_) * 100).round(2))
+print(X_pca.shape)
+print(X_pca[:3].round(4))
 ```
 
 **Output:**
 
 ```text
-each component : [72.96 22.85  3.67  0.52]
-cumulative     : [ 72.96  95.81  99.48 100.  ]
+(150, 2)
+[[-2.6841  0.3194]
+ [-2.7141 -0.177 ]
+ [-2.889  -0.1449]]
 ```
 
-> **Read the cumulative row: two components carry 95.81% of all the variation in four columns.** **The last two components together hold 4.2% — mostly noise.**
+> **Four columns became two.** **Each new number is a mixture of all four original measurements** — which is exactly why `-2.6841` cannot be read as centimetres of anything.
+
+### How much did you keep?
 
 ```python
-pca = PCA(n_components=2)
-X_pca = pca.fit_transform(X_scaled)
-print("before:", X_scaled.shape, " after:", X_pca.shape)
+print("each component:", (pca.explained_variance_ratio_ * 100).round(2))
+print("total kept    :", round(pca.explained_variance_ratio_.sum() * 100, 2), "%")
 ```
 
-**Output:** `before: (150, 4)  after: (150, 2)`
+**Output:**
 
-### ⚠️ Three rules for PCA
+```text
+each component: [92.46  5.31]
+total kept    : 97.77 %
+```
 
-1. **Always scale first.** **PCA maximises variance, so an unscaled column measured in large units will dominate PC1 purely because of its units.**
-2. **Fit on train only.** `pca.fit(X_train)` then `pca.transform(X_test)`. **Fitting on everything leaks test information into training.**
-3. **You lose interpretability.** **`PC1 = 0.52×sepal_length − 0.27×sepal_width + 0.58×petal_length + 0.56×petal_width` is not a sentence you can say to a customer.**
+> **Two components carry 97.77% of all the variation in four columns.** **Report this number every time you show a PCA plot** — a picture holding 97% of the variance is a fair summary; one holding 40% is misleading, and you must say so.
+
+### Plotting it
+
+```python
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y, cmap="viridis")
+plt.xlabel("Principal Component 1")
+plt.ylabel("Principal Component 2")
+plt.title("PCA: Iris Dataset")
+plt.show()
+```
+
+> **`c=y` colours each point by species.** **PCA never saw `y`** — it was only used for the colours, after the fact. **The separation you can see is structure PCA found on its own.**
+
+### ⚠️ PCA depends on your units
+
+**The code above ran on the raw measurements. Watch what changes when you scale first.**
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+X_scaled = StandardScaler().fit_transform(X)
+pca_scaled = PCA(n_components=2).fit(X_scaled)
+
+print("raw   :", (PCA(n_components=2).fit(X).explained_variance_ratio_ * 100).round(2))
+print("scaled:", (pca_scaled.explained_variance_ratio_ * 100).round(2))
+print("column variances:", X.var(axis=0).round(3))
+```
+
+**Output:**
+
+```text
+raw   : [92.46  5.31]
+scaled: [72.96 22.85]
+column variances: [0.681 0.189 3.096 0.577]
+```
+
+![PCA on raw and on scaled iris](images/s6-pca-scaled-or-not.png)
+
+> **The raw version looks better — 97.8% in two components against 95.8%. It is not better.**
+>
+> **PCA maximises variance, and `petal length` has 4.5× the variance of `sepal length` purely because of the range it happens to occupy.** **So PC1 on raw data is largely "petal length in disguise", and the 92.46% is really a statement about one column rather than about the dataset.**
+>
+> **On iris all four columns are centimetres, so the damage is mild.** **Put income in rupees next to age in years and the first component will be income, every time.**
+
+### Two more rules
+
+1. **Fit on train only.** `pca.fit(X_train)` then `pca.transform(X_test)`. **Fitting on everything leaks test information into training.**
+2. **You lose interpretability.** **`PC1 = 0.36×sepal_length − 0.08×sepal_width + 0.86×petal_length + 0.36×petal_width` is not a sentence you can say to a customer.**
 
 ### How many components to keep
 
@@ -1540,33 +1705,37 @@ PCA(n_components=0.95)   # enough components to keep 95% of the variance
 
 **PCA does not know the labels. LDA does — and that changes everything.**
 
-**LDA looks for the direction that pushes the class means as far apart as possible while keeping each class tightly packed.**
+**LDA looks for the direction that pushes the class averages as far apart as possible while keeping each class tightly packed.**
 
 ```python
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
 lda = LinearDiscriminantAnalysis(n_components=2)
-X_lda = lda.fit_transform(X, y)
+X_lda = lda.fit_transform(X, y)          # note: y is REQUIRED here
 
+print(X_lda.shape)
 print("separation kept:", (lda.explained_variance_ratio_ * 100).round(2))
 ```
 
 **Output:**
 
 ```text
+(150, 2)
 separation kept: [99.12  0.88]
 ```
 
-> **The first LDA component alone captures 99.12% of the separation between the three species.** **One number per flower is nearly enough to classify it.**
+> **The first LDA component alone captures 99.12% of the separation between the three species.** **One number per flower is very nearly enough to classify it.**
+>
+> **Notice `fit_transform(X, y)` — the labels are not optional.** That is the whole difference from PCA.
 
-⚠️ **LDA has a hard limit:** **at most `n_classes − 1` components.** With 3 species you can have at most 2. **With a binary target you get exactly one** — no matter how many columns you started with.
+⚠️ **LDA has a hard limit: at most `n_classes − 1` components.** With 3 species you can have at most 2. **With a binary target you get exactly one, no matter how many columns you started with.**
 
 | | PCA | LDA |
 |---|---|---|
 | Uses `y` | No | **Yes** |
-| Max components | Number of features | **`n_classes − 1`** |
+| Maximum components | Number of features | **`n_classes − 1`** |
 | Best for | General compression | **Classification** |
-| Works when there is no target | **Yes** | No |
+| Works with no target at all | **Yes** | No |
 
 ---
 
@@ -1575,24 +1744,32 @@ separation kept: [99.12  0.88]
 **t-SNE tries to keep points that were close together in the original space close together in 2-D. It does not care about the global layout at all.**
 
 ```python
-# needs-download: t-SNE on a large dataset is slow; iris runs in seconds.
 from sklearn.manifold import TSNE
 
-tsne = TSNE(n_components=2, random_state=42, perplexity=30)
+tsne = TSNE(n_components=2, random_state=42)
 X_tsne = tsne.fit_transform(X)
+
 print(X_tsne.shape)
+
+plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=y, cmap="viridis")
+plt.xlabel("t-SNE Dimension 1")
+plt.ylabel("t-SNE Dimension 2")
+plt.title("t-SNE: Iris Dataset")
+plt.show()
 ```
 
 **Output:** `(150, 2)`
 
+> **Set `random_state`.** **Without it t-SNE gives a visibly different picture on every run**, which is unsettling when you are presenting.
+
 ### ⚠️ Four things about t-SNE you must know
 
-1. **There is no `transform()`.** **t-SNE cannot map new data into the same space.** You cannot fit it on train and apply it to test — which means **it can never be a preprocessing step in a model pipeline.**
-2. **The distances between clusters are meaningless.** Two clusters drawn far apart are not more different than two drawn close.
+1. **There is no `transform()`.** **t-SNE cannot map new data into the same space.** You cannot fit it on train and apply it to test — **so it can never be a preprocessing step in a model pipeline.**
+2. **The distances between clusters are meaningless.** Two clusters drawn far apart are not more different than two drawn close together.
 3. **Cluster sizes are meaningless.** A big blob is not a more spread-out group.
 4. **Change `perplexity` and the picture changes.** **Always look at two or three settings before believing a shape.**
 
-> **Use t-SNE to answer "are there groups in here at all?" — and then use something else to model them.** **UMAP is a modern alternative that is faster and does support `transform()`.**
+> **Use t-SNE to answer "are there groups in here at all?" — then model them with something else.** **UMAP is a modern alternative that is faster and does support `transform()`.**
 
 ---
 
@@ -1600,47 +1777,110 @@ print(X_tsne.shape)
 
 ![PCA, LDA and t-SNE compared](images/s6-projection-methods.png)
 
-> **Look at what each optimised for.** **PCA spreads the data out but lets two species overlap — it was never told there were species.** **LDA, which was told, pushes the three groups into clean separated bands.** **t-SNE produces three tight islands that look wonderfully convincing — and the distance between those islands means nothing.**
+> **Look at what each one optimised for.**
+>
+> **PCA** spreads the data out but lets two species overlap — **it was never told there were species.**
+> **LDA**, which was told, pushes the three groups into clean separated bands.
+> **t-SNE** produces three tight islands that look wonderfully convincing — **and the distance between those islands means nothing.**
+
+## ✏️ Practice — projection methods
+
+1. Load iris, apply `PCA(n_components=2)` and print the shape and the first three rows. **What are those numbers, in units?**
+2. Print `explained_variance_ratio_`. **How much did two components keep? Would you trust the 2-D plot?**
+3. Plot the PCA result with `c=y`. **Did PCA use `y`? What was it used for?**
+4. Fit PCA on raw and on scaled iris and compare the explained variance. **Why does the raw version look better but tell you less?**
+5. Fit LDA with `n_components=2`, then try `n_components=3`. **What error do you get, and why?**
+6. Run t-SNE with `perplexity` 5, 30 and 50 and plot all three. **What stays the same and what does not?**
+
+<details><summary>Solutions</summary>
+
+```python
+import numpy as np
+import matplotlib; matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+from sklearn.manifold import TSNE
+from sklearn.preprocessing import StandardScaler
+
+iris = load_iris()
+X, y = iris.data, iris.target
+
+pca = PCA(n_components=2)                                              # 1
+X_pca = pca.fit_transform(X)
+print(X_pca.shape)
+print(X_pca[:3].round(4))
+# The numbers have NO units. Each one is a weighted mixture of all four
+# original measurements, so "-2.6841" is not centimetres of anything.
+# That loss of meaning is the price projection charges.
+
+print((pca.explained_variance_ratio_ * 100).round(2),                  # 2
+      "total", round(pca.explained_variance_ratio_.sum() * 100, 2))
+# 92.46 + 5.31 = 97.77%. Yes - a picture holding 98% of the variation is
+# a fair summary. At 40% you would have to say so out loud.
+
+fig, ax = plt.subplots()                                               # 3
+ax.scatter(X_pca[:, 0], X_pca[:, 1], c=y, cmap="viridis")
+plt.close(fig)
+# PCA did NOT use y - fit_transform(X) takes X only. y was used purely
+# to colour the points afterwards. The separation you can see is
+# structure PCA found unsupervised.
+
+Xs = StandardScaler().fit_transform(X)                                 # 4
+print("raw   :", (PCA(n_components=2).fit(X).explained_variance_ratio_ * 100).round(2))
+print("scaled:", (PCA(n_components=2).fit(Xs).explained_variance_ratio_ * 100).round(2))
+print("variances:", X.var(axis=0).round(3))
+# Raw keeps 97.8% vs scaled 95.8% - but petal length has 4.5x the
+# variance of sepal width purely because of its range, so raw PC1 is
+# mostly "petal length in disguise". The higher number describes ONE
+# column, not the dataset. Scale first.
+
+l2 = LDA(n_components=2).fit(X, y)                                     # 5
+print("LDA 2 ok:", (l2.explained_variance_ratio_ * 100).round(2))
+try:
+    LDA(n_components=3).fit(X, y)
+except ValueError as e:
+    print("LDA 3 fails:", e)
+# n_components cannot exceed n_classes - 1. With 3 species the maximum
+# is 2. This is a mathematical limit, not a tuning choice - and with a
+# binary target you would get exactly one component.
+
+fig, axes = plt.subplots(1, 3, figsize=(14, 4))                        # 6
+for ax, per in zip(axes, [5, 30, 50]):
+    Z = TSNE(n_components=2, random_state=42, perplexity=per).fit_transform(X)
+    for c in range(3):
+        ax.scatter(Z[y == c, 0], Z[y == c, 1], s=25)
+    ax.set_title(f"perplexity = {per}")
+plt.close(fig)
+# The three species stay separated at every setting. The POSITIONS,
+# ORIENTATION and spacing of the clusters change completely. Never read
+# meaning into where a t-SNE cluster sits or how far apart two are.
+```
+</details>
 
 ---
 
 # 15. What reduction actually costs
 
-**Reduction is a trade. Here is the trade, measured.**
+**Reduction is a trade. Here is the trade, measured on iris with a Random Forest and 5-fold cross-validation.**
 
-```python
-from sklearn.model_selection import cross_val_score
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_selection import SelectKBest, f_classif
-from sklearn.decomposition import PCA
-
-for k in [1, 2, 3, 4]:
-    kept = SelectKBest(f_classif, k=k).fit_transform(X, y)
-    comp = PCA(n_components=k).fit_transform(X_scaled)
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
-    s = cross_val_score(model, kept, y, cv=5).mean()
-    p = cross_val_score(model, comp, y, cv=5).mean()
-    print(f"k={k}   SelectKBest {s:.4f}    PCA {p:.4f}")
-```
-
-**Output:**
-
-```text
-k=1   SelectKBest 0.9200    PCA 0.9067
-k=2   SelectKBest 0.9667    PCA 0.9067
-k=3   SelectKBest 0.9600    PCA 0.9267
-k=4   SelectKBest 0.9667    PCA 0.9400
-```
+| Features kept | **Selection** (keep the best real columns) | **Projection** (PCA components) |
+|---|---|---|
+| 1 | 0.9200 | 0.9067 |
+| **2** | **0.9667** | 0.9067 |
+| 3 | 0.9600 | 0.9267 |
+| **4 (everything)** | **0.9667** | 0.9400 |
 
 ![What reduction costs](images/s6-reduction-curve.png)
 
-**Three findings, and none of them is the one people expect:**
+**Three findings, and none of them is the one people expect.**
 
 > **1. Halving the features cost nothing.** **Two selected columns score 0.9667 — identical to all four.** **Half the data, same accuracy.**
 >
-> **2. PCA was worse at every single k — including k=4, where nothing was dropped at all.** **At k=4 PCA is a pure rotation, no information lost, and accuracy still fell from 0.9667 to 0.9400.** **Rotating the axes destroyed the axis-aligned splits a tree relies on.**
+> **2. PCA was worse at every single k — including k=4, where nothing was dropped at all.** **At k=4 PCA is a pure rotation with no information lost, and accuracy still fell from 0.9667 to 0.9400.** **Rotating the axes destroyed the axis-aligned splits a tree relies on.**
 >
-> **3. Three features scored *lower* than two.** **0.9600 against 0.9667.** **Adding `sepal length` back in actively hurt.**
+> **3. Three features scored *lower* than two.** 0.9600 against 0.9667. **Adding `sepal length` back in actively hurt.**
 
 ## The lesson
 
@@ -1649,90 +1889,14 @@ k=4   SelectKBest 0.9667    PCA 0.9400
 | **Explainability** | **Selection** — you keep real, nameable columns |
 | A tree-based model | **Selection** — PCA fights against how trees split |
 | To compress hundreds of correlated columns | **PCA** |
-| To feed a distance-based model (KNN, SVM) | **PCA** is often genuinely better |
+| To feed a distance-based model (kNN, SVM) | **PCA** is often genuinely better |
 | To *look* at your data | **t-SNE** or **UMAP**, and nothing else |
 
-> **Do not reach for PCA by reflex.** **On this dataset, the simplest possible method — score each column, keep the top two — beat it every time.**
-
-## ✏️ Practice — projection
-
-1. Scale iris and fit `PCA()`. **How many components do you need for 95% of the variance?**
-2. Fit `PCA(n_components=2)` on **unscaled** data and compare the explained variance with the scaled version. **Why do they differ?**
-3. Fit LDA with `n_components=2`. **Then try `n_components=3` — what error do you get, and why?**
-4. Run t-SNE with `perplexity=5`, `30` and `50`. Plot all three. **Do the clusters stay in the same places?**
-5. **Compare 5-fold CV accuracy for: all 4 columns, the 2 best-selected columns, 2 PCA components, and 2 LDA components. Which wins, and does that surprise you?**
-
-<details><summary>Solutions</summary>
-
-```python
-import numpy as np, pandas as pd
-from sklearn.datasets import load_iris
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
-from sklearn.feature_selection import SelectKBest, f_classif
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import cross_val_score
-
-iris = load_iris()
-X = pd.DataFrame(iris.data, columns=iris.feature_names)
-y = iris.target
-Xs = StandardScaler().fit_transform(X)
-
-p = PCA().fit(Xs)                                                       # 1
-cum = np.cumsum(p.explained_variance_ratio_)
-print((cum * 100).round(2))
-print("components for 95%:", int(np.argmax(cum >= 0.95)) + 1)     # 2
-
-scaled = PCA(n_components=2).fit(Xs).explained_variance_ratio_          # 2
-raw = PCA(n_components=2).fit(X).explained_variance_ratio_
-print("scaled  :", (scaled * 100).round(2), " total", round(scaled.sum()*100, 2))
-print("unscaled:", (raw * 100).round(2), " total", round(raw.sum()*100, 2))
-# Unscaled PCA looks BETTER (higher % in 2 components) but it is
-# misleading: petal length has the largest raw variance (3.12 vs 0.19),
-# so PC1 is mostly just "petal length in disguise". PCA maximises
-# variance, and variance depends on units - so scale first.
-
-l2 = LDA(n_components=2).fit(X, y)                                      # 3
-print("LDA 2 ok:", (l2.explained_variance_ratio_ * 100).round(2))
-try:
-    LDA(n_components=3).fit(X, y)
-except ValueError as e:
-    print("LDA 3 fails:", e)
-# n_components cannot exceed n_classes - 1. With 3 species the maximum
-# is 2. This is a mathematical limit, not a tuning choice.
-
-from sklearn.manifold import TSNE                                       # 4
-import matplotlib; matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-fig, axes = plt.subplots(1, 3, figsize=(14, 4))
-for ax, per in zip(axes, [5, 30, 50]):
-    Z = TSNE(n_components=2, random_state=42, perplexity=per).fit_transform(X)
-    for c in range(3):
-        ax.scatter(Z[y == c, 0], Z[y == c, 1], s=25)
-    ax.set_title(f"perplexity = {per}")
-plt.close(fig)
-# The three species stay separated, but the POSITIONS, ORIENTATION and
-# spacing of the clusters change completely with perplexity. Never
-# read meaning into where a t-SNE cluster sits.
-
-def cv(Z):                                                              # 5
-    return cross_val_score(LogisticRegression(max_iter=1000), Z, y, cv=5).mean()
-sel = SelectKBest(f_classif, k=2).fit_transform(X, y)
-print("all 4      ", round(cv(Xs), 4))
-print("best 2     ", round(cv(StandardScaler().fit_transform(sel)), 4))
-print("PCA 2      ", round(cv(PCA(n_components=2).fit_transform(Xs)), 4))
-print("LDA 2      ", round(cv(LDA(n_components=2).fit_transform(Xs, y)), 4))
-# LDA 2 wins (0.98) - HIGHER than using all four raw columns. That is
-# the surprise: LDA saw the labels, so its two components are built
-# specifically to separate the classes. PCA 2 is the worst (0.9133),
-# because it optimised for spread, which is not the same thing.
-```
-</details>
+> **Do not reach for PCA by reflex.** **On this dataset the simplest possible method — score each column, keep the top two — beat it every time.**
 
 ---
 
-# ❓ Session 6 — 20 MCQs
+# ❓ Session 6 — 21 MCQs
 
 **Answer from memory first, then check.**
 
@@ -1780,26 +1944,29 @@ print("LDA 2      ", round(cv(LDA(n_components=2).fit_transform(Xs, y)), 4))
 - (a) It saves memory  (b) **It gives the model a single "how ill overall" signal instead of making it discover that those four should be added**  (c) It removes missing values  (d) It is required by scikit-learn
 
 **Q14.** The heart-failure feature code fails on the raw file because…
-- (a) The file is corrupt  (b) **The `*_bin` columns do not exist — the binary columns are `"Yes"`/`"No"` text and must be converted first**  (c) There are too many rows  (d) The target is missing
+- (a) The file is corrupt  (b) **The `*_bin` columns do not exist — the binary columns are `"Yes"`/`"No"` text and must be Label Encoded first**  (c) There are too many rows  (d) The target is missing
+
+**Q15.** `describe()` showed a maximum age of 160, and the IQR rule flagged 77 rows (25.8%). The right response is…
+- (a) Remove all 77 flagged rows  (b) **Fix the age of 160 as a data-entry error, and keep the other flagged rows — their death rate is 46.8% against an overall 32.1%**  (c) Keep everything, including the 160  (d) Scale the columns
 
 ### Feature reduction
 
-**Q15.** `VarianceThreshold` should be used with care because…
+**Q16.** `VarianceThreshold` should be used with care because…
 - (a) It is slow  (b) **Variance depends on units, so a column measured in metres looks less variable than the same column in centimetres**  (c) It needs the target  (d) It only works on text
 
-**Q16.** `chi2` raises an error on standard-scaled data because…
+**Q17.** `chi2` raises an error on standard-scaled data because…
 - (a) The data is too large  (b) **`chi2` requires non-negative values, and standard scaling produces negatives**  (c) It needs integers  (d) Scaling removes the target
 
-**Q17.** The key difference between filter and wrapper methods is…
+**Q18.** The key difference between filter and wrapper methods is…
 - (a) Filters are more accurate  (b) **Filters score columns statistically without training a model; wrappers train the model repeatedly on different subsets**  (c) Wrappers only work on text  (d) There is none
 
-**Q18.** Lasso performs feature selection because…
+**Q19.** Lasso performs feature selection because…
 - (a) It ranks columns  (b) **Its penalty drives small coefficients to exactly zero, and a zero coefficient means the column is unused**  (c) It deletes rows  (d) It uses the labels
 
-**Q19.** LDA on a **binary** target can produce at most…
+**Q20.** LDA on a **binary** target can produce at most…
 - (a) 2 components  (b) **1 component**  (c) As many as there are features  (d) 3 components
 
-**Q20.** t-SNE can never be used as a preprocessing step in a model pipeline because…
+**Q21.** t-SNE can never be used as a preprocessing step in a model pipeline because…
 - (a) It is too slow  (b) **It has no `transform()` — it cannot map new data into the same space**  (c) It needs the labels  (d) It only handles 2 columns
 
 <details><summary>Answers</summary>
@@ -1830,19 +1997,21 @@ print("LDA 2      ", round(cv(LDA(n_components=2).fit_transform(Xs, y)), 4))
 
 **A13 — (b) A single "how ill overall" signal.** Clinicians reason about *how many* conditions a patient has. One column now carries that.
 
-**A14 — (b) The `*_bin` columns do not exist.** This is what the notebook's "do preprocessing first" comment means — convert the Yes/No text to 1/0 and fill the 45 missing values before any feature code runs.
+**A14 — (b) The `*_bin` columns do not exist.** This is what the notebook's "do preprocessing first" comment means — **run Session 3's whole sequence** (duplicates, impossible values, missing values, outliers, encoding) before any feature code.
 
-**A15 — (b) Variance depends on units.** **A zero threshold, which drops only constant columns, is always safe. Anything above zero needs scaled data or a deliberate per-column decision.**
+**A15 — (b) Set it to `NaN` and impute.** **An impossible value is an error, not an outlier.** Convert it rather than deleting the row: the patient's other thirteen measurements are perfectly good. **And do it *before* the missing-value step, or the error survives.**
 
-**A16 — (b) `chi2` requires non-negative values.** Use `MinMaxScaler`, or switch to `f_classif`.
+**A16 — (b) Variance depends on units.** **A zero threshold, which drops only constant columns, is always safe. Anything above zero needs scaled data or a deliberate per-column decision.**
 
-**A17 — (b).** Filters are cheap and model-agnostic but judge each column alone. **Wrappers measure what actually helps *your* model — at the cost of training it many times.**
+**A17 — (b) `chi2` requires non-negative values.** Use `MinMaxScaler`, or switch to `f_classif`.
 
-**A18 — (b) Its penalty drives coefficients to exactly zero.** On iris it dropped two of four columns without being told how many to keep. **Always scale first**, or the penalty punishes large-valued columns unfairly.
+**A18 — (b).** Filters are cheap and model-agnostic but judge each column alone. **Wrappers measure what actually helps *your* model — at the cost of training it many times.**
 
-**A19 — (b) 1 component.** The limit is `n_classes − 1`, regardless of how many features you started with.
+**A19 — (b) Its penalty drives coefficients to exactly zero.** On iris it dropped two of four columns without being told how many to keep. **Always scale first**, or the penalty punishes large-valued columns unfairly.
 
-**A20 — (b) It has no `transform()`.** **You cannot fit it on train and apply it to test.** t-SNE is an exploration tool: use it to see whether groups exist, then model them with something else.
+**A20 — (b) 1 component.** The limit is `n_classes − 1`, regardless of how many features you started with.
+
+**A21 — (b) It has no `transform()`.** **You cannot fit it on train and apply it to test.** t-SNE is an exploration tool: use it to see whether groups exist, then model them with something else.
 </details>
 
 ---
@@ -1869,7 +2038,7 @@ print("LDA 2      ", round(cv(LDA(n_components=2).fit_transform(Xs, y)), 4))
 
 **Task 8 — One good feature.** Invent **one** new cardekho feature that is not in the list, justify it in a sentence a car dealer would accept, and measure whether it helps.
 
-**Task 9 — Preprocess first.** Load `heart_failure_raw.csv` and write the preprocessing that must happen before any feature code: convert the four Yes/No columns, fill the 45 missing values. **Print proof that both problems are gone.**
+**Task 9 — Preprocess first.** Load `heart_failure_raw.csv` and run Session 3's full sequence, minus scaling: explore, check duplicates, fix the impossible ages, impute the gaps with the median, apply the IQR rule, and encode the binary columns with `LabelEncoder`. **Print proof at each step, and justify your outlier decision with the death rate.**
 
 **Task 10 — Clinical thresholds.** Build five threshold flags for the heart data. **For each, find and cite the clinical reference range you used.** *(A model cannot look these up. You can.)*
 

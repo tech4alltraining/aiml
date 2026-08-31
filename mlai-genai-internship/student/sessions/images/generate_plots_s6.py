@@ -105,7 +105,8 @@ fig.tight_layout(); save(fig, "s6-image-augmentation.png")
 
 # 4. projection methods side by side
 Xsc = StandardScaler().fit_transform(X)
-pca = PCA(n_components=2).fit(Xsc); Xp = pca.transform(Xsc)
+# PCA on the RAW data, matching the trainer notebook (no scaler)
+pca = PCA(n_components=2).fit(X); Xp = pca.transform(X)
 lda = LDA(n_components=2).fit(X, y); Xl = lda.transform(X)
 Xt = TSNE(n_components=2, random_state=42, perplexity=30).fit_transform(X)
 fig, axes = plt.subplots(1, 3, figsize=(14, 4.2))
@@ -118,6 +119,21 @@ for ax, (Z, title) in zip(axes, [
     ax.set_title(title, fontsize=10.5); ax.grid(alpha=.3)
 axes[0].legend()
 fig.tight_layout(); save(fig, "s6-projection-methods.png")
+
+# 4b. PCA depends on units
+fig, (b1, b2) = plt.subplots(1, 2, figsize=(12.5, 4.6))
+for ax, data, title in [(b1, X, "PCA on RAW iris"), (b2, Xsc, "PCA on SCALED iris")]:
+    pp = PCA(n_components=2).fit(data)
+    Z = pp.transform(data)
+    for cls, name in enumerate(iris.target_names):
+        ax.scatter(Z[y == cls, 0], Z[y == cls, 1], s=32, alpha=.85, label=name)
+    ax.set_title(f"{title}\n2 components keep {pp.explained_variance_ratio_.sum():.1%} "
+                 f"of the variance", fontsize=10.5)
+    ax.set_xlabel("PC1"); ax.set_ylabel("PC2"); ax.grid(alpha=.3)
+b1.legend()
+fig.suptitle("The raw version looks better - because PC1 is mostly just petal length in disguise",
+             fontsize=12, y=1.03)
+fig.tight_layout(); save(fig, "s6-pca-scaled-or-not.png")
 
 # 5. filter methods agree
 scores = {}
