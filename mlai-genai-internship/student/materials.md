@@ -8,3 +8,6 @@
   - **Practice:** [Notebook](https://colab.research.google.com/drive/1BiVxGUG69fqPhniX-rGpZbqWo-pHWnat?usp=sharing)
 - K-Fold Cross Validation
   - **Practice:** [Notebook](https://colab.research.google.com/drive/1_MHdhg7Y1x5BnelDgPn9KB3d4NpwYwpf?usp=sharing)
+
+- Hyperparameter Tuning
+  - **Practice:** [Notebook](https://colab.research.google.com/drive/1oX3TjjwUidpxNctmaRtzykl_MjjXXXv_?usp=sharing)
