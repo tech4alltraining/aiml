@@ -6,5 +6,5 @@
   - **Practice:**  [Notebook](https://colab.research.google.com/drive/1NJSLQ3slItQTyvYYQkkzP36h9vKwKT2z?usp=sharing)
 - Model Validation Techniques
   - **Practice:** [Notebook](https://colab.research.google.com/drive/1BiVxGUG69fqPhniX-rGpZbqWo-pHWnat?usp=sharing)
--  K-Fold Cross Validation
+- K-Fold Cross Validation
   - **Practice:** [Notebook](https://colab.research.google.com/drive/1_MHdhg7Y1x5BnelDgPn9KB3d4NpwYwpf?usp=sharing)
