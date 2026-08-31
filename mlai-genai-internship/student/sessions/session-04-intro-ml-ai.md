@@ -80,7 +80,6 @@ By the end of this session you can:
 | 9 | [⭐ Rules versus learning](#-checkpoint-problem-2--rules-versus-learning) |
 | 12 | [⭐ Name that learning type](#-checkpoint-problem-3--name-that-learning-type) |
 | 13 | [⭐ Data type sorter](#-checkpoint-problem-4--data-type-sorter) |
-| 18 | [⭐ Walk the workflow](#-checkpoint-problem-5--walk-the-workflow) |
 
 ---
 

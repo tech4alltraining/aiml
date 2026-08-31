@@ -12,6 +12,7 @@
 # --- Days 1-3: data handling, visualisation, machine learning ---
 numpy
 pandas
+scipy
 matplotlib
 seaborn
 scikit-learn

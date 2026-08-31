@@ -369,7 +369,7 @@ prompt -> [tokenize] -> [model] -> probability over every possible next token
 
 # 8. Parameters in LLMs
 
-> **A parameter is one number the model learned during training — exactly the weights and biases of [Session 9](session-09-deep-learning.md#18-parameters-vs-hyperparameters).**
+> **A parameter is one number the model learned during training — exactly the weights and biases of [Session 9](session-09-deep-learning.md#2-from-biological-to-artificial--the-mapping).**
 
 **The iris network in Session 9 had 67 parameters. An LLM has billions of the same thing.**
 

@@ -6,7 +6,7 @@
 |---|---|
 | **Notebook** | [session-05b-classification.ipynb](../notebooks/session-05b-classification.ipynb) |
 | **Previous** | [Session 5 — Regression](session-05-regression.md) |
-| **Next** | [Session 6 — Augmentation & Feature Engineering](session-06-augmentation-feature-engg-red.md) |
+| **Next** | [Session 5C — Model Deployment & Streamlit](session-05c-deployment.md) |
 | **Stuck?** | [Troubleshooting](../troubleshooting.md) |
 
 > **Session 5 predicted numbers. This one predicts categories** — and that single change means every metric has to be rebuilt from scratch.
@@ -48,8 +48,7 @@ By the end of this session you can:
 | 6 | [Pipelines](#6-pipelines) |
 | 7 | [Use case 2 — Imbalanced data](#7-use-case-2--imbalanced-data) |
 | 8 | [Use case 3 — More than two classes](#8-use-case-3--more-than-two-classes) |
-| 9 | [Saving, loading and inference](#9-saving-loading-and-inference) |
-| 10 | [Streamlit app development](#10-streamlit-app-development) |
+| | *Deploying these models is [Session 5C](session-05c-deployment.md)* |
 | | [❓ 20 MCQs](#-classification--20-mcqs) · [🎯 Tasks](#-classification--tasks) |
 
 ---
