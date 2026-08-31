@@ -10,16 +10,16 @@ import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from sklearn.model_selection import (train_test_split, cross_val_score, KFold,
+from sklearn.model_selection import (train_test_split, cross_val_score, cross_validate, KFold,
     StratifiedKFold, LeaveOneOut, validation_curve, learning_curve,
     GridSearchCV, RandomizedSearchCV)
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.pipeline import make_pipeline
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, accuracy_score
 
 OUT = pathlib.Path(__file__).parent
 ROOT = pathlib.Path(__file__).parents[4] / "datasets"
@@ -31,18 +31,23 @@ def save(fig, name):
     print("  wrote", name)
 
 # ---------------------------------------------------------------- data
+# Session 3 preprocessing: impossible values -> missing -> LabelEncoder
 heart = pd.read_csv(ROOT / "classification" / "heart_failure_raw.csv")
-for c in ["anaemia", "diabetes", "high_blood_pressure", "sex", "smoking", "DEATH_EVENT"]:
-    heart[c] = heart[c].map({"Yes": 1, "No": 0})
-heart = pd.get_dummies(heart, columns=["treatment_type"], drop_first=True)
+heart.loc[heart["age"] > 120, "age"] = np.nan
 for c in ["age", "ejection_fraction", "serum_creatinine"]:
     heart[c] = heart[c].fillna(heart[c].median())
+le = LabelEncoder()
+for c in ["anaemia", "diabetes", "high_blood_pressure", "sex", "smoking",
+          "treatment_type", "DEATH_EVENT"]:
+    heart[c] = le.fit_transform(heart[c])
 Xh = heart.drop(columns=["DEATH_EVENT"])
 yh = heart["DEATH_EVENT"]
 
 cars = pd.read_csv(ROOT / "regression" / "cardekho_preprocessed.csv")
+cars_clean = cars[(cars["seats"] > 0) & (cars["km_driven"] <= 1_000_000)].reset_index(drop=True)
 FEATS = ["vehicle_age", "km_driven", "mileage", "engine", "max_power", "seats"]
-Xc, yc = cars[FEATS], cars["selling_price"]
+Xc, yc = cars_clean[FEATS], cars_clean["selling_price"]
+yc_log = np.log(yc)
 
 # ------------------------------------------------- 1. holdout instability
 seeds, accs = list(range(10)), []
@@ -94,10 +99,13 @@ ax.legend(); ax.grid(alpha=.3, axis="y")
 save(fig, "s8-cv-variants.png")
 
 # ------------------------------------------------------ 3. the fit spectrum
+kf_c = KFold(5, shuffle=True, random_state=42)
+
 def fit_scores(feats, **kw):
-    a, b, c, d = train_test_split(cars[feats], yc, test_size=.2, random_state=42)
-    m = DecisionTreeRegressor(random_state=42, **kw).fit(a, c)
-    return r2_score(c, m.predict(a)), r2_score(d, m.predict(b))
+    r = cross_validate(DecisionTreeRegressor(random_state=42, **kw),
+                       cars_clean[feats], cars_clean["selling_price"],
+                       cv=kf_c, scoring="r2", return_train_score=True, n_jobs=-1)
+    return r["train_score"].mean(), r["test_score"].mean()
 
 specs = [("UNDERFIT\n1 feature, depth 1", fit_scores(["vehicle_age"], max_depth=1)),
          ("GOOD FIT\n4 features, depth 5", fit_scores(
@@ -108,7 +116,7 @@ specs = [("UNDERFIT\n1 feature, depth 1", fit_scores(["vehicle_age"], max_depth=
 fig, ax = plt.subplots(figsize=(9.5, 5))
 x = np.arange(3); w = .36
 ax.bar(x - w/2, [s[1][0] for s in specs], w, label="Train R²", color=BLUE, alpha=.9)
-ax.bar(x + w/2, [s[1][1] for s in specs], w, label="Test R²", color=ORANGE, alpha=.9)
+ax.bar(x + w/2, [s[1][1] for s in specs], w, label="5-fold CV R²", color=ORANGE, alpha=.9)
 for i, (_, (tr, te)) in enumerate(specs):
     ax.text(i - w/2, tr + .015, f"{tr:.3f}", ha="center", fontsize=9.5)
     ax.text(i + w/2, te + .015, f"{te:.3f}", ha="center", fontsize=9.5)
@@ -118,34 +126,33 @@ for i, (_, (tr, te)) in enumerate(specs):
 ax.set_xticks(x); ax.set_xticklabels([s[0] for s in specs])
 ax.set_ylim(0, 1.18); ax.set_ylabel("R²")
 ax.set_title("Underfitting, good fit, overfitting — read the GAP, not the train score")
+ax.set_xlabel("car prices, 15,240 rows, 5-fold cross-validated")
 ax.legend(loc="upper left"); ax.grid(alpha=.3, axis="y")
 save(fig, "s8-fit-spectrum.png")
 
 # --------------------------------------------------- 4. validation curve
 depths = [1, 2, 3, 5, 8, 10, 12, 15, 20, 30]
-tr_s, te_s = validation_curve(DecisionTreeRegressor(random_state=42), Xc, yc,
+tr_s, te_s = validation_curve(DecisionTreeRegressor(random_state=42), Xc, yc_log,
     param_name="max_depth", param_range=depths, cv=kf, scoring="r2", n_jobs=-1)
-single = []
-a, b, c, d = train_test_split(Xc, yc, test_size=.2, random_state=42)
-for dep in depths:
-    m = DecisionTreeRegressor(max_depth=dep, random_state=42).fit(a, c)
-    single.append(r2_score(d, m.predict(b)))
+raw_tr, raw_te = validation_curve(DecisionTreeRegressor(random_state=42), Xc, yc,
+    param_name="max_depth", param_range=depths, cv=kf, scoring="r2", n_jobs=-1)
+single = raw_te.mean(axis=1)
 
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.5, 4.8), sharey=True)
 a1.plot(depths, single, "s-", color=RED)
-a1.set_title("ONE train/test split — unreadable", fontsize=11)
-a1.set_xlabel("max_depth"); a1.set_ylabel("test R²"); a1.grid(alpha=.3)
+a1.set_title("Raw price — R² is dominated by a few luxury cars", fontsize=11)
+a1.set_xlabel("max_depth"); a1.set_ylabel("5-fold CV R²"); a1.grid(alpha=.3)
 a2.plot(depths, tr_s.mean(1), "o-", color=BLUE, label="train R²")
 a2.plot(depths, te_s.mean(1), "s-", color=GREEN, label="5-fold CV R²")
 a2.fill_between(depths, te_s.mean(1), tr_s.mean(1), color=RED, alpha=.12,
                 label="the gap = overfitting")
 best = depths[int(np.argmax(te_s.mean(1)))]
 a2.axvline(best, color="crimson", ls="--", lw=1.3)
-a2.annotate(f"best depth {best}\nCV R² {te_s.mean(1).max():.3f}", (best, .45),
+a2.annotate(f"best depth {best}\nCV R² {te_s.mean(1).max():.3f}", (best, .55),
             color="crimson", weight="bold", fontsize=10)
-a2.set_title("5-fold cross-validation — a curve you can act on", fontsize=11)
+a2.set_title("log(price) — the same sweep, now readable", fontsize=11)
 a2.set_xlabel("max_depth"); a2.legend(loc="lower right"); a2.grid(alpha=.3)
-fig.suptitle("Why a validation curve needs cross-validation", fontsize=13, y=1.02)
+fig.suptitle("A validation curve you cannot read is telling you about your TARGET", fontsize=13, y=1.02)
 fig.tight_layout(); save(fig, "s8-validation-curve.png")
 
 # ------------------------------------------------------ 5. learning curve
@@ -190,16 +197,18 @@ fig.suptitle("Same budget, very different coverage of the parameter that matters
 fig.tight_layout(); save(fig, "s8-grid-vs-random.png")
 
 # --------------------------------------------------------- 7. KNN tuning
+from imblearn.over_sampling import SMOTE
 Xtr, Xte, ytr, yte = train_test_split(Xh, yh, test_size=.2, random_state=42, stratify=yh)
-sc = MinMaxScaler().fit(Xtr)
-Xtr_s, Xte_s = sc.transform(Xtr), sc.transform(Xte)
+Xbal, ybal = SMOTE(random_state=42).fit_resample(Xtr, ytr)     # TRAIN only
+sc = MinMaxScaler().fit(Xbal)
+Xtr_s, Xte_s = sc.transform(Xbal), sc.transform(Xte)
 ks = list(range(1, 20))
 tr_a, te_a, cv_a = [], [], []
 for k in ks:
-    kn = KNeighborsClassifier(n_neighbors=k).fit(Xtr_s, ytr)
-    tr_a.append(kn.score(Xtr_s, ytr)); te_a.append(kn.score(Xte_s, yte))
+    kn = KNeighborsClassifier(n_neighbors=k).fit(Xtr_s, ybal)
+    tr_a.append(kn.score(Xtr_s, ybal)); te_a.append(kn.score(Xte_s, yte))
     cv_a.append(cross_val_score(make_pipeline(MinMaxScaler(),
-        KNeighborsClassifier(n_neighbors=k)), Xtr, ytr, cv=5).mean())
+        KNeighborsClassifier(n_neighbors=k)), Xbal, ybal, cv=5).mean())
 
 fig, ax = plt.subplots(figsize=(9.5, 5))
 ax.plot(ks, tr_a, "o-", color=BLUE, label="train accuracy")
@@ -216,5 +225,50 @@ ax.set_xticks(ks); ax.set_xlabel("k (n_neighbors)"); ax.set_ylabel("accuracy")
 ax.set_title("Choosing k: the test set is not allowed to vote")
 ax.legend(fontsize=9); ax.grid(alpha=.3)
 save(fig, "s8-knn-tuning.png")
+
+# ------------------------------------------- 8. heart failure: tree depth
+ha, hb, hc, hd = train_test_split(Xh, yh, test_size=.2, random_state=42, stratify=yh)
+depths = [1, 2, 3, 4, 5, 6, 8, 10, 15]
+h_tr, h_te = [], []
+for dep in depths:
+    m = DecisionTreeClassifier(max_depth=dep, random_state=42).fit(ha, hc)
+    h_tr.append(accuracy_score(hc, m.predict(ha)))
+    h_te.append(accuracy_score(hd, m.predict(hb)))
+fig, ax = plt.subplots(figsize=(8.5, 4.8))
+ax.plot(depths, h_tr, "o-", color=BLUE, label="Training Accuracy")
+ax.plot(depths, h_te, "s-", color=ORANGE, label="Testing Accuracy")
+ax.fill_between(depths, h_te, h_tr, color=RED, alpha=.12, label="the gap")
+ax.annotate("best test score is at depth 1 —\nthe 'underfitting' model wins",
+            (1, h_te[0]), textcoords="offset points", xytext=(60, -46),
+            weight="bold", fontsize=9.5, arrowprops=dict(arrowstyle="->"))
+ax.set_xlabel("max_depth"); ax.set_ylabel("Accuracy")
+ax.set_title("Underfitting vs Good Fit vs Overfitting — heart failure")
+ax.legend(); ax.grid(alpha=.3)
+save(fig, "s8-heart-tree-depth.png")
+
+# ----------------------------------- 9. what four impossible rows cost
+kf5 = KFold(5, shuffle=True, random_state=42)
+configs = [("underfit\ndepth 1", ["vehicle_age"], dict(max_depth=1)),
+           ("good fit\ndepth 5", ["vehicle_age", "km_driven", "engine", "max_power"],
+            dict(max_depth=5, min_samples_leaf=10)),
+           ("overfit\nno limit", FEATS, dict(max_depth=None, min_samples_leaf=1)),
+           ("regularised\ndepth 10", FEATS, dict(max_depth=10, min_samples_leaf=10))]
+raw_cv, clean_cv, raw_err, clean_err = [], [], [], []
+for _, feats, kw in configs:
+    for df, means, errs in [(cars, raw_cv, raw_err), (cars_clean, clean_cv, clean_err)]:
+        r = cross_validate(DecisionTreeRegressor(random_state=42, **kw), df[feats],
+                           df["selling_price"], cv=kf5, scoring="r2", n_jobs=-1)
+        means.append(r["test_score"].mean()); errs.append(r["test_score"].std())
+fig, ax = plt.subplots(figsize=(9.5, 4.8))
+xx = np.arange(len(configs)); w = .36
+ax.bar(xx - w/2, raw_cv, w, yerr=raw_err, capsize=5, color=RED, alpha=.85,
+       label="raw — 2 cars with seats=0, 2 driven over 1,000,000 km")
+ax.bar(xx + w/2, clean_cv, w, yerr=clean_err, capsize=5, color=GREEN, alpha=.85,
+       label="after removing those 4 rows")
+ax.set_xticks(xx); ax.set_xticklabels([c[0] for c in configs])
+ax.set_ylabel("5-fold CV R²"); ax.set_ylim(0, 1.05)
+ax.set_title("Four impossible rows out of 15,244 — and what they were costing")
+ax.legend(fontsize=9); ax.grid(alpha=.3, axis="y")
+save(fig, "s8-impossible-rows-cost.png")
 
 print("\nAll Session 8 plots generated.")
