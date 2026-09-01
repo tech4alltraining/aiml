@@ -1,6 +1,6 @@
 # Session 11 — AI-Powered Applications
 
-**Application concepts · Six working Streamlit apps · Three pure GenAI, three ML + GenAI**
+**Application concepts · Eight Streamlit apps, simplest first · Five GenAI, three ML + GenAI**
 
 | | |
 |---|---|
@@ -11,7 +11,7 @@
 
 > **[Session 5C](session-05c-deployment.md) taught you to serve a model. [Session 10](session-10-genai-llms.md) taught you to call an LLM.**
 >
-> **This session puts them in the same application** — six of them, each complete enough to run.
+> **This session builds eight applications, and each one adds exactly one new idea to the one before it.** **App 1 is fifteen lines. By App 8 you are combining a trained model with a language model — and every step in between is small enough to follow.**
 
 ---
 
@@ -20,15 +20,36 @@
 By the end of this session you can:
 
 1. Name the **five patterns** almost every AI application is built from
-2. Draw the **architecture that actually ships**, and say what each layer is for
+2. Draw the **architecture** and say what each layer is for
 3. Name the **four failure modes** and the design that handles each
-4. Build a **GenAI Streamlit app** end to end
-5. Get **structured, parseable output** from an LLM inside an app
-6. Build a **multi-turn chat** that survives Streamlit's reruns
-7. Explain **why you would combine an ML model with an LLM** — and which does which job
-8. Build a **hybrid app**: a model decides, an LLM explains
-9. **Measure and control hallucination** in your own application
-10. Say what each of your apps **must not be used for**
+4. Build a Streamlit GenAI app **from an empty file**
+5. Turn **widgets into a prompt**, and a response into a page
+6. Give an app **memory** that survives Streamlit's reruns
+7. **Validate input before you spend**, and show what a request cost
+8. Get **structured, parseable output** and guard it three ways
+9. Explain **why you would combine an ML model with an LLM** — and which does which job
+10. Build a **hybrid app**: a model decides, an LLM explains
+11. **Measure and control hallucination** in your own application
+12. Say what each of your apps **must not be used for**
+
+---
+
+## The eight apps
+
+**Read them in order. Each row adds one thing.**
+
+| # | App | Part | **What it adds** | Lines |
+|---|---|---|---|---|
+| **1** | [Hello Gemini](#7-app-1--hello-gemini) | B | **The four building blocks. Nothing else** | ~15 |
+| **2** | [AI Text Generator](#9-app-2--ai-text-generator) | B | **Widgets that shape the prompt** | ~35 |
+| **3** | [Chatbot](#10-app-3--chatbot) | B | **Memory across reruns** | ~45 |
+| **4** | [Text Summariser](#11-app-4--text-summariser) | B | **Validation, spinner, cost display** | ~50 |
+| **5** | [Ticket Triage](#12-app-5--support-ticket-triage) | B | **Structured output and guardrails** | ~60 |
+| **6** | [Loan + explanation](#15-app-6--loan-decision--explanation) | C | **A trained model decides; the LLM explains** | ~80 |
+| **7** | [Diabetes + report](#16-app-7--diabetes-screening--patient-report) | C | **Rules that forbid, for a risky domain** | ~85 |
+| **8** | [Car + listing](#17-app-8--car-valuation--listing-writer) | C | **Verifying the output in code** | ~90 |
+
+> **If you only build one, build App 1.** **If you build two, build App 1 and App 3.** **The rest are variations on those two ideas.**
 
 ---
 
@@ -37,21 +58,22 @@ By the end of this session you can:
 | Part | What it covers |
 |---|---|
 | **A — [Application concepts](#part-a--ai-powered-application-concepts)** | **Concepts only, no code.** Patterns, architecture, failure modes |
-| **B — [GenAI apps with Streamlit](#part-b--building-genai-applications-with-streamlit)** | **Apps 1–3.** The LLM does all the work |
-| **C — [Integrating ML with GenAI](#part-c--integrating-machine-learning-with-generative-ai)** | **Apps 4–6.** A trained model decides; the LLM explains |
+| **B — [GenAI apps with Streamlit](#part-b--building-genai-applications-with-streamlit)** | **Apps 1–5, simplest first.** The LLM does all the work |
+| **C — [Integrating ML with GenAI](#part-c--integrating-machine-learning-with-generative-ai)** | **Apps 6–8.** A trained model decides; the LLM explains |
 
 | # | Topic | | # | Topic |
 |---|---|---|---|---|
-| 1 | [What an AI application is](#1-what-an-ai-powered-application-is) | | 8 | [App 1 — Text summariser](#8-app-1--text-summariser) |
-| 2 | [The five patterns](#2-the-five-patterns) | | 9 | [App 2 — Ticket triage](#9-app-2--support-ticket-triage) |
-| 3 | [The architecture that ships](#3-the-architecture-that-ships) | | 10 | [App 3 — Chat assistant](#10-app-3--chat-assistant-with-memory) |
-| 4 | [The four failure modes](#4-the-four-failure-modes) | | 11 | [Why combine ML and GenAI](#11-why-combine-ml-and-genai) |
-| 5 | [Designing for non-determinism](#5-designing-for-non-determinism) | | 12 | [App 4 — Loan decision + explanation](#12-app-4--loan-decision--explanation) |
-| 6 | [Cost, latency and keys](#6-cost-latency-and-keys) | | 13 | [App 5 — Diabetes screening + report](#13-app-5--diabetes-screening--patient-report) |
-| 7 | [The shared app skeleton](#7-the-shared-app-skeleton) | | 14 | [App 6 — Car valuation + listing](#14-app-6--car-valuation--listing-writer) |
-| | | | 15 | [The invention problem, measured](#15-the-invention-problem-measured) |
+| 1 | [What an AI application is](#1-what-an-ai-powered-application-is) | | 10 | [App 3 — Chatbot](#10-app-3--chatbot) |
+| 2 | [The five patterns](#2-the-five-patterns) | | 11 | [App 4 — Text summariser](#11-app-4--text-summariser) |
+| 3 | [The architecture that ships](#3-the-architecture-that-ships) | | 12 | [App 5 — Ticket triage](#12-app-5--support-ticket-triage) |
+| 4 | [The four failure modes](#4-the-four-failure-modes) | | 13 | [The shared helper](#13-the-shared-helper) |
+| 5 | [Designing for non-determinism](#5-designing-for-non-determinism) | | 14 | [Why combine ML and GenAI](#14-why-combine-ml-and-genai) |
+| 6 | [Setup](#6-setup--install-and-the-api-key) | | 15 | [App 6 — Loan + explanation](#15-app-6--loan-decision--explanation) |
+| 7 | [App 1 — Hello Gemini](#7-app-1--hello-gemini) | | 16 | [App 7 — Diabetes + report](#16-app-7--diabetes-screening--patient-report) |
+| 8 | [The four building blocks](#8-the-four-building-blocks) | | 17 | [App 8 — Car + listing](#17-app-8--car-valuation--listing-writer) |
+| 9 | [App 2 — Text generator](#9-app-2--ai-text-generator) | | 18 | [The invention problem](#18-the-invention-problem-measured) |
 
-**The [20 MCQs](#-session-11--20-mcqs) and [tasks](#-session-11--tasks) are at the end.**
+**Short “try it yourself” exercises follow each app.** The [20 MCQs](#-session-11--20-mcqs) and [tasks](#-session-11--tasks) are at the end.
 
 ---
 
@@ -103,7 +125,7 @@ By the end of this session you can:
 | Pattern | **Predictive model** | **LLM** | Notes |
 |---|---|---|---|
 | Transform | ✗ | **✓** | Only an LLM does this |
-| Extract | ✗ | **✓** | Structured output — [§9](#9-app-2--support-ticket-triage) |
+| Extract | ✗ | **✓** | Structured output — [§12](#12-app-5--support-ticket-triage) |
 | **Classify** | **✓** | **✓** | **Both work. The choice is a real decision** |
 | Converse | ✗ | **✓** | |
 | **Augment** | **✓ and ✓** | | **This is [Part C](#part-c--integrating-machine-learning-with-generative-ai)** |
@@ -168,7 +190,7 @@ By the end of this session you can:
 | **Why it happens** | The model predicts plausible text; plausible is not true |
 | **Design for it** | **Supply the facts in the prompt. Ban invention explicitly. Verify in code. Show the source** |
 
-> **[§15](#15-the-invention-problem-measured) measures this in App 6 and shows the fix working.**
+> **[§18](#18-the-invention-problem-measured) measures this in App 8 and shows the fix working.**
 
 ## 2. Malformed output — right answer, wrong shape
 
@@ -224,121 +246,471 @@ By the end of this session you can:
 
 ---
 
-# 6. Cost, latency and keys
-
-## Keys
-
-> ⚠️ **The rule from [Session 10](session-10-genai-llms.md#12-setup--install-and-api-key) is absolute and it matters more here, because an app gets deployed.**
->
-> **The key goes in an environment variable or a Streamlit secret. Never in the code. Never in the repository.**
-
-| Where you deploy | Where the key goes |
-|---|---|
-| Local | **`.env`, listed in `.gitignore`** |
-| **Streamlit Community Cloud** | **App settings → Secrets** |
-| Anywhere else | The platform's environment variables |
-
-## Cost control, in order of effectiveness
-
-| # | Technique | Typical saving |
-|---|---|---|
-| **1** | **Validate before calling** — reject empty or over-long input | **100% of wasted calls** |
-| **2** | **Turn thinking off** where reasoning is not needed | **Session 10 measured 510 → 39 tokens** |
-| **3** | **Cache repeated inputs** | Depends on repeat rate |
-| **4** | **Cap `max_output_tokens`** | Bounds the worst case |
-| **5** | Use a smaller model | Often large |
-
-## Latency
-
-| Technique | Effect |
-|---|---|
-| **`st.spinner`** | **The user knows it is working.** The cheapest fix there is |
-| **Streaming** | First words appear in under a second |
-| **Cache** | A repeat is instant |
-| **Do the ML first** | A trained model answers in microseconds; show that while the LLM works |
-
----
-
 # Part B — Building GenAI applications with Streamlit
 
-**Three apps. The LLM does all the work in every one.**
+> **Streamlit provides the user interface. Gemini provides the intelligence.**
+>
+> **That is the whole of Part B in one sentence.** **Five apps, each adding one idea.**
 
-| App | Pattern | New thing it teaches |
-|---|---|---|
-| **[1 — Text summariser](#8-app-1--text-summariser)** | Transform | **The skeleton, and validation before you spend** |
-| **[2 — Ticket triage](#9-app-2--support-ticket-triage)** | Extract + Classify | **Structured output you can parse** |
-| **[3 — Chat assistant](#10-app-3--chat-assistant-with-memory)** | Converse | **Memory that survives Streamlit's reruns** |
+```text
+User
+ ↓
+Streamlit interface          you build this
+ ↓
+Prompt                       you build this
+ ↓
+Gemini API                   somebody else built this
+ ↓
+Generated response
+ ↓
+Streamlit output             you build this
+```
 
 ---
 
-# 7. The shared app skeleton
+# 6. Setup — install and the API key
 
-**Every app in this session starts from these fifteen lines. Write them once.**
+## Step 1 — install
+
+```bash
+conda activate genai
+pip install streamlit google-genai
+```
+
+> ⚠️ **Your terminal prompt must show `(genai)` before you install.** **If it does not, the packages go into a different environment and `streamlit run` will fail with `command not found`.**
+
+## Step 2 — get a key
+
+**[aistudio.google.com/apikey](https://aistudio.google.com/apikey)** → sign in → **Create API key**. **There is a free tier and it is enough for this session.**
+
+## Step 3 — store it where Streamlit looks
+
+**Create this file next to your app:**
+
+```text
+your-app/
+├── app.py
+└── .streamlit/
+    └── secrets.toml
+```
+
+**`.streamlit/secrets.toml`:**
+
+```toml
+GEMINI_API_KEY = "your_api_key_here"
+```
+
+**Then in your app:**
+
+```python
+# illustrative: a syntax reference, not runnable as written.
+api_key = st.secrets["GEMINI_API_KEY"]
+```
+
+> ⚠️ **Add `.streamlit/secrets.toml` to `.gitignore` before you write the key into it.**
+>
+> **A key committed to git is a key in your history forever — deleting the line does not remove it, and automated scanners find leaked keys within minutes.**
+
+**When you deploy to Streamlit Community Cloud, you paste the same contents into App settings → Secrets.** **No code changes.**
+
+## Step 4 — one place for the model name
+
+```python
+# illustrative: a syntax reference, not runnable as written.
+MODEL_NAME = "gemini-3.5-flash"
+```
+
+> **[Session 10](session-10-genai-llms.md#12-setup--install-and-api-key) showed how to list the models your key can actually reach.** **Put the name in one variable and a change is one edit.**
+
+---
+
+# 7. App 1 — Hello Gemini
+
+**The smallest Streamlit GenAI app that does something useful. Fifteen lines.**
 
 ```python
 # streamlit-only: run with `streamlit run app.py`, not `python app.py`
-# genai_helper.py  -  shared by every app in this session
-import os
+# app1_hello.py
+import streamlit as st
+from google import genai
+
+MODEL_NAME = "gemini-3.5-flash"
+
+st.title("🤖 Ask Gemini")
+
+client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+
+question = st.text_input("Ask anything")
+
+if st.button("Ask"):
+    response = client.models.generate_content(
+        model=MODEL_NAME,
+        contents=question,
+    )
+    st.write(response.text)
+```
+
+## Run it
+
+```bash
+streamlit run app1_hello.py
+```
+
+**Your browser opens at `http://localhost:8501`. Type a question, press Ask, and a language model answers.**
+
+> **That is a working AI application.** **Nothing has been left out — this is the complete file.**
+
+## Read it once more, slowly
+
+| Line | What it does |
+|---|---|
+| `import streamlit as st` | The interface library |
+| `from google import genai` | The Gemini client |
+| `st.title(...)` | **Draws a heading.** Streamlit renders top to bottom |
+| `genai.Client(api_key=st.secrets[...])` | **Opens the connection**, reading the key from `secrets.toml` |
+| `question = st.text_input(...)` | **Draws a box AND returns what the user typed** |
+| `if st.button("Ask"):` | **`True` on the click.** Everything indented under it runs only then |
+| `client.models.generate_content(...)` | **Sends the request over the internet** |
+| `st.write(response.text)` | **Puts the answer on the page** |
+
+> **The line that surprises people is `question = st.text_input(...)`.**
+>
+> **In Streamlit a widget *is* its value.** **There is no callback, no `.get()`, no event handler. The function draws the box and hands you what is in it.**
+
+## ⚠️ One number you cannot see
+
+**Ask this app *"Explain machine learning in simple words"* and it costs **1,382 tokens** — measured.**
+
+**The same question with reasoning switched off costs **484**.**
+
+> **[Session 10](session-10-genai-llms.md#15-what-the-machine-sees--the-raw-json) explained why: the model generates hidden thinking tokens you are billed for.**
+>
+> **App 2 adds the configuration that controls this.** **For now, know that your fifteen-line app has a bill attached to it.**
+
+---
+
+# 8. The four building blocks
+
+**Every app in this session — all eight — is these four steps. App 1 has one of each.**
+
+```text
+1. COLLECT      widgets return what the user chose
+2. BUILD        assemble those values into a prompt string
+3. CALL         send the prompt, get a response
+4. DISPLAY      put the answer on the page
+```
+
+## Block 1 — collect
+
+| Widget | Returns | Use it for |
+|---|---|---|
+| **`st.text_input(label)`** | a string | **A short answer** — a topic, a name |
+| **`st.text_area(label, height=200)`** | a string | **A long answer** — a document to summarise |
+| **`st.selectbox(label, options)`** | the chosen option | **One from a list** — a style, a tone |
+| **`st.slider(label, min, max, default)`** | a number | **A bounded number** — a word limit |
+| `st.radio(label, options)` | the chosen option | 2–4 choices, all visible |
+| `st.toggle(label)` | `True`/`False` | A single yes/no |
+| **`st.button(label)`** | `True` on the click | **Gate the API call behind it** |
+| `st.file_uploader(label)` | a file | Letting the user supply a document |
+
+## Block 2 — build
+
+**A prompt is just a string. Build it with an f-string.**
+
+```python
+# illustrative: a syntax reference, not runnable as written.
+prompt = f"Explain '{topic}' in a {style} style. Keep it to about {words} words."
+```
+
+> **This is the whole trick of Part B.** **Widgets give you variables; f-strings turn variables into instructions.**
+>
+> **[Session 10](session-10-genai-llms.md#18-the-core-elements-of-a-prompt)'s five core elements are what you put in that string.**
+
+## Block 3 — call
+
+```python
+# illustrative: a syntax reference, not runnable as written.
+response = client.models.generate_content(
+    model=MODEL_NAME,
+    contents=prompt,
+    config=types.GenerateContentConfig(       # optional, but you will want it
+        temperature=0.7,
+        max_output_tokens=600,
+        thinking_config=types.ThinkingConfig(thinking_budget=0),
+    ),
+)
+```
+
+| Setting | What it does | When to change it |
+|---|---|---|
+| **`temperature`** | **0 = same answer every time; 1 = varied** | **0 for anything structured** |
+| **`max_output_tokens`** | **Caps the bill for one request** | Always set it |
+| **`thinking_budget=0`** | **Turns off hidden reasoning** | **On by default; off saves ~3× on simple tasks** |
+
+## Block 4 — display
+
+| Function | Shows |
+|---|---|
+| **`st.write(x)`** | **Almost anything** — text, tables, charts |
+| `st.markdown(x)` | Formatted text |
+| **`st.metric(label, value)`** | **A big number** |
+| `st.success` / `st.warning` / `st.error` / `st.info` | A coloured box |
+| `st.dataframe(df)` | A table |
+| **`st.spinner("...")`** | **"Working" while the call runs** |
+| `st.download_button(label, data, filename)` | A download |
+
+> **Those four blocks are the entire API surface you need for Apps 1 to 5.** **Everything below is a rearrangement of them.**
+
+---
+
+# 9. App 2 — AI Text Generator
+
+**One new idea: the widgets now *shape the prompt* instead of being the prompt.**
+
+```python
+# streamlit-only: run with `streamlit run app.py`, not `python app.py`
+# app2_generator.py
 import streamlit as st
 from google import genai
 from google.genai import types
 
-MODEL_ID = "gemini-3.5-flash"
+MODEL_NAME = "gemini-3.5-flash"
 
-@st.cache_resource
-def get_client():
-    """One client, created once, shared by every rerun."""
-    key = os.environ.get("GEMINI_API_KEY") or st.secrets.get("GEMINI_API_KEY")
-    if not key:
-        st.error("GEMINI_API_KEY is not set. Add it to .env or to Streamlit secrets.")
-        st.stop()
-    return genai.Client(api_key=key)
+st.set_page_config(page_title="Gemini Text Generator", page_icon="🤖")
+st.title("🤖 Gemini AI Text Generator")
+st.write("Enter a topic and Gemini will generate an explanation.")
 
-def ask(prompt, temperature=0.3, max_tokens=800, thinking=False, json_out=False):
-    """One call, with every guardrail from Part A applied."""
-    config = types.GenerateContentConfig(
-        temperature=temperature,
-        max_output_tokens=max_tokens,
-        thinking_config=types.ThinkingConfig(thinking_budget=0) if not thinking else None,
-        response_mime_type="application/json" if json_out else None,
+client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+
+# ---- 1. COLLECT
+topic = st.text_input("Enter a topic", placeholder="Example: Artificial Intelligence")
+
+style = st.selectbox("Explanation style",
+                     ["simple", "detailed", "for school students", "for college students"])
+
+word_limit = st.slider("Approximate word limit", 50, 300, 120, 50)
+
+if st.button("Generate", type="primary"):
+    # ---- 2. BUILD
+    prompt = (f"Explain the topic '{topic}' in a {style} style. "
+              f"Keep it to about {word_limit} words.")
+
+    # ---- 3. CALL
+    response = client.models.generate_content(
+        model=MODEL_NAME,
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            temperature=0.7,
+            max_output_tokens=600,
+            thinking_config=types.ThinkingConfig(thinking_budget=0),
+        ),
     )
-    response = get_client().models.generate_content(
-        model=MODEL_ID, contents=prompt, config=config)
 
-    # GUARDRAIL: response.text can be None when the budget runs out
-    if response.candidates[0].finish_reason.name != "STOP":
-        st.warning(f"Response was cut short ({response.candidates[0].finish_reason.name}).")
-    return response.text or "", response.usage_metadata.total_token_count
+    # ---- 4. DISPLAY
+    st.subheader("Explanation")
+    st.write(response.text)
+    st.caption(f"{len(response.text.split())} words · "
+               f"{response.usage_metadata.total_token_count} tokens")
 ```
 
-## Why each line is there
+## Measured
 
-| Line | Reason |
-|---|---|
-| `@st.cache_resource` | **[Session 5C](session-05c-deployment.md#10-the-three-rules-that-fix-most-streamlit-bugs)'s rule** — the script reruns on every interaction; the client should not be rebuilt |
-| `os.environ … or st.secrets` | **Works locally and on Streamlit Cloud with no code change** |
-| `st.stop()` | **Fail loudly and early** rather than crashing three lines later |
-| `thinking_budget=0` **by default** | **Session 10 measured 510 → 39 tokens.** Turn it on deliberately, not by accident |
-| `max_output_tokens` | **Bounds the worst-case bill** |
-| `finish_reason` check | **`response.text` can be `None`** — measured in Session 10 |
-| **returns the token count** | **You cannot control a cost you do not display** |
+**Topic: *Artificial Intelligence*, three settings:**
 
-> **Every app below imports `ask` from this file.** **The guardrails are written once and cannot be forgotten.**
+| Style | Word limit | **Words produced** | Tokens |
+|---|---|---|---|
+| simple | 50 | **48** | 81 |
+| for school students | 120 | **109** | 168 |
+| detailed | 200 | **187** | 271 |
+
+> **The word limit is respected approximately, and consistently a little under.** **Three runs at a 120-word limit gave 108, 108 and 111 words.**
+>
+> **"About 120 words" is a steer, not a contract.** **If you need an exact count, verify it in code** — [Session 10](session-10-genai-llms.md#20-zero-shot-prompting) covers that.
+
+## What changed from App 1
+
+| | App 1 | **App 2** |
+|---|---|---|
+| Widgets | 1 | **3** |
+| The prompt is | **What the user typed** | **Built from three values** |
+| Config | none | **temperature, token cap, thinking off** |
+| Feedback | the answer | **the answer plus its cost** |
+
+> **The three widgets did not make the app cleverer. They made the *prompt* better** — and the prompt is where all the quality lives.
+
+## 🧠 The mental model
+
+> **You are not building an AI. You are building a form that writes an instruction.**
+>
+> **Every app in Part B is a different form writing a different instruction.**
+
+## ✏️ Try it yourself
+
+1. **Add a fourth widget** — `st.radio("Language", ["English", "Hindi", "Tamil"])` — and put it in the prompt.
+2. **Add a temperature slider** and watch the same topic produce different explanations.
+3. **Set the word limit to 300 but `max_output_tokens=100`.** What happens, and what does `finish_reason` say?
 
 ---
+# 10. App 3 — Chatbot
 
-# 8. App 1 — Text summariser
+**One new idea: memory.**
 
-**The simplest useful GenAI app: text in, shorter text out.**
+## ⚠️ Understand the problem before the code
+
+> **[Session 5C](session-05c-deployment.md#10-the-three-rules-that-fix-most-streamlit-bugs)'s Rule 1: Streamlit reruns your whole script, top to bottom, on every interaction.**
+
+**So this does not work:**
+
+```python
+# illustrative: this is what NOT to do.
+messages = []                      # recreated as [] on EVERY message
+messages.append(new_message)       # ...so it always has exactly one item
+```
+
+> **An ordinary Python variable is destroyed and rebuilt on every rerun.** **The conversation would be one turn long, forever.**
+>
+> **`st.session_state` is the only thing that survives.**
+
+## And a second problem
+
+> **The model has no memory either.** **It is stateless: it sees only what you send.**
+>
+> **Send just the newest message and it cannot answer *"and why is that?"*** **"Memory" in a chat app is entirely your list, resent in full on every turn.**
+
+## The code
 
 ```python
 # streamlit-only: run with `streamlit run app.py`, not `python app.py`
-# app1_summariser.py
+# app3_chatbot.py
 import streamlit as st
-from genai_helper import ask
+from google import genai
+from google.genai import types
+
+MODEL_NAME = "gemini-3.5-flash"
+
+st.set_page_config(page_title="Gemini Chatbot", page_icon="💬")
+st.title("💬 Gemini Chatbot")
+
+client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+
+# ---- 1. MEMORY that survives the rerun
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# ---- 2. REPLAY the whole conversation, every rerun
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+# ---- 3. TAKE new input
+if question := st.chat_input("Ask something..."):
+    st.session_state.messages.append({"role": "user", "content": question})
+    with st.chat_message("user"):
+        st.markdown(question)
+
+    # ---- 4. SEND THE WHOLE HISTORY - this is what makes it a conversation
+    history = [
+        types.Content(role="model" if m["role"] == "assistant" else "user",
+                      parts=[types.Part(text=m["content"])])
+        for m in st.session_state.messages
+    ]
+
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            response = client.models.generate_content(
+                model=MODEL_NAME,
+                contents=history,
+                config=types.GenerateContentConfig(
+                    temperature=0.3,
+                    max_output_tokens=600,
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),
+                ),
+            )
+            answer = response.text or ""
+            st.markdown(answer)
+
+    st.session_state.messages.append({"role": "assistant", "content": answer})
+
+# ---- 5. A way out
+if st.sidebar.button("Clear conversation"):
+    st.session_state.messages = []
+    st.rerun()
+st.sidebar.metric("Turns", len(st.session_state.messages) // 2)
+```
+
+## The five steps, and what breaks without each
+
+| Step | Remove it and… |
+|---|---|
+| **1. `st.session_state.messages`** | **The conversation resets on every message** |
+| **2. Replay the history** | **The screen shows only the newest message** |
+| **3. `st.chat_input`** | No way to type |
+| **4. Send the whole history** | ⚠️ **Every answer is a first answer.** *"And why is that?"* gets a request for clarification |
+| 5. Clear button | The user is stuck with a bad conversation forever |
+
+## ⚠️ The cost that grows
+
+> **Turn 20 sends all 20 previous turns.** **A long conversation gets quadratically expensive.**
+>
+> **Capping the history is a normal thing to do:**
+
+```python
+# illustrative: a syntax reference, not runnable as written.
+RECENT = st.session_state.messages[-12:]     # last 6 exchanges
+```
+
+## Two upgrades worth knowing
+
+**A system instruction — a standing rule for every turn:**
+
+```python
+# illustrative: a syntax reference, not runnable as written.
+config = types.GenerateContentConfig(
+    system_instruction="You are a teaching assistant for a machine learning course. "
+                       "Answer in at most 120 words. If you are unsure, say so.",
+    temperature=0.3,
+)
+```
+
+**Streaming — the words appear as they are generated:**
+
+```python
+# illustrative: a syntax reference, not runnable as written.
+stream = client.models.generate_content_stream(model=MODEL_NAME, contents=history)
+answer = st.write_stream(chunk.text for chunk in stream if chunk.text)
+```
+
+> **The total time is identical. The experience is not.** **First words in under a second instead of a four-second blank screen.**
+
+## ✏️ Try it yourself
+
+1. **Ask a follow-up that only makes sense with memory** — *"and why is that?"*
+2. **Break step 4:** send `[types.Content(role="user", parts=[types.Part(text=question)])]` instead of the history. Describe how the conversation feels.
+3. **Add the system instruction** and try to make the bot break its own rule.
+
+---
+
+# 11. App 4 — Text Summariser
+
+**One new idea: the app protects itself.**
+
+**Apps 1 to 3 assume the user behaves. This one does not.**
+
+```python
+# streamlit-only: run with `streamlit run app.py`, not `python app.py`
+# app4_summariser.py
+import streamlit as st
+from google import genai
+from google.genai import types
+
+MODEL_NAME = "gemini-3.5-flash"
 
 st.set_page_config(page_title="Summariser", page_icon="📝")
 st.title("📝 Text Summariser")
+
+@st.cache_resource                      # <- NEW: build the client ONCE
+def get_client():
+    return genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 text = st.text_area("Paste the text to summarise", height=250)
 
@@ -346,10 +718,9 @@ col1, col2 = st.columns(2)
 style = col1.selectbox("Summary style",
                        ["three bullet points", "a single sentence",
                         "a paragraph for a non-technical reader"])
-temperature = col2.slider("Creativity", 0.0, 1.0, 0.3, 0.1,
-                          help="0.0 = same summary every time")
+temperature = col2.slider("Creativity", 0.0, 1.0, 0.3, 0.1)
 
-# --- LAYER 2: VALIDATION - reject before spending anything
+# ---- NEW: VALIDATE before spending anything
 MIN_CHARS, MAX_CHARS = 200, 20_000
 too_short = len(text.strip()) < MIN_CHARS
 too_long = len(text) > MAX_CHARS
@@ -363,16 +734,26 @@ if st.button("Summarise", type="primary", disabled=too_short or too_long):
     prompt = (f"Summarise the text below in {style}. "
               f"Output only the summary — no preamble, no heading.\n\n{text}")
 
-    with st.spinner("Summarising..."):                      # LAYER 4: latency
-        summary, tokens = ask(prompt, temperature=temperature)
+    with st.spinner("Summarising..."):          # <- NEW: never a blank screen
+        response = get_client().models.generate_content(
+            model=MODEL_NAME,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=temperature,
+                max_output_tokens=800,
+                thinking_config=types.ThinkingConfig(thinking_budget=0),
+            ),
+        )
 
+    summary = response.text or ""
     st.subheader("Summary")
     st.write(summary)
 
+    # ---- NEW: show what it cost
     c1, c2, c3 = st.columns(3)
     c1.metric("Input characters", f"{len(text):,}")
     c2.metric("Summary words", len(summary.split()))
-    c3.metric("Tokens used", f"{tokens:,}")
+    c3.metric("Tokens used", f"{response.usage_metadata.total_token_count:,}")
 
     st.download_button("Download summary", summary, file_name="summary.txt")
 
@@ -380,14 +761,23 @@ st.caption("The summary is generated by a language model. It can omit or misstat
            "details. Read the original before relying on it.")
 ```
 
+## The four new things
+
+| New | Why |
+|---|---|
+| **`@st.cache_resource`** | **The script reruns on every keystroke.** Without this the client is rebuilt every time |
+| **`disabled=too_short or too_long`** | ⚠️ **You cannot spend money on an empty box.** Validation, enforced by the interface |
+| **`st.spinner`** | **Three seconds of blank screen makes users click twice — and pay twice** |
+| **The token metric** | **You cannot control a cost you do not display** |
+
 ## Measured
 
-**Run on a four-sentence paragraph about cross-validation:**
+**On a four-sentence paragraph about cross-validation:**
 
-| Style | Tokens used |
+| Style | Tokens |
 |---|---|
-| `three bullet points` | **212** |
-| `a single sentence` | **132** |
+| three bullet points | **212** |
+| a single sentence | **132** |
 
 **The single-sentence result:**
 
@@ -397,34 +787,40 @@ datasets where single data splits are highly unstable, by averaging the scores
 of a model trained and tested across multiple data folds.
 ```
 
-> **Accurate, and it kept the point about instability.** **Which is worth checking, because a summariser that drops the caveat is worse than no summariser.**
+> **Accurate, and it kept the caveat about instability** — which is worth checking, because a summariser that drops the caveat is worse than no summariser.
 
-## The three things that make this an application
+## ✏️ Try it yourself
 
-| | Why it matters |
-|---|---|
-| **The `disabled=` on the button** | **You cannot spend money on an empty box.** Validation, enforced by the interface |
-| **`st.spinner`** | **Three seconds of blank screen makes users click twice** — and pay twice |
-| **The token metric** | **The user sees the cost.** So do you, while developing |
+1. **Remove the `disabled=` and click Summarise on an empty box.** What did that cost?
+2. Summarise a session guide at all three styles. **Compare the token counts.**
+3. **Estimate the monthly bill** for 1,000 summaries a day at your model's current price.
 
 ---
 
-# 9. App 2 — Support ticket triage
+# 12. App 5 — Support Ticket Triage
 
-**Extract *and* classify, with output your code can actually use.**
+**One new idea: output your *code* can use, not just output a human can read.**
+
+**Apps 1 to 4 print text. This one produces data — and that changes what can go wrong.**
 
 ```python
 # streamlit-only: run with `streamlit run app.py`, not `python app.py`
-# app2_triage.py
+# app5_triage.py
 import json
 import pandas as pd
 import streamlit as st
-from genai_helper import ask
+from google import genai
+from google.genai import types
+
+MODEL_NAME = "gemini-3.5-flash"
+CATEGORIES = ["BILLING", "TECH_ISSUE", "SALES", "OTHER"]
 
 st.set_page_config(page_title="Ticket Triage", page_icon="🎫", layout="wide")
 st.title("🎫 Support Ticket Triage")
 
-CATEGORIES = ["BILLING", "TECH_ISSUE", "SALES", "OTHER"]
+@st.cache_resource
+def get_client():
+    return genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 PROMPT = """You are a support triage system.
 
@@ -446,30 +842,32 @@ tickets_text = st.text_area(
 if st.button("Triage all tickets", type="primary"):
     tickets = [t.strip() for t in tickets_text.split("\n") if t.strip()]
     rows, total_tokens = [], 0
-
     progress = st.progress(0.0)
-    for i, ticket in enumerate(tickets, start=1):
-        raw, tokens = ask(
-            PROMPT.format(categories=", ".join(CATEGORIES), ticket=ticket),
-            temperature=0.0,          # deterministic - it is a classification
-            json_out=True,            # structural, not a polite request
-        )
-        total_tokens += tokens
 
-        # --- LAYER 4: GUARDRAIL. Parse defensively, always.
+    for i, ticket in enumerate(tickets, start=1):
+        response = get_client().models.generate_content(
+            model=MODEL_NAME,
+            contents=PROMPT.format(categories=", ".join(CATEGORIES), ticket=ticket),
+            config=types.GenerateContentConfig(
+                temperature=0.0,                          # GUARD 1: deterministic
+                response_mime_type="application/json",    # GUARD 2: structural
+                thinking_config=types.ThinkingConfig(thinking_budget=0),
+            ),
+        )
+        total_tokens += response.usage_metadata.total_token_count
+
+        # GUARD 3: parse defensively - assume guards 1 and 2 failed
         try:
-            data = json.loads(raw)
-            row = {
-                "ticket": ticket[:60],
-                "category": data.get("category", "OTHER"),
-                "urgency": data.get("urgency", "UNKNOWN"),
-                "summary": data.get("summary", ""),
-            }
-            if row["category"] not in CATEGORIES:      # it invented a category
+            data = json.loads(response.text)
+            row = {"ticket": ticket[:60],
+                   "category": data.get("category", "OTHER"),
+                   "urgency": data.get("urgency", "UNKNOWN"),
+                   "summary": data.get("summary", "")}
+            if row["category"] not in CATEGORIES:     # GUARD 4: invented category
                 row["category"] = "OTHER"
         except json.JSONDecodeError:
             row = {"ticket": ticket[:60], "category": "PARSE_FAILED",
-                   "urgency": "UNKNOWN", "summary": raw[:80]}
+                   "urgency": "UNKNOWN", "summary": (response.text or "")[:80]}
 
         rows.append(row)
         progress.progress(i / len(tickets))
@@ -490,156 +888,121 @@ st.caption("Categories are assigned by a language model at temperature 0. "
 
 ## Measured
 
-**The three example tickets, at `temperature=0.0` with `response_mime_type="application/json"`:**
-
 | Ticket | Category | Urgency | Tokens |
 |---|---|---|---|
 | *"charged twice… nobody has replied"* | **BILLING** | **HIGH** | 112 |
 | *"Do you offer a student discount?"* | **SALES** | LOW | 99 |
 | *"The app crashes… reports tab"* | **TECH_ISSUE** | **HIGH** | 105 |
 
-> **All three parsed on the first attempt.** **About 105 tokens per ticket — so 10,000 tickets is roughly a million tokens, which is a number you can put in a budget.**
+> **All three parsed on the first attempt. About 105 tokens per ticket** — so 10,000 tickets is roughly a million tokens, which is a number you can put in a budget.
 
-## The three guardrails, and why each exists
+## The four guardrails, and why each exists
 
-| Guardrail | The failure it prevents |
-|---|---|
-| **`json_out=True`** | **[Session 10](session-10-genai-llms.md#20-zero-shot-prompting) measured the model wrapping JSON in a ` ```json ` fence, which makes `json.loads` raise.** This constrains the API rather than asking politely |
-| **`try/except json.JSONDecodeError`** | **The belt to that braces.** A parse failure becomes a row, not a crash |
-| **`if row["category"] not in CATEGORIES`** | **The model can invent a category that was never on your list.** Anything unexpected becomes `OTHER` |
+| # | Guard | The failure it prevents |
+|---|---|---|
+| **1** | **`temperature=0.0`** | **[Session 10](session-10-genai-llms.md#22-few-shot-prompting) measured a ticket flipping between `[SALES]` and `[BILLING]` between runs.** At zero it was 5/5 identical |
+| **2** | **`response_mime_type`** | **Session 10 measured the model wrapping JSON in a ` ```json ` fence, which makes `json.loads` raise** |
+| **3** | **`try/except`** | **The belt to that braces.** A parse failure becomes a row, not a crash |
+| **4** | **`not in CATEGORIES`** | **The model can invent a label that was never on your list** |
 
-> **Notice that the second and third guardrails assume the first one failed.** **That is the correct posture: the model is not a function, and you do not control it.**
+> **Notice guards 3 and 4 assume guards 1 and 2 failed.**
+>
+> **That is the correct posture: the model is not a function, and you do not control it.**
+
+## ✏️ Try it yourself
+
+1. **Remove `response_mime_type`.** Report the exact exception and what `response.text` contained.
+2. **Feed it a ticket that fits none of your four categories.** Does it return `OTHER`, or invent something?
+3. Run ten tickets of your own, **including two you consider genuinely ambiguous**, twice each. Are they stable?
 
 ---
 
-# 10. App 3 — Chat assistant with memory
+# 13. The shared helper
 
-**The pattern everyone wants to build, and the one Streamlit's rerun model makes counter-intuitive.**
-
-## ⚠️ The problem first
-
-> **[Session 5C](session-05c-deployment.md#10-the-three-rules-that-fix-most-streamlit-bugs)'s Rule 1: the script reruns top to bottom on every interaction.**
->
-> **So an ordinary Python list of messages is destroyed and recreated on every single message.** **The conversation would be one turn long, forever.**
->
-> **`st.session_state` is the only thing that survives a rerun.**
+**You have now written the same four guards five times. Stop.**
 
 ```python
 # streamlit-only: run with `streamlit run app.py`, not `python app.py`
-# app3_chat.py
+# genai_helper.py  -  import this from every app in Part C
+import os
 import streamlit as st
-from genai_helper import get_client, MODEL_ID
+from google import genai
 from google.genai import types
 
-st.set_page_config(page_title="Chat Assistant", page_icon="💬")
-st.title("💬 Course Assistant")
+MODEL_NAME = "gemini-3.5-flash"
 
-SYSTEM = ("You are a teaching assistant for a machine learning course. "
-          "Answer in at most 120 words. If you are not sure, say so. "
-          "Never invent a citation, a dataset or a result.")
+@st.cache_resource
+def get_client():
+    key = st.secrets.get("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
+    if not key:
+        st.error("GEMINI_API_KEY is not set. Add it to .streamlit/secrets.toml.")
+        st.stop()
+    return genai.Client(api_key=key)
 
-# --- 1. MEMORY that survives the rerun
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-with st.sidebar:
-    st.header("Settings")
-    temperature = st.slider("Temperature", 0.0, 1.0, 0.3, 0.1)
-    if st.button("Clear conversation"):
-        st.session_state.messages = []
-        st.rerun()
-    st.metric("Turns", len(st.session_state.messages) // 2)
-
-# --- 2. REPLAY the whole conversation on every rerun
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
-# --- 3. TAKE new input
-if question := st.chat_input("Ask about the course..."):
-    st.session_state.messages.append({"role": "user", "content": question})
-    with st.chat_message("user"):
-        st.markdown(question)
-
-    # --- 4. SEND THE WHOLE HISTORY - this is what makes it a conversation
-    history = [
-        types.Content(role="model" if m["role"] == "assistant" else "user",
-                      parts=[types.Part(text=m["content"])])
-        for m in st.session_state.messages
-    ]
-
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            stream = get_client().models.generate_content_stream(
-                model=MODEL_ID,
-                contents=history,
-                config=types.GenerateContentConfig(
-                    system_instruction=SYSTEM,
-                    temperature=temperature,
-                    max_output_tokens=600,
-                    thinking_config=types.ThinkingConfig(thinking_budget=0),
-                ),
-            )
-            answer = st.write_stream(chunk.text for chunk in stream if chunk.text)
-
-    st.session_state.messages.append({"role": "assistant", "content": answer})
-
-st.caption("This assistant can be confidently wrong. Check anything that matters "
-           "against the session guides.")
+def ask(prompt, temperature=0.3, max_tokens=800, thinking=False, json_out=False):
+    """One call, with every guard from Part B applied. Returns (text, tokens)."""
+    response = get_client().models.generate_content(
+        model=MODEL_NAME,
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            temperature=temperature,
+            max_output_tokens=max_tokens,
+            thinking_config=types.ThinkingConfig(thinking_budget=0) if not thinking else None,
+            response_mime_type="application/json" if json_out else None,
+        ),
+    )
+    if response.candidates[0].finish_reason.name != "STOP":
+        st.warning(f"Response was cut short ({response.candidates[0].finish_reason.name}).")
+    return response.text or "", response.usage_metadata.total_token_count
 ```
 
-## The four steps, and why the order matters
-
-| Step | What breaks without it |
+| Line | Which app taught you this |
 |---|---|
-| **1. `st.session_state.messages`** | **The conversation resets on every message** |
-| **2. Replay the history** | **The screen goes blank except for the newest message** |
-| **3. `st.chat_input`** | — |
-| **4. Send the *whole* history** | ⚠️ **The model has no memory.** Send only the last message and it cannot answer *"and why is that?"* |
+| `@st.cache_resource` | **App 4** |
+| `st.secrets … or os.environ` | **Works locally and on Streamlit Cloud with no code change** |
+| `st.stop()` | Fail loudly and early rather than crashing three lines later |
+| `thinking_budget=0` by default | **App 1 — 1,382 tokens against 484** |
+| `max_output_tokens` | App 2 |
+| `response_mime_type` | **App 5** |
+| `finish_reason` check | **[Session 10](session-10-genai-llms.md#15-what-the-machine-sees--the-raw-json) measured `response.text` returning `None`** |
+| returns the token count | App 4 |
 
-> **Step 4 is the one that surprises people.** **The model is stateless.** **"Memory" in a chat application is entirely your list, resent in full on every turn.**
->
-> **Which is also a cost warning: turn 20 sends all 20 previous turns.** **A long conversation gets quadratically expensive, and capping the history at the last N turns is a normal thing to do.**
-
-## `st.write_stream` — the one-line latency fix
-
-> **`generate_content_stream` returns chunks as they are generated, and `st.write_stream` renders them as they arrive.**
->
-> **The first words appear in well under a second instead of the whole answer appearing after four.** **The total time is identical. The experience is not.**
+> **Every app in Part C imports `ask` from this file.** **The guards are written once and cannot be forgotten.**
 
 ## ✏️ Practice — the GenAI apps
 
-1. Build App 1. **Paste in a session guide and summarise it three ways.** Compare the token counts.
-2. **Remove the `disabled=` from App 1's button and click it on an empty box.** What did that cost?
-3. Build App 2 and feed it ten tickets of your own. **Include one that is genuinely ambiguous** and see what it does.
-4. **Remove `json_out=True` from App 2.** Report the exact error, and what `raw` contained.
-5. Build App 3. **Ask a follow-up question that only makes sense with memory** — *"and why is that?"*
-6. **Break App 3's memory:** send only the newest message instead of the whole history. **Describe what the conversation feels like.**
+1. **Build Apps 1, 2 and 3 in order.** After each one, write down in a sentence what it added.
+2. **Rewrite App 2 to use `ask` from the helper.** How many lines shorter is it?
+3. **Build App 4 and remove the `disabled=`.** Click on an empty box five times. What did it cost?
+4. **Build App 5 and remove `response_mime_type`.** Report the exact error and which guard caught it.
+5. Build App 3 and **ask a follow-up that only makes sense with memory.** Then break step 4 and try again.
+6. **Design App 6 of your own** — one new idea on top of App 5. Write down what the one new idea is before you write any code.
 
 <details><summary>Answers</summary>
 
-**2.** **An API call on an empty prompt.** It costs tokens, returns something useless, and does it again every time the user clicks. **Validation before the call is the cheapest optimisation in this session.**
+**3.** **An API call on an empty prompt** — tokens spent, nothing useful returned, and repeated on every click. **Validation before the call is the cheapest optimisation in this session.**
 
-**4.** **`json.JSONDecodeError`** — the model returns the JSON wrapped in a ` ```json ` fence, so `raw` starts with the three backticks and `json.loads` fails on the first character. **Session 10 measured this.** The `try/except` catches it and the row becomes `PARSE_FAILED`.
+**4.** **`json.JSONDecodeError`** — the model returns JSON wrapped in a ` ```json ` fence, so `response.text` starts with three backticks and `json.loads` fails on the first character. **Guard 3, the `try/except`, catches it and the row becomes `PARSE_FAILED`.**
 
-**6.** **Every answer is a first answer.** *"And why is that?"* produces a request for clarification, because from the model's point of view nothing came before it. **The model is stateless; the conversation lives entirely in your list.**
+**5.** **Every answer becomes a first answer.** *"And why is that?"* gets a request for clarification, because from the model's point of view nothing came before it. **The model is stateless; the conversation lives entirely in your list.**
 </details>
 
 ---
-
 # Part C — Integrating Machine Learning with Generative AI
 
 **Three apps. A trained model makes the decision; the LLM makes it understandable.**
 
-| App | The model decides | The LLM produces |
-|---|---|---|
-| **[4 — Loan](#12-app-4--loan-decision--explanation)** | Approve or decline, with a probability | **A letter the applicant can act on** |
-| **[5 — Diabetes](#13-app-5--diabetes-screening--patient-report)** | A risk percentage | **A patient-safe explanation** |
-| **[6 — Car](#14-app-6--car-valuation--listing-writer)** | A price and an error range | **A sales listing** |
+| App | **What it adds** | The model decides | The LLM produces |
+|---|---|---|---|
+| **[6 — Loan](#15-app-6--loan-decision--explanation)** | **The hybrid pattern itself** | Approve or decline, with a probability | **A letter the applicant can act on** |
+| **[7 — Diabetes](#16-app-7--diabetes-screening--patient-report)** | **Rules that forbid, for a risky domain** | A risk percentage | **A patient-safe explanation** |
+| **[8 — Car](#17-app-8--car-valuation--listing-writer)** | **Verifying the output in code** | A price and an error range | **A sales listing** |
+
+> **All three import `ask` from [§13](#13-the-shared-helper)'s helper.** **The guards are already written — these apps are about what you put *around* the model call.**
 
 ---
 
-# 11. Why combine ML and GenAI
+# 14. Why combine ML and GenAI
 
 **Each is bad at what the other is good at.**
 
@@ -683,7 +1046,7 @@ st.caption("This assistant can be confidently wrong. Check anything that matters
 
 ---
 
-# 12. App 4 — Loan decision + explanation
+# 15. App 6 — Loan decision + explanation
 
 **[Session 5C](session-05c-deployment.md#12-app-2--loan-approval)'s loan model, plus an LLM that writes the letter.**
 
@@ -695,7 +1058,7 @@ st.caption("This assistant can be confidently wrong. Check anything that matters
 
 ```python
 # streamlit-only: run with `streamlit run app.py`, not `python app.py`
-# app4_loan.py
+# app6_loan.py
 import joblib
 import pandas as pd
 import streamlit as st
@@ -807,7 +1170,7 @@ LLM:    455 tokens
 
 > **The measured output said `"$20,000"`.** **The dataset has no currency.** **The model filled a gap that looked like it needed filling** — which is exactly [§4](#4-the-four-failure-modes)'s failure mode 1.
 >
-> **The `Do not add a currency symbol` rule in the prompt above was added because of that measurement.** **[§15](#15-the-invention-problem-measured) shows how much difference an explicit rule makes.**
+> **The `Do not add a currency symbol` rule in the prompt above was added because of that measurement.** **[§18](#18-the-invention-problem-measured) shows how much difference an explicit rule makes.**
 
 **2. `person_gender` is a model input.**
 
@@ -817,7 +1180,7 @@ LLM:    455 tokens
 
 ---
 
-# 13. App 5 — Diabetes screening + patient report
+# 16. App 7 — Diabetes screening + patient report
 
 **A harder problem, because the reader is a patient and the model is deliberately over-cautious.**
 
@@ -827,7 +1190,7 @@ LLM:    455 tokens
 
 ```python
 # streamlit-only: run with `streamlit run app.py`, not `python app.py`
-# app5_diabetes.py
+# app7_diabetes.py
 import joblib
 import pandas as pd
 import streamlit as st
@@ -947,7 +1310,7 @@ your actual health status.
 
 ---
 
-# 14. App 6 — Car valuation + listing writer
+# 17. App 8 — Car valuation + listing writer
 
 **Regression this time: the model produces a number and an error range, and the LLM writes the advert.**
 
@@ -1000,7 +1363,7 @@ saved -> models/car_model.joblib
 
 ```python
 # streamlit-only: run with `streamlit run app.py`, not `python app.py`
-# app6_car.py
+# app8_car.py
 import joblib
 import pandas as pd
 import streamlit as st
@@ -1094,11 +1457,11 @@ Estimated price range: 618,780 to 846,356 rupees.
 
 > **Every claim in that listing traces back to a number the model was given.** **No condition, no brand, no invented history.**
 >
-> **That did not happen by accident.** **[§15](#15-the-invention-problem-measured) is the measurement that produced those rules.**
+> **That did not happen by accident.** **[§18](#18-the-invention-problem-measured) is the measurement that produced those rules.**
 
 ---
 
-# 15. The invention problem, measured
+# 18. The invention problem, measured
 
 **App 6's first version had a reasonable-sounding instruction:**
 
@@ -1152,12 +1515,12 @@ if found:
 
 ## ✏️ Practice — the hybrid apps
 
-1. Build App 4 with Session 5C's loan model. **Find an applicant the model declines with probability under 0.10 and read the explanation.** Is it accurate?
-2. **Remove the "do not add a currency symbol" rule from App 4.** Run it three times. Does a currency appear?
-3. Build App 5. **Move the threshold from 0.9 down to 0.1 for one patient** and watch both the flag and the wording change.
-4. **Delete the three "do not" rules from App 5's prompt.** Run it three times. **Report anything it said that a screening tool must not say.**
-5. Build App 6 and run the weak-versus-strong comparison yourself. **Report your own hit counts.**
-6. **Build a `BANNED` list for App 4 or App 5** by running the prompt ten times and writing down every invented claim.
+1. Build App 6 with Session 5C's loan model. **Find an applicant the model declines with probability under 0.10 and read the explanation.** Is it accurate?
+2. **Remove the "do not add a currency symbol" rule from App 6.** Run it three times. Does a currency appear?
+3. Build App 7. **Move the threshold from 0.9 down to 0.1 for one patient** and watch both the flag and the wording change.
+4. **Delete the three "do not" rules from App 7's prompt.** Run it three times. **Report anything it said that a screening tool must not say.**
+5. Build App 8 and run the weak-versus-strong comparison yourself. **Report your own hit counts.**
+6. **Build a `BANNED` list for App 6 or App 7** by running the prompt ten times and writing down every invented claim.
 
 <details><summary>Answers</summary>
 
@@ -1202,19 +1565,19 @@ if found:
 
 ### The GenAI apps
 
-**Q9.** `@st.cache_resource` on `get_client()` matters because…
-- (a) It speeds up the model  (b) **Streamlit reruns the whole script on every interaction, so the client would be rebuilt on every click**  (c) It caches responses  (d) It stores the key
+**Q9.** Every app in this session is the same four steps. They are…
+- (a) Import, train, predict, print  (b) **Collect, build, call, display**  (c) Load, clean, model, deploy  (d) Input, output, save, share
 
-**Q10.** The shared helper sets `thinking_budget=0` by default because…
-- (a) Thinking is broken  (b) **Session 10 measured a one-sentence question costing 510 tokens with thinking and 39 without** — it should be turned on deliberately  (c) It is faster to type  (d) Reasoning is never useful
+**Q10.** In Streamlit, `topic = st.text_input("Enter a topic")` does two things at once. They are…
+- (a) Validates and saves  (b) **Draws the box AND returns what the user typed** — a widget *is* its value  (c) Creates a callback  (d) Stores it in session state
 
 **Q11.** `response_mime_type="application/json"` is better than asking for JSON in the prompt because…
 - (a) It is shorter  (b) **It constrains the API rather than relying on the model to obey an instruction**  (c) It is cheaper  (d) It is required
 
-**Q12.** App 2 still wraps the parse in `try/except` even with `json_out=True` because…
+**Q12.** App 5 still wraps the parse in `try/except` even with `json_out=True` because…
 - (a) Style  (b) **The guardrail assumes the first guardrail failed — the model is not a function you control**  (c) JSON is slow  (d) Streamlit requires it
 
-**Q13.** App 2 checks `if row["category"] not in CATEGORIES`. This catches…
+**Q13.** App 5 checks `if row["category"] not in CATEGORIES`. This catches…
 - (a) Empty tickets  (b) **A category the model invented that was never on your list**  (c) Parse errors  (d) Rate limits
 
 **Q14.** In App 3, the conversation must live in `st.session_state` because…
@@ -1228,16 +1591,16 @@ if found:
 
 ### The hybrid apps
 
-**Q17.** In Apps 4–6, the LLM must never make the decision because…
+**Q17.** In Apps 6–8, the LLM must never make the decision because…
 - (a) It is slower  (b) **The decision would stop being consistent, auditable and cheap — and in lending or healthcare that is often illegal**  (c) It is less accurate  (d) It cannot classify
 
-**Q18.** App 4's prompt says "do not add a currency symbol" because…
+**Q18.** App 6's prompt says "do not add a currency symbol" because…
 - (a) Style  (b) **A measured run invented `$` on a dataset that has no currency** — the model fills gaps that look like they need filling  (c) The dataset is in rupees  (d) Symbols break Streamlit
 
 **Q19.** The weak instruction "do not invent a brand, model, colour or service history" produced invented claims in 3 of 3 runs. The lesson is…
 - (a) The model is broken  (b) **A negative instruction only covers what it enumerates — it worked for brand and colour, and failed on everything it did not name**  (c) Use a bigger model  (d) Lower the temperature
 
-**Q20.** App 6 checks the generated listing against a `BANNED` word list because…
+**Q20.** App 8 checks the generated listing against a `BANNED` word list because…
 - (a) Speed  (b) **You verify in code rather than trusting the instruction — and you build the list by measuring what the model actually invents**  (c) It is required by Streamlit  (d) To reduce tokens
 
 <details><summary>Answers</summary>
@@ -1248,7 +1611,7 @@ if found:
 
 **A3 — (b) Validation and guardrails.** **The bouncer at the entrance and quality control at the exit.** A model guards neither door.
 
-**A4 — (b) You pay for empty input.** **Removing the `disabled=` from App 1's button is the practice that demonstrates it.**
+**A4 — (b) You pay for empty input.** **Removing the `disabled=` from App 4's button is the practice that demonstrates it.**
 
 **A5 — (b) Hallucination, malformed output, latency, cost.** **Design for all four; you will meet all four.**
 
@@ -1258,9 +1621,9 @@ if found:
 
 **A8 — (b) Near-deterministic, not deterministic.** **Two variants separated by one comma.** Assert on the parsed structure instead.
 
-**A9 — (b) The script reruns on every interaction.** **Session 5C's Rule 1, with a cost attached.**
+**A9 — (b) Collect, build, call, display.** **App 1 has one of each; App 8 has many of each.** Everything in between is a rearrangement.
 
-**A10 — (b) 510 tokens against 39.** **Hidden reasoning should be a deliberate choice, not a default you never noticed.**
+**A10 — (b) It draws the box and returns the value.** **There is no callback and no event handler** — which is why a Streamlit app reads top to bottom like a script.
 
 **A11 — (b) It constrains the API.** **An instruction is a request the model may ignore; a config field is not.** Structure beats discipline.
 
@@ -1289,6 +1652,8 @@ if found:
 
 **These tasks are about building GenAI applications. Every one produces something you can run.**
 
+> **Do them in order.** **Tasks 4 to 11 walk up the same ladder the guide does — one new idea at a time.**
+
 ## Concepts
 
 **Task 1 — Pattern-match five products.** Take five AI features you have used. **Identify which of the five patterns each is, and whether an LLM or a trained model is doing the work.**
@@ -1299,15 +1664,15 @@ if found:
 
 ## The GenAI apps
 
-**Task 4 — App 1, built and measured.** Build the summariser. **Summarise the same text at three styles and three temperatures — nine runs — and report the token counts in a table.**
+**Task 4 — App 4, built and measured.** Build the summariser. **Summarise the same text at three styles and three temperatures — nine runs — and report the token counts in a table.**
 
 **Task 5 — Cost the summariser.** From your token counts, **estimate the monthly bill for 1,000 summaries a day** at the current price of your model.
 
-**Task 6 — App 2, ten tickets.** Build the triage app and run it on ten tickets of your own, **including two you consider genuinely ambiguous.** Run each twice at temperature 0 and confirm they are stable.
+**Task 6 — App 5, ten tickets.** Build the triage app and run it on ten tickets of your own, **including two you consider genuinely ambiguous.** Run each twice at temperature 0 and confirm they are stable.
 
-**Task 7 — Break the parser.** Remove `json_out=True` from App 2. **Report the exact exception, what `raw` contained, and which guardrail caught it.**
+**Task 7 — Break the parser.** Remove `response_mime_type` from App 5. **Report the exact exception, what `raw` contained, and which guardrail caught it.**
 
-**Task 8 — Make it invent a category.** Feed App 2 a ticket that fits none of your four categories. **Does it return `OTHER`, or does it invent something? Report exactly what happened.**
+**Task 8 — Make it invent a category.** Feed App 5 a ticket that fits none of your four categories. **Does it return `OTHER`, or does it invent something? Report exactly what happened.**
 
 **Task 9 — App 3, built.** Build the chat assistant. **Have a five-turn conversation where each turn depends on the previous one**, and paste the transcript.
 
@@ -1317,17 +1682,17 @@ if found:
 
 ## The hybrid apps
 
-**Task 12 — App 4, built.** Build the loan app on Session 5C's model. **Produce one approval and one decline, and paste both letters.**
+**Task 12 — App 6, built.** Build the loan app on Session 5C's model. **Produce one approval and one decline, and paste both letters.**
 
-**Task 13 — Check the explanation against the model.** For App 4, **compare the two factors the LLM named against the model's actual feature importances.** Do they agree?
+**Task 13 — Check the explanation against the model.** For App 6, **compare the two factors the LLM named against the model's actual feature importances.** Do they agree?
 
-**Task 14 — App 5, built.** Build the diabetes app. **Run one patient at thresholds 0.2, 0.5 and 0.8** and paste all three reports.
+**Task 14 — App 7, built.** Build the diabetes app. **Run one patient at thresholds 0.2, 0.5 and 0.8** and paste all three reports.
 
-**Task 15 — Strip the safety rules.** Delete the "do not" rules from App 5's prompt and run it five times. **Report every sentence a screening tool should not have produced.**
+**Task 15 — Strip the safety rules.** Delete the "do not" rules from App 7's prompt and run it five times. **Report every sentence a screening tool should not have produced.**
 
-**Task 16 — App 6, built.** Build the car app including the `BANNED` check. **Find an input where the check fires.**
+**Task 16 — App 8, built.** Build the car app including the `BANNED` check. **Find an input where the check fires.**
 
-**Task 17 — Reproduce the invention measurement.** Run App 6's weak and strong prompts three times each. **Report your hit counts in the same table format as §15.**
+**Task 17 — Reproduce the invention measurement.** Run App 8's weak and strong prompts three times each. **Report your hit counts in the same table format as §18.**
 
 **Task 18 — Build your own guardrail list.** For any app above, **run the prompt ten times, list every claim not present in your input, and turn that list into a code check.**
 
